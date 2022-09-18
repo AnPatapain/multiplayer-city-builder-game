@@ -9,8 +9,8 @@ def main():
     pg.init()
     screen = pg.display.set_mode((0, 0), pg.FULLSCREEN) # return surface instance
     clock = pg.time.Clock()
-
     game = Game(screen, clock)
+    
     while game_run:
         # display menu
         while is_playing:
