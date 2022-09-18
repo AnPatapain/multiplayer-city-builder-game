@@ -36,15 +36,19 @@ class Game:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        world = self.world.create_world()
+        cartesian_world = self.world.create_cartesian_world()
+        isometric_world = self.world.create_isometric_world()
 
         for row in range(self.world.nums_grid_y):
             for col in range(self.world.nums_grid_x):
-                # Retrive each rect coordination (by pixel) from world grid
-                # Draw each rect from these coordination
-                rect = pg.Rect(world[row][col][0][0], world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
+                # Create and Draw each rect from coordinations that be retrieved from world grid
+
+                cartesian_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in cartesian_world[row][col]]
+                rect = pg.Rect(cartesian_world[row][col][0][0], cartesian_world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
                 pg.draw.rect(self.screen, (255, 255, 255), rect, 1)
 
+                isometric_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in isometric_world[row][col]]
+                pg.draw.polygon(self.screen, (0, 255, 0), isometric_world[row][col], 1)
         pg.display.flip()
 
 
