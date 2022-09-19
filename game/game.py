@@ -48,7 +48,7 @@ class Game:
                 pg.draw.rect(self.screen, (255, 255, 255), rect, 1)
 
                 isometric_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in isometric_world[row][col]]
-                pg.draw.polygon(self.screen, (0, 255, 0), isometric_world[row][col], 1)
+                pg.draw.polygon(self.screen, (255, 0, 0), isometric_world[row][col], 1)
         pg.display.flip()
 
 
