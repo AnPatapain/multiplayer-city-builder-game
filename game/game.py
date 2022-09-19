@@ -43,12 +43,12 @@ class Game:
             for col in range(self.world.nums_grid_x):
                 # Create and Draw each rect from coordinations that be retrieved from world grid
 
-                cartesian_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in cartesian_world[row][col]]
-                rect = pg.Rect(cartesian_world[row][col][0][0], cartesian_world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
-                pg.draw.rect(self.screen, (255, 255, 255), rect, 1)
+                # cartesian_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in cartesian_world[row][col]]
+                # rect = pg.Rect(cartesian_world[row][col][0][0], cartesian_world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
+                # pg.draw.rect(self.screen, (255, 255, 255), rect, 1)
 
                 isometric_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in isometric_world[row][col]]
-                pg.draw.polygon(self.screen, (255, 0, 0), isometric_world[row][col], 1)
+                pg.draw.polygon(self.screen, (0, 255, 0), isometric_world[row][col], 1)
         pg.display.flip()
 
 

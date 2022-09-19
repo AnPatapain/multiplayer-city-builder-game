@@ -1,5 +1,6 @@
 import pygame as pg
 from game.game import Game
+from game.setting import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 def main():
@@ -7,7 +8,8 @@ def main():
     is_playing = True
 
     pg.init()
-    screen = pg.display.set_mode((0, 0), pg.FULLSCREEN) # return surface instance
+    # screen = pg.display.set_mode((0, 0), pg.FULLSCREEN) # return surface instance
+    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT]) # -> Surface instance
     clock = pg.time.Clock()
     game = Game(screen, clock)
     
