@@ -43,12 +43,18 @@ class Game:
             for col in range(self.world.nums_grid_x):
                 # Create and Draw each rect from coordinations that be retrieved from world grid
 
-                cartesian_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in cartesian_world[row][col]]
-                rect = pg.Rect(cartesian_world[row][col][0][0], cartesian_world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
-                pg.draw.rect(self.screen, (255, 0, 0), rect, 1)
+                # cartesian_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in cartesian_world[row][col]]
+                # rect = pg.Rect(cartesian_world[row][col][0][0], cartesian_world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
+                # pg.draw.rect(self.screen, (255, 0, 0), rect, 1)
 
-                isometric_world[row][col] = [(x + self.width/2, y + self.height/4) for x, y in isometric_world[row][col]]
-                pg.draw.polygon(self.screen, (0, 255, 0), isometric_world[row][col], 1)
+                isometric_world[row][col]['isometric_cell'] = [(x + self.width/2, y + self.height/4) for x, y in isometric_world[row][col]['isometric_cell']]
+                pg.draw.polygon(self.screen, (0, 255, 0), isometric_world[row][col]['isometric_cell'], 1)
+
+                # this_Surface.blit(source_Surface, [upper_left_corner_x, upper_left_corner_y])
+                (x, y) = isometric_world[row][col]['render_img_coor']
+                render_after_offset = (x + self.width/2, y + self.height/4)
+                self.screen.blit(self.world.land, render_after_offset)
+                
         pg.display.flip()
 
 

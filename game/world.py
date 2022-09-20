@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 from .setting import *
 
 
@@ -8,6 +9,7 @@ class World:
         self.nums_grid_y = nums_grid_y
         self.length = height
         self.width = width
+        self.land = self.load_images()["land"]
 
 
     def create_cartesian_world(self):
@@ -44,8 +46,23 @@ class World:
     # Convert the coordinations of 4 vertices of square in cartesian basis to isometric basis
     def isometric_cell(self, cartesian_cell):
         convert_function = lambda x, y: (x -y, x/2 + y/2) # for more info about this function search gg with keyword: cartesian to isometric map
-        
         isometric_cell = [convert_function(x, y) for x, y in cartesian_cell]
-        return isometric_cell
+        
+        render_img_coor = (
+            min([x for x, y in isometric_cell]), 
+            min([y for x, y in isometric_cell])
+        )
+
+        return {
+            'isometric_cell': isometric_cell,
+            'render_img_coor': render_img_coor
+        }
+        # return isometric_cell
+
+    def load_images(self):
+        path = 'assets/graphics'
+        return {
+            'land': pg.image.load(os.path.join(path, 'Land2a_00040.png'))
+        }
 
     
