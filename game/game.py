@@ -47,7 +47,7 @@ class Game:
                 # rect = pg.Rect(cartesian_world[row][col][0][0], cartesian_world[row][col][0][1] , TILE_SIZE, TILE_SIZE)
                 # pg.draw.rect(self.screen, (255, 0, 0), rect, 1)
 
-                isometric_world[row][col]['isometric_cell'] = [(x + self.width/2, y + self.height/4) for x, y in isometric_world[row][col]['isometric_cell']]
+                isometric_world[row][col]['isometric_cell'] = [(x + self.width/2, y + self.height/2) for x, y in isometric_world[row][col]['isometric_cell']]
                 pg.draw.polygon(self.screen, (0, 255, 0), isometric_world[row][col]['isometric_cell'], 1)
 
                 # this_Surface.blit(source_Surface, [upper_left_corner_x, upper_left_corner_y])
