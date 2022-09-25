@@ -31,7 +31,11 @@ class World:
             for col in range(self.nums_grid_x):
                 cartesian_cell = self.cartesian_cell(row, col)
                 isometric_cell = self.isometric_cell(cartesian_cell)
-                world[row].append(isometric_cell) 
+                world[row].append(isometric_cell)
+
+                (x, y) = isometric_cell['render_img_coor']
+                offset_render = (x + self.width/2, y + self.height/4)
+                self.default_surface.blit(self.graphics['block'], offset_render)
         return world
 
 

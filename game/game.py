@@ -1,4 +1,3 @@
-from cmath import rect
 import pygame as pg
 import sys
 from .world import World
@@ -37,7 +36,7 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
         isometric_world = self.world.isometric_world
-
+        self.screen.blit(isometric_world.default_surface, (0,0))
         for row in range(self.world.nums_grid_y):
             for col in range(self.world.nums_grid_x):
 
