@@ -36,19 +36,18 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
         isometric_world = self.world.isometric_world
-        self.screen.blit(isometric_world.default_surface, (0,0))
+        self.screen.blit(self.world.default_surface, (0,0))
         for row in range(self.world.nums_grid_y):
             for col in range(self.world.nums_grid_x):
 
                 # Render graphic
-                (x, y) = isometric_world[row][col]['render_img_coor']
-                offset_render = (x + self.width/2, y + self.height/4)
-                self.screen.blit(self.world.graphics['block'], offset_render)
+                
+                # For graphical object rendering (graphical object is water, prefecture, housing,etc) 
 
                 # Render grid
                 cell_render = isometric_world[row][col]['isometric_cell']
-                cell_render = [(x + self.width/2, y + self.height/2) for x, y in cell_render]
-                pg.draw.polygon(self.screen, (0, 255, 0), cell_render, 1)
+                cell_render = [(x + self.width/2, y + self.height/4) for x, y in cell_render]
+                pg.draw.polygon(self.screen, (255, 0, 0), cell_render, 1)
                 
         pg.display.flip()
 
