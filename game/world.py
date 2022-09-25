@@ -4,13 +4,15 @@ from .setting import *
 
 
 class World:
-    def __init__(self, nums_grid_x, nums_grid_y, height, width):
+    def __init__(self, nums_grid_x, nums_grid_y, width, height):
         self.nums_grid_x = nums_grid_x
         self.nums_grid_y = nums_grid_y
-        self.length = height
+        self.height = height
         self.width = width
-        self.land = self.load_images()["land"]
 
+        self.graphics = self.load_images()
+        self.default_surface = pg.Surface((width, height))
+        self.isometric_world = self.create_isometric_world()
 
     def create_cartesian_world(self):
         world = []
@@ -29,7 +31,7 @@ class World:
             for col in range(self.nums_grid_x):
                 cartesian_cell = self.cartesian_cell(row, col)
                 isometric_cell = self.isometric_cell(cartesian_cell)
-                world[row].append(isometric_cell)    
+                world[row].append(isometric_cell) 
         return world
 
 
@@ -62,7 +64,7 @@ class World:
     def load_images(self):
         path = 'assets/graphics'
         return {
-            'land': pg.image.load(os.path.join(path, 'Land2a_00040.png'))
+            'block': pg.image.load(os.path.join(path, 'Land2a_00040.png'))
         }
 
     
