@@ -47,7 +47,7 @@ class Game:
                 # Render grid
                 cell_render = isometric_world[row][col]['isometric_cell']
                 cell_render = [(x + self.width/2, y + self.height/4) for x, y in cell_render]
-                pg.draw.polygon(self.screen, (255, 0, 0), cell_render, 1)
+                pg.draw.polygon(self.screen, (0, 0, 255), cell_render, 1)
                 
         pg.display.flip()
 
