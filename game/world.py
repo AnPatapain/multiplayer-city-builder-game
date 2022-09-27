@@ -66,8 +66,8 @@ class World:
             graphic = 'block'
             if random < 10:
                 graphic = 'tree'
-            # elif random >= 10 and random < 20:
-            #     graphic = 'rock'
+            elif random >= 10 and random < 20:
+                graphic = 'rock'
             return graphic
 
         return {
@@ -88,8 +88,8 @@ class World:
             },
             'upscale_4x': {
                 'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')),
-                'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png'))
-                # 'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290.png'))
+                'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png')),
+                'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png'))
             }
             
         }
