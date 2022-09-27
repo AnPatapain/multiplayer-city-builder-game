@@ -1,6 +1,7 @@
 import pygame as pg
 import os
 from .setting import *
+import random as rd
 
 
 class World:
@@ -59,16 +60,28 @@ class World:
             min([y for x, y in isometric_cell])
         )
 
+        def graphic_generator():
+            random = rd.randint(1, 100)
+            graphic = 'block'
+            if random < 10:
+                graphic = 'tree'
+            elif random >= 10 and random < 50:
+                graphic = 'rock'
+            return graphic
+
         return {
             'isometric_cell': isometric_cell,
-            'render_img_coor': render_img_coor
+            'render_img_coor': render_img_coor,
+            'graphic': graphic_generator()
         }
         # return isometric_cell
 
     def load_images(self):
         path = 'assets/graphics'
         return {
-            'block': pg.image.load(os.path.join(path, 'Land2a_00040.png'))
+            'block': pg.image.load(os.path.join(path, 'Land2a_00040.png')),
+            'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')),
+            'rock': pg.image.load(os.path.join(path, 'land3a_00084.png'))
         }
 
     
