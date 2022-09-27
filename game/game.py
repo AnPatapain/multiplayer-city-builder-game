@@ -41,6 +41,10 @@ class Game:
             for col in range(self.world.nums_grid_x):
 
                 # Render graphic
+                (x, y) = isometric_world[row][col]['render_img_coor']
+                
+                graphic = self.world['graphics'][isometric_world[row][col]['graphic']]
+                
                 
                 # For graphical object rendering (graphical object is water, prefecture, housing,etc) 
 
