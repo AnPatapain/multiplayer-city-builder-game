@@ -42,18 +42,20 @@ class Game:
 
                 # Render graphic
                 (x, y) = isometric_world[row][col]['render_img_coor']
+                (x, y) = (x + self.width/2, y + self.height/4)
 
                 graphic_name = isometric_world[row][col]['graphic']
-                graphic = self.world['graphics'][graphic_name]
-                graphic_render = (x, y - graphic.get_height() )
+                graphic_img = self.world.graphics['upscale_4x'][graphic_name]
+                graphic_render = (x, y -  graphic_img.get_height() + TILE_SIZE)
                 
+                if graphic_name != 'block':
+                    self.screen.blit(graphic_img, graphic_render)
                 
-                # For graphical object rendering (graphical object is water, prefecture, housing,etc) 
 
                 # Render grid
-                cell_render = isometric_world[row][col]['isometric_cell']
-                cell_render = [(x + self.width/2, y + self.height/4) for x, y in cell_render]
-                pg.draw.polygon(self.screen, (0, 0, 255), cell_render, 1)
+                # cell_render = isometric_world[row][col]['isometric_cell']
+                # cell_render = [(x + self.width/2, y + self.height/4) for x, y in cell_render]
+                # pg.draw.polygon(self.screen, (0, 0, 255), cell_render, 1)
                 
         pg.display.flip()
 

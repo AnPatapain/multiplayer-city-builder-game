@@ -36,7 +36,8 @@ class World:
 
                 (x, y) = isometric_cell['render_img_coor']
                 offset_render = (x + self.width/2, y + self.height/4)
-                self.default_surface.blit(self.graphics['block'], offset_render)
+                self.default_surface.blit(self.graphics['upscale_4x']['block'], offset_render)
+
         return world
 
 
@@ -65,8 +66,8 @@ class World:
             graphic = 'block'
             if random < 10:
                 graphic = 'tree'
-            elif random >= 10 and random < 50:
-                graphic = 'rock'
+            # elif random >= 10 and random < 20:
+            #     graphic = 'rock'
             return graphic
 
         return {
@@ -78,10 +79,19 @@ class World:
 
     def load_images(self):
         path = 'assets/graphics'
+        upscale_path = 'assets/upscaled_graphics'
         return {
-            'block': pg.image.load(os.path.join(path, 'Land2a_00040.png')),
-            'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')),
-            'rock': pg.image.load(os.path.join(path, 'land3a_00084.png'))
+            'origin': {
+                'block': pg.image.load(os.path.join(path, 'Land1a_00069.png')),
+                'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')),
+                'rock': pg.image.load(os.path.join(path, 'Land1a_00290.png'))
+            },
+            'upscale_4x': {
+                'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')),
+                'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png'))
+                # 'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290.png'))
+            }
+            
         }
 
     
