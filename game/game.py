@@ -42,8 +42,10 @@ class Game:
 
                 # Render graphic
                 (x, y) = isometric_world[row][col]['render_img_coor']
-                
-                graphic = self.world['graphics'][isometric_world[row][col]['graphic']]
+
+                graphic_name = isometric_world[row][col]['graphic']
+                graphic = self.world['graphics'][graphic_name]
+                graphic_render = (x, y - graphic.get_height() )
                 
                 
                 # For graphical object rendering (graphical object is water, prefecture, housing,etc) 
