@@ -1,5 +1,6 @@
 import pygame as pg
 import os
+import math
 from .setting import *
 import random as rd
 
@@ -8,14 +9,17 @@ class World:
     def __init__(self, nums_grid_x, nums_grid_y, width, height):
         self.nums_grid_x = nums_grid_x
         self.nums_grid_y = nums_grid_y
-        self.height = height
         self.width = width
+        self.height = height
+        self.map_position = [0, 0] 
 
         self.graphics = self.load_images()
-        self.default_surface = pg.Surface((width, height))
-        self.isometric_world = self.create_isometric_world()
+        self.default_surface_width = 5000
+        self.default_surface_height = 5000
+        self.default_surface = pg.Surface((self.default_surface_width, self.default_surface_height))
+        self.isometric_map = self.isometric_map()
 
-    def create_cartesian_world(self):
+    def cartesian_map(self):
         world = []
         for row in range(self.nums_grid_y):
             world.append([])
@@ -25,20 +29,20 @@ class World:
         return world
     
 
-    def create_isometric_world(self):
-        world = []
+    def isometric_map(self):
+        map = []
         for row in range(self.nums_grid_y):
-            world.append([])
+            map.append([])
             for col in range(self.nums_grid_x):
                 cartesian_cell = self.cartesian_cell(row, col)
                 isometric_cell = self.isometric_cell(cartesian_cell)
-                world[row].append(isometric_cell)
+                map[row].append(isometric_cell)
 
                 (x, y) = isometric_cell['render_img_coor']
-                offset_render = (x + self.width/2, y + self.height/4)
+                offset_render = (x + self.default_surface_width/2, y + self.default_surface_height/4)
                 self.default_surface.blit(self.graphics['upscale_4x']['block'], offset_render)
 
-        return world
+        return map
 
 
     # return a cell that contain the cartesian coordination of all vertices

@@ -11,7 +11,6 @@ class Game:
         self.width, self.height = self.screen.get_size()
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height)
 
-
     # Game Loop
     def run(self):
         self.playing = True
@@ -32,24 +31,34 @@ class Game:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     sys.exit()
+                
+                # For scrolling map
+                if event.key == pg.K_DOWN:
+                    self.world.map_position[1] = self.world.map_position[1] - 200
+                if event.key == pg.K_UP:
+                    self.world.map_position[1] = self.world.map_position[1] + 200
+                if event.key == pg.K_LEFT:
+                    self.world.map_position[0] = self.world.map_position[0] + 200
+                if event.key == pg.K_RIGHT:
+                    self.world.map_position[0] = self.world.map_position[0] - 200
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        isometric_world = self.world.isometric_world
-        self.screen.blit(self.world.default_surface, (0,0))
+        isometric_map = self.world.isometric_map
+        self.screen.blit(self.world.default_surface, self.world.map_position)
         for row in range(self.world.nums_grid_y):
             for col in range(self.world.nums_grid_x):
 
                 # Render graphic
-                (x, y) = isometric_world[row][col]['render_img_coor']
-                (x, y) = (x + self.width/2, y + self.height/4)
+                (x, y) = isometric_map[row][col]['render_img_coor']
+                (x, y) = (x + self.world.default_surface_width/2, y + self.world.default_surface_height/4)
 
-                graphic_name = isometric_world[row][col]['graphic']
+                graphic_name = isometric_map[row][col]['graphic']
                 graphic_img = self.world.graphics['upscale_4x'][graphic_name]
                 graphic_render = (x, y -  graphic_img.get_height() + TILE_SIZE)
                 
                 if graphic_name != 'block':
-                    self.screen.blit(graphic_img, graphic_render)
+                    self.world.default_surface.blit(graphic_img, graphic_render)
                 
 
                 # Render grid
