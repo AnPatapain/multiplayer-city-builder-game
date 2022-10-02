@@ -11,12 +11,9 @@ class World:
         self.nums_grid_y = nums_grid_y
         self.width = width
         self.height = height
-        self.map_position = [0, 0] 
 
         self.graphics = self.load_images()
-        self.default_surface_width = 5000
-        self.default_surface_height = 5000
-        self.default_surface = pg.Surface((self.default_surface_width, self.default_surface_height))
+        self.default_surface = pg.Surface((nums_grid_x * TILE_SIZE * 2, nums_grid_y * TILE_SIZE + 2 * TILE_SIZE))
         self.isometric_map = self.isometric_map()
 
     def cartesian_map(self):
@@ -39,7 +36,7 @@ class World:
                 map[row].append(isometric_cell)
 
                 (x, y) = isometric_cell['render_img_coor']
-                offset_render = (x + self.default_surface_width/2, y + self.default_surface_height/4)
+                offset_render = (x + self.default_surface.get_width()/2, y)
                 self.default_surface.blit(self.graphics['upscale_4x']['block'], offset_render)
 
         return map
@@ -68,9 +65,9 @@ class World:
         def graphic_generator():
             random = rd.randint(1, 100)
             graphic = 'block'
-            if random < 10:
+            if random < 5:
                 graphic = 'tree'
-            elif random >= 10 and random < 20:
+            elif random < 10:
                 graphic = 'rock'
             return graphic
 
