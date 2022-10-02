@@ -27,7 +27,7 @@ Day 2 24/9/2022 - Blit graphical object on the grid
 
 Day 3  29/9/2022 - Extending our world, Camera, check FPS
 
-    1> check FPS    #COMPLETED
+    1> Display FPS    #COMPLETED
         > Draw current fps on the top left of screen
             Create "draw_text" function in utils module in game module this func takes "text" as a argument to be displayed
             Import this function to game module in draw function and pass the current fps using clock to this func

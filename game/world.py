@@ -91,8 +91,10 @@ class World:
                 'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')).convert_alpha(),
                 'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png')).convert_alpha(),
                 'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png')).convert_alpha()
+            },
+            'upscale_2x': {
+                'block': pg.image.load(os.path.join(upscale_path, 'download.png')).convert_alpha()
             }
-            
         }
 
     

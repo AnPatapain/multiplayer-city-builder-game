@@ -48,32 +48,18 @@ class Game:
         self.screen.blit(self.world.default_surface, self.map_controller.map_position)
         for row in range(self.world.nums_grid_y):
             for col in range(self.world.nums_grid_x):
-
-                # (x, y) = isometric_world[row][col]['render_img_coor']
-                # offset_render = (x + self.world.default_surface.get_width()/2 + self.camera.map_position[0], 
-                #                  y + self.camera.map_position[1])
-
-                # graphic = isometric_world[row][col]['graphic']
-                # offset_render_graphic = (offset_render[0], offset_render[1] - self.world.graphics[graphic].get_height() + TILE_SIZE)
-                # if graphic != 'block':
-                #     self.screen.blit(self.world.graphics[graphic], offset_render_graphic)
-
+                
                 # Render graphic
                 (x, y) = isometric_map[row][col]['render_img_coor']
-                (x_offset, y_offset) = (x + self.map_controller.map_position[0] + self.world.default_surface.get_width()/2, y)
+                (x_offset, y_offset) = (x + self.map_controller.map_position[0] + self.world.default_surface.get_width()/2, 
+                                        y + self.map_controller.map_position[1])
 
                 graphic_name = isometric_map[row][col]['graphic']
                 graphic_img = self.world.graphics['upscale_4x'][graphic_name]
                 graphic_render = (x_offset, y_offset -  graphic_img.get_height() + TILE_SIZE)
                 
                 if graphic_name != 'block':
-                    self.world.default_surface.blit(graphic_img, graphic_render)
-                
-
-                # Render grid
-                # cell_render = isometric_world[row][col]['isometric_cell']
-                # cell_render = [(x + self.width/2, y + self.height/4) for x, y in cell_render]
-                # pg.draw.polygon(self.screen, (0, 0, 255), cell_render, 1)
+                    self.screen.blit(graphic_img, graphic_render)
 
         
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (10, 10))        
