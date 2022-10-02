@@ -25,7 +25,7 @@ Day 2 24/9/2022 - Blit graphical object on the grid
         > Blit tree or rock or none depends on this number
 
 
-Day 3  29/9/2022 - Extending our world, Camera, check FPS
+Day 3  3/10/2022 - Extending our world, Camera, check FPS
 
     1> Display FPS    #COMPLETED
         > Draw current fps on the top left of screen
