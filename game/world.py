@@ -86,14 +86,14 @@ class World:
         upscale_path = 'assets/upscaled_graphics'
         return {
             'origin': {
-                'block': pg.image.load(os.path.join(path, 'Land1a_00069.png')),
-                'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')),
-                'rock': pg.image.load(os.path.join(path, 'Land1a_00290.png'))
+                'block': pg.image.load(os.path.join(path, 'Land1a_00069.png')).convert_alpha(),
+                'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')).convert_alpha(),
+                'rock': pg.image.load(os.path.join(path, 'Land1a_00290.png')).convert_alpha()
             },
             'upscale_4x': {
-                'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')),
-                'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png')),
-                'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png'))
+                'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')).convert_alpha(),
+                'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png')).convert_alpha(),
+                'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png')).convert_alpha()
             }
             
         }

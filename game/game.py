@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 from .world import World
+from .utils import draw_text
 from .setting import *
 
 
@@ -65,7 +66,9 @@ class Game:
                 # cell_render = isometric_world[row][col]['isometric_cell']
                 # cell_render = [(x + self.width/2, y + self.height/4) for x, y in cell_render]
                 # pg.draw.polygon(self.screen, (0, 0, 255), cell_render, 1)
-                
+
+        
+        draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (10, 10))        
         pg.display.flip()
 
 
