@@ -1,6 +1,6 @@
 import pygame as pg
 import os
-import math
+from perlin_noise import PerlinNoise
 from .setting import *
 import random as rd
 
@@ -11,7 +11,8 @@ class World:
         self.nums_grid_y = nums_grid_y
         self.width = width
         self.height = height
-
+        
+        self.noise_scale = nums_grid_x/2
         self.graphics = self.load_images()
         self.default_surface = pg.Surface((nums_grid_x * TILE_SIZE * 2, nums_grid_y * TILE_SIZE + 2 * TILE_SIZE))
         self.isometric_map = self.isometric_map()
@@ -32,7 +33,7 @@ class World:
             map.append([])
             for col in range(self.nums_grid_x):
                 cartesian_cell = self.cartesian_cell(row, col)
-                isometric_cell = self.isometric_cell(cartesian_cell)
+                isometric_cell = self.isometric_cell(cartesian_cell, col, row)
                 map[row].append(isometric_cell)
 
                 (x, y) = isometric_cell['render_img_coor']
@@ -53,7 +54,7 @@ class World:
         return cell
     
     # Convert the coordinations of 4 vertices of square in cartesian basis to isometric basis
-    def isometric_cell(self, cartesian_cell):
+    def isometric_cell(self, cartesian_cell, grid_x, grid_y):
         convert_function = lambda x, y: (x -y, x/2 + y/2) # for more info about this function search gg with keyword: cartesian to isometric map
         isometric_cell = [convert_function(x, y) for x, y in cartesian_cell]
         
@@ -63,12 +64,18 @@ class World:
         )
 
         def graphic_generator():
-            random = rd.randint(1, 100)
+            normal_random = rd.randint(1, 100)
+            noise = PerlinNoise(octaves=1, seed=777)
+            random = 100 * noise([grid_x/self.noise_scale, grid_y/self.noise_scale])
+            print(random)
             graphic = 'block'
-            if random < 5:
+            if random < -20:
                 graphic = 'tree'
-            elif random < 10:
-                graphic = 'rock'
+            elif random > 20:
+                graphic = 'mountain'
+            else:
+                if normal_random < 3:
+                    graphic = 'rock'
             return graphic
 
         return {
@@ -90,7 +97,8 @@ class World:
             'upscale_4x': {
                 'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')).convert_alpha(),
                 'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png')).convert_alpha(),
-                'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png')).convert_alpha()
+                'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png')).convert_alpha(),
+                'mountain': pg.image.load(os.path.join(upscale_path, 'land3a_00074_upscaled.png')).convert_alpha()
             },
             'upscale_2x': {
                 'block': pg.image.load(os.path.join(upscale_path, 'download.png')).convert_alpha()

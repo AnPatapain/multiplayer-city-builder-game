@@ -51,3 +51,7 @@ Day 3  3/10/2022 - Extending our world, Camera, check FPS
             > Use convert() and convert_alpha()
 
     4> Reallocating tree and rock in map
+        > Using "Perlin Noise" algorithm to generate randomly natural Map
+
+            Perlin Noise is an algorithm that is frequently used for creating terrain that looks natural
+            
