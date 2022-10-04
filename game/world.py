@@ -64,18 +64,30 @@ class World:
         )
 
         def graphic_generator():
+
+            def perlin_distribution(random_number):
+                for row in range(30):
+                    for col in range(30):
+                        print('| %5.2f |' % (random_number), end=' ')
+                    print('\n')
+
+
             normal_random = rd.randint(1, 100)
+
             noise = PerlinNoise(octaves=1, seed=777)
-            random = 100 * noise([grid_x/self.noise_scale, grid_y/self.noise_scale])
-            print(random)
+
+            perlin_random = 100 * noise([grid_x/self.noise_scale, grid_y/self.noise_scale])
+
+            perlin_distribution(perlin_random)
+            
             graphic = 'block'
-            if random < -20:
+            if (perlin_random >= 20) or perlin_random <= -30 :
                 graphic = 'tree'
-            elif random > 20:
-                graphic = 'mountain'
             else:
-                if normal_random < 3:
+                if normal_random < 4:
                     graphic = 'rock'
+                if normal_random < 2:
+                    graphic = 'tree'
             return graphic
 
         return {

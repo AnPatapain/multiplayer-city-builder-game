@@ -53,5 +53,5 @@ Day 3  3/10/2022 - Extending our world, Camera, check FPS
     4> Reallocating tree and rock in map
         > Using "Perlin Noise" algorithm to generate randomly natural Map
 
-            Perlin Noise is an algorithm that is frequently used for creating terrain that looks natural
-            
+            Perlin Noise is an algorithm that is frequently used for creating terrain that looks natural. Perlin Noise
+            help us creating clustering object placed at a random space
