@@ -65,11 +65,13 @@ class World:
 
         def graphic_generator():
 
-            def perlin_distribution(random_number):
-                for row in range(30):
-                    for col in range(30):
-                        print('| %5.2f |' % (random_number), end=' ')
-                    print('\n')
+            # For test: Seeing perlin noise distribution
+
+            # def perlin_distribution(random_number):
+            #     for row in range(10):
+            #         for col in range(10):
+            #             print('| %5.2f |' % (random_number), end=' ')
+            #         print('\n')
 
 
             normal_random = rd.randint(1, 100)
@@ -78,7 +80,7 @@ class World:
 
             perlin_random = 100 * noise([grid_x/self.noise_scale, grid_y/self.noise_scale])
 
-            perlin_distribution(perlin_random)
+            # perlin_distribution(perlin_random)
             
             graphic = 'block'
             if (perlin_random >= 20) or perlin_random <= -30 :
