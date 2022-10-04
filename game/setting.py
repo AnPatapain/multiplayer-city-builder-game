@@ -7,5 +7,6 @@ TILE_SIZE = 116 # length and height of square tile
 DAA=1
 DAA=2
 DAA=3
+DAA=4
 # TILE_SIZE = 58
 # TILE_SIZE = 29
