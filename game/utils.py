@@ -1,6 +1,5 @@
 import pygame as pg
 
-flag_an=1
 
 def draw_text(text, screen, pos):
     font = pg.font.Font(None, 42)
