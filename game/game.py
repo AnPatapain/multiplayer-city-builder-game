@@ -55,7 +55,7 @@ class Game:
                                         y + self.map_controller.map_position[1])
 
                 graphic_name = isometric_map[row][col]['graphic']
-                graphic_img = self.world.graphics['upscale_4x'][graphic_name]
+                graphic_img = self.world.graphics['upscale_2x'][graphic_name]
                 graphic_render = (x_offset, y_offset -  graphic_img.get_height() + TILE_SIZE)
                 
                 if graphic_name != 'block':
