@@ -1,7 +1,7 @@
 import pygame as pg
 
-def draw_text(text, screen, pos):
-    font = pg.font.Font(None, 42)
+def draw_text(text, size, screen, pos):
+    font = pg.font.Font(None, size)
     text_surface = font.render(text, True, (255,255, 255), None) # -> Surface
     
 
