@@ -30,7 +30,7 @@ class Pannel:
 
     def create_building_pannel(self):
 
-        render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 500]
+        render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 800]
         object_width = self.building_pannel.get_width() // 3
         tiles = []
 
@@ -53,7 +53,7 @@ class Pannel:
 
             if render_pos[0] + building_image_scale.get_width() + 10 >= self.width:
                 
-                render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 500]
+                render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 800]
                 render_pos[1] += building_image_scale.get_height() + 10
             
             else:
@@ -76,7 +76,7 @@ class Pannel:
         for tile in self.tiles:
             screen.blit(tile["icon"], tile["rect"])
 
-        resource_pannel_text  = ['File', 'Options', 'Help', 'Advisor', 'Dn', 'Population']
+        resource_pannel_text  = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
         
         resource_pannel_text_pos = [20, 20]
 
@@ -87,6 +87,14 @@ class Pannel:
             draw_text(text, 42, screen, temp_pos)
             
             resource_pannel_text_pos[0] += 200
+
+
+        # Minimap placeholder
+        demo_minimap = pg.Rect(self.width * 0.8, self.height * 0.04, 
+                               self.building_pannel.get_width(), self.building_pannel.get_height() * 0.3 )
+
+        pg.draw.rect(screen, (0, 0, 0), demo_minimap, 10)
+        draw_text('minimap placeholder', 60, screen, (self.width * 0.8 + 100, self.height * 0.04 + 100))
 
     
     def update(self):
@@ -112,8 +120,8 @@ class Pannel:
 
         return {
 
-            'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')).convert_alpha(),
-            'rock': pg.image.load(os.path.join(path, 'Land1a_00290.png')).convert_alpha()
+            'tree': self.scale_image_2x( pg.image.load(os.path.join(path, 'Land1a_00041.png')) ).convert_alpha(),
+            'rock': self.scale_image_2x( pg.image.load(os.path.join(path, 'Land1a_00290.png')) ).convert_alpha()
 
         }
 
@@ -138,3 +146,8 @@ class Pannel:
             image = pg.transform.scale(image, (int(width), int(height)))
 
         return image
+
+    def scale_image_2x(self, image):
+        
+        # built-in function of pygame for scaling image to 2x 
+        return pg.transform.scale2x(image)
