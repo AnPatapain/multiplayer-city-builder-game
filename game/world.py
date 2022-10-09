@@ -38,7 +38,7 @@ class World:
 
                 (x, y) = isometric_cell['render_img_coor']
                 offset_render = (x + self.default_surface.get_width()/2, y)
-                self.default_surface.blit(self.graphics['upscale_4x']['block'], offset_render)
+                self.default_surface.blit(self.graphics['upscale_2x']['block'], offset_render)
 
         return map
 
@@ -64,15 +64,6 @@ class World:
         )
 
         def graphic_generator():
-
-            # For test: Seeing perlin noise distribution
-
-            # def perlin_distribution(random_number):
-            #     for row in range(10):
-            #         for col in range(10):
-            #             print('| %5.2f |' % (random_number), end=' ')
-            #         print('\n')
-
 
             normal_random = rd.randint(1, 100)
 
@@ -115,8 +106,16 @@ class World:
                 'mountain': pg.image.load(os.path.join(upscale_path, 'land3a_00074_upscaled.png')).convert_alpha()
             },
             'upscale_2x': {
-                'block': pg.image.load(os.path.join(upscale_path, 'download.png')).convert_alpha()
+                'block': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00069.png') ) ).convert_alpha() ,
+                'tree': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00041.png') ) ).convert_alpha(),
+                'rock': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00290.png') ) ).convert_alpha()
             }
         }
+
+
+    def scale_image_2x(self, image):
+        
+        # built-in function of pygame for scaling image to 2x 
+        return pg.transform.scale2x(image)
 
     
