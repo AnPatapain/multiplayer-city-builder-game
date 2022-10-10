@@ -8,6 +8,7 @@ from .setting import *
 
 
 class Game:
+
     def __init__(self, screen, clock):
 
         self.screen = screen
@@ -24,8 +25,10 @@ class Game:
         # for displaying available building in game
         self.pannel = Pannel(self.width, self.height)
 
+
     # Game Loop
     def run(self):
+
         self.playing = True
         
         while self.playing:
@@ -36,6 +39,7 @@ class Game:
         
 
     def event_handler(self):
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -51,25 +55,10 @@ class Game:
                 
 
     def draw(self):
+
         self.screen.fill((0, 0, 0))
 
-        isometric_map = self.world.isometric_map
-        
-        self.screen.blit(self.world.default_surface, self.map_controller.map_position)
-        for row in range(self.world.nums_grid_y):
-            for col in range(self.world.nums_grid_x):
-                
-                # Render graphic
-                (x, y) = isometric_map[row][col]['render_img_coor']
-                (x_offset, y_offset) = (x + self.map_controller.map_position[0] + self.world.default_surface.get_width()/2, 
-                                        y + self.map_controller.map_position[1])
-
-                graphic_name = isometric_map[row][col]['graphic']
-                graphic_img = self.world.graphics['upscale_2x'][graphic_name]
-                graphic_render = (x_offset, y_offset -  graphic_img.get_height() + TILE_SIZE)
-                
-                if graphic_name != 'block':
-                    self.screen.blit(graphic_img, graphic_render)
+        self.world.draw(self.screen, self.map_controller.map_position)
 
         self.pannel.draw(self.screen)
 
