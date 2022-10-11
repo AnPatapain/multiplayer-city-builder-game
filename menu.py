@@ -57,13 +57,13 @@ class Menu:
 
 
     def load_images(self):
-        background = pg.image.load('assets/menu_sprites/background_menu.jpg')
+        background = pg.image.load('assets/menu_sprites/background_menu.jpg').convert()
         background = pg.transform.scale(background, self.screen.get_size())
 
-        logo = pg.image.load('assets/menu_sprites/caesar3.png')
+        logo = pg.image.load('assets/menu_sprites/caesar3.png').convert_alpha()
         logo = pg.transform.scale(logo, (440, 130))
 
-        splash = pg.image.load('assets/menu_sprites/splash_screen.jpg')
+        splash = pg.image.load('assets/menu_sprites/splash_screen.jpg').convert()
         splash = pg.transform.scale(splash, self.screen.get_size())
 
         return {
