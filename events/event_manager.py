@@ -23,7 +23,7 @@ class EventManager:
                     if key_listener[0] == event.key:
                         key_listener[1]()
 
-            if event.type == pg.MOUSEBUTTONDOWN:
+            if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click
                 if event.button not in (4, 5):
                     self.any_input()
