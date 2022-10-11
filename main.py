@@ -8,8 +8,9 @@ def main():
     is_playing = True
 
     pg.init()
-    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT]) # -> Surface instance
-    # screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
+    # screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT]) # -> Surface instance
+    screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
+    pg.event.set_grab(True)
     clock = pg.time.Clock()
     game = Game(screen, clock)
     
