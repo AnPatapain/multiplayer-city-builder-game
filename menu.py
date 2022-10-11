@@ -1,99 +1,86 @@
-# coding:utf-8
-import pygame
-# import math
-pygame.init()
+import pygame as pg
+from components import button
+from events import event_manager
+from game import utils
 
-# créer la fenetre du jeu
+class Menu:
+    def __init__(self, screen, clock):
+        self.splash_screen = True
+        self.active = True
 
-#icone = pygame.image.load('Sierra.ico')
-screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)  # Taille de la fenetre
-pygame.display.set_caption("Caesar III")   # Nom de la fenetre
+        self.screen = screen
+        self.clock = clock
+        self.graphics = self.load_images()
+        self.eventManager = event_manager.EventManager()
 
-x = screen.get_size()
-background = pygame.image.load('assets/menu_sprites/Background_Init.png')
-background = pygame.transform.scale(background, x)
+        # (Width, Height)
+        button_size = (320, 40)
 
-"""menu = pygame.image.load('assets/menu_sprites/menu demo.png')
-menu_rect = menu.get_rect()
-menu_rect.x = screen.get_width() / 6
-menu_rect.y = screen.get_height() / 4"""
+        self.button__start_new_career = button.Button("Start new career", (625, 350), button_size)
+        self.button__start_new_career.on_click(self.set_inactive)
 
-logo = pygame.image.load('assets/menu_sprites/Caesar3.png')
-logo = pygame.transform.scale(logo, (440, 130))
+        self.button__load_saved_game = button.Button("Load saved game", (625, 400), button_size)
 
+        self.button__options = button.Button("Options", (625, 450), button_size)
 
-start_new_career = pygame.image.load('assets/menu_sprites/start new career.png')
-start_new_career_rect = start_new_career.get_rect()
-start_new_career_rect.x = 625
-start_new_career_rect.y = 350
-load_saved_game = pygame.image.load('assets/menu_sprites/load saved game.png')
-options = pygame.image.load('assets/menu_sprites/options.png')
-exit_button = pygame.image.load('assets/menu_sprites/exit.png')
-exit_rect = exit_button.get_rect()
-exit_rect.x = 625
-exit_rect.y = 500
+        self.button__exit = button.Button("Exit", (625, 500), button_size)
+        self.button__exit.on_click(exit)
 
-def affichage_menu():
-    screen.blit(logo, (560, 200))
-    screen.blit(start_new_career, (625, 350))
-    screen.blit(load_saved_game, (625, 400))
-    screen.blit(options, (625, 450))
-    screen.blit(exit_button, (625, 500))
-    pygame.display.flip()
-
-def survole(bouton, pos):
-    if bouton.x < pos[0] < bouton.x + bouton.width:
-        if bouton.y < pos[1] < bouton.y + bouton.height:
-            return True
-    return False
+        self.eventManager.register_component(self.button__start_new_career)\
+            .register_component(self.button__load_saved_game)\
+            .register_component(self.button__options)\
+            .register_component(self.button__exit)
 
 
-
-interface_menu = False
-game = False
-launched = True
-
-while launched:  # boucle tant que cette condition est vraie
-    screen.blit(background, (0, 0))
-    pygame.display.flip()
-    # si le joueur ferme cette fenetre
-    if interface_menu:
-        affichage_menu()
-
-    for event in pygame.event.get():
-
-        pos = pygame.mouse.get_pos()
-
-        if event.type == pygame.QUIT:
-            launched = False
-            pygame.quit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                launched = False
-                pygame.quit()
-        if event.type == pygame.MOUSEMOTION:
-            #boutons_dynamiques(start_new_career, exit_button)
-            if survole(start_new_career_rect, pos):
-                start_new_career = pygame.image.load('assets/menu_sprites/start new career mouse on.png')
-            elif not survole(start_new_career_rect, pos):
-                start_new_career = pygame.image.load('assets/menu_sprites/start new career.png')
-            if survole(exit_rect, pos):
-                exit_button = pygame.image.load('assets/menu_sprites/exit mouse on.png')
-            elif not survole(exit_rect, pos):
-                exit_button = pygame.image.load('assets/menu_sprites/exit.png')
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if not interface_menu:
-                background = pygame.image.load('assets/menu_sprites/Background_Menu.png')
-                background = pygame.transform.scale(background, x)
-                interface_menu = True
-            elif interface_menu:
-                if exit_rect.collidepoint(event.pos):
-                    launched = False
-                    pygame.quit()
-                if start_new_career_rect.collidepoint(event.pos):
-                    interface_menu = False
-                    background = pygame.image.load('assets/menu_sprites/Start.png')
-                    background = pygame.transform.scale(background, x)
+        self.eventManager.set_any_input(self.skip_splashscreen)
+        self.screen.blit(self.graphics["splash"], (0, 0))
+        pg.display.flip()
 
 
+    def run(self):
+        self.clock.tick(60)
+        self.eventManager.handle_events()
 
+        if self.is_splashscreen_skipped():
+            self.affichage()
+
+
+    def affichage(self):
+        self.screen.blit(self.graphics["background"], (0, 0))
+        self.screen.blit(self.graphics["logo"], (560, 200))
+
+        self.button__start_new_career.display(self.screen)
+        self.button__load_saved_game.display(self.screen)
+        self.button__options.display(self.screen)
+        self.button__exit.display(self.screen)
+        pg.display.flip()
+
+
+    def load_images(self):
+        background = pg.image.load('assets/menu_sprites/background_menu.jpg')
+        background = pg.transform.scale(background, self.screen.get_size())
+
+        logo = pg.image.load('assets/menu_sprites/caesar3.png')
+        logo = pg.transform.scale(logo, (440, 130))
+
+        splash = pg.image.load('assets/menu_sprites/splash_screen.jpg')
+        splash = pg.transform.scale(splash, self.screen.get_size())
+
+        return {
+            'background': background,
+            'logo': logo,
+            'splash': splash
+        }
+
+    def is_active(self):
+        return self.active
+
+    def set_inactive(self):
+        self.active = False
+
+    def skip_splashscreen(self):
+        self.eventManager.clear_any_input()
+        self.splash_screen = False
+
+    def is_splashscreen_skipped(self):
+        return not self.splash_screen
