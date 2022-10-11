@@ -13,10 +13,6 @@ x = screen.get_size()
 background = pygame.image.load('assets/menu_sprites/Background_Init.png')
 background = pygame.transform.scale(background, x)
 
-"""menu = pygame.image.load('assets/menu_sprites/menu demo.png')
-menu_rect = menu.get_rect()
-menu_rect.x = screen.get_width() / 6
-menu_rect.y = screen.get_height() / 4"""
 
 logo = pygame.image.load('assets/menu_sprites/Caesar3.png')
 logo = pygame.transform.scale(logo, (440, 130))
@@ -55,7 +51,7 @@ launched = True
 
 while launched:  # boucle tant que cette condition est vraie
     screen.blit(background, (0, 0))
-    pygame.display.flip()
+    
     # si le joueur ferme cette fenetre
     if interface_menu:
         affichage_menu()
@@ -94,6 +90,8 @@ while launched:  # boucle tant que cette condition est vraie
                     interface_menu = False
                     background = pygame.image.load('assets/menu_sprites/Start.png')
                     background = pygame.transform.scale(background, x)
+
+    pygame.display.flip()
 
 
 

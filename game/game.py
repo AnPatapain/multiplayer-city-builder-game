@@ -24,6 +24,8 @@ class Game:
         # for displaying available building in game
         self.pannel = Pannel(self.width, self.height)
 
+        
+
     # Game Loop
     def run(self):
         self.playing = True
@@ -47,6 +49,8 @@ class Game:
                 
                 # For scrolling map
                 self.map_controller.key_event_handling(event)
+            
+            
                 
                 
 
