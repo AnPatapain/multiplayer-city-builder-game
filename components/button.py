@@ -12,6 +12,7 @@ class Button:
         self.rect = pg.Rect(pos, size)
         self.margin = 8
         self.func = lambda: True
+        self.is_hovered = False
 
     def is_hover(self, pos):
         hover_x = self.rect.x < pos[0] < self.rect.x + self.rect.width
@@ -20,14 +21,19 @@ class Button:
         return hover_x and hover_y
 
     def hover(self):
-        self.color = HOVER_COLOR
-        # if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
-        #     pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
+        if not self.is_hovered:
+            self.color = HOVER_COLOR
+            # TODO: la souris reste avec un curseur hand après avoir cliqué
+            if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
+                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
+            self.is_hovered = True
 
     def not_hover(self):
-        self.color = BASE_COLOR
-        # if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
-        #    pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
+        if self.is_hovered:
+            self.color = BASE_COLOR
+            if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
+                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
+            self.is_hovered = False
 
     def set_margin(self, margin):
         self.margin = margin
