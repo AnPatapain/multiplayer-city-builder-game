@@ -59,16 +59,16 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        isometric_map = self.world.isometric_map
+        # isometric_map = self.world.isometric_map
         
-        self.screen.blit(self.world.default_surface, self.map_controller.map_position)
-        for row in range(self.world.nums_grid_y):
-            for col in range(self.world.nums_grid_x):
+        # self.screen.blit(self.world.default_surface, self.map_controller.map_position)
+        # for row in range(self.world.nums_grid_y):
+        #     for col in range(self.world.nums_grid_x):
                 
-                # Render graphic
-                (x, y) = isometric_map[row][col]['render_img_coor']
-                (x_offset, y_offset) = (x + self.map_controller.map_position[0] + self.world.default_surface.get_width()/2, 
-                                        y + self.map_controller.map_position[1])
+        #         # Render graphic
+        #         (x, y) = isometric_map[row][col]['render_img_coor']
+        #         (x_offset, y_offset) = (x + self.map_controller.map_position[0] + self.world.default_surface.get_width()/2, 
+        #                                 y + self.map_controller.map_position[1])
 
         self.world.draw(self.screen, self.map_controller.map_position)
 

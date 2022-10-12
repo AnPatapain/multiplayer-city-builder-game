@@ -1,6 +1,7 @@
 import pygame as pg
 from game.game import Game
 from game.setting import SCREEN_HEIGHT, SCREEN_WIDTH
+from menu.menu import Menu
 
 
 def main():
@@ -13,9 +14,13 @@ def main():
     pg.event.set_grab(True)
     clock = pg.time.Clock()
     game = Game(screen, clock)
+
+    # menu = Menu(screen)
     
     while is_game_run:
-        # in case player pause the game for reading instruction or view game menu
+
+        # menu.display()
+
         while is_playing:
             #game loop (Draw screen -> event handling -> update state)
             game.run()
