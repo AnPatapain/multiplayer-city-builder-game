@@ -40,6 +40,7 @@ class Button:
         return self
 
     def click(self):
+        self.not_hover()
         self.func()
 
     def on_click(self, func):
