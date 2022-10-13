@@ -14,69 +14,57 @@ class Menu:
         
         self.screen_size = screen.get_size() # -> tuple (width, height)
         self.menu_graphics = self.load_menu_graphics()
+
+        self.start_game = False
+        self.is_display_background_init = True
+        self.is_display_game_menu = False
         
 
     def run(self):
-        run = True
-        while run:
-            clock.tick
+        
+        while self.start_game == False:
+            self.clock.tick(60)
             self.draw()
             self.event_handler()
             self.update()
 
+    def update(self):
+        pass
 
-    def event
+
+    def event_handler(self):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+
+            if event.type == pg.KEYDOWN:
+
+                if self.is_display_background_init:
+                    self.start_game = True
+
+                if event.key == pg.K_ESCAPE:
+                    pg.quit()
+                    sys.exit()
+                
+
+
+    
     def draw(self):
 
-        self.display_background_init()
-        
-        self.display_background_menu()
+        if self.is_display_background_init :
+            self.display_background_init()
 
-        # displaying = True
+        if self.is_display_game_menu:
+            self.display_background_menu()
 
-        # start_new_career = Button ( self.menu_graphics['start_new_career'] )
-        # load_saved_game = Button (self.menu_graphics['load_saved_game'])
-        # options = Button (self.menu_graphics['options'])
-        # exit_button = Button ( self.menu_graphics['exit_button'] )
-        
-        # while displaying:
+        pg.display.flip()
 
-        #     if start_new_career.clicked():
-        #         displaying = False
-
-        #     elif load_saved_game.clicked():
-        #         self.load_saved_game_display()
-
-        #     elif options.clicked():
-        #         self.options_display()
-
-        #     elif exit_button.clicked():
-        #         sys.exit()
-        #     pass
-
-        # pass
     
     def display_background_init(self):
 
-        display = True
-
-        while display:
-            self.clock.tick(60)
-            
-            pg.display.flip()
-            pass
-
-
-        pass
-
-    def display_background_menu(self):
-        pass
-
-    def load_saved_game_display(self):
-        pass
-
-    def options_display(self):
-        pass
+        background = pg.transform.scale(self.menu_graphics['background_init'], self.screen_size)
+        self.screen.blit(background, (0, 0)) 
 
     def load_menu_graphics(self):
 

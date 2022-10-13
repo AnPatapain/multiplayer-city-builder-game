@@ -21,7 +21,7 @@ def main():
     
     while is_game_run:
 
-        menu.display()
+        menu.run()
 
         while is_playing:
             #game loop (Draw screen -> event handling -> update state)
