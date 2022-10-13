@@ -3,6 +3,8 @@ from game.game import Game
 from game.setting import SCREEN_HEIGHT, SCREEN_WIDTH
 from menu.menu import Menu
 
+# def main():
+#     print('hello world')
 
 def main():
     is_game_run = True
@@ -15,11 +17,11 @@ def main():
     clock = pg.time.Clock()
     game = Game(screen, clock)
 
-    # menu = Menu(screen)
+    menu = Menu(screen, clock)
     
     while is_game_run:
 
-        # menu.display()
+        menu.display()
 
         while is_playing:
             #game loop (Draw screen -> event handling -> update state)

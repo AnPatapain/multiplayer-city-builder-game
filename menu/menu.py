@@ -1,3 +1,4 @@
+from operator import is_
 import pygame as pg
 from .button import Button
 from .setting import *
@@ -6,13 +7,26 @@ import os
 
 
 class Menu:
-    def __init__(self, screen):
+    def __init__(self, screen, clock):
 
-        self.menu_graphics = self.load_menu_graphics()
         self.screen = screen
+        self.clock = clock
+        
         self.screen_size = screen.get_size() # -> tuple (width, height)
+        self.menu_graphics = self.load_menu_graphics()
+        
 
-    def display(self):
+    def run(self):
+        run = True
+        while run:
+            clock.tick
+            self.draw()
+            self.event_handler()
+            self.update()
+
+
+    def event
+    def draw(self):
 
         self.display_background_init()
         
@@ -42,10 +56,20 @@ class Menu:
 
         # pass
     
-    def display_background_init():
+    def display_background_init(self):
+
+        display = True
+
+        while display:
+            self.clock.tick(60)
+            
+            pg.display.flip()
+            pass
+
+
         pass
 
-    def display_background_menu():
+    def display_background_menu(self):
         pass
 
     def load_saved_game_display(self):
