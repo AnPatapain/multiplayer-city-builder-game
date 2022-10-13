@@ -1,4 +1,3 @@
-from operator import is_
 import pygame as pg
 from .button import Button
 from .setting import *
@@ -21,9 +20,25 @@ class Menu:
         self.exit = False
         self.is_display_background_init = True
         self.is_display_game_menu = False
+
+    def init(self):
+        for i in range(len(self.buttons)):
+            original_image = self.buttons[i].get_image()
+            scale_image = pg.transform.scale(original_image, (self.screen_size[0]/3, self.screen_size[1]/15))
+            self.buttons[i].set_image(scale_image)
+
+            self.buttons[i].set_margin_top(40)
+            self.buttons[i].set_position( (self.screen_size[0]/3, 
+                                           self.screen_size[1]/5 + i * ( self.buttons[i].get_button_size()[1] + self.buttons[i].get_margin_top() ) ) )
+
+
+            self.buttons[i].set_rect( self.buttons[i].get_position(), self.buttons[i].get_image().get_size())
+                                                                
         
 
     def run(self):
+
+        self.init()
         
         while self.start_game == False:
             self.clock.tick(60)
@@ -31,12 +46,23 @@ class Menu:
             self.event_handler()
             self.update()
 
-    def update(self):
-        
-        # start game if we click "start new career" button
-        # exit game if we click "exit" button
 
-        pass
+    def update(self):
+        for button in self.buttons:
+
+            if button.check_button():
+                
+                if button.get_name() == 'start_new_career':
+                    self.start_game = True
+
+                elif button.get_name() == 'load_saved_game':
+                    self.load_saved_game_render()
+
+                elif button.get_name() == 'options':
+                    self.options_render()
+
+                elif button.get_name() == 'exit_button':
+                    sys.exit()
 
 
     def event_handler(self):
@@ -81,14 +107,7 @@ class Menu:
 
     def display_background_menu(self):
 
-        for i in range(len(self.buttons)):
-            original_image = self.buttons[i].get_image()
-            scale_image = pg.transform.scale(original_image, (self.screen_size[0]/3, self.screen_size[1]/15))
-            self.buttons[i].set_image(scale_image)
-
-            self.buttons[i].set_margin_top(40)
-            self.buttons[i].set_position( (self.screen_size[0]/3, 
-                                           self.screen_size[1]/5 + i * ( self.buttons[i].get_button_size()[1] + self.buttons[i].get_margin_top() ) ) )
+        
             
         background_menu = pg.transform.scale(self.menu_graphics['background']['background_menu'], self.screen_size)
         self.screen.blit(background_menu, (0, 0))
@@ -97,6 +116,15 @@ class Menu:
             self.screen.blit(button.get_image(), button.get_position())
 
         
+
+    def load_saved_game_render():
+        pass
+    
+    
+    def options_render():
+        pass
+
+
 
     def load_menu_graphics(self):
 
