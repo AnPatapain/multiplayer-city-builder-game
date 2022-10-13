@@ -52,7 +52,7 @@ class Game:
                     sys.exit()
                 
                 # For scrolling map
-                self.map_controller.key_event_handling(event)
+                self.map_controller.event_handler(event)
                 
                 
 

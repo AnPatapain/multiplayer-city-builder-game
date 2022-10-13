@@ -10,7 +10,7 @@ class Map_controller:
         self.offset_for_mouse = 20
         self.offset_for_key = 50
 
-    def key_event_handling(self, event):
+    def event_handler(self, event):
         
         if event.key == pg.K_DOWN:
             self.map_position[1] = self.map_position[1] - self.offset_for_key
