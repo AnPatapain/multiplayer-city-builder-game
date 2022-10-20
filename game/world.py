@@ -1,14 +1,14 @@
 import pygame as pg
 import os
 from perlin_noise import PerlinNoise
-from .setting import *
 import random as rd
+
+from .setting import *
 
 
 class World:
 
-    def __init__(self, nums_grid_x, nums_grid_y, width, height):
-
+    def __init__(self, nums_grid_x, nums_grid_y, width, height, panel):
         self.nums_grid_x = nums_grid_x
         self.nums_grid_y = nums_grid_y
         self.width = width
@@ -17,49 +17,112 @@ class World:
         self.noise_scale = nums_grid_x/2
         self.graphics = self.load_images()
         self.default_surface = pg.Surface((nums_grid_x * TILE_SIZE * 2, nums_grid_y * TILE_SIZE + 2 * TILE_SIZE))
-        self.isometric_map = self.isometric_map()
+        self.grid = self.grid()
+
+        self.panel = panel
+        self.temp_tile = None
 
 
-    def draw(self, screen, map_position):
+    def mouse_pos_to_grid(self, mouse_pos, map_pos):
+
+        '''
+        Convert the process that transform a mouse_pos to row and col in grid
+
+        convert this process: (col, row) -> convert_to_iso -> offset (1/2 default_surface.width, 0) -> offset (map_pos[0], map_pos[1])
+
+        Arguments: mouse_position: tuple, map_position: tuple
+
+        Return: (col, row) of mouse_position in the grid
+        '''
+
+        iso_x = mouse_pos[0] - map_pos[0] - self.default_surface.get_width()/2
+        iso_y = mouse_pos[1] - map_pos[1]
+
+        # transform to cart (inverse of cart_to_iso)
+        cart_x = (iso_x + 2*iso_y)/2
+        cart_y = (2*iso_y - iso_x)/2
+
+        # transform to grid coordinates
+        grid_col = int(cart_x // TILE_SIZE)
+        grid_row = int(cart_y // TILE_SIZE)
+        return (grid_col, grid_row)
+
+    
+    def update(self, map_pos):
+        '''
+        Get mouse_pos -> convert to (col, row) in grid using mouse_pos_to_grid function
         
-        screen.blit(self.default_surface, map_position)
+        if there is selected_tile from panel:
+            store name, image of selected_tile and mouse_grid_pos in self.temp_tile so we can draw it in world.draw()
+
+            if left_click:
+                bind the texture of the selected_tile at grid[row][col]
+                set isBuildable at grid[row][col] False
+            
+            if right_click:
+                set selected_tile in panel False    
+        '''
+        mouse_pos = pg.mouse.get_pos()
+        mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
+        mouse_action = pg.mouse.get_pressed()
+
+
+        selected_tile = self.panel.get_selected_tile()
+        self.temp_tile = None
+
+        if selected_tile != None:
+            if self.in_map(mouse_grid_pos):
+
+                self.temp_tile = {
+                    'name': selected_tile["name"],
+                    'isometric_coor': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isometric_coor"],
+                    'render_img_coor': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["render_img_coor"],
+                    'isBuildable': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"]
+                }
+
+                if mouse_action[0] and self.temp_tile['isBuildable']:
+                    self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["texture"] = self.temp_tile["name"]
+                    self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"] = False
+                    # self.panel.set_selected_tile(None)
+                elif mouse_action[2]:
+                    self.panel.set_selected_tile(None)
+
+
+    def draw(self, screen, map_pos):
+        
+        screen.blit(self.default_surface, map_pos)
 
         for row in range(self.nums_grid_y):
             for col in range(self.nums_grid_x):
-                
-                # Render graphic
-                (x, y) = self.isometric_map[row][col]['render_img_coor']
+                (x, y) = self.grid[row][col]['render_img_coor']
+                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
+                (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0], 
+                                         y + map_pos[1] )
 
-                # cell places at 1/2 default_surface.get_width() and default_surface move around on the screen
-                (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_position[0], 
-                                         y + map_position[1] )
+                texture = self.grid[row][col]['texture']
+                texture_image = self.graphics['upscale_2x'][texture]
 
-                graphic_object_name = self.isometric_map[row][col]['texture']
+                if texture != 'block':
+                    screen.blit(texture_image, (x_offset, y_offset -  texture_image.get_height() + TILE_SIZE))
+        
+        if self.temp_tile is not None:
+            isometric_coor = self.temp_tile['isometric_coor']
+            isometric_coor_offset = [(x+map_pos[0]+self.default_surface.get_width()/2, y + map_pos[1]) for x, y in isometric_coor]
 
-                graphic_object_img = self.graphics['upscale_2x'][graphic_object_name]
+            (x, y) = self.temp_tile['render_img_coor']
+            (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0], 
+                                     y + map_pos[1] )
 
-                graphic_render = (x_offset, y_offset -  graphic_object_img.get_height() + TILE_SIZE)
-                
+            screen.blit(self.graphics['upscale_2x'][self.temp_tile['name']], 
+                       (x_offset, y_offset -  self.graphics['upscale_2x'][self.temp_tile['name']].get_height() + TILE_SIZE))
 
-                if graphic_object_name != 'block':
-
-                    screen.blit(graphic_object_img, graphic_render)
-
-                    self.isometric_map[row][col]['isBuildable'] = False
-
-
-    # def cartesian_map(self):
-
-    #     world = []
-    #     for row in range(self.nums_grid_y):
-    #         world.append([])
-    #         for col in range(self.nums_grid_x):
-    #             cartesian_cell = self.cartesian_cell(row, col)
-    #             world[row].append(cartesian_cell)    
-    #     return world
+            if self.temp_tile['isBuildable']:
+                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset, 4)
+            else:
+                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset, 4)
     
 
-    def isometric_map(self):
+    def grid(self):
 
         map = []
         for row in range(self.nums_grid_y):
@@ -90,16 +153,17 @@ class World:
             perlin_random = 100 * noise([col/self.noise_scale, row/self.noise_scale])
 
             # perlin_distribution(perlin_random)
-            
-            graphic = 'block'
+            graphic_ = 'block'
             if (perlin_random >= 20) or perlin_random <= -30 :
-                graphic = 'tree'
+                graphic_ = 'tree'
             else:
                 if normal_random < 4:
-                    graphic = 'rock'
+                    graphic_ = 'rock'
                 if normal_random < 2:
-                    graphic = 'tree'
-            return graphic
+                    graphic_ = 'tree'
+            return graphic_
+
+        graphic = graphic_generator()
         
         cartesian_coor = [
             (col*TILE_SIZE, row*TILE_SIZE),
@@ -119,8 +183,8 @@ class World:
             'cartesian_coor': cartesian_coor,
             'isometric_coor': isometric_coor,
             'render_img_coor': render_img_coor,
-            'texture': graphic_generator(),
-            'isBuildable': True
+            'texture': graphic,
+            'isBuildable': True if graphic == "block" else False
         }
 
 
@@ -152,8 +216,15 @@ class World:
 
 
     def scale_image_2x(self, image):
-        
-        # built-in function of pygame for scaling image to 2x 
         return pg.transform.scale2x(image)
+
+
+    def in_map(self, grid_pos):
+        mouse_on_panel = False
+        in_map_limit = (0 <= grid_pos[0] < self.nums_grid_x) and (0 <= grid_pos[1] < self.nums_grid_y)
+        for rect in self.panel.get_panel_rects():
+            if rect.collidepoint(pg.mouse.get_pos()):
+                mouse_on_panel = True
+        return True if (in_map_limit and not mouse_on_panel) else False
 
     

@@ -3,9 +3,6 @@ from game.game import Game
 from game.setting import SCREEN_HEIGHT, SCREEN_WIDTH
 from menu.menu import Menu
 
-# def main():
-#     print('hello world')
-
 def main():
     is_game_run = True
     is_playing = True
@@ -21,10 +18,9 @@ def main():
     
     while is_game_run:
 
-        menu.run()
+        # menu.run()
 
         while is_playing:
-            #game loop (Draw screen -> event handling -> update state)
             game.run()
 
 

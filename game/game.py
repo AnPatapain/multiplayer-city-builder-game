@@ -3,7 +3,7 @@ import sys
 from .world import World
 from .utils import draw_text
 from .map_controller import Map_controller
-from .pannel import Pannel
+from .panel import Panel
 from .setting import *
 
 
@@ -15,15 +15,15 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
-        # World contains populations or graphical objects like buildings, trees, grass
-        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height)
-
         # map_controller update position of surface that the map blited on according to mouse position or key event
         self.map_controller = Map_controller(self.width, self.height)
 
-        # pannel has two sub_pannel: ressource_pannel for displaying Dn, Populations, etc and building_pannel
+        # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
         # for displaying available building in game
-        self.pannel = Pannel(self.width, self.height)
+        self.panel = Panel(self.width, self.height)
+
+        # World contains populations or graphical objects like buildings, trees, grass
+        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
         
 
@@ -46,11 +46,11 @@ class Game:
             if event.type == pg.QUIT:
                 pg.quit()
                 sys.exit()
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     sys.exit()
-                
                 # For scrolling map
                 self.map_controller.event_handler(event)
                 
@@ -59,9 +59,9 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        self.world.draw(self.screen, self.map_controller.map_position)
+        self.world.draw(self.screen, self.map_controller.get_map_pos())
 
-        self.pannel.draw(self.screen)
+        self.panel.draw(self.screen)
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), 42, self.screen, (self.width - 200, 20))
                 
@@ -69,6 +69,6 @@ class Game:
 
 
     def update(self):
-        # update map position depending on mouse movement 
-        self.map_controller.update_map_position()
-        self.pannel.update()
+        self.map_controller.update_map_pos()
+        self.panel.update()
+        self.world.update(self.map_controller.get_map_pos())
