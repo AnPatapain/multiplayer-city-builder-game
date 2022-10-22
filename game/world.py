@@ -117,6 +117,9 @@ class World:
                                 self.grid[row][col]["texture"] = self.temp_tile["name"]
                                 self.grid[row][col]["isBuildable"] = False
 
+                if mouse_action[2]:
+                    self.panel.set_selected_tile(None)
+
                 # if mouse_action[0] and self.temp_tile['isBuildable']:
                 #     self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["texture"] = self.temp_tile["name"]
                 #     self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"] = False
