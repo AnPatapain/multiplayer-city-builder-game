@@ -10,8 +10,7 @@ class Map_controller:
         self.offset_for_mouse = 20
         self.offset_for_key = 50
 
-    def event_handler(self, event):
-        
+    def event_handler(self, event):  
         if event.key == pg.K_DOWN:
             self.map_pos[1] = self.map_pos[1] - self.offset_for_key
         if event.key == pg.K_UP:
@@ -22,7 +21,6 @@ class Map_controller:
             self.map_pos[0] = self.map_pos[0] - self.offset_for_key
     
     def update_map_pos(self):
-
         mouse_position = pg.mouse.get_pos()
         (x, y) = mouse_position
         

@@ -4,6 +4,7 @@ from perlin_noise import PerlinNoise
 import random as rd
 
 from .setting import *
+import game.utils as utils
 
 
 class World:
@@ -19,12 +20,16 @@ class World:
         self.default_surface = pg.Surface((nums_grid_x * TILE_SIZE * 2, nums_grid_y * TILE_SIZE + 2 * TILE_SIZE))
         self.grid = self.grid()
 
+        #For building feature
         self.panel = panel
         self.temp_tile = None
+        self.start_point = None
+        self.temp_end_point = None
+        self.end_point = None
 
+        self.in_build_action = False
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
-
         '''
         Convert the process that transform a mouse_pos to row and col in grid
 
@@ -46,6 +51,29 @@ class World:
         grid_col = int(cart_x // TILE_SIZE)
         grid_row = int(cart_y // TILE_SIZE)
         return (grid_col, grid_row)
+
+    
+    def event_handler(self, event, map_pos):
+
+        mouse_pos = pg.mouse.get_pos()
+        mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
+
+        if self.in_map(mouse_grid_pos):
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.start_point = mouse_grid_pos
+                    self.in_build_action = True
+                    print('mouse button down:',  self.start_point)  
+
+            elif event.type == pg.MOUSEBUTTONUP:
+                if event.button == 1:
+                    self.in_build_action = False
+                    self.end_point = mouse_grid_pos
+                    print('mouse button up', self.end_point)
+                
+            elif event.type == pg.MOUSEMOTION:
+                self.temp_end_point = mouse_grid_pos
+                print('mouse motion', self.temp_end_point) 
 
     
     def update(self, map_pos):
@@ -72,7 +100,6 @@ class World:
 
         if selected_tile != None:
             if self.in_map(mouse_grid_pos):
-
                 self.temp_tile = {
                     'name': selected_tile["name"],
                     'isometric_coor': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isometric_coor"],
@@ -80,16 +107,28 @@ class World:
                     'isBuildable': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"]
                 }
 
-                if mouse_action[0] and self.temp_tile['isBuildable']:
-                    self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["texture"] = self.temp_tile["name"]
-                    self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"] = False
-                    # self.panel.set_selected_tile(None)
-                elif mouse_action[2]:
-                    self.panel.set_selected_tile(None)
+            if self.in_build_action == False and self.start_point != None and self.end_point != None:
+
+                if self.in_map(self.start_point) and self.in_map(self.end_point):
+                    for row in utils.MyRange(self.start_point[1], self.end_point[1]):
+                        for col in utils.MyRange(self.start_point[0], self.end_point[0]):
+
+                            if self.grid[row][col]['isBuildable']:
+                                self.grid[row][col]["texture"] = self.temp_tile["name"]
+                                self.grid[row][col]["isBuildable"] = False
+
+                # if mouse_action[0] and self.temp_tile['isBuildable']:
+                #     self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["texture"] = self.temp_tile["name"]
+                #     self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"] = False
+
+                # if self.in_build_action == False:
+                #     pass
+
+                # elif mouse_action[2]:
+                #     self.panel.set_selected_tile(None)
 
 
-    def draw(self, screen, map_pos):
-        
+    def draw(self, screen, map_pos):   
         screen.blit(self.default_surface, map_pos)
 
         for row in range(self.nums_grid_y):
@@ -105,7 +144,7 @@ class World:
                 if texture != 'block':
                     screen.blit(texture_image, (x_offset, y_offset -  texture_image.get_height() + TILE_SIZE))
         
-        if self.temp_tile is not None:
+        if self.temp_tile is not None and self.in_build_action == False:
             isometric_coor = self.temp_tile['isometric_coor']
             isometric_coor_offset = [(x+map_pos[0]+self.default_surface.get_width()/2, y + map_pos[1]) for x, y in isometric_coor]
 
@@ -120,26 +159,40 @@ class World:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset, 4)
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset, 4)
+
+        
+        if self.in_build_action:
+
+            if self.in_map(self.start_point) and self.in_map(self.temp_end_point):
+                for row in utils.MyRange(self.start_point[1], self.temp_end_point[1]):
+                    for col in utils.MyRange(self.start_point[0], self.temp_end_point[0]):
+
+                        if self.grid[row][col]['isBuildable']:
+
+                            (x, y) = self.grid[row][col]['render_img_coor']
+
+                            (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0], y + map_pos[1] )
+                            temp_house_image = self.graphics['upscale_2x']['temp_house']
+                            screen.blit(temp_house_image, (x_offset, y_offset -  temp_house_image.get_height() + TILE_SIZE))
     
 
     def grid(self):
-
-        map = []
+        grid = []
         for row in range(self.nums_grid_y):
 
-            map.append([])
+            grid.append([])
 
             for col in range(self.nums_grid_x):
 
                 iso_tile = self.tile(row, col)
-                map[row].append(iso_tile)
+                grid[row].append(iso_tile)
 
                 (x, y) = iso_tile['render_img_coor']
                 offset_render = (x + self.default_surface.get_width()/2, y)
                 
                 self.default_surface.blit(self.graphics['upscale_2x']['block'], offset_render)
 
-        return map
+        return grid
 
 
     def tile(self, row, col):
@@ -193,24 +246,20 @@ class World:
 
     def load_images(self):
 
-        path = 'assets/graphics'
-        upscale_path = 'assets/upscaled_graphics'
+        path = 'assets/C3_sprites/C3'
+
         return {
             'origin': {
                 'block': pg.image.load(os.path.join(path, 'Land1a_00069.png')).convert_alpha(),
                 'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')).convert_alpha(),
                 'rock': pg.image.load(os.path.join(path, 'Land1a_00290.png')).convert_alpha()
             },
-            'upscale_4x': {
-                'block': pg.image.load(os.path.join(upscale_path, 'Land1a_00069_upscaled.png')).convert_alpha(),
-                'tree': pg.image.load(os.path.join(upscale_path, 'Land1a_00041_upscaled.png')).convert_alpha(),
-                'rock': pg.image.load(os.path.join(upscale_path, 'Land1a_00290_upscaled.png')).convert_alpha(),
-                'mountain': pg.image.load(os.path.join(upscale_path, 'land3a_00074_upscaled.png')).convert_alpha()
-            },
+
             'upscale_2x': {
                 'block': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00069.png') ) ).convert_alpha() ,
                 'tree': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00041.png') ) ).convert_alpha(),
-                'rock': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00290.png') ) ).convert_alpha()
+                'rock': self.scale_image_2x( pg.image.load( os.path.join(path, 'Land1a_00290.png') ) ).convert_alpha(),
+                'temp_house': self.scale_image_2x(pg.image.load( os.path.join(path, 'Housng1a_00045.png') )).convert_alpha()
             }
         }
 

@@ -48,21 +48,29 @@ class Menu:
 
 
     def update(self):
-        for button in self.buttons:
 
-            if button.check_button():
-                
-                if button.get_name() == 'start_new_career':
-                    self.start_game = True
+        mouse_action = pg.mouse.get_pressed()
 
-                elif button.get_name() == 'load_saved_game':
-                    self.load_saved_game_render()
+        if mouse_action[0] and self.is_display_background_init:
+            self.is_display_background_init = False
+            self.is_display_game_menu = True
+        
+        elif self.is_display_game_menu:
+            for button in self.buttons:
 
-                elif button.get_name() == 'options':
-                    self.options_render()
+                if button.check_button():
+                    
+                    if button.get_name() == 'start_new_career':
+                        self.start_game = True
 
-                elif button.get_name() == 'exit_button':
-                    sys.exit()
+                    elif button.get_name() == 'load_saved_game':
+                        self.load_saved_game_render()
+
+                    elif button.get_name() == 'options':
+                        self.options_render()
+
+                    elif button.get_name() == 'exit_button':
+                        sys.exit()
 
 
     def event_handler(self):
@@ -91,7 +99,6 @@ class Menu:
 
     
     def draw(self):
-
         if self.is_display_background_init :
             self.display_background_init()
 
@@ -117,11 +124,11 @@ class Menu:
 
         
 
-    def load_saved_game_render():
+    def load_saved_game_render(self):
         pass
     
     
-    def options_render():
+    def options_render(self):
         pass
 
 

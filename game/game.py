@@ -53,6 +53,8 @@ class Game:
                     sys.exit()
                 # For scrolling map
                 self.map_controller.event_handler(event)
+
+            self.world.event_handler(event, self.map_controller.get_map_pos())
                 
                 
 

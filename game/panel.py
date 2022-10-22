@@ -4,8 +4,7 @@ import os
 
 class Panel:
     
-    def __init__(self, width, height):
-        
+    def __init__(self, width, height):        
         self.width, self.height = width, height
 
         self.ressource_panel_color = (204, 174, 132)
@@ -32,7 +31,6 @@ class Panel:
 
 
     def create_building_panel(self):
-
         render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 800]
         object_width = self.building_panel.get_width() // 3
         tiles = []
@@ -67,8 +65,7 @@ class Panel:
 
 
 
-    def draw(self, screen):
-        
+    def draw(self, screen):        
         screen.blit(self.ressource_panel, (0, 0))
 
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
@@ -98,7 +95,6 @@ class Panel:
 
     
     def update(self):
-
         mouse_pos = pg.mouse.get_pos()
 
         mouse_action = pg.mouse.get_pressed()
@@ -110,9 +106,8 @@ class Panel:
 
 
 
-    def load_images(self):
-        
-        path = 'assets/graphics'
+    def load_images(self):    
+        path = 'assets/C3_sprites/C3'
 
         return {
 
@@ -122,8 +117,7 @@ class Panel:
         }
 
     
-    def scale_image(self, image, width=None, height=None): # Procedure function which scales up or down the image specified
-                
+    def scale_image(self, image, width=None, height=None): # Procedure function which scales up or down the image specified 
         # Default case do nothing
         if (width == None) and (height == None):
             pass
@@ -143,9 +137,8 @@ class Panel:
 
         return image
 
+
     def scale_image_2x(self, image):
-        
-        # built-in function of pygame for scaling image to 2x 
         return pg.transform.scale2x(image)
 
 
