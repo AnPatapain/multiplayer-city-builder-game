@@ -63,17 +63,17 @@ class World:
                 if event.button == 1:
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
-                    print('mouse button down:',  self.start_point)  
+                      
 
             elif event.type == pg.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.in_build_action = False
                     self.end_point = mouse_grid_pos
-                    print('mouse button up', self.end_point)
+                    
                 
             elif event.type == pg.MOUSEMOTION:
                 self.temp_end_point = mouse_grid_pos
-                print('mouse motion', self.temp_end_point) 
+                
 
     
     def update(self, map_pos):

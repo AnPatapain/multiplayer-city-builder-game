@@ -1,11 +1,18 @@
 import pygame as pg
+#test
+from game.map_controller import Map_controller
+from game.world import World
 
 
 class EventManager:
-    def __init__(self):
+    def __init__(self, size):
         self.components = []
         self.key_listeners = []
         self.any_input = lambda: True
+
+        #test
+        self.width, self.height = size
+        self.map_controller = Map_controller(self.width, self.height)
 
     def handle_events(self):
         pos = pg.mouse.get_pos()
@@ -36,7 +43,10 @@ class EventManager:
         return self
 
     def remove_component(self, component):
-        self.components.remove(component)
+        try:
+            self.components.remove(component)
+        except ValueError:
+            pass
         return self
 
     def clear_components(self):

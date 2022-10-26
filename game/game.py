@@ -6,6 +6,8 @@ from .map_controller import Map_controller
 from .panel import Panel
 from .setting import *
 
+from events import event_manager
+
 
 class Game:
 
@@ -25,6 +27,14 @@ class Game:
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
+        #test
+        self.event_manager = event_manager.EventManager(self.screen.get_size())
+        self.event_manager.register_key_listener(pg.K_ESCAPE, exit)
+
+        self.event_manager.append_entitie('world', self.world)
+        self.event_manager.append_entitie('map_controller', self.map_controller)
+
+
         
 
 
@@ -36,21 +46,26 @@ class Game:
         while self.playing:
             self.clock.tick(60)
             self.draw()
-            self.event_handler()
+
+            self.event_manager.handle_events()
+            # self.event_handler()
+            
             self.update()
         
 
     def event_handler(self):
 
+
         for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
+            print("call here")
+            # if event.type == pg.QUIT:
+            #     pg.quit()
+            #     sys.exit()
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    pg.quit()
-                    sys.exit()
+                # if event.key == pg.K_ESCAPE:
+                #     pg.quit()
+                #     sys.exit()
                 # For scrolling map
                 self.map_controller.event_handler(event)
 
