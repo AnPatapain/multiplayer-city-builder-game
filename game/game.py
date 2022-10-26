@@ -28,7 +28,7 @@ class Game:
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
         #test
-        self.event_manager = event_manager.EventManager(self.screen.get_size())
+        self.event_manager = event_manager.EventManager()
         self.event_manager.register_key_listener(pg.K_ESCAPE, exit)
 
         self.event_manager.append_entitie('world', self.world)

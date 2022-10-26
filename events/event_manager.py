@@ -5,14 +5,13 @@ from game.world import World
 
 
 class EventManager:
-    def __init__(self, size):
+    def __init__(self):
         self.components = []
         self.key_listeners = []
         self.any_input = lambda: True
 
         #test
-        self.width, self.height = size
-        self.map_controller = Map_controller(self.width, self.height)
+        self.entities = {'world': None, 'map_controller': None}
 
     def handle_events(self):
         pos = pg.mouse.get_pos()
@@ -37,6 +36,10 @@ class EventManager:
                     for component in self.components:
                         if component.is_hover(pos):
                             component.click()
+
+    #test
+    def append_entitie(self, name, entitie):
+        self.entities[name] = entitie
 
     def register_component(self, component):
         self.components.append(component)
