@@ -23,7 +23,7 @@ class MyRange:
         else:
             self.start = num_2
             self.end = num_1
-        
+
 
 
     def __iter__(self): return self.MyRange_Iterator(self)
@@ -43,7 +43,7 @@ class MyRange:
         def __next__(self):
             if self.__index > self.__my_range.end:
                 raise StopIteration
-            
+
             self.__index += 1
 
             return self.__index - 1
