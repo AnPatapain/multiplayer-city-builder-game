@@ -3,19 +3,34 @@ import sys
 from .world import World
 from .utils import draw_text
 from .map_controller import Map_controller
+from .panel import Panel
 from .setting import *
 
 
 class Game:
+
     def __init__(self, screen, clock):
+
         self.screen = screen
         self.clock = clock
         self.width, self.height = self.screen.get_size()
-        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height)
+
+        # map_controller update position of surface that the map blited on according to mouse position or key event
         self.map_controller = Map_controller(self.width, self.height)
+
+        # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
+        # for displaying available building in game
+        self.panel = Panel(self.width, self.height)
+
+        # World contains populations or graphical objects like buildings, trees, grass
+        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
+
+        
+
 
     # Game Loop
     def run(self):
+
         self.playing = True
         
         while self.playing:
@@ -26,46 +41,36 @@ class Game:
         
 
     def event_handler(self):
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 sys.exit()
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     sys.exit()
-                
                 # For scrolling map
-                self.map_controller.key_event_handling(event)
+                self.map_controller.event_handler(event)
+
+            self.world.event_handler(event, self.map_controller.get_map_pos())
                 
                 
 
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        isometric_map = self.world.isometric_map
-        
-        self.screen.blit(self.world.default_surface, self.map_controller.map_position)
-        for row in range(self.world.nums_grid_y):
-            for col in range(self.world.nums_grid_x):
-                
-                # Render graphic
-                (x, y) = isometric_map[row][col]['render_img_coor']
-                (x_offset, y_offset) = (x + self.map_controller.map_position[0] + self.world.default_surface.get_width()/2, 
-                                        y + self.map_controller.map_position[1])
+        self.world.draw(self.screen, self.map_controller.get_map_pos())
 
-                graphic_name = isometric_map[row][col]['graphic']
-                graphic_img = self.world.graphics['upscale_4x'][graphic_name]
-                graphic_render = (x_offset, y_offset -  graphic_img.get_height() + TILE_SIZE)
-                
-                if graphic_name != 'block':
-                    self.screen.blit(graphic_img, graphic_render)
+        self.panel.draw(self.screen)
 
-        
-        draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (10, 10))        
+        draw_text('fps={}'.format(round(self.clock.get_fps())), 42, self.screen, (self.width - 200, 20))
+                
         pg.display.flip()
 
 
     def update(self):
-        # update map position depending on mouse movement 
-        self.map_controller.update_map_position()
+        self.map_controller.update_map_pos()
+        self.panel.update()
+        self.world.update(self.map_controller.get_map_pos())
