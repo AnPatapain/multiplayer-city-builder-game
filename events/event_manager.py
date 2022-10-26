@@ -36,7 +36,10 @@ class EventManager:
         return self
 
     def remove_component(self, component):
-        self.components.remove(component)
+        try:
+            self.components.remove(component)
+        except ValueError:
+            pass
         return self
 
     def clear_components(self):
