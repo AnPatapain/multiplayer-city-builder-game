@@ -47,16 +47,3 @@ class MyRange:
             self.__index += 1
 
             return self.__index - 1
-
-
-for row in MyRange(9, 8):
-    for col in MyRange(0, 1):
-        print('row', row, 'col', col)
-        
-            
-
-
-
-        
-
-

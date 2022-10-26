@@ -65,7 +65,7 @@ class Game:
 
         self.panel.draw(self.screen)
 
-        draw_text('fps={}'.format(round(self.clock.get_fps())), 42, self.screen, (self.width - 200, 20))
+        draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
                 
         pg.display.flip()
 
