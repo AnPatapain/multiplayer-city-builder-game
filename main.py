@@ -1,7 +1,6 @@
 import pygame as pg
 from game.game import Game
 from game.setting import SCREEN_HEIGHT, SCREEN_WIDTH
-from menu.menu import Menu
 
 def main():
     is_game_run = True
@@ -14,13 +13,10 @@ def main():
     clock = pg.time.Clock()
     game = Game(screen, clock)
 
-    menu = Menu(screen, clock)
-    
     while is_game_run:
 
-        # menu.run()
-
         while is_playing:
+
             game.run()
 
 
