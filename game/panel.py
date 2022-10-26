@@ -81,7 +81,7 @@ class Panel:
             
             temp_pos = resource_panel_text_pos.copy()
 
-            draw_text(text, 42, screen, temp_pos)
+            draw_text(text, screen, temp_pos, size=42)
             
             resource_panel_text_pos[0] += 200
 
@@ -91,7 +91,7 @@ class Panel:
                                self.building_panel.get_width(), self.building_panel.get_height() * 0.3 )
 
         pg.draw.rect(screen, (0, 0, 0), demo_minimap, 10)
-        draw_text('minimap placeholder', 60, screen, (self.width * 0.8 + 100, self.height * 0.04 + 100))
+        draw_text('minimap placeholder', screen, (self.width * 0.8 + 100, self.height * 0.04 + 100), size=60)
 
     
     def update(self):
