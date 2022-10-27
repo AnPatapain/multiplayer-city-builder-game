@@ -60,13 +60,13 @@ class World:
 
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
-                if event.button == 1 and self.panel.selected_tile is not None:
+                if event.button == 1 and self.panel.has_selected_tile():
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
                     print('mouse button down:',  self.start_point)  
 
             elif event.type == pg.MOUSEBUTTONUP:
-                if event.button == 1 and self.panel.selected_tile is not None:
+                if event.button == 1 and self.panel.has_selected_tile():
                     self.in_build_action = False
                     self.end_point = mouse_grid_pos
                     print('mouse button up', self.end_point)
