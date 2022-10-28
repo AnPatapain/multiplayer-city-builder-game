@@ -1,6 +1,4 @@
 import pygame as pg
-#test
-from game.map_controller import Map_controller
 from game.world import World
 
 
@@ -24,8 +22,6 @@ class EventManager:
         # Useful for things like "press any to continue"
         self.any_input = lambda: True
 
-        #test
-        self.entities = {'world': None, 'map_controller': None}
 
     def handle_events(self):
         """
@@ -62,10 +58,6 @@ class EventManager:
                         if component.is_hover(pos):
                             component.click()
         return self
-
-    #test
-    def append_entitie(self, name, entitie):
-        self.entities[name] = entitie
 
     def register_component(self, component):
         """
