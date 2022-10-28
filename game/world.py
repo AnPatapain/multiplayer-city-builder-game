@@ -31,11 +31,10 @@ class World:
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
         '''
-        Convert the process that transform a mouse_pos to row and col in grid
+        DESCRIPTION: Convert position of mouse to row and col on grid. ex: convert (192.15, 30.14) to (row: 40, col: 10)
+        To do that we reverse this process: (col, row) -> convert_to_iso -> offset (1/2 default_surface.width, 0) -> offset (map_pos[0], map_pos[1])
 
-        convert this process: (col, row) -> convert_to_iso -> offset (1/2 default_surface.width, 0) -> offset (map_pos[0], map_pos[1])
-
-        Arguments: mouse_position: tuple, map_position: tuple
+        Params: mouse_position: tuple, map_position: tuple
 
         Return: (col, row) of mouse_position in the grid
         '''
@@ -54,6 +53,14 @@ class World:
 
     
     def event_handler(self, event, map_pos):
+
+        '''
+        DESCRIPTION: Handling the events that be gotten from event queue in module event_manager.py
+        
+        Params: event retrieved from pg.event.get() in event_manager.py, map_position in mapcontroller.py
+
+        Return: None
+        '''
 
         mouse_pos = pg.mouse.get_pos()
         mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
@@ -78,17 +85,11 @@ class World:
     
     def update(self, map_pos):
         '''
-        Get mouse_pos -> convert to (col, row) in grid using mouse_pos_to_grid function
-        
-        if there is selected_tile from panel:
-            store name, image of selected_tile and mouse_grid_pos in self.temp_tile so we can draw it in world.draw()
+        DESCRIPTION: updating the state of the world. For now it updates temp_tile, texture of the world 
 
-            if left_click:
-                bind the texture of the selected_tile at grid[row][col]
-                set isBuildable at grid[row][col] False
-            
-            if right_click:
-                set selected_tile in panel False    
+        Params: map_position from mapcontroller module 
+
+        Return: None
         '''
         mouse_pos = pg.mouse.get_pos()
         mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
@@ -121,7 +122,16 @@ class World:
                     self.panel.set_selected_tile(None)
 
 
-    def draw(self, screen, map_pos):   
+    def draw(self, screen, map_pos):
+
+        '''
+        DESCRIPTION: Draw graphical object
+
+        Params: screen, map_position passed from game.py
+
+        Return: None 
+        '''
+
         screen.blit(self.default_surface, map_pos)
 
         for row in range(self.nums_grid_y):
@@ -170,6 +180,16 @@ class World:
     
 
     def grid(self):
+
+        '''
+        DESCRIPTION: Creating a 2 dimension array grid in which each element grid[row][col] is a tile that be presented 
+        in a form dictionary that contains all neccessary informations for drawing updating and handling event
+
+        Params: No
+
+        Returns: <List>
+        '''
+
         grid = []
         for row in range(self.nums_grid_y):
 
@@ -189,6 +209,14 @@ class World:
 
 
     def tile(self, row, col):
+
+        '''
+        DESCRIPTION: Creating a tile in a form dictionary that contains all neccessary infos for updating, drawing and handling event
+        
+        Params: row and col that be passed from self.grid method
+
+        Return: <Dict>
+        '''
 
         def graphic_generator():
 
@@ -234,7 +262,16 @@ class World:
         }
 
 
-    def convert_cart_to_iso(self, x, y): return ( x - y, (x + y)/2 )
+    def convert_cart_to_iso(self, x, y):
+        '''
+        DESCRIPTION: I don't know how to explain this method 
+        You can think this method helps us rotate square and then stretch it out : )
+
+        Params: coordination of one point of the square
+
+        Return: new coordination of the rhombus
+        ''' 
+        return ( x - y, (x + y)/2 )
 
 
     def load_images(self):
@@ -262,6 +299,14 @@ class World:
 
 
     def in_map(self, grid_pos):
+        '''
+        DESCRIPTION: Check whether the mouse_grid_pos is in map or not. Ex: our map is 30x30 and mouse_grid_pos is (row: 31, col: 32)
+        so the mouse is not in the map
+
+        Params: the grid pos of mouse
+
+        Return: boolean
+        '''
         mouse_on_panel = False
         in_map_limit = (0 <= grid_pos[0] < self.nums_grid_x) and (0 <= grid_pos[1] < self.nums_grid_y)
         for rect in self.panel.get_panel_rects():
