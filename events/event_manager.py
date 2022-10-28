@@ -1,12 +1,14 @@
 import pygame as pg
 from game.world import World
 
+from components.component import Component
+
 
 class EventManager:
     def __init__(self):
         # Components are IU elements like button, that have different states and actions depending on the input
         # of the system. For example, a button changes its color and the cursor when its hovered
-        self.components = []
+        self.components: list[Component] = []
 
         # Key listeners are functions that are called when the matching key is pressed
         self.key_listeners = []
@@ -59,7 +61,7 @@ class EventManager:
                             component.click()
         return self
 
-    def register_component(self, component):
+    def register_component(self, component: Component):
         """
         Add a new component to the EventManager
 
@@ -73,7 +75,7 @@ class EventManager:
         self.components.append(component)
         return self
 
-    def remove_component(self, component):
+    def remove_component(self, component: Component):
         """
         Remove an existing component from the EventManager.
 
