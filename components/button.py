@@ -8,12 +8,13 @@ BASE_COLOR = pg.Color(154, 146, 121)
 HOVER_COLOR = pg.Color(139, 131, 106)
 
 class Button(Component):
-    def __init__(self, text, pos, size):
+    def __init__(self, text, pos, size, center_text: bool = False):
         super().__init__(pos, size)
         self.text = text
         self.bg_color = BASE_COLOR
         self.bg = pg.Rect(self.position, self.size)
         self.margin = 8
+        self.text_centered = center_text
 
     def hover(self):
         if not self.is_hovered:
@@ -39,4 +40,7 @@ class Button(Component):
 
     def display(self, screen):
         pg.draw.rect(screen, self.bg_color, self.bg)
-        utils.draw_text(self.text, screen, (self.bg.x + self.margin, self.bg.y + self.margin), TEXT_COLOR)
+        if self.text_centered:
+            utils.draw_text(self.text, screen, (self.bg.x, self.bg.y + self.margin), TEXT_COLOR, center_on_width=self.size[0])
+        else:
+            utils.draw_text(self.text, screen, (self.bg.x + self.margin, self.bg.y + self.margin), TEXT_COLOR)
