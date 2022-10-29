@@ -1,4 +1,6 @@
 import pygame as pg
+import random as rd
+import string as st
 from pygame.surface import Surface
 
 TEXT_COLOR = pg.Color(255, 255, 255)
@@ -18,6 +20,17 @@ def draw_text(text: str, screen: Surface, pos: tuple[int, int], color: pg.Color 
 
     text_rect = text_surface.get_rect(topleft=pos)  # -> Rect
     screen.blit(text_surface, text_rect)
+
+
+def generate_uid(size: int = 10) -> str:
+    """
+    Generate a random UID composed of ASCII letters (with or without caps) and numbers.
+
+    :param size: The length of the UID (optional, default to 10)
+    :return: The UID (as a string)
+    """
+
+    return ''.join([rd.choice(st.ascii_letters + st.digits) for _ in range(size)])
 
 
 class MyRange:
