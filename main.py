@@ -1,7 +1,7 @@
 import pygame as pg
 from game.game import Game
 from menu import Menu
-from game.setting import SCREEN_HEIGHT, SCREEN_WIDTH
+from game.textures import Textures
 
 
 def main():
@@ -16,6 +16,7 @@ def main():
     pg.event.set_grab(True)
     clock = pg.time.Clock()
     menu = Menu(screen, clock)
+    Textures.init(screen)
 
     while menu.is_active():
         menu.run()

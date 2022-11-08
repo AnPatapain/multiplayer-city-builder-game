@@ -1,11 +1,16 @@
 import pygame as pg
-from .utils import draw_text
+
+from class_types.tile_types import TileTypes
+from components.button import Button
+from game.utils import draw_text
 import os
 
 class Panel:
     
-    def __init__(self, width, height):        
+    def __init__(self, width, height, event_manager):
         self.width, self.height = width, height
+
+        self.event_manager = event_manager
 
         self.ressource_panel_color = (204, 174, 132)
         self.building_panel_color = (230, 162, 64)
@@ -23,6 +28,13 @@ class Panel:
         # Available building in building panel
         self.buildings = self.load_images()
         self.tiles = self.create_building_panel()
+
+        self.build__tree = Button("Build Tree", (1400, 800), (120, 80), image=self.buildings["tree"])
+
+        def _build_tree():
+            self.selected_tile = TileTypes.TREE
+        self.build__tree.on_click(_build_tree)
+        self.event_manager.register_component(self.build__tree)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -92,9 +104,11 @@ class Panel:
 
         pg.draw.rect(screen, (0, 0, 0), demo_minimap, 10)
         draw_text('minimap placeholder', screen, (self.width * 0.8 + 100, self.height * 0.04 + 100), size=60)
+        self.build__tree.display(screen)
 
     
     def update(self):
+        self.event_manager.handle_events()
         mouse_pos = pg.mouse.get_pos()
 
         mouse_action = pg.mouse.get_pressed()

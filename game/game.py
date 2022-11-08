@@ -22,7 +22,7 @@ class Game:
 
         # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
         # for displaying available building in game
-        self.panel = Panel(self.width, self.height)
+        self.panel = Panel(self.width, self.height, self.event_manager)
 
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
