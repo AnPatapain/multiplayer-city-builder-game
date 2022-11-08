@@ -1,6 +1,7 @@
 import random as rd
 import string as st
-from class_types.TypeBuilding import TypeBuilding
+import enum
+from class_types.buildind_types import TypeBuilding
 
 def ID():
     Id = ''.join([rd.choice(st.ascii_letters + st.digits) for n in range(5)])
