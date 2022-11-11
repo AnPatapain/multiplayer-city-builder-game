@@ -20,6 +20,9 @@ class Button(Component):
         if self.image_hovered is not None:
             self.image_hovered.set_alpha(200)
 
+    def is_hover(self, pos):
+        return self.bg.collidepoint(pos)
+
     def hover(self):
         if not self.is_hovered:
             self.bg_color = HOVER_COLOR
