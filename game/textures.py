@@ -9,8 +9,8 @@ class Textures:
     textures = {}
 
     @staticmethod
-    def get_texture(id: any):
-        return Textures.textures[id]
+    def get_texture(texture_id: any):
+        return Textures.textures[texture_id]
 
     @staticmethod
     def init(screen):
