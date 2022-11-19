@@ -9,18 +9,19 @@ class Component:
         self.on_click_func = lambda: None
         self.is_hovered = False
 
+    @abstractmethod
     def is_hover(self, pos):
-        hover_x = self.position[0] < pos[0] < self.position[0] + self.size[0]
-        hover_y = self.position[1] < pos[1] < self.position[1] + self.size[1]
-
-        return hover_x and hover_y
+        print("FIXME: Method is_hover not implemented!")
+        pass
 
     @abstractmethod
     def hover(self):
+        print("FIXME: Method hover not implemented!")
         pass
 
     @abstractmethod
     def not_hover(self):
+        print("FIXME: Method not_hover not implemented!")
         pass
 
     def on_click(self, func):
@@ -31,4 +32,5 @@ class Component:
 
     @abstractmethod
     def display(self, screen: Surface):
+        print("FIXME: Method display not implemented!")
         pass
