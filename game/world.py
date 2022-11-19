@@ -3,8 +3,11 @@ import os
 from perlin_noise import PerlinNoise
 import random as rd
 
-from .setting import *
+from map_element.tile import Tile
+from game.setting import *
 import game.utils as utils
+from class_types.tile_types import TileTypes
+from game.textures import Textures
 
 
 class World:
@@ -14,11 +17,11 @@ class World:
         self.nums_grid_y = nums_grid_y
         self.width = width
         self.height = height
-        
+
         self.noise_scale = nums_grid_x/2
         self.graphics = self.load_images()
         self.default_surface = pg.Surface((nums_grid_x * TILE_SIZE * 2, nums_grid_y * TILE_SIZE + 2 * TILE_SIZE))
-        self.grid = self.grid()
+        self.grid: [[Tile]] = self.grid()
 
         #For building feature
         self.panel = panel
@@ -51,7 +54,7 @@ class World:
         grid_row = int(cart_y // TILE_SIZE)
         return (grid_col, grid_row)
 
-    
+
     def event_handler(self, event, map_pos):
 
         '''
@@ -70,19 +73,19 @@ class World:
                 if event.button == 1 and self.panel.has_selected_tile():
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
-                      
+                    print('mouse button down:',  self.start_point)
 
             elif event.type == pg.MOUSEBUTTONUP:
                 if event.button == 1 and self.panel.has_selected_tile():
                     self.in_build_action = False
                     self.end_point = mouse_grid_pos
-                    
-                
+                    print('mouse button up', self.end_point)
+
             elif event.type == pg.MOUSEMOTION:
                 self.temp_end_point = mouse_grid_pos
-                
+                print('mouse motion', self.temp_end_point)
 
-    
+
     def update(self, map_pos):
         '''
         DESCRIPTION: updating the state of the world. For now it updates temp_tile, texture of the world 
@@ -101,11 +104,13 @@ class World:
 
         if selected_tile != None:
             if self.in_map(mouse_grid_pos):
+                tile = self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
+                print(selected_tile)
                 self.temp_tile = {
-                    'name': selected_tile["name"],
-                    'isometric_coor': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isometric_coor"],
-                    'render_img_coor': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["render_img_coor"],
-                    'isBuildable': self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]["isBuildable"]
+                    'name': selected_tile,
+                    'isometric_coor': tile.get_isometric_coord(),
+                    'render_img_coor': tile.get_render_coord(),
+                    'isBuildable': tile.is_buildable()
                 }
 
             if self.in_build_action == False and self.start_point != None and self.end_point != None:
@@ -113,83 +118,68 @@ class World:
                 if self.in_map(self.start_point) and self.in_map(self.end_point):
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
+                            tile: Tile = self.grid[row][col]
 
-                            if self.grid[row][col]['isBuildable']:
-                                self.grid[row][col]["texture"] = self.temp_tile["name"]
-                                self.grid[row][col]["isBuildable"] = False
+                            if tile.is_buildable():
+                                tile.set_type(selected_tile)
+                                self.grid[row][col].set_type(selected_tile)
 
                 if mouse_action[2]:
                     self.panel.set_selected_tile(None)
 
 
     def draw(self, screen, map_pos):
-
-        '''
-        DESCRIPTION: Draw graphical object
-
-        Params: screen, map_position passed from game.py
-
-        Return: None 
-        '''
-
         screen.blit(self.default_surface, map_pos)
 
         for row in range(self.nums_grid_y):
             for col in range(self.nums_grid_x):
-                (x, y) = self.grid[row][col]['render_img_coor']
+                tile: Tile = self.grid[row][col]
+                (x, y) = tile.get_render_coord()
                 # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-                (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0], 
-                                         y + map_pos[1] )
+                (x_offset, y_offset) = (x + self.default_surface.get_width()/2 + map_pos[0],
+                                         y + map_pos[1])
 
-                texture = self.grid[row][col]['texture']
-                texture_image = self.graphics['upscale_2x'][texture]
+                texture_image = tile.get_texture()
 
-                if texture != 'block':
-                    screen.blit(texture_image, (x_offset, y_offset -  texture_image.get_height() + TILE_SIZE))
-        
-        if self.temp_tile is not None and self.in_build_action == False:
+                if tile.get_type() != TileTypes.GRASS:
+                    screen.blit(texture_image, (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
+
+        if self.temp_tile is not None and self.in_build_action is False:
             isometric_coor = self.temp_tile['isometric_coor']
             isometric_coor_offset = [(x+map_pos[0]+self.default_surface.get_width()/2, y + map_pos[1]) for x, y in isometric_coor]
 
             (x, y) = self.temp_tile['render_img_coor']
-            (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0], 
+            (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0],
                                      y + map_pos[1] )
 
-            screen.blit(self.graphics['upscale_2x'][self.temp_tile['name']], 
-                       (x_offset, y_offset -  self.graphics['upscale_2x'][self.temp_tile['name']].get_height() + TILE_SIZE))
+            #screen.blit(self.graphics['upscale_2x'][self.temp_tile['name']],
+            #           (x_offset, y_offset -  self.graphics['upscale_2x'][self.temp_tile['name']].get_height() + TILE_SIZE))
+
+            texture = Textures.get_texture(self.temp_tile['name'])
+            screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
 
             if self.temp_tile['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset, 4)
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset, 4)
 
-        
+
         if self.in_build_action:
 
             if self.in_map(self.start_point) and self.in_map(self.temp_end_point):
                 for row in utils.MyRange(self.start_point[1], self.temp_end_point[1]):
                     for col in utils.MyRange(self.start_point[0], self.temp_end_point[0]):
 
-                        if self.grid[row][col]['isBuildable']:
+                        if self.grid[row][col].is_buildable():
 
-                            (x, y) = self.grid[row][col]['render_img_coor']
+                            (x, y) = self.grid[row][col].get_render_coord()
 
                             (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0], y + map_pos[1] )
                             temp_house_image = self.graphics['upscale_2x']['temp_house']
                             screen.blit(temp_house_image, (x_offset, y_offset -  temp_house_image.get_height() + TILE_SIZE))
-    
 
-    def grid(self):
 
-        '''
-        DESCRIPTION: Creating a 2 dimension array grid in which each element grid[row][col] is a tile that be presented 
-        in a form dictionary that contains all neccessary informations for drawing updating and handling event
-
-        Params: No
-
-        Returns: <List>
-        '''
-
+    def grid(self) -> [[Tile]]:
         grid = []
         for row in range(self.nums_grid_y):
 
@@ -197,69 +187,38 @@ class World:
 
             for col in range(self.nums_grid_x):
 
-                iso_tile = self.tile(row, col)
+                iso_tile = self.tile(col, row)
                 grid[row].append(iso_tile)
 
-                (x, y) = iso_tile['render_img_coor']
+                (x, y) = iso_tile.get_render_coord()
                 offset_render = (x + self.default_surface.get_width()/2, y)
-                
+
                 self.default_surface.blit(self.graphics['upscale_2x']['block'], offset_render)
 
         return grid
 
 
-    def tile(self, row, col):
-
-        '''
-        DESCRIPTION: Creating a tile in a form dictionary that contains all neccessary infos for updating, drawing and handling event
-        
-        Params: row and col that be passed from self.grid method
-
-        Return: <Dict>
-        '''
-
+    def tile(self, col: int, row: int) -> Tile:
         def graphic_generator():
-
             normal_random = rd.randint(1, 100)
-
             noise = PerlinNoise(octaves=1, seed=777)
-
             perlin_random = 100 * noise([col/self.noise_scale, row/self.noise_scale])
 
             # perlin_distribution(perlin_random)
-            graphic_ = 'block'
+            graphic_ = TileTypes.GRASS
             if (perlin_random >= 20) or perlin_random <= -30 :
-                graphic_ = 'tree'
+                graphic_ = TileTypes.TREE
             else:
                 if normal_random < 4:
-                    graphic_ = 'rock'
+                    graphic_ = TileTypes.ROCK
                 if normal_random < 2:
-                    graphic_ = 'tree'
+                    graphic_ = TileTypes.TREE
             return graphic_
 
-        graphic = graphic_generator()
-        
-        cartesian_coor = [
-            (col*TILE_SIZE, row*TILE_SIZE),
-            (col*TILE_SIZE + TILE_SIZE, row*TILE_SIZE),
-            (col*TILE_SIZE + TILE_SIZE, row*TILE_SIZE + TILE_SIZE),
-            (col*TILE_SIZE, row*TILE_SIZE + TILE_SIZE)
-        ]
+        tile = Tile(col, row)
+        tile.set_type(graphic_generator())
 
-        isometric_coor = [self.convert_cart_to_iso(x, y) for x, y in cartesian_coor]
-
-        render_img_coor = (
-            min([x for x, y in isometric_coor]), 
-            min([y for x, y in isometric_coor])
-        )
-
-        return {
-            'cartesian_coor': cartesian_coor,
-            'isometric_coor': isometric_coor,
-            'render_img_coor': render_img_coor,
-            'texture': graphic,
-            'isBuildable': True if graphic == "block" else False
-        }
+        return tile
 
 
     def convert_cart_to_iso(self, x, y):
@@ -314,4 +273,4 @@ class World:
                 mouse_on_panel = True
         return True if (in_map_limit and not mouse_on_panel) else False
 
-    
+
