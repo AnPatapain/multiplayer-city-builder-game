@@ -20,7 +20,7 @@ class World:
 
         self.noise_scale = nums_grid_x/2
         self.graphics = self.load_images()
-        self.default_surface = pg.Surface((nums_grid_x * TILE_SIZE * 2, nums_grid_y * TILE_SIZE + 2 * TILE_SIZE))
+        self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
         self.grid: [[Tile]] = self.grid()
 
         #For building feature

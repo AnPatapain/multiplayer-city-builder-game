@@ -85,8 +85,9 @@ class Panel:
 
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
 
-        for tile in self.tiles:
-            screen.blit(tile["icon"], tile["rect"])
+        # Delete it, we use button build__tree and button build__rock
+        # for tile in self.tiles:
+        #     screen.blit(tile["icon"], tile["rect"])
 
         resource_panel_text  = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
         
@@ -100,13 +101,6 @@ class Panel:
             
             resource_panel_text_pos[0] += 200
 
-
-        # Minimap placeholder
-        demo_minimap = pg.Rect(self.width * 0.8, self.height * 0.04, 
-                               self.building_panel.get_width(), self.building_panel.get_height() * 0.3 )
-
-        pg.draw.rect(screen, (0, 0, 0), demo_minimap, 10)
-        draw_text('minimap placeholder', screen, (self.width * 0.8 + 100, self.height * 0.04 + 100), size=60)
         self.build__tree.display(screen)
         self.build__rock.display(screen)
 

@@ -6,6 +6,7 @@ from .utils import draw_text
 from .mapcontroller import MapController
 from .panel import Panel
 from .setting import *
+from .mini_map import MiniMap
 
 from events import event_manager
 
@@ -25,6 +26,9 @@ class Game:
         # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
         # for displaying available building in game
         self.panel = Panel(self.width, self.height, self.event_manager)
+
+        # Mini_Map
+        self.mini_map = MiniMap(self.screen, self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
@@ -47,6 +51,8 @@ class Game:
         self.world.draw(self.screen, self.map_controller.get_map_pos())
 
         self.panel.draw(self.screen)
+
+        self.mini_map.draw(self.map_controller.get_map_pos())
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
                 
