@@ -48,6 +48,9 @@ class MiniMap:
 
 
     def is_in_mini_map(self, x, y):
-        if (self.mini_map_pos_x + self.mini_default_surface_width > x > self.mini_map_pos_x) and ( self.mini_map_pos_y <= y <= self.mini_map_pos_y + self.mini_default_surface_height ):
+        in_x = (self.mini_map_pos_x + self.mini_default_surface_width - self.mini_screen_width >= x >= self.mini_map_pos_x)
+        in_y = (self.mini_map_pos_y <= y <= self.mini_map_pos_y + self.mini_default_surface_height - self.mini_screen_height)
+        
+        if in_x and in_y:
             return True
         return False

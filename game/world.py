@@ -22,6 +22,9 @@ class World:
         self.graphics = self.load_images()
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
         self.grid: [[Tile]] = self.grid()
+        
+        '''developing'''
+        self.create_static_map()
 
         #For building feature
         self.panel = panel
@@ -71,19 +74,17 @@ class World:
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1 and self.panel.has_selected_tile():
+                    print(self.panel.get_selected_tile())
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
-                    print('mouse button down:',  self.start_point)
 
             elif event.type == pg.MOUSEBUTTONUP:
                 if event.button == 1 and self.panel.has_selected_tile():
                     self.in_build_action = False
                     self.end_point = mouse_grid_pos
-                    print('mouse button up', self.end_point)
 
             elif event.type == pg.MOUSEMOTION:
                 self.temp_end_point = mouse_grid_pos
-                print('mouse motion', self.temp_end_point)
 
 
     def update(self, map_pos):
@@ -105,7 +106,6 @@ class World:
         if selected_tile != None:
             if self.in_map(mouse_grid_pos):
                 tile = self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
-                print(selected_tile)
                 self.temp_tile = {
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
@@ -113,8 +113,8 @@ class World:
                     'isBuildable': tile.is_buildable()
                 }
 
+            # Build from start point to end point
             if self.in_build_action == False and self.start_point != None and self.end_point != None:
-
                 if self.in_map(self.start_point) and self.in_map(self.end_point):
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
@@ -124,25 +124,29 @@ class World:
                                 tile.set_type(selected_tile)
                                 self.grid[row][col].set_type(selected_tile)
 
-                if mouse_action[2]:
-                    self.panel.set_selected_tile(None)
+                    self.create_static_map() # update the static map based upon self.grid
+                    self.start_point = None # update start point to default after building
+                    self.end_point = None # update start point to default after building
+
+            if mouse_action[2]:
+                self.panel.set_selected_tile(None)
 
 
     def draw(self, screen, map_pos):
+        
         screen.blit(self.default_surface, map_pos)
+        # for row in range(self.nums_grid_y):
+        #     for col in range(self.nums_grid_x):
+        #         tile: Tile = self.grid[row][col]
+        #         (x, y) = tile.get_render_coord()
+        #         # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
+        #         (x_offset, y_offset) = (x + self.default_surface.get_width()/2 + map_pos[0],
+        #                                  y + map_pos[1])
 
-        for row in range(self.nums_grid_y):
-            for col in range(self.nums_grid_x):
-                tile: Tile = self.grid[row][col]
-                (x, y) = tile.get_render_coord()
-                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-                (x_offset, y_offset) = (x + self.default_surface.get_width()/2 + map_pos[0],
-                                         y + map_pos[1])
+        #         texture_image = tile.get_texture()
 
-                texture_image = tile.get_texture()
-
-                if tile.get_type() != TileTypes.GRASS:
-                    screen.blit(texture_image, (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
+        #         if tile.get_type() != TileTypes.GRASS:
+        #             screen.blit(texture_image, (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 
         if self.temp_tile is not None and self.in_build_action is False:
             isometric_coor = self.temp_tile['isometric_coor']
@@ -152,8 +156,7 @@ class World:
             (x_offset, y_offset) = ( x + self.default_surface.get_width()/2 + map_pos[0],
                                      y + map_pos[1] )
 
-            #screen.blit(self.graphics['upscale_2x'][self.temp_tile['name']],
-            #           (x_offset, y_offset -  self.graphics['upscale_2x'][self.temp_tile['name']].get_height() + TILE_SIZE))
+                                     
 
             texture = Textures.get_texture(self.temp_tile['name'])
             screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
@@ -196,6 +199,20 @@ class World:
                 self.default_surface.blit(self.graphics['upscale_2x']['block'], offset_render)
 
         return grid
+
+    ''' Testing i'm not sure about this method '''
+    def create_static_map(self):
+        for row in range(self.nums_grid_y):
+            for col in range(self.nums_grid_x):
+                tile: Tile = self.grid[row][col]
+                (x, y) = tile.get_render_coord()
+                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
+                (x_offset, y_offset) = (x + self.default_surface.get_width()/2, y)
+
+                texture_image = tile.get_texture()
+
+                if tile.is_buildable and tile.get_type() != TileTypes.GRASS:
+                    self.default_surface.blit(texture_image, (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 
 
     def tile(self, col: int, row: int) -> Tile:

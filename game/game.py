@@ -42,8 +42,9 @@ class Game:
     def run(self):
         self.clock.tick(60)
         self.event_manager.handle_events()
-        self.draw()
+        
         self.update()
+        self.draw()
 
     def draw(self):
         self.screen.fill((0, 0, 0))
