@@ -2,6 +2,7 @@ import pygame as pg
 
 from class_types.tile_types import TileTypes
 from components.button import Button
+from components.image_button import ButtonImage
 from game.textures import Textures
 from game.utils import draw_text
 import os
@@ -30,10 +31,10 @@ class Panel:
         self.buildings = self.load_images()
         self.tiles = self.create_building_panel()
 
-        self.build__tree = Button("Build Tree", (self.building_panel_rect.left + 20, 800), (120, 80), image=Textures.get_texture(TileTypes.TREE))
+        self.build__tree = ButtonImage((self.building_panel_rect.left + 20, 800), (120, 80), Textures.get_texture(TileTypes.TREE))
         self.build__tree.on_click(lambda: self.set_selected_tile(TileTypes.TREE))
 
-        self.build__rock = Button("Build Rock", (self.building_panel_rect.left + 20 + 120 + 20, 800), (120, 80), image=Textures.get_texture(TileTypes.ROCK))
+        self.build__rock = ButtonImage((self.building_panel_rect.left + 20 + 120 + 20, 800), (120, 80), Textures.get_texture(TileTypes.ROCK))
         self.build__rock.on_click(lambda: self.set_selected_tile(TileTypes.ROCK))
 
         self.event_manager.register_component(self.build__tree)

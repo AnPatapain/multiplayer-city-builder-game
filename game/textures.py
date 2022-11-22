@@ -6,10 +6,10 @@ from class_types.tile_types import TileTypes
 
 
 class Textures:
-    textures = {}
+    textures: dict[pg.Surface] = {}
 
     @staticmethod
-    def get_texture(texture_id: any):
+    def get_texture(texture_id: any) -> pg.Surface:
         return Textures.textures[texture_id]
 
     @staticmethod
