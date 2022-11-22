@@ -29,7 +29,6 @@ class Panel:
 
         # Available building in building panel
         self.buildings = self.load_images()
-        self.tiles = self.create_building_panel()
 
         self.build__tree = ButtonImage((self.building_panel_rect.left + 20, 800), (120, 80), Textures.get_texture(TileTypes.TREE))
         self.build__tree.on_click(lambda: self.set_selected_tile(TileTypes.TREE))
@@ -45,49 +44,10 @@ class Panel:
         self.panel_rects = [self.ressource_panel_rect, self.building_panel_rect]
 
 
-
-    def create_building_panel(self):
-        render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 800]
-        object_width = self.building_panel.get_width() // 3
-        tiles = []
-
-        for building_name, building_image in self.buildings.items():
-
-            pos = render_pos.copy()
-            building_image_tmp = building_image.copy()
-            building_image_scale = self.scale_image(building_image_tmp, width=object_width)
-            rect = building_image_scale.get_rect(topleft=pos)
-
-            tiles.append(
-                {
-                    "name": building_name,
-                    "icon": building_image_scale,
-                    "image": self.buildings[building_name],
-                    "rect": rect
-                }
-            )
-
-
-            if render_pos[0] + building_image_scale.get_width() + 10 >= self.width:
-                
-                render_pos = [self.width * 0.8 + 10, self.height * 0.04 + 800]
-                render_pos[1] += building_image_scale.get_height() + 10
-            
-            else:
-                render_pos[0] += building_image_scale.get_width() + 10 # update x for next item
-
-
-        return tiles
-
-
-
     def draw(self, screen):        
         screen.blit(self.ressource_panel, (0, 0))
 
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
-
-        for tile in self.tiles:
-            screen.blit(tile["icon"], tile["rect"])
 
         resource_panel_text  = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
         
@@ -101,28 +61,13 @@ class Panel:
             
             resource_panel_text_pos[0] += 200
 
-
-        # Minimap placeholder
-        demo_minimap = pg.Rect(self.width * 0.8, self.height * 0.04, 
-                               self.building_panel.get_width(), self.building_panel.get_height() * 0.3 )
-
-        pg.draw.rect(screen, (0, 0, 0), demo_minimap, 10)
-        draw_text('minimap placeholder', screen, (self.width * 0.8 + 100, self.height * 0.04 + 100), size=60)
         self.build__tree.display(screen)
         self.build__rock.display(screen)
 
     
     def update(self):
-        self.event_manager.handle_events()
-        mouse_pos = pg.mouse.get_pos()
-
-        mouse_action = pg.mouse.get_pressed()
-
-        for tile in self.tiles:
-            if tile["rect"].collidepoint(mouse_pos):
-                if mouse_action[0]:
-                    self.selected_tile = tile
-
+        pass
+        # self.event_manager.handle_events()
 
 
     def load_images(self):    

@@ -1,4 +1,5 @@
 import pygame as pg
+from game.world import World
 
 from components.component import Component
 
@@ -22,6 +23,7 @@ class EventManager:
         # The any_input function is called when any key or mouse button is pressed (excluding scroll)
         # Useful for things like "press any to continue"
         self.any_input = lambda: True
+
 
     def handle_events(self):
         """
