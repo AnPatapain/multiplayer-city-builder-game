@@ -23,7 +23,9 @@ class World:
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
         self.grid: [[Tile]] = self.grid()
         
-        '''developing'''
+        '''
+        create map only once by bliting texture directly on default surface not on screen and then we can blit default surface on screen 
+        '''
         self.create_static_map()
 
         #For building feature

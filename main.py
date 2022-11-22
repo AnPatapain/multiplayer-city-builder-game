@@ -18,8 +18,8 @@ def main():
     menu = Menu(screen, clock)
     Textures.init(screen)
 
-    # while menu.is_active():
-    #     menu.run()
+    while menu.is_active():
+        menu.run()
 
     game = Game(screen, clock)
     while is_game_run:
