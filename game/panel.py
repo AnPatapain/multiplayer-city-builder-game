@@ -26,9 +26,6 @@ class Panel:
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width * 0.8, self.height * 0.04))
         self.building_panel.fill(self.building_panel_color)
 
-        # Available building in building panel
-        self.buildings = self.load_images()
-
         self.build__tree = ButtonImage((self.building_panel_rect.left + 20, 800), (120, 80), Textures.get_texture(TileTypes.TREE))
         self.build__tree.on_click(lambda: self.set_selected_tile(TileTypes.TREE))
 
@@ -69,17 +66,6 @@ class Panel:
         # self.event_manager.handle_events()
 
 
-    def load_images(self):    
-        path = 'assets/C3_sprites/C3'
-
-        return {
-
-            'tree': self.scale_image_2x( pg.image.load(os.path.join(path, 'Land1a_00041.png')) ).convert_alpha(),
-            'rock': self.scale_image_2x( pg.image.load(os.path.join(path, 'Land1a_00290.png')) ).convert_alpha()
-
-        }
-
-    
     def scale_image(self, image, width=None, height=None): # Procedure function which scales up or down the image specified 
         # Default case do nothing
         if (width == None) and (height == None):
