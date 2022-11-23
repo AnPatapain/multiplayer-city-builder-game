@@ -8,13 +8,13 @@ BASE_COLOR = pg.Color(154, 146, 121)
 HOVER_COLOR = pg.Color(139, 131, 106)
 
 class Button(Component):
-    def __init__(self, text, pos, size, center: bool = False):
+    def __init__(self, text, pos, size, center_text: bool = False):
         super().__init__(pos, size)
         self.text = text
         self.bg_color = BASE_COLOR
         self.bg = pg.Rect(self.position, self.size)
         self.margin = 8
-        self.text_centered = center
+        self.text_centered = center_text
 
     def is_hover(self, pos):
         return self.bg.collidepoint(pos)

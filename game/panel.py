@@ -1,8 +1,7 @@
 import pygame as pg
 
 from class_types.tile_types import TileTypes
-from components.button import Button
-from components.image_button import ButtonImage
+from components.button_image import ButtonImage
 from game.textures import Textures
 from game.utils import draw_text
 import os
