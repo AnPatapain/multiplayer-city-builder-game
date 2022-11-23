@@ -124,7 +124,6 @@ class World:
 
                             if tile.is_buildable():
                                 tile.set_type(selected_tile)
-                                self.grid[row][col].set_type(selected_tile)
 
                     self.create_static_map() # update the static map based upon self.grid
                     self.start_point = None # update start point to default after building
@@ -184,7 +183,7 @@ class World:
                             screen.blit(temp_house_image, (x_offset, y_offset -  temp_house_image.get_height() + TILE_SIZE))
 
 
-    def grid(self) -> [[Tile]]:
+    def grid(self) -> list[list[Tile]]:
         grid = []
         for row in range(self.nums_grid_y):
 

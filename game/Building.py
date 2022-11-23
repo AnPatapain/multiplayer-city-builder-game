@@ -1,6 +1,5 @@
 import random as rd
 import string as st
-import enum
 from class_types.buildind_types import TypeBuilding
 
 def ID():
@@ -10,7 +9,7 @@ def ID():
 class Buildings():
     # all buildings are listed in this class
     def __init__(self, max_occupants, building_size, cost, typeBuilding : TypeBuilding):
-        ### need to add : Risk, current occupants
+        ### need to add : current occupants
         self.id = ID()
         self.max_occupants = max_occupants
         self.building_size = building_size
