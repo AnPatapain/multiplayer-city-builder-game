@@ -16,14 +16,15 @@ class Menu:
         button_size = (320, 40)
         button_start = (self.screen.get_size()[0]/2) - (button_size[0]/2)
 
-        self.button__start_new_career = button.Button("Start new career", (button_start, 350), button_size, center_text=True)
+        self.button__start_new_career = button.Button((button_start, 350), button_size, center_text=True, text="Start new career")
         self.button__start_new_career.on_click(self.set_inactive)
 
-        self.button__load_saved_game = button.Button("Load saved game", (button_start, 400), button_size, center_text=True)
+        self.button__load_saved_game = button.Button((button_start, 400), button_size, center_text=True, text="Load saved game")
 
-        self.button__options = button.Button("Options", (button_start, 450), button_size, center_text=True)
+        self.button__options = button.Button((button_start, 450), button_size, center_text=True, text="Options")
+        self.button__options.set_disabled(True)
 
-        self.button__exit = button.Button("Exit", (button_start, 500), button_size, center_text=True)
+        self.button__exit = button.Button((button_start, 500), button_size, center_text=True, text="Exit")
         self.button__exit.on_click(exit)
 
         self.eventManager.register_component(self.button__start_new_career)\

@@ -1,4 +1,6 @@
 import pygame as pg
+
+from components.button import Button
 from game.world import World
 
 from components.component import Component
@@ -52,13 +54,28 @@ class EventManager:
                     if key_listener[0] == event.key:
                         key_listener[1]()
 
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button not in (4, 5):
+                    for component in self.components:
+                        if isinstance(component, Button) and component.is_hover(pos):
+                            component.set_being_pressed(True)
+
             if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click
                 if event.button not in (4, 5):
                     self.any_input()
                     for component in self.components:
-                        if component.is_hover(pos):
-                            component.click()
+                        if isinstance(component, Button):
+                            if component.is_hover(pos) and component.being_pressed:
+                                component.set_selected(True)
+                                component.set_being_pressed(False)
+                                component.click()
+                            else:
+                                component.set_selected(False)
+                                component.set_being_pressed(False)
+                        else:
+                            if component.is_hover(pos):
+                                component.click()
         return self
 
     def register_component(self, component: Component):
