@@ -133,6 +133,9 @@ class World:
 
             if mouse_action[2]:
                 self.panel.set_selected_tile(None)
+                self.start_point = None
+                self.end_point = None
+                self.in_build_action = False
 
     def draw(self, screen, map_pos):
 
