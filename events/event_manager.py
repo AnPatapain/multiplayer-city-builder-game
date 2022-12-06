@@ -64,11 +64,10 @@ class EventManager:
                     if key_listener.key == event.key:
                         key_listener.set_being_pressed(False)
 
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if event.button not in (4, 5):
-                    for component in self.components:
-                        if isinstance(component, Button) and component.is_hover(pos):
-                            component.set_being_pressed(True)
+            if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                for component in self.components:
+                    if isinstance(component, Button) and component.is_hover(pos):
+                        component.set_being_pressed(True)
 
             if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click
