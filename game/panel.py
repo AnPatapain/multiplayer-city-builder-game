@@ -1,10 +1,10 @@
 import pygame as pg
 
 from class_types.tile_types import TileTypes
+from class_types.road_types import RoadTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
-import os
 
 class Panel:
     
@@ -32,8 +32,12 @@ class Panel:
         self.build__rock = Button((self.building_panel_rect.left + 20 + 120 + 20, 800), (120, 80), image=Textures.get_texture(TileTypes.ROCK))
         self.build__rock.on_click(lambda: self.set_selected_tile(TileTypes.ROCK))
 
+        self.build__road = Button((self.building_panel_rect.left + 20, 800 + 80 + 20), (120, 80), image=Textures.get_texture(RoadTypes.TL_TO_BR))
+        self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
+
         self.event_manager.register_component(self.build__tree)
         self.event_manager.register_component(self.build__rock)
+        self.event_manager.register_component(self.build__road)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -45,7 +49,7 @@ class Panel:
 
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
 
-        resource_panel_text  = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
+        resource_panel_text = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
         
         resource_panel_text_pos = [20, 20]
 
@@ -59,6 +63,7 @@ class Panel:
 
         self.build__tree.display(screen)
         self.build__rock.display(screen)
+        self.build__road.display(screen)
 
     
     def update(self):
@@ -66,17 +71,17 @@ class Panel:
         # self.event_manager.handle_events()
 
 
-    def scale_image(self, image, width=None, height=None): # Procedure function which scales up or down the image specified 
+    def scale_image(self, image, width=None, height=None):  # Procedure function which scales up or down the image specified
         # Default case do nothing
-        if (width == None) and (height == None):
+        if (width is None) and (height is None):
             pass
 
-        elif height == None: # scale only width
+        elif height is None:  # scale only width
             scale = width / image.get_width()
             height = scale * image.get_height()
             image = pg.transform.scale(image, ( int(width), int(height) ))
 
-        elif width == None: # scale only width
+        elif width is None:  # scale only width
             scale = height / image.get_height()
             width = scale * image.get_width()
             image = pg.transform.scale(image, (int(width), int(height)))
