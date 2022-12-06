@@ -323,4 +323,4 @@ class World:
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)
-        self.create_static_map()
+        # self.create_static_map()
