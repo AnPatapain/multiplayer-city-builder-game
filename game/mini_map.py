@@ -16,19 +16,24 @@ class MiniMap:
         self.mini_default_surface_width = MiniMap.scale_down_ratio * Setting.DEFAULT_SURFACE_WIDTH
         self.mini_default_surface_height = MiniMap.scale_down_ratio * Setting.DEFAULT_SURFACE_HEIGHT
 
-        self.mini_default_surface = pg.Surface((self.mini_default_surface_width, self.mini_default_surface_height))
-        self.mini_default_surface.fill((0, 0, 0))
+        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width
+        self.mini_map_pos_y = self.screen_height * 0.04
+
+        self.mini_default_surface = self.mini_default_surface()
 
         self.mini_screen_rect = None
 
-        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width
-        self.mini_map_pos_y = self.screen_height * 0.04
+
+    def mini_default_surface(self):
+        mini_df_surface = pg.Surface((self.mini_default_surface_width, self.mini_default_surface_height))
+        mini_df_surface.fill((0, 0, 0))
+        return mini_df_surface
+
 
     def draw(self, map_pos):
         
         self.screen.blit(self.mini_default_surface, (self.mini_map_pos_x, self.mini_map_pos_y))
 
-        # We need coordination of 4 points to draw rhombus
         pg.draw.polygon(self.screen, (0, 255, 0), [(self.mini_map_pos_x + self.mini_default_surface_width/2, self.mini_map_pos_y),
                                                    (self.mini_map_pos_x + self.mini_default_surface_width, self.mini_map_pos_y + self.mini_default_surface_height/2),
                                                    (self.mini_map_pos_x + self.mini_default_surface_width/2, self.mini_map_pos_y + self.mini_default_surface_height),
