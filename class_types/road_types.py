@@ -1,8 +1,9 @@
-from enum import Enum
+from enum import IntEnum
 
-class RoadTypes(Enum) :
+
+class RoadTypes(IntEnum):
     ALONE = 1
-    
+
     # End of road
     TL_ALONE = 2
     TR_ALONE = 3

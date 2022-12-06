@@ -8,6 +8,8 @@ from game.setting import *
 import game.utils as utils
 from class_types.tile_types import TileTypes
 from game.textures import Textures
+from buildable.road import Road
+from class_types.road_types import RoadTypes
 
 
 class World:
@@ -124,6 +126,10 @@ class World:
 
                             if tile.is_buildable():
                                 tile.set_type(selected_tile)
+                                # Def road
+                                if selected_tile == RoadTypes.TL_TO_BR:
+                                    self.road_add(row,col)
+
 
                     self.create_static_map() # update the static map based upon self.grid
                     self.start_point = None # update start point to default after building
@@ -291,4 +297,34 @@ class World:
                 mouse_on_panel = True
         return True if (in_map_limit and not mouse_on_panel) else False
 
+    def road_add(self, road_row, road_col):
+        """
+        DESCRIPTION : Make a new road with connection between other road
+        """
+        # Create road
+        road: Road = Road([])
+        road_connection = []
 
+        # Connect other road:
+        # TL connection
+        if self.grid[road_row - 1][road_col].get_road():
+            self.grid[road_row - 1][road_col].get_road().set_connect(road, 2)
+            road_connection.append(self.grid[road_row - 1][road_col].get_road())
+
+        # TR connection
+        if self.grid[road_row][road_col - 1].get_road():
+            self.grid[road_row][road_col - 1].get_road().set_connect(road, 3)
+            road_connection.append(self.grid[road_row][road_col - 1].get_road())
+
+        # BR connection
+        if self.grid[road_row + 1][road_col].get_road():
+            self.grid[road_row + 1][road_col].get_road().set_connect(road, 0)
+            road_connection.append(self.grid[road_row + 1][road_col].get_road())
+
+        # BL connection
+        if self.grid[road_row][road_col + 1].get_road():
+            self.grid[road_row][road_col + 1].get_road().set_connect(road, 1)
+            road_connection.append(self.grid[road_row][road_col + 1].get_road())
+
+        road.set_road_connection(road_connection)
+        self.grid[road_row][road_col].set_road(road)

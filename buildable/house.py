@@ -1,4 +1,4 @@
-from Building import Buildings
+from buildable.Building import Buildings
 
 class Houses(Buildings):
         def __init__(self, max_occupants, building_size, cost,HasWater, Tax_Multi):

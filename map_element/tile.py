@@ -1,4 +1,6 @@
 from class_types.tile_types import TileTypes
+from class_types.road_types import RoadTypes
+from buildable.road import Road
 from game.textures import Textures
 from game.setting import TILE_SIZE
 
@@ -45,6 +47,10 @@ class Tile:
 
     def get_road(self):
         return self.road
+
+    def set_road(self,new_road):
+        self.road = new_road
+        self.type = self.road.get_road_type()
 
     def get_texture(self):
         return Textures.get_texture(self.type)

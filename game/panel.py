@@ -32,8 +32,12 @@ class Panel:
         self.build__rock = Button((self.building_panel_rect.left + 20 + 120 + 20, 800), (120, 80), image=Textures.get_texture(TileTypes.ROCK))
         self.build__rock.on_click(lambda: self.set_selected_tile(TileTypes.ROCK))
 
+        self.build__road = Button((self.building_panel_rect.left + 20, 800 + 80 + 20), (120, 80), image=Textures.get_texture(RoadTypes.TL_TO_BR))
+        self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
+
         self.event_manager.register_component(self.build__tree)
         self.event_manager.register_component(self.build__rock)
+        self.event_manager.register_component(self.build__road)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -59,6 +63,7 @@ class Panel:
 
         self.build__tree.display(screen)
         self.build__rock.display(screen)
+        self.build__road.display(screen)
 
     
     def update(self):
