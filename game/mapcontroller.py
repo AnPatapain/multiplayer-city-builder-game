@@ -11,10 +11,10 @@ class MapController:
         self.event_manager = event_manager
 
         self.event_manager.register_mouse_listener(self._mouse_listener)
-        self.event_manager.register_key_listener(pg.K_DOWN, self._down_arrow)
-        self.event_manager.register_key_listener(pg.K_UP, self._up_arrow)
-        self.event_manager.register_key_listener(pg.K_LEFT, self._left_arrow)
-        self.event_manager.register_key_listener(pg.K_RIGHT, self._right_arrow)
+        self.event_manager.register_key_listener(pg.K_DOWN, self._down_arrow, continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_UP, self._up_arrow, continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_LEFT, self._left_arrow, continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_RIGHT, self._right_arrow, continuous_press=True)
 
     def _mouse_listener(self):
         mouse_position = pg.mouse.get_pos()
