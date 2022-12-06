@@ -297,25 +297,29 @@ class World:
 
         # Connect other road:
         # TL connection
+        if  road_col > 0:
+            if self.grid[road_row][road_col - 1].get_road():
+                self.grid[road_row][road_col - 1].get_road().set_connect(road, 2)
+                road_connection[0] = (self.grid[road_row][road_col - 1].get_road())
 
-        if self.grid[road_row][road_col - 1].get_road():
-            self.grid[road_row][road_col - 1].get_road().set_connect(road, 2)
-            road_connection[0] = (self.grid[road_row][road_col - 1].get_road())
 
         # TR connection
-        if self.grid[road_row - 1][road_col].get_road():
-            self.grid[road_row - 1][road_col].get_road().set_connect(road, 3)
-            road_connection[1] = (self.grid[road_row - 1][road_col].get_road())
+        if road_row > 0:
+            if self.grid[road_row - 1][road_col].get_road():
+                self.grid[road_row - 1][road_col].get_road().set_connect(road, 3)
+                road_connection[1] = (self.grid[road_row - 1][road_col].get_road())
 
         # BR connection
-        if self.grid[road_row][road_col + 1].get_road():
-            self.grid[road_row][road_col + 1].get_road().set_connect(road, 0)
-            road_connection[2] = (self.grid[road_row][road_col + 1].get_road())
+        if road_col < self.nums_grid_x - 1:
+            if self.grid[road_row][road_col + 1].get_road():
+                self.grid[road_row][road_col + 1].get_road().set_connect(road, 0)
+                road_connection[2] = (self.grid[road_row][road_col + 1].get_road())
 
         # BL connection
-        if self.grid[road_row + 1][road_col].get_road():
-            self.grid[road_row + 1][road_col].get_road().set_connect(road, 1)
-            road_connection[3] = (self.grid[road_row + 1][road_col].get_road())
+        if road_row < self.nums_grid_y - 1:
+            if self.grid[road_row + 1][road_col].get_road():
+                self.grid[road_row + 1][road_col].get_road().set_connect(road, 1)
+                road_connection[3] = (self.grid[road_row + 1][road_col].get_road())
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)
