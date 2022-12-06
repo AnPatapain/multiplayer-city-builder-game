@@ -19,7 +19,7 @@ class Menu:
         self.button__start_new_career = button.Button((button_start, 350), button_size, center_text=True, text="Start new career")
         self.button__start_new_career.on_click(self.set_inactive)
 
-        self.button__load_saved_game = button.Button((button_start, 400), button_size, center_text=True, text="Load saved game")
+        self.button__load_saved_game = button.Button((button_start, 400), button_size, center_text=True, text="Load saved game", selectable=True)
 
         self.button__options = button.Button((button_start, 450), button_size, center_text=True, text="Options")
         self.button__options.set_disabled(True)
