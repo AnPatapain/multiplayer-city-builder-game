@@ -16,7 +16,6 @@ class Road:
 
         self.road_connection = road_connection
         self.road_type = RoadTypes.ALONE
-        self.update_road()
 
     def set_connect(self, road, position):
         # Update one connection of a road
@@ -43,7 +42,7 @@ class Road:
             # Test one connection Road
             for i in range(4):
                 if self.road_connection[i]:
-                    self.road_type = RoadTypes.ALONE + i
+                    self.road_type = RoadTypes.ALONE + i + 1
 
         def update_2():
             # Test diagonal road
@@ -57,14 +56,14 @@ class Road:
 
             # Test angle road
             for i in range(4):
-                if self.road_connection[i] and self.road_connection[(i+1)%4]:
-                    self.road_type = RoadTypes.TR_TO_BL + i
+                if self.road_connection[i] and self.road_connection[(i+1) % 4]:
+                    self.road_type = RoadTypes.TR_TO_BL + i + 1
 
         def update_3():
             # Test 3 road connection
             for i in range(4):
-                if self.road_connection[i] and self.road_connection[(i+1)%4] and self.road_connection[(i+2)%4]:
-                    self.road_type = RoadTypes.BL_TO_TL + i
+                if self.road_connection[i] and self.road_connection[(i+1) % 4] and self.road_connection[(i+2) % 4]:
+                    self.road_type = RoadTypes.BL_TO_TL + i + 1
 
         match sum(x is not None for x in self.road_connection):
             case 0:

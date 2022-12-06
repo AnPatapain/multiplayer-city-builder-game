@@ -34,9 +34,9 @@ def generate_uid(size: int = 10) -> str:
 
 
 class MyRange:
-    '''
+    """
     iterable which automatically call its iterator after reach out all element
-    '''
+    """
     def __init__(self, num_1, num_2):
         if num_1 <= num_2:
             self.start = num_1
@@ -47,12 +47,12 @@ class MyRange:
 
 
 
-    def __iter__(self): return self.MyRange_Iterator(self)
+    def __iter__(self): return self.MyRangeIterator(self)
 
-    class MyRange_Iterator:
-        '''
+    class MyRangeIterator:
+        """
         iterator for myRange iterable
-        '''
+        """
         def __init__(self, my_range):
             self.__index = my_range.start
             self.__my_range = my_range

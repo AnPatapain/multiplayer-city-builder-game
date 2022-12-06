@@ -7,8 +7,8 @@ class RoadTypes(IntEnum):
     # End of road
     TL_ALONE = 2
     TR_ALONE = 3
-    BL_ALONE = 4
-    BR_ALONE = 5
+    BR_ALONE = 4
+    BL_ALONE = 5
 
     # Diagonal road
     TL_TO_BR = 6
