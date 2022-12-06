@@ -1,10 +1,10 @@
 import pygame as pg
 
 from class_types.tile_types import TileTypes
+from class_types.road_types import RoadTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
-import os
 
 class Panel:
     
