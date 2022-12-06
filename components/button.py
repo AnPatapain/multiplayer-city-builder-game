@@ -71,7 +71,7 @@ class Button(Component):
 
     def click(self):
         if not self.disabled:
-            if self.selected:
+            if not self.selectable:
                 self.not_hover()
             super().click()
 
