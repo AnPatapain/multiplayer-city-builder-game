@@ -3,7 +3,7 @@ import game.setting as Setting
 
 class MiniMap:
 
-    scale_down_ratio = 0.1
+    scale_down_ratio = 0.0249
 
     def __init__(self, screen, width, height) -> None:
         self.screen = screen
@@ -21,8 +21,8 @@ class MiniMap:
 
         self.mini_screen_rect = None
 
-        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width
-        self.mini_map_pos_y = self.screen_height * 0.04
+        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width - 8
+        self.mini_map_pos_y = 98
 
     def draw(self, map_pos):
         

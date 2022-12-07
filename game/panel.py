@@ -1,6 +1,7 @@
 import pygame as pg
 
 from class_types.tile_types import TileTypes
+from class_types.panel_types import BuildingButtonTypes, SwitchViewButtonTypes
 from components.button import Button
 from components.image_button import ButtonImage
 from game.textures import Textures
@@ -18,7 +19,7 @@ class Panel:
         self.building_panel_color = (230, 162, 64)
 
         # Ressource panel in the top of screen
-        self.ressource_panel = pg.Surface((self.width, self.height * 0.04))
+        self.ressource_panel = pg.Surface((self.width, self.height * 0.043))
         self.ressource_panel_rect = self.ressource_panel.get_rect(topleft=(0, 0))
         self.ressource_panel.fill(self.ressource_panel_color)
 
@@ -46,20 +47,60 @@ class Panel:
 
     def draw(self, screen):        
         screen.blit(self.ressource_panel, (0, 0))
-
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (self.width - 162, self.height -120))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (self.width - 155, 200))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (self.width - 78, 200))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON1), (self.width - 155, 230))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON2), (self.width - 116, 230))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON3), (self.width - 78, 230))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON4), (self.width - 39, 230))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON5), (self.width - 150, 277 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON6), (self.width - 100, 277 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON7), (self.width - 49, 277 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON8), (self.width - 150, 312 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON9), (self.width - 100, 312 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON10), (self.width - 49, 312 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON11), (self.width - 150, 349 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON12), (self.width - 100, 349 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON13), (self.width - 49, 349 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON14), (self.width - 150, 385 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON15), (self.width - 100, 385 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON16), (self.width - 49, 385 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON17), (self.width - 150, 420 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON18), (self.width - 100, 420 + 46))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
+
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.TOP_PANNEL), (self.width - 162, self.height * 0.043))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BOTTOM_PANNEL), (self.width - 162, 496))
 
         resource_panel_text  = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
         
-        resource_panel_text_pos = [20, 20]
-
+        resource_panel_text_pos = [20, 10]
+        i=0
         for text in resource_panel_text:
-            
+
             temp_pos = resource_panel_text_pos.copy()
 
-            draw_text(text, screen, temp_pos, size=42)
-            
-            resource_panel_text_pos[0] += 200
+            draw_text(text, screen, temp_pos, size=38)
+
+            if(i>=3):
+                resource_panel_text_pos[0] += 280
+            else:
+                resource_panel_text_pos[0] += 150
+            i+=1
+
 
         self.build__tree.display(screen)
         self.build__rock.display(screen)
