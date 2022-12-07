@@ -54,7 +54,13 @@ class MapController:
 
     def get_map_pos(self):
         return self.map_pos
-
+    
+    def set_map_pos(self, x, y):
+        '''
+        Used in mini_map
+        '''
+        self.map_pos = [x, y]
+ 
     def in_constraint(self, map_pos_x, map_pos_y):
         in_constraint_x = -DEFAULT_SURFACE_WIDTH <= map_pos_x <= 0
         in_constraint_y = -DEFAULT_SURFACE_HEIGHT + self.height <= map_pos_y <= self.height*0.04

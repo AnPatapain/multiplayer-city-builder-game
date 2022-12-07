@@ -28,7 +28,7 @@ class Game:
         self.panel = Panel(self.width, self.height, self.event_manager)
 
         # Mini_Map
-        self.mini_map = MiniMap(self.screen, self.width, self.height)
+        self.mini_map = MiniMap(self.screen, self.width, self.height, self.event_manager)
 
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
@@ -62,3 +62,4 @@ class Game:
     def update(self):
         self.panel.update()
         self.world.update(self.map_controller.get_map_pos())
+        self.mini_map.update(self.map_controller)

@@ -1,11 +1,14 @@
 import pygame as pg
 import game.setting as Setting
-
+from events.event_manager import EventManager
+from .mapcontroller import MapController
 
 class MiniMap:
     scale_down_ratio = 0.1
 
-    def __init__(self, screen, width, height) -> None:
+    def __init__(self, screen, width, height, event_manager: EventManager) -> None:
+        self.event_manager = event_manager
+
         self.screen = screen
         self.screen_width = width
         self.screen_height = height
@@ -22,6 +25,11 @@ class MiniMap:
         self.mini_default_surface = self.mini_default_surface()
 
         self.mini_screen_rect = None
+
+        self.mini_relative_pos = None 
+        self.pos_on_big_map = None
+
+        self.event_manager.register_mouse_listener(self.mini_map_mouse_listener)
 
 
     def mini_default_surface(self):
@@ -52,8 +60,22 @@ class MiniMap:
         if self.mini_screen_rect is not None:
             pg.draw.rect(self.screen, (255, 255, 0), self.mini_screen_rect, 1)
 
-    def update():
-        pass
+    def mini_map_mouse_listener(self):
+        mouse_position = pg.mouse.get_pos()
+        mouse_action = pg.mouse.get_pressed()
+        (x, y) = mouse_position
+
+        if self.is_in_mini_map(x, y) and mouse_action[0]:
+            print("coucou")
+            #Transform mouse postion to relative position to mini_default_surface
+            self.mini_relative_pos = [x - self.mini_map_pos_x, y - self.mini_map_pos_y]
+            #Deduce the position on the big map by inversing the function which is used for converting pos on big map to pos on mini_map
+            self.pos_on_big_map = [-self.mini_relative_pos[0]/self.scale_down_ratio, 
+                                   -self.mini_relative_pos[1]/self.scale_down_ratio]
+
+    def update(self, map_controller_instance):
+        if self.pos_on_big_map != None:
+            map_controller_instance.set_map_pos(self.pos_on_big_map[0], self.pos_on_big_map[1])
 
     def is_in_mini_map(self, x, y):
         in_x = (
