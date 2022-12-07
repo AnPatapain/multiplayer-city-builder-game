@@ -60,6 +60,12 @@ class Menu:
         self.screen.blit(self.graphics["background"], (0, 0))
         self.sound_manager.play('menu_demarrer')
 
+        rect_size = (500, 400)
+        rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)
+        rect = pg.Rect(rect_pos, rect_size)
+        pg.draw.rect(self.screen, (100, 100, 100), rect)
+        self.sound_manager.play('menu_demarrer')
+
         logo_start = (self.screen.get_size()[0]/2) - (self.graphics["logo"].get_size()[0]/2)
         self.screen.blit(self.graphics["logo"], (logo_start, 200))
 

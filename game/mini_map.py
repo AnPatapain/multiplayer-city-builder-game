@@ -2,7 +2,6 @@ import pygame as pg
 from game.setting import DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT
 
 class MiniMap:
-
     scale_down_ratio = 0.0249
 
     def __init__(self, width, height) -> None:
@@ -19,8 +18,6 @@ class MiniMap:
 
         self.mini_screen_rect = None
 
-        # self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width
-        # self.mini_map_pos_y = self.screen_height * 0.04
         self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width - 8
         self.mini_map_pos_y = 98
 

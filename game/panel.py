@@ -2,6 +2,7 @@ import pygame as pg
 
 from class_types.buildind_types import BuildingTypes
 from class_types.road_types import RoadTypes
+from class_types.panel_types import BuildingButtonTypes, SwitchViewButtonTypes
 from class_types.panel_types import SwitchViewButtonTypes
 from components.button import Button
 from game.textures import Textures
@@ -67,10 +68,14 @@ class Panel:
 
     def draw(self, screen):        
         screen.blit(self.ressource_panel, (0, 0))
-
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
 
         resource_panel_text = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
 
