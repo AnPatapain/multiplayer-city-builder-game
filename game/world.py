@@ -8,6 +8,8 @@ from game.setting import *
 import game.utils as utils
 from class_types.tile_types import TileTypes
 from game.textures import Textures
+from buildable.road import Road
+from class_types.road_types import RoadTypes
 
 
 class World:
@@ -38,14 +40,14 @@ class World:
         self.in_build_action = False
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
-        '''
+        """
         DESCRIPTION: Convert position of mouse to row and col on grid. ex: convert (192.15, 30.14) to (row: 40, col: 10)
         To do that we reverse this process: (col, row) -> convert_to_iso -> offset (1/2 default_surface.width, 0) -> offset (map_pos[0], map_pos[1])
 
         Params: mouse_position: tuple, map_position: tuple
 
         Return: (col, row) of mouse_position in the grid
-        '''
+        """
 
         iso_x = mouse_pos[0] - map_pos[0] - self.default_surface.get_width() / 2
         iso_y = mouse_pos[1] - map_pos[1]
@@ -57,17 +59,17 @@ class World:
         # transform to grid coordinates
         grid_col = int(cart_x // TILE_SIZE)
         grid_row = int(cart_y // TILE_SIZE)
-        return (grid_col, grid_row)
+        return grid_col, grid_row
 
     def event_handler(self, event, map_pos):
 
-        '''
+        """
         DESCRIPTION: Handling the events that be gotten from event queue in module event_manager.py
-        
+
         Params: event retrieved from pg.event.get() in event_manager.py, map_position in mapcontroller.py
 
         Return: None
-        '''
+        """
 
         mouse_pos = pg.mouse.get_pos()
         mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
@@ -88,13 +90,13 @@ class World:
                 self.temp_end_point = mouse_grid_pos
 
     def update(self, map_pos):
-        '''
-        DESCRIPTION: updating the state of the world. For now it updates temp_tile, texture of the world 
+        """
+        DESCRIPTION: updating the state of the world. For now it updates temp_tile, texture of the world
 
-        Params: map_position from mapcontroller module 
+        Params: map_position from mapcontroller module
 
         Return: None
-        '''
+        """
         mouse_pos = pg.mouse.get_pos()
         mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
         mouse_action = pg.mouse.get_pressed()
@@ -102,7 +104,7 @@ class World:
         selected_tile = self.panel.get_selected_tile()
         self.temp_tile = None
 
-        if selected_tile != None:
+        if selected_tile is not None:
             if self.in_map(mouse_grid_pos):
                 tile = self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
                 self.temp_tile = {
@@ -113,7 +115,7 @@ class World:
                 }
 
             # Build from start point to end point
-            if self.in_build_action == False and self.start_point != None and self.end_point != None:
+            if self.in_build_action is False and self.start_point is not None and self.end_point is not None:
                 if self.in_map(self.start_point) and self.in_map(self.end_point):
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
@@ -121,7 +123,9 @@ class World:
 
                             if tile.is_buildable():
                                 tile.set_type(selected_tile)
-                                self.grid[row][col].set_type(selected_tile)
+                                # Def road
+                                if selected_tile == RoadTypes.TL_TO_BR:
+                                    self.road_add(row, col)
 
                     self.create_static_map()  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
@@ -129,6 +133,9 @@ class World:
 
             if mouse_action[2]:
                 self.panel.set_selected_tile(None)
+                self.start_point = None
+                self.end_point = None
+                self.in_build_action = False
 
     def draw(self, screen, map_pos):
 
@@ -173,12 +180,12 @@ class World:
                             (x, y) = self.grid[row][col].get_render_coord()
 
                             (x_offset, y_offset) = (
-                            x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                                x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
                             temp_house_image = self.graphics['upscale_2x']['temp_house']
                             screen.blit(temp_house_image,
                                         (x_offset, y_offset - temp_house_image.get_height() + TILE_SIZE))
 
-    def grid(self) -> [[Tile]]:
+    def grid(self) -> list[list[Tile]]:
         grid = []
         for row in range(self.nums_grid_y):
 
@@ -234,15 +241,15 @@ class World:
         return tile
 
     def convert_cart_to_iso(self, x, y):
-        '''
-        DESCRIPTION: I don't know how to explain this method 
+        """
+        DESCRIPTION: I don't know how to explain this method
         You can think this method helps us rotate square and then stretch it out : )
 
         Params: coordination of one point of the square
 
         Return: new coordination of the rhombus
-        '''
-        return (x - y, (x + y) / 2)
+        """
+        return x - y, (x + y) / 2
 
     def load_images(self):
 
@@ -268,17 +275,54 @@ class World:
         return pg.transform.scale2x(image)
 
     def in_map(self, grid_pos):
-        '''
+        """
         DESCRIPTION: Check whether the mouse_grid_pos is in map or not. Ex: our map is 30x30 and mouse_grid_pos is (row: 31, col: 32)
         so the mouse is not in the map
 
         Params: the grid pos of mouse
 
         Return: boolean
-        '''
+        """
         mouse_on_panel = False
         in_map_limit = (0 <= grid_pos[0] < self.nums_grid_x) and (0 <= grid_pos[1] < self.nums_grid_y)
         for rect in self.panel.get_panel_rects():
             if rect.collidepoint(pg.mouse.get_pos()):
                 mouse_on_panel = True
         return True if (in_map_limit and not mouse_on_panel) else False
+
+    def road_add(self, road_row, road_col):
+        """
+        DESCRIPTION : Make a new road with connection between other road
+        """
+        # Create road
+        road = Road([])
+        road_connection = [None, None, None, None]
+
+        # Connect other road:
+        # TL connection
+        if  road_col > 0:
+            if self.grid[road_row][road_col - 1].get_road():
+                self.grid[road_row][road_col - 1].get_road().set_connect(road, 2)
+                road_connection[0] = (self.grid[road_row][road_col - 1].get_road())
+
+
+        # TR connection
+        if road_row > 0:
+            if self.grid[road_row - 1][road_col].get_road():
+                self.grid[road_row - 1][road_col].get_road().set_connect(road, 3)
+                road_connection[1] = (self.grid[road_row - 1][road_col].get_road())
+
+        # BR connection
+        if road_col < self.nums_grid_x - 1:
+            if self.grid[road_row][road_col + 1].get_road():
+                self.grid[road_row][road_col + 1].get_road().set_connect(road, 0)
+                road_connection[2] = (self.grid[road_row][road_col + 1].get_road())
+
+        # BL connection
+        if road_row < self.nums_grid_y - 1:
+            if self.grid[road_row + 1][road_col].get_road():
+                self.grid[road_row + 1][road_col].get_road().set_connect(road, 1)
+                road_connection[3] = (self.grid[road_row + 1][road_col].get_road())
+
+        road.set_road_connection(road_connection)
+        self.grid[road_row][road_col].set_road(road)

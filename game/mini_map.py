@@ -1,15 +1,15 @@
 import pygame as pg
 import game.setting as Setting
 
-class MiniMap:
 
+class MiniMap:
     scale_down_ratio = 0.1
 
     def __init__(self, screen, width, height) -> None:
         self.screen = screen
         self.screen_width = width
         self.screen_height = height
-        
+
         self.mini_screen_width = MiniMap.scale_down_ratio * width
         self.mini_screen_height = MiniMap.scale_down_ratio * height
 
@@ -31,19 +31,23 @@ class MiniMap:
 
 
     def draw(self, map_pos):
-        
+
         self.screen.blit(self.mini_default_surface, (self.mini_map_pos_x, self.mini_map_pos_y))
 
-        pg.draw.polygon(self.screen, (0, 255, 0), [(self.mini_map_pos_x + self.mini_default_surface_width/2, self.mini_map_pos_y),
-                                                   (self.mini_map_pos_x + self.mini_default_surface_width, self.mini_map_pos_y + self.mini_default_surface_height/2),
-                                                   (self.mini_map_pos_x + self.mini_default_surface_width/2, self.mini_map_pos_y + self.mini_default_surface_height),
-                                                   (self.mini_map_pos_x, self.mini_map_pos_y + self.mini_default_surface_height/2)], 1)
-        
+        # We need coordination of 4 points to draw rhombus
+        pg.draw.polygon(self.screen, (0, 255, 0),
+                        [(self.mini_map_pos_x + self.mini_default_surface_width / 2, self.mini_map_pos_y),
+                         (self.mini_map_pos_x + self.mini_default_surface_width,
+                          self.mini_map_pos_y + self.mini_default_surface_height / 2),
+                         (self.mini_map_pos_x + self.mini_default_surface_width / 2,
+                          self.mini_map_pos_y + self.mini_default_surface_height),
+                         (self.mini_map_pos_x, self.mini_map_pos_y + self.mini_default_surface_height / 2)], 1)
 
-
-        if self.is_in_mini_map(self.mini_map_pos_x - map_pos[0]*MiniMap.scale_down_ratio, self.mini_map_pos_y - map_pos[1]*MiniMap.scale_down_ratio):
-            self.mini_screen_rect = pg.Rect(self.mini_map_pos_x - map_pos[0]*MiniMap.scale_down_ratio, self.mini_map_pos_y - map_pos[1]*MiniMap.scale_down_ratio, 
-                                   self.mini_screen_width, self.mini_screen_height)
+        if self.is_in_mini_map(self.mini_map_pos_x - map_pos[0] * MiniMap.scale_down_ratio,
+                               self.mini_map_pos_y - map_pos[1] * MiniMap.scale_down_ratio):
+            self.mini_screen_rect = pg.Rect(self.mini_map_pos_x - map_pos[0] * MiniMap.scale_down_ratio,
+                                            self.mini_map_pos_y - map_pos[1] * MiniMap.scale_down_ratio,
+                                            self.mini_screen_width, self.mini_screen_height)
 
         if self.mini_screen_rect is not None:
             pg.draw.rect(self.screen, (255, 255, 0), self.mini_screen_rect, 1)
@@ -51,11 +55,12 @@ class MiniMap:
     def update():
         pass
 
-
     def is_in_mini_map(self, x, y):
-        in_x = (self.mini_map_pos_x + self.mini_default_surface_width - self.mini_screen_width >= x >= self.mini_map_pos_x)
-        in_y = (self.mini_map_pos_y <= y <= self.mini_map_pos_y + self.mini_default_surface_height - self.mini_screen_height)
-        
+        in_x = (
+                    self.mini_map_pos_x + self.mini_default_surface_width - self.mini_screen_width >= x >= self.mini_map_pos_x)
+        in_y = (
+                    self.mini_map_pos_y <= y <= self.mini_map_pos_y + self.mini_default_surface_height - self.mini_screen_height)
+
         if in_x and in_y:
             return True
         return False
