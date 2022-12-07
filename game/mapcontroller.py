@@ -52,7 +52,8 @@ class MapController:
         '''
         Used in mini_map
         '''
-        self.map_pos = [x, y]
+        self.map_pos[0] = x
+        self.map_pos[1] = y
  
     def in_constraint(self, map_pos_x, map_pos_y):
         in_constraint_x = -DEFAULT_SURFACE_WIDTH <= map_pos_x <= 0

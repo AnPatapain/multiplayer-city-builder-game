@@ -35,7 +35,6 @@ class MiniMap:
     def mini_map_mouse_listener(self):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
-        print(mouse_action)
 
         (x, y) = mouse_pos
         if (self.mini_map_pos_x <= x <= self.screen_width) and (self.mini_map_pos_y < y <= self.mini_map_pos_y + self.mini_default_surface_height):

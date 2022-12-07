@@ -5,7 +5,6 @@ from game.setting import IMAGE_PATH
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 
-
 class Textures:
     textures: dict[pg.Surface] = {}
 
