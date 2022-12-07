@@ -12,45 +12,38 @@ class MapController:
         self.event_manager = event_manager
 
         self.event_manager.register_mouse_listener(self._mouse_listener)
-        self.event_manager.register_key_listener(pg.K_DOWN, self._down_arrow, continuous_press=True)
-        self.event_manager.register_key_listener(pg.K_UP, self._up_arrow, continuous_press=True)
-        self.event_manager.register_key_listener(pg.K_LEFT, self._left_arrow, continuous_press=True)
-        self.event_manager.register_key_listener(pg.K_RIGHT, self._right_arrow, continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_DOWN, lambda: self.go_down(OFFSET_FOR_KEY), continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_UP, lambda: self.go_up(OFFSET_FOR_KEY), continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_LEFT, lambda: self.go_left(OFFSET_FOR_KEY), continuous_press=True)
+        self.event_manager.register_key_listener(pg.K_RIGHT, lambda: self.go_right(OFFSET_FOR_KEY), continuous_press=True)
 
     def _mouse_listener(self):
-        mouse_position = pg.mouse.get_pos()
-        (x, y) = mouse_position
+        (x, y) = pg.mouse.get_pos()
 
         if x >= self.width * 0.97:
-            if self.in_constraint(self.map_pos[0] - OFFSET_FOR_KEY, self.map_pos[1]):
-                self.map_pos[0] -= OFFSET_FOR_MOUSE
-
+            self.go_right(OFFSET_FOR_MOUSE)
         if x <= self.width * 0.03:
-            if self.in_constraint(self.map_pos[0] + OFFSET_FOR_KEY, self.map_pos[1]):
-                self.map_pos[0] += OFFSET_FOR_MOUSE
-
+            self.go_left(OFFSET_FOR_MOUSE)
         if y >= self.height * 0.97:
-            if self.in_constraint(self.map_pos[0], self.map_pos[1] - OFFSET_FOR_KEY):
-                self.map_pos[1] -= OFFSET_FOR_MOUSE
+            self.go_down(OFFSET_FOR_MOUSE)
         if y <= self.width * 0.03:
-            if self.in_constraint(self.map_pos[0], self.map_pos[1] + OFFSET_FOR_KEY):
-                self.map_pos[1] += OFFSET_FOR_MOUSE
+            self.go_up(OFFSET_FOR_MOUSE)
 
-    def _down_arrow(self):
-        if self.in_constraint(self.map_pos[0], self.map_pos[1] - OFFSET_FOR_KEY):
-            self.map_pos[1] -= OFFSET_FOR_KEY
+    def go_down(self, offset: int):
+        if self.map_pos[1] > -2100:
+            self.map_pos[1] -= offset
 
-    def _up_arrow(self):
-        if self.in_constraint(self.map_pos[0], self.map_pos[1] + OFFSET_FOR_KEY):
-            self.map_pos[1] += OFFSET_FOR_KEY
+    def go_up(self, offset: int):
+        if self.map_pos[1] < 300:
+            self.map_pos[1] += offset
 
-    def _left_arrow(self):
-        if self.in_constraint(self.map_pos[0] + OFFSET_FOR_KEY, self.map_pos[1]):
-            self.map_pos[0] += OFFSET_FOR_KEY
+    def go_left(self, offset: int):
+        if self.map_pos[0] < 300:
+            self.map_pos[0] += offset
 
-    def _right_arrow(self):
-        if self.in_constraint(self.map_pos[0] - OFFSET_FOR_KEY, self.map_pos[1]):
-            self.map_pos[0] -= OFFSET_FOR_KEY
+    def go_right(self, offset: int):
+        if self.map_pos[0] > -4550:
+            self.map_pos[0] -= offset
 
     def get_map_pos(self):
         return self.map_pos
