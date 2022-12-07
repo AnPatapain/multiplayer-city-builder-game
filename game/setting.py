@@ -11,4 +11,4 @@ IMAGE_PATH = 'assets/C3_sprites/C3'
 
 # Used for the camera movements
 OFFSET_FOR_MOUSE = 20
-OFFSET_FOR_KEY = 50
+OFFSET_FOR_KEY = 12

@@ -32,7 +32,7 @@ class Game:
         self.panel = Panel(self.width, self.height, self.event_manager)
 
         # Mini_Map
-        self.mini_map = MiniMap(self.screen, self.width, self.height)
+        self.mini_map = MiniMap(self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
@@ -57,7 +57,7 @@ class Game:
 
         self.panel.draw(self.screen)
 
-        self.mini_map.draw(self.map_controller.get_map_pos())
+        self.mini_map.draw(self.screen, self.map_controller.get_map_pos())
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
                 

@@ -1,5 +1,7 @@
 import pygame as pg
-from game.world import World
+
+from components.button import Button
+from events.key_listener import KeyListener
 
 from components.component import Component
 
@@ -11,7 +13,7 @@ class EventManager:
         self.components: list[Component] = []
 
         # Key listeners are functions that are called when the matching key is pressed
-        self.key_listeners = []
+        self.key_listeners: list[KeyListener] = []
 
         # Mouse listeners are functions that are called at every loop of the game, without any condition
         self.mouse_listeners = []
@@ -42,6 +44,10 @@ class EventManager:
             else:
                 component.not_hover()
 
+        for key_listener in self.key_listeners:
+            if key_listener.being_pressed:
+                key_listener.call()
+
         for event in pg.event.get():
             for hooked_function in self.hooked_functions:
                 hooked_function[0](event, *hooked_function[1])
@@ -49,16 +55,36 @@ class EventManager:
             if event.type == pg.KEYDOWN:
                 self.any_input()
                 for key_listener in self.key_listeners:
-                    if key_listener[0] == event.key:
-                        key_listener[1]()
+                    if key_listener.key == event.key:
+                        key_listener.set_being_pressed(True)
+                        key_listener.call()
+
+            if event.type == pg.KEYUP:
+                for key_listener in self.key_listeners:
+                    if key_listener.key == event.key:
+                        key_listener.set_being_pressed(False)
+
+            if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                for component in self.components:
+                    if isinstance(component, Button) and component.is_hover(pos):
+                        component.set_being_pressed(True)
 
             if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click
                 if event.button not in (4, 5):
                     self.any_input()
                     for component in self.components:
-                        if component.is_hover(pos):
-                            component.click()
+                        if isinstance(component, Button):
+                            if component.is_hover(pos) and component.being_pressed:
+                                component.set_selected(True)
+                                component.set_being_pressed(False)
+                                component.click()
+                            else:
+                                component.set_selected(False)
+                                component.set_being_pressed(False)
+                        else:
+                            if component.is_hover(pos):
+                                component.click()
         return self
 
     def register_component(self, component: Component):
@@ -99,19 +125,21 @@ class EventManager:
         self.components = []
         return self
 
-    def register_key_listener(self, key, func):
+    def register_key_listener(self, key, func, continuous_press: bool = False):
         """
         Add a new key listener to the event manager, and remove the old one bound to the key if it exists.
 
         Key listeners are functions that are called when the matching key is pressed.
 
+        :param continuous_press: Call the function when the key is kept pressed
         :param key: The key associated with the function
         :param func: The function to call when the key is pressed
         :return: The EventManager itself
         """
-
+        kl = KeyListener(func, key, continuous_press)
         self.remove_key_listener(key)
-        self.key_listeners.append((key, func))
+        self.key_listeners.append(kl)
+        # self.key_listeners.append((key, func, continuous_press))
         return self
 
     def remove_key_listener(self, key):
@@ -123,7 +151,7 @@ class EventManager:
         """
 
         for listeners in self.key_listeners:
-            if listeners[0] == key:
+            if listeners.key == key:
                 self.key_listeners.remove(listeners)
         return self
 
