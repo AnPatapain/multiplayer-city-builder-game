@@ -4,7 +4,7 @@ from game.setting import TILE_SIZE
 
 
 class Tile:
-    def __init__(self, col: int, row: int, tile_type=TileTypes.GRASS):
+    def __init__(self, col: int, row: int, tile_type: TileTypes = TileTypes.GRASS):
         self.type = tile_type
         self.building = None
         self.road = None

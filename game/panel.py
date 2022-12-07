@@ -91,10 +91,6 @@ class Panel:
 
         return image
 
-
-    def scale_image_2x(self, image):
-        return pg.transform.scale2x(image)
-
     def has_selected_tile(self): return self.selected_tile is not None
 
     def get_selected_tile(self): return self.selected_tile
