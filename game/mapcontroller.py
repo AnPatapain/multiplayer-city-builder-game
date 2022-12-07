@@ -54,9 +54,3 @@ class MapController:
         '''
         self.map_pos[0] = x
         self.map_pos[1] = y
- 
-    def in_constraint(self, map_pos_x, map_pos_y):
-        in_constraint_x = -DEFAULT_SURFACE_WIDTH <= map_pos_x <= 0
-        in_constraint_y = -DEFAULT_SURFACE_HEIGHT + self.height <= map_pos_y <= self.height*0.04
-        if in_constraint_x and in_constraint_y:
-            return True

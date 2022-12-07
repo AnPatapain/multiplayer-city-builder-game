@@ -265,7 +265,7 @@ class World:
         for rect in self.panel.get_panel_rects():
             if rect.collidepoint(pg.mouse.get_pos()):
                 mouse_on_panel = True
-        return True if (in_map_limit and not mouse_on_panel) else False
+        return (in_map_limit and not mouse_on_panel)
 
     def road_add(self, road_row, road_col):
         """
