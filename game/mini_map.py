@@ -32,7 +32,6 @@ class MiniMap:
         self.mini_relative_y = None
 
         self.event_manager.register_mouse_listener(self.mini_map_mouse_listener)
-        print(self.event_manager.mouse_listeners)
 
 
     def mini_map_mouse_listener(self):

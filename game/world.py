@@ -77,7 +77,6 @@ class World:
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1 and self.panel.has_selected_tile():
-                    print(self.panel.get_selected_tile())
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
 
