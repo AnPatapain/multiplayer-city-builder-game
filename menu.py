@@ -1,6 +1,11 @@
 import pygame as pg
+
+import sounds.sounds
 from components import button
 from events import event_manager
+from sounds import sounds
+from game import game
+
 
 class Menu:
     def __init__(self, screen, clock):
@@ -11,6 +16,7 @@ class Menu:
         self.clock = clock
         self.graphics = self.load_images()
         self.eventManager = event_manager.EventManager()
+        self.sound_manager = sounds.SoundManager()
 
         # (Width, Height)
         button_size = (320, 40)
@@ -47,6 +53,7 @@ class Menu:
 
     def affichage(self):
         self.screen.blit(self.graphics["background"], (0, 0))
+        self.sound_manager.play('menu_demarrer')
 
         rect_size = (500, 400)
         rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)

@@ -4,7 +4,8 @@ from events.event_manager import EventManager
 from .mapcontroller import MapController
 
 class MiniMap:
-    scale_down_ratio = 0.1
+
+    scale_down_ratio = 0.0249
 
     def __init__(self, width, height, event_manager: EventManager) -> None:
         self.event_manager = event_manager
@@ -22,8 +23,10 @@ class MiniMap:
 
         self.mini_screen_rect = None
 
-        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width
-        self.mini_map_pos_y = self.screen_height * 0.04
+        # self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width
+        # self.mini_map_pos_y = self.screen_height * 0.04
+        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width - 8
+        self.mini_map_pos_y = 98
 
         self.mini_relative_x = None
         self.mini_relative_y = None

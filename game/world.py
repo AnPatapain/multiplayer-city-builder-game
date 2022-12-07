@@ -6,11 +6,12 @@ import random as rd
 from map_element.tile import Tile
 from game.setting import *
 import game.utils as utils
-from class_types.tile_types import TileTypes
 from game.textures import Textures
 from buildable.road import Road
-from class_types.road_types import RoadTypes
 
+from class_types.tile_types import TileTypes
+from class_types.road_types import RoadTypes
+from class_types.buildind_types import BuildingTypes
 
 class World:
 
@@ -21,7 +22,6 @@ class World:
         self.height = height
 
         self.noise_scale = nums_grid_x / 2
-        self.graphics = self.load_images()
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
         self.grid: [[Tile]] = self.grid()
 
@@ -181,9 +181,9 @@ class World:
 
                             (x_offset, y_offset) = (
                                 x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
-                            temp_house_image = self.graphics['upscale_2x']['temp_house']
-                            screen.blit(temp_house_image,
-                                        (x_offset, y_offset - temp_house_image.get_height() + TILE_SIZE))
+                            build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
+                            screen.blit(build_sign,
+                                        (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
     def grid(self) -> list[list[Tile]]:
         grid = []
@@ -198,7 +198,7 @@ class World:
                 (x, y) = iso_tile.get_render_coord()
                 offset_render = (x + self.default_surface.get_width() / 2, y)
 
-                self.default_surface.blit(self.graphics['upscale_2x']['block'], offset_render)
+                self.default_surface.blit(Textures.get_texture(TileTypes.GRASS), offset_render)
 
         return grid
 
@@ -251,29 +251,6 @@ class World:
         """
         return x - y, (x + y) / 2
 
-    def load_images(self):
-
-        path = 'assets/C3_sprites/C3'
-
-        return {
-            'origin': {
-                'block': pg.image.load(os.path.join(path, 'Land1a_00069.png')).convert_alpha(),
-                'tree': pg.image.load(os.path.join(path, 'Land1a_00041.png')).convert_alpha(),
-                'rock': pg.image.load(os.path.join(path, 'Land1a_00290.png')).convert_alpha()
-            },
-
-            'upscale_2x': {
-                'block': self.scale_image_2x(pg.image.load(os.path.join(path, 'Land1a_00069.png'))).convert_alpha(),
-                'tree': self.scale_image_2x(pg.image.load(os.path.join(path, 'Land1a_00041.png'))).convert_alpha(),
-                'rock': self.scale_image_2x(pg.image.load(os.path.join(path, 'Land1a_00290.png'))).convert_alpha(),
-                'temp_house': self.scale_image_2x(
-                    pg.image.load(os.path.join(path, 'Housng1a_00045.png'))).convert_alpha()
-            }
-        }
-
-    def scale_image_2x(self, image):
-        return pg.transform.scale2x(image)
-
     def in_map(self, grid_pos):
         """
         DESCRIPTION: Check whether the mouse_grid_pos is in map or not. Ex: our map is 30x30 and mouse_grid_pos is (row: 31, col: 32)
@@ -323,6 +300,7 @@ class World:
             if self.grid[road_row + 1][road_col].get_road():
                 self.grid[road_row + 1][road_col].get_road().set_connect(road, 1)
                 road_connection[3] = (self.grid[road_row + 1][road_col].get_road())
+
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)

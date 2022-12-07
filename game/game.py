@@ -1,6 +1,7 @@
 import pygame as pg
 
 from events.event_manager import EventManager
+from sounds.sounds import SoundManager
 from .world import World
 from .utils import draw_text
 from .mapcontroller import MapController
@@ -16,6 +17,9 @@ class Game:
         self.screen = screen
         self.clock = clock
         self.width, self.height = self.screen.get_size()
+
+        # sound manager
+        self.sound_manager = SoundManager()
 
         # event_manager handles every event (mouse & keyboard input) of the game
         self.event_manager = EventManager()
