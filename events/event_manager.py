@@ -1,9 +1,9 @@
 import pygame as pg
 
 from components.button import Button
-from events.key_listener import KeyListener
-
 from components.component import Component
+
+from events.key_listener import KeyListener
 
 
 class EventManager:
