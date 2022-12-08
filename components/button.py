@@ -41,49 +41,58 @@ class Button(Component):
         return self.bg.collidepoint(pos)
 
     def hover(self):
-        if not self.is_hovered and not self.disabled:
+        if not self.is_hovered() and not self.is_disabled():
             self.bg_color = HOVER_COLOR
             if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
                 pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
-            self.is_hovered = True
+            self.hovered = True
 
     def not_hover(self):
-        if self.is_hovered and not self.disabled:
+        if self.is_hovered() and not self.is_disabled():
             self.bg_color = BASE_COLOR
             if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
                 pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
-            self.is_hovered = False
+            self.hovered = False
 
     def set_margin(self, margin: int):
         self.margin = margin
         return self
 
+    def is_selected(self):
+        return self.selected
+
     def set_selected(self, status: bool):
-        if not self.disabled and self.selectable:
+        if not self.is_disabled() and self.selectable:
             self.selected = status
 
+    def is_being_pressed(self):
+        return self.being_pressed
+
     def set_being_pressed(self, being_pressed: bool):
-        if not self.disabled:
+        if not self.is_disabled():
             self.being_pressed = being_pressed
+
+    def is_disabled(self):
+        return self.disabled
 
     def set_disabled(self, disabled: bool):
         self.disabled = disabled
 
     def click(self):
-        if not self.disabled:
+        if not self.is_disabled():
             if not self.selectable:
                 self.not_hover()
             super().click()
 
     def display(self, screen: Surface):
         color = BASE_COLOR
-        if self.disabled:
+        if self.is_disabled():
             color = DISABLED_COLOR
-        elif self.selected:
+        elif self.is_selected():
             color = SELECTED_COLOR
-        elif self.is_hovered:
+        elif self.is_hovered():
             color = HOVER_COLOR
-        elif self.being_pressed:
+        elif self.is_being_pressed():
             color = HOVER_COLOR
 
         pg.draw.rect(screen, color, self.bg)
@@ -96,7 +105,7 @@ class Button(Component):
 
         if self.is_hovered and self.image_hover is not None:
             screen.blit(self.image_hover, self.bg)
-        elif self.selected and self.image_selected is not None:
+        elif self.is_selected() and self.image_selected is not None:
             screen.blit(self.image_selected, self.bg)
         elif self.image is not None:
             screen.blit(self.image, self.bg)

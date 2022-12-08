@@ -5,6 +5,9 @@ class KeyListener:
         self.continuous_press = continuous_press
         self.being_pressed = False
 
+    def is_being_pressed(self):
+        return self.being_pressed
+
     def set_being_pressed(self, being_pressed: bool):
         if self.continuous_press:
             self.being_pressed = being_pressed
