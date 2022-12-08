@@ -46,7 +46,7 @@ class EventManager:
                 component.not_hover()
 
         for key_listener in self.key_listeners:
-            if key_listener.being_pressed:
+            if key_listener.is_being_pressed():
                 key_listener.call()
 
         for event in pg.event.get():
@@ -76,10 +76,13 @@ class EventManager:
                     self.any_input()
                     for component in self.components:
                         if isinstance(component, Button):
-                            if component.is_hover(pos) and component.being_pressed:
-                                component.set_selected(True)
+                            if component.is_hover(pos) and component.is_being_pressed():
+                                if component.is_selected():
+                                    component.set_selected(False)
+                                else:
+                                    component.set_selected(True)
+                                    component.click()
                                 component.set_being_pressed(False)
-                                component.click()
                             else:
                                 component.set_selected(False)
                                 component.set_being_pressed(False)
