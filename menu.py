@@ -1,10 +1,8 @@
 import pygame as pg
 
-import sounds.sounds
 from components import button
-from events import event_manager
-from sounds import sounds
-from game import game
+from events.event_manager import EventManager
+from sounds.sounds import SoundManager
 
 
 class Menu:
@@ -15,8 +13,7 @@ class Menu:
         self.screen = screen
         self.clock = clock
         self.graphics = self.load_images()
-        self.eventManager = event_manager.EventManager()
-        self.sound_manager = sounds.SoundManager()
+        self.sound_manager = SoundManager()
 
         # (Width, Height)
         button_size = (322, 32)
@@ -41,19 +38,19 @@ class Menu:
                                                       image_hover=pg.image.load('assets/menu_sprites/exit_hover.png').convert())
         self.button__exit.on_click(exit)
 
-        self.eventManager.register_component(self.button__start_new_career)\
-            .register_component(self.button__load_saved_game)\
-            .register_component(self.button__options)\
-            .register_component(self.button__exit)
+        EventManager.register_component(self.button__start_new_career)
+        EventManager.register_component(self.button__load_saved_game)
+        EventManager.register_component(self.button__options)
+        EventManager.register_component(self.button__exit)
 
-        self.eventManager.set_any_input(self.skip_splashscreen)
+        EventManager.set_any_input(self.skip_splashscreen)
         self.screen.blit(self.graphics["splash"], (0, 0))
         pg.display.flip()
 
 
     def run(self):
         self.clock.tick(60)
-        self.eventManager.handle_events()
+        EventManager.handle_events()
 
         if self.is_splashscreen_skipped():
             self.affichage()
@@ -83,12 +80,10 @@ class Menu:
         splash = pg.image.load('assets/menu_sprites/splash_screen.jpg').convert()
         splash = pg.transform.scale(splash, self.screen.get_size())
 
-
         return {
             'background': background,
             'logo': logo,
             'splash': splash
-
         }
 
     def is_active(self):

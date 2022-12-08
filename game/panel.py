@@ -1,21 +1,19 @@
 import pygame as pg
 
 from class_types.buildind_types import BuildingTypes
-from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
-from class_types.panel_types import BuildingButtonTypes, SwitchViewButtonTypes
+from class_types.panel_types import SwitchViewButtonTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
-
+from events.event_manager import EventManager
 
 class Panel:
     
-    def __init__(self, width, height, event_manager):
+    def __init__(self, width, height):
         self.width, self.height = width, height
 
-        self.event_manager = event_manager
 
         self.ressource_panel_color = (204, 174, 132)
         self.building_panel_color = (230, 162, 64)
@@ -56,10 +54,11 @@ class Panel:
         self.build__prefecture.on_click(lambda: self.set_selected_tile(BuildingTypes.PREFECTURE))
 
 
-        self.event_manager.register_component(self.build__road)
-        self.event_manager.register_component(self.destroy_tile)
-        self.event_manager.register_component(self.build__house)
-        self.event_manager.register_component(self.build__prefecture)
+        EventManager.register_component(self.build__road)
+        EventManager.register_component(self.destroy_tile)
+        EventManager.register_component(self.build__house)
+        EventManager.register_component(self.build__prefecture)
+
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -129,7 +128,6 @@ class Panel:
     
     def update(self):
         pass
-        # self.event_manager.handle_events()
 
 
     def scale_image(self, image, width=None, height=None):  # Procedure function which scales up or down the image specified
@@ -159,5 +157,3 @@ class Panel:
     def set_selected_tile(self, value): self.selected_tile = value
 
     def get_panel_rects(self): return self.panel_rects
-
-
