@@ -146,18 +146,6 @@ class World:
     def draw(self, screen, map_pos):
 
         screen.blit(self.default_surface, map_pos)
-        # for row in range(self.nums_grid_y):
-        #     for col in range(self.nums_grid_x):
-        #         tile: Tile = self.grid[row][col]
-        #         (x, y) = tile.get_render_coord()
-        #         # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-        #         (x_offset, y_offset) = (x + self.default_surface.get_width()/2 + map_pos[0],
-        #                                  y + map_pos[1])
-
-        #         texture_image = tile.get_texture()
-
-        #         if tile.get_type() != TileTypes.GRASS:
-        #             screen.blit(texture_image, (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 
         if self.temp_tile is not None and self.in_build_action is False:
             isometric_coor = self.temp_tile['isometric_coor']
