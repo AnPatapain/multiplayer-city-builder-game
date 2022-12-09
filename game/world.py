@@ -122,11 +122,19 @@ class World:
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
                             tile: Tile = self.grid[row][col]
 
-                            if tile.is_buildable():
-                                tile.set_type(selected_tile)
-                                # Def road
-                                if selected_tile == RoadTypes.TL_TO_BR:
-                                    self.road_add(row, col)
+                            if selected_tile != BuildingTypes.PELLE:
+                                if tile.is_buildable():
+                                    tile.set_type(selected_tile)
+                                    # Def road
+                                    if selected_tile == RoadTypes.TL_TO_BR:
+                                        self.road_add(row, col)
+                            else:
+                                if tile.is_destroyable():
+                                    print("coucouuuuuuuuu")
+                                    tile.destroy()
+                                    print(row, col, tile.get_type(), tile.road, tile.building)
+                            
+
                             """else:
                                 tile.set_type(TileTypes.GRASS)
                                 tile.road = None
@@ -214,13 +222,15 @@ class World:
         for row in range(self.nums_grid_y):
             for col in range(self.nums_grid_x):
                 tile: Tile = self.grid[row][col]
+                print("inside create_static_map", row, col, tile.get_type())
                 (x, y) = tile.get_render_coord()
                 # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
                 (x_offset, y_offset) = (x + self.default_surface.get_width() / 2, y)
 
                 texture_image = tile.get_texture()
 
-                if tile.is_buildable and tile.get_type() != TileTypes.GRASS:
+                # if tile.is_buildable and tile.get_type() != TileTypes.GRASS:
+                if tile.is_buildable:
                     self.default_surface.blit(texture_image,
                                               (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 

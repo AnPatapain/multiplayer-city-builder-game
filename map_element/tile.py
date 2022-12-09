@@ -65,3 +65,7 @@ class Tile:
         if self.type in (TileTypes.WHEAT, TileTypes.GRASS) : return False
         else : return True
 
+    def destroy(self):
+        self.road = None # Brute force self road to None
+        self.building = None # Brute force self building to None
+        self.type = TileTypes.GRASS

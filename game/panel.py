@@ -44,7 +44,7 @@ class Panel:
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON6),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED))
-        self.destroy_tile.on_click(lambda: self.set_selected_tile(TileTypes.GRASS)) #image qui est sur le curseur
+        self.destroy_tile.on_click(lambda: self.set_selected_tile(BuildingTypes.PELLE)) #image qui est sur le curseur
 
         self.build__house = Button((self.width - 149, 277 + 46), (33, 22),
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
