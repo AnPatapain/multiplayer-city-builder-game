@@ -10,4 +10,5 @@ class SoundManager:
         }
 
     def play(self, name):
-        self.sounds[name].play()
+        pass
+        # self.sounds[name].play()
