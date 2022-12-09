@@ -19,13 +19,13 @@ class MapController:
     def _mouse_listener(self):
         (x, y) = pg.mouse.get_pos()
 
-        if x >= self.width * 0.97:
+        if x >= self.width * 0.999:
             self.go_right(OFFSET_FOR_MOUSE)
-        if x <= self.width * 0.03:
+        if x <= self.width * 0.001:
             self.go_left(OFFSET_FOR_MOUSE)
-        if y >= self.height * 0.97:
+        if y >= self.height * 0.999:
             self.go_down(OFFSET_FOR_MOUSE)
-        if y <= self.width * 0.03:
+        if y <= self.width * 0.001:
             self.go_up(OFFSET_FOR_MOUSE)
 
     def go_down(self, offset: int):
@@ -46,3 +46,4 @@ class MapController:
 
     def get_map_pos(self):
         return self.map_pos
+

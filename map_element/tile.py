@@ -60,3 +60,8 @@ class Tile:
         return self.building is None \
                and self.road is None \
                and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
+
+    def is_destroyable(self):
+        if self.type in (TileTypes.WHEAT, TileTypes.GRASS) : return False
+        else : return True
+

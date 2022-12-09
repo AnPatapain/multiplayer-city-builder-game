@@ -111,7 +111,8 @@ class World:
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
-                    'isBuildable': tile.is_buildable()
+                    'isBuildable': tile.is_buildable(),
+                    'isDestroyable' : tile.is_destroyable()
                 }
 
             # Build from start point to end point
@@ -126,6 +127,11 @@ class World:
                                 # Def road
                                 if selected_tile == RoadTypes.TL_TO_BR:
                                     self.road_add(row, col)
+                            """else:
+                                tile.set_type(TileTypes.GRASS)
+                                tile.road = None
+                                tile.building = None"""
+
 
                     self.create_static_map()  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
@@ -176,7 +182,7 @@ class World:
                 for row in utils.MyRange(self.start_point[1], self.temp_end_point[1]):
                     for col in utils.MyRange(self.start_point[0], self.temp_end_point[0]):
 
-                        if self.grid[row][col].is_buildable():
+                        if self.grid[row][col].is_buildable() :
                             (x, y) = self.grid[row][col].get_render_coord()
 
                             (x_offset, y_offset) = (
@@ -233,6 +239,8 @@ class World:
                     graphic_ = TileTypes.ROCK
                 if normal_random < 2:
                     graphic_ = TileTypes.TREE
+                if normal_random < 3:
+                    graphic_ = TileTypes.BIG_TREE
             return graphic_
 
         tile = Tile(col, row)

@@ -19,18 +19,26 @@ class Menu:
         self.sound_manager = sounds.SoundManager()
 
         # (Width, Height)
-        button_size = (320, 40)
+        button_size = (322, 32)
         button_start = (self.screen.get_size()[0]/2) - (button_size[0]/2)
 
-        self.button__start_new_career = button.Button((button_start, 350), button_size, center_text=True, text="Start new career")
+        self.button__start_new_career = button.Button((button_start, 350),button_size,
+                                                      image=pg.image.load('assets/menu_sprites/start.png').convert(),
+                                                      image_hover=pg.image.load('assets/menu_sprites/start_hover.png').convert())
         self.button__start_new_career.on_click(self.set_inactive)
 
-        self.button__load_saved_game = button.Button((button_start, 400), button_size, center_text=True, text="Load saved game", selectable=True)
+        self.button__load_saved_game = button.Button((button_start, 400), button_size,
+                                                      image=pg.image.load('assets/menu_sprites/load saved game.png').convert(),
+                                                      image_hover=pg.image.load('assets/menu_sprites/load_saved_game_mouse_on.png').convert())
 
-        self.button__options = button.Button((button_start, 450), button_size, center_text=True, text="Options")
-        self.button__options.set_disabled(True)
+        self.button__options = button.Button((button_start, 450), button_size,
+                                                      image=pg.image.load('assets/menu_sprites/options.png').convert(),
+                                                      image_hover=pg.image.load('assets/menu_sprites/options_mouse_on.png').convert())
+        #self.button__options.set_disabled(True)
 
-        self.button__exit = button.Button((button_start, 500), button_size, center_text=True, text="Exit")
+        self.button__exit = button.Button((button_start, 500), button_size,
+                                                      image=pg.image.load('assets/menu_sprites/exit.png').convert(),
+                                                      image_hover=pg.image.load('assets/menu_sprites/exit_hover.png').convert())
         self.button__exit.on_click(exit)
 
         self.eventManager.register_component(self.button__start_new_career)\
@@ -55,11 +63,6 @@ class Menu:
         self.screen.blit(self.graphics["background"], (0, 0))
         self.sound_manager.play('menu_demarrer')
 
-        rect_size = (500, 400)
-        rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)
-        rect = pg.Rect(rect_pos, rect_size)
-        pg.draw.rect(self.screen, (100, 100, 100), rect)
-
         logo_start = (self.screen.get_size()[0]/2) - (self.graphics["logo"].get_size()[0]/2)
         self.screen.blit(self.graphics["logo"], (logo_start, 200))
 
@@ -80,10 +83,12 @@ class Menu:
         splash = pg.image.load('assets/menu_sprites/splash_screen.jpg').convert()
         splash = pg.transform.scale(splash, self.screen.get_size())
 
+
         return {
             'background': background,
             'logo': logo,
             'splash': splash
+
         }
 
     def is_active(self):
