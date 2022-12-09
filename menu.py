@@ -99,7 +99,7 @@ class Menu:
         self.active = False
 
     def skip_splashscreen(self):
-        self.eventManager.clear_any_input()
+        EventManager.clear_any_input()
         self.splash_screen = False
 
     def is_splashscreen_skipped(self):

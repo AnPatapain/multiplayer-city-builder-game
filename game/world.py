@@ -181,7 +181,7 @@ class World:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
-                        
+
                         elif self.grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
                             building = self.grid[row][col].get_delete_texture()
                             screen.blit(building,
