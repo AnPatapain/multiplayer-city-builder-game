@@ -178,14 +178,18 @@ class World:
                 for row in utils.MyRange(self.start_point[1], self.temp_end_point[1]):
                     for col in utils.MyRange(self.start_point[0], self.temp_end_point[0]):
 
-                        if self.grid[row][col].is_buildable() :
-                            (x, y) = self.grid[row][col].get_render_coord()
+                        (x, y) = self.grid[row][col].get_render_coord()
+                        (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
 
-                            (x_offset, y_offset) = (
-                                x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                        if self.grid[row][col].is_buildable() and self.temp_tile and self.temp_tile["name"] != BuildingTypes.PELLE:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+                        
+                        elif self.grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
+                            destroy_sign = Textures.get_texture(TileTypes.GRASS)
+                            screen.blit(destroy_sign, 
+                                        (x_offset, y_offset - destroy_sign.get_height() + TILE_SIZE))
 
     def grid(self) -> list[list[Tile]]:
         grid = []
