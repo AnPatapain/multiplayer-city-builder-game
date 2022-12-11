@@ -4,6 +4,7 @@ import pygame as pg
 from game.setting import IMAGE_PATH
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
+from class_types.buildind_types import BuildingTypes
 
 
 class Textures:
@@ -37,4 +38,7 @@ class Textures:
             RoadTypes.BR_TO_BL_TO_TL: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00107.png'))).convert_alpha(screen),
             RoadTypes.BL_TO_TL_TO_TR: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00108.png'))).convert_alpha(screen),
             RoadTypes.ALL_DIRECTION: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00110.png'))).convert_alpha(screen),
+
+            # Buildings texture
+            BuildingTypes.BUILD_SIGN: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00045.png'))).convert_alpha(screen)
         }

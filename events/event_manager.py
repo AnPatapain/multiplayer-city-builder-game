@@ -1,33 +1,32 @@
 import pygame as pg
 
 from components.button import Button
-from events.key_listener import KeyListener
-
 from components.component import Component
+
+from events.key_listener import KeyListener
 
 
 class EventManager:
-    def __init__(self):
-        # Components are IU elements like button, that have different states and actions depending on the input
-        # of the system. For example, a button changes its color and the cursor when its hovered
-        self.components: list[Component] = []
+    # Components are IU elements like button, that have different states and actions depending on the input
+    # of the system. For example, a button changes its color and the cursor when its hovered
+    components: list[Component] = []
 
-        # Key listeners are functions that are called when the matching key is pressed
-        self.key_listeners: list[KeyListener] = []
+    # Key listeners are functions that are called when the matching key is pressed
+    key_listeners: list[KeyListener] = []
 
-        # Mouse listeners are functions that are called at every loop of the game, without any condition
-        self.mouse_listeners = []
+    # Mouse listeners are functions that are called at every loop of the game, without any condition
+    mouse_listeners = []
 
-        # Hooked functions are functions that are called with the "event" parameter as their first, and
-        # any other parameters passed to them
-        self.hooked_functions = []
+    # Hooked functions are functions that are called with the "event" parameter as their first, and
+    # any other parameters passed to them
+    hooked_functions = []
 
-        # The any_input function is called when any key or mouse button is pressed (excluding scroll)
-        # Useful for things like "press any to continue"
-        self.any_input = lambda: True
+    # The any_input function is called when any key or mouse button is pressed (excluding scroll)
+    # Useful for things like "press any to continue"
+    any_input = lambda: True
 
-
-    def handle_events(self):
+    @staticmethod
+    def handle_events():
         """
         The logic function that has to be called in the game loop for the magic to append
         :return: The EventManager itself
@@ -35,59 +34,62 @@ class EventManager:
 
         pos = pg.mouse.get_pos()
 
-        for mouse_listener in self.mouse_listeners:
+        for mouse_listener in EventManager.mouse_listeners:
             mouse_listener()
 
-        for component in self.components:
+        for component in EventManager.components:
             if component.is_hover(pos):
                 component.hover()
             else:
                 component.not_hover()
 
-        for key_listener in self.key_listeners:
-            if key_listener.being_pressed:
+        for key_listener in EventManager.key_listeners:
+            if key_listener.is_being_pressed():
                 key_listener.call()
 
         for event in pg.event.get():
-            for hooked_function in self.hooked_functions:
+            for hooked_function in EventManager.hooked_functions:
                 hooked_function[0](event, *hooked_function[1])
 
             if event.type == pg.KEYDOWN:
-                self.any_input()
-                for key_listener in self.key_listeners:
+                EventManager.any_input()
+                for key_listener in EventManager.key_listeners:
                     if key_listener.key == event.key:
                         key_listener.set_being_pressed(True)
                         key_listener.call()
 
             if event.type == pg.KEYUP:
-                for key_listener in self.key_listeners:
+                for key_listener in EventManager.key_listeners:
                     if key_listener.key == event.key:
                         key_listener.set_being_pressed(False)
 
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                for component in self.components:
+                for component in EventManager.components:
                     if isinstance(component, Button) and component.is_hover(pos):
                         component.set_being_pressed(True)
 
             if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click
                 if event.button not in (4, 5):
-                    self.any_input()
-                    for component in self.components:
+                    EventManager.any_input()
+                    for component in EventManager.components:
                         if isinstance(component, Button):
-                            if component.is_hover(pos) and component.being_pressed:
-                                component.set_selected(True)
+                            if component.is_hover(pos) and component.is_being_pressed():
+                                if component.is_selected():
+                                    component.set_selected(False)
+                                else:
+                                    component.set_selected(True)
+                                    component.click()
                                 component.set_being_pressed(False)
-                                component.click()
                             else:
                                 component.set_selected(False)
                                 component.set_being_pressed(False)
                         else:
                             if component.is_hover(pos):
                                 component.click()
-        return self
 
-    def register_component(self, component: Component):
+    @staticmethod
+    def register_component(component: Component):
         """
         Add a new component to the EventManager
 
@@ -95,13 +97,12 @@ class EventManager:
         For example, a button changes its color and the cursor when its hovered.
 
         :param component: The component to add to the EventManager
-        :return: The EventManager itself
         """
 
-        self.components.append(component)
-        return self
+        EventManager.components.append(component)
 
-    def remove_component(self, component: Component):
+    @staticmethod
+    def remove_component(component: Component):
         """
         Remove an existing component from the EventManager.
 
@@ -110,22 +111,21 @@ class EventManager:
         """
 
         try:
-            self.components.remove(component)
+            EventManager.components.remove(component)
         except ValueError:
             pass
-        return self
 
-
-    def clear_components(self):
+    @staticmethod
+    def clear_components():
         """
         Remove every component from the EventManager.
 
         :return: The EventManager itself
         """
-        self.components = []
-        return self
+        EventManager.components = []
 
-    def register_key_listener(self, key, func, continuous_press: bool = False):
+    @staticmethod
+    def register_key_listener(key, func, continuous_press: bool = False):
         """
         Add a new key listener to the event manager, and remove the old one bound to the key if it exists.
 
@@ -137,12 +137,11 @@ class EventManager:
         :return: The EventManager itself
         """
         kl = KeyListener(func, key, continuous_press)
-        self.remove_key_listener(key)
-        self.key_listeners.append(kl)
-        # self.key_listeners.append((key, func, continuous_press))
-        return self
+        EventManager.remove_key_listener(key)
+        EventManager.key_listeners.append(kl)
 
-    def remove_key_listener(self, key):
+    @staticmethod
+    def remove_key_listener(key):
         """
         Remove a listener associated with a specific key.
 
@@ -150,22 +149,22 @@ class EventManager:
         :return: The EventManager itself
         """
 
-        for listeners in self.key_listeners:
+        for listeners in EventManager.key_listeners:
             if listeners.key == key:
-                self.key_listeners.remove(listeners)
-        return self
+                EventManager.key_listeners.remove(listeners)
 
-    def clear_key_listeners(self):
+    @staticmethod
+    def clear_key_listeners():
         """
         Remove every key listeners from the EventManager.
 
         :return: The EventManager itself
         """
 
-        self.key_listeners = []
-        return self
+        EventManager.key_listeners = []
 
-    def set_any_input(self, func):
+    @staticmethod
+    def set_any_input(func):
         """
         Sets the any_input function.
 
@@ -176,20 +175,20 @@ class EventManager:
         :return: The EventManager itself
         """
 
-        self.any_input = func
-        return self
+        EventManager.any_input = func
 
-    def clear_any_input(self):
+    @staticmethod
+    def clear_any_input():
         """
         Remove the function to run to any input.
 
         :return: The EventManager itself
         """
 
-        self.any_input = lambda: True
-        return self
+        EventManager.any_input = lambda: True
 
-    def register_mouse_listener(self, func):
+    @staticmethod
+    def register_mouse_listener(func):
         """
         Add a mouse listener to the Event Manager.
 
@@ -200,10 +199,10 @@ class EventManager:
         :return: The EventManager itself
         """
 
-        self.mouse_listeners.append(func)
-        return self
+        EventManager.mouse_listeners.append(func)
 
-    def remove_mouse_listener(self, func):
+    @staticmethod
+    def remove_mouse_listener(func):
         """
         Remove a specific mouse listener from the EventManager.
 
@@ -212,22 +211,22 @@ class EventManager:
         """
 
         try:
-            self.mouse_listeners.remove(func)
+            EventManager.mouse_listeners.remove(func)
         except ValueError:
             pass
-        return self
 
-    def clear_mouse_listeners(self):
+    @staticmethod
+    def clear_mouse_listeners():
         """
         Remove every mouse listener from the EventManager.
 
         :return: The EventManager itself
         """
 
-        self.mouse_listeners = []
-        return self
+        EventManager.mouse_listeners = []
 
-    def add_hooked_function(self, func, *params):
+    @staticmethod
+    def add_hooked_function(func, *params):
         """
         Add a hooked function to the EventManager.
 
@@ -237,26 +236,33 @@ class EventManager:
         :param params: List of every parameter to call the function with (in addition to the event)
         :return: The EventManager itself
         """
-        self.hooked_functions.append((func, params))
-        return self
+        EventManager.hooked_functions.append((func, params))
 
-    def remove_hooked_function(self, func):
+    @staticmethod
+    def remove_hooked_function(func):
         """
         Remove a specific hook from the EventManager.
 
         :param func: The hook to remove
         :return: The EventManager itself
         """
-        for hooked_fonction in self.hooked_functions:
+        for hooked_fonction in EventManager.hooked_functions:
             if hooked_fonction[0] == func:
-                self.hooked_functions.remove(hooked_fonction)
-        return self
+                EventManager.hooked_functions.remove(hooked_fonction)
 
-    def clear_hooked_functions(self):
+    @staticmethod
+    def clear_hooked_functions():
         """
         Remove every hook from the EventManager.
 
         :return: The EventManager itself
         """
-        self.hooked_functions = []
-        return self
+        EventManager.hooked_functions = []
+
+    @staticmethod
+    def reset():
+        EventManager.clear_components()
+        EventManager.clear_hooked_functions()
+        EventManager.clear_any_input()
+        EventManager.clear_key_listeners()
+        EventManager.clear_mouse_listeners()

@@ -1,9 +1,9 @@
-from class_types.buildind_types import TypeBuilding
+from class_types.buildind_types import BuildingTypes
 from game.utils import generate_uid
 
 class Buildings:
     # all buildings are listed in this class
-    def __init__(self, max_occupants, building_size, cost, type_building: TypeBuilding):
+    def __init__(self, max_occupants, building_size, cost, type_building: BuildingTypes):
         ### need to add : Risk, current occupants
         self.id = generate_uid()
         self.max_occupants = max_occupants
