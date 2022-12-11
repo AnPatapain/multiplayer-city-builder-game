@@ -2,10 +2,7 @@ import pygame as pg
 
 import sounds.sounds
 from components import button
-from events import event_manager
-from sounds import sounds
-from game import game
-
+from events.event_manager import EventManager
 
 class Menu:
     def __init__(self, screen, clock):
@@ -15,8 +12,7 @@ class Menu:
         self.screen = screen
         self.clock = clock
         self.graphics = self.load_images()
-        self.eventManager = event_manager.EventManager()
-        self.sound_manager = sounds.SoundManager()
+        self.eventManager = EventManager()
 
         # (Width, Height)
         button_size = (320, 40)
@@ -33,10 +29,10 @@ class Menu:
         self.button__exit = button.Button((button_start, 500), button_size, center_text=True, text="Exit")
         self.button__exit.on_click(exit)
 
-        self.eventManager.register_component(self.button__start_new_career)\
-            .register_component(self.button__load_saved_game)\
-            .register_component(self.button__options)\
-            .register_component(self.button__exit)
+        EventManager.register_component(self.button__start_new_career)
+        EventManager.register_component(self.button__load_saved_game)
+        EventManager.register_component(self.button__options)
+        EventManager.register_component(self.button__exit)
 
         self.eventManager.set_any_input(self.skip_splashscreen)
         self.screen.blit(self.graphics["splash"], (0, 0))

@@ -1,4 +1,6 @@
 import pygame as pg
+
+from events.event_manager import EventManager
 from game.game import Game
 from menu import Menu
 from game.textures import Textures
@@ -21,6 +23,8 @@ def main():
     while menu.is_active():
         menu.run()
 
+    # Clear buttons from the menu
+    EventManager.reset()
     game = Game(screen, clock)
     while is_game_run:
 

@@ -6,13 +6,13 @@ from class_types.panel_types import BuildingButtonTypes, SwitchViewButtonTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
+from events.event_manager import EventManager
 
 class Panel:
     
-    def __init__(self, width, height, event_manager):
+    def __init__(self, width, height):
         self.width, self.height = width, height
 
-        self.event_manager = event_manager
 
         self.ressource_panel_color = (204, 174, 132)
         self.building_panel_color = (230, 162, 64)
@@ -36,9 +36,9 @@ class Panel:
         self.build__road = Button((self.building_panel_rect.left + 20, 800 + 80 + 20), (120, 80), image=Textures.get_texture(RoadTypes.TL_TO_BR))
         self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
 
-        self.event_manager.register_component(self.build__tree)
-        self.event_manager.register_component(self.build__rock)
-        self.event_manager.register_component(self.build__road)
+        EventManager.register_component(self.build__tree)
+        EventManager.register_component(self.build__rock)
+        EventManager.register_component(self.build__road)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -111,7 +111,6 @@ class Panel:
     
     def update(self):
         pass
-        # self.event_manager.handle_events()
 
 
     def scale_image(self, image, width=None, height=None):  # Procedure function which scales up or down the image specified
