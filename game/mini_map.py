@@ -7,8 +7,7 @@ class MiniMap:
 
     scale_down_ratio = 0.0249
 
-    def __init__(self, width, height, event_manager: EventManager) -> None:
-        self.event_manager = event_manager
+    def __init__(self, width, height) -> None:
 
         self.screen_width = width
         self.screen_height = height
@@ -31,7 +30,7 @@ class MiniMap:
         self.mini_relative_x = None
         self.mini_relative_y = None
 
-        self.event_manager.register_mouse_listener(self.mini_map_mouse_listener)
+        EventManager.register_mouse_listener(self.mini_map_mouse_listener)
 
 
     def mini_map_mouse_listener(self):

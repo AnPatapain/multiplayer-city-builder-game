@@ -49,7 +49,7 @@ class Menu:
 
     def affichage(self):
         self.screen.blit(self.graphics["background"], (0, 0))
-        self.sound_manager.play('menu_demarrer')
+        # self.sound_manager.play('menu_demarrer')
 
         rect_size = (500, 400)
         rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)
