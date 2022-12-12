@@ -130,15 +130,12 @@ class World:
                                         self.road_add(row, col)
                             else:
                                 if tile.is_destroyable():
-                                    print("coucouuuuuuuuu")
-                                    tile.destroy()
-                                    print(row, col, tile.get_type(), tile.road, tile.building)
-                            
+                                    if  tile.get_road():
+                                        tile.destroy()
+                                        self.road_update(row,col)
+                                    else :
+                                        tile.destroy()
 
-                            """else:
-                                tile.set_type(TileTypes.GRASS)
-                                tile.road = None
-                                tile.building = None"""
 
 
                     self.create_static_map()  # update the static map based upon self.grid
@@ -314,3 +311,24 @@ class World:
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)
+
+    def road_update(self, road_row, road_col):
+        if  road_col > 0:
+            if self.grid[road_row][road_col - 1].get_road():
+                self.grid[road_row][road_col - 1].get_road().set_connect(self.grid[road_row][road_col].get_road(), 2)
+
+
+        # TR connection
+        if road_row > 0:
+            if self.grid[road_row - 1][road_col].get_road():
+                self.grid[road_row - 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 3)
+
+        # BR connection
+        if road_col < self.nums_grid_x - 1:
+            if self.grid[road_row][road_col + 1].get_road():
+                self.grid[road_row][road_col + 1].get_road().set_connect(self.grid[road_row][road_col].get_road(), 0)
+
+        # BL connection
+        if road_row < self.nums_grid_y - 1:
+            if self.grid[road_row + 1][road_col].get_road():
+                self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
