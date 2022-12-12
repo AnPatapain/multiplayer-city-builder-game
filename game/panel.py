@@ -48,7 +48,7 @@ class Panel:
     def draw(self, screen):        
         screen.blit(self.ressource_panel, (0, 0))
 
-        screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
+        # screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
 
         resource_panel_text = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
