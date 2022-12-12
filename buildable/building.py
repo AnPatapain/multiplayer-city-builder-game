@@ -10,8 +10,26 @@ class Buildings:
         self.building_size = building_size
         self.cost = cost
         self.type_building = type_building
+        self.number_citizen = 0
         
         #The building haven't problems at creation
         self.is_on_fire = False
         self.is_destroyed = False
 
+        self.building_type = BuildingTypes
+
+    def add_citizen(self,number_citizen):
+        self.number_citizen += number_citizen
+
+    def sub_citizen(self,number_citizen):
+        self.number_citizen -= number_citizen
+
+    def get_cost(self):
+        return self.cost
+
+    def get_building_type(self):
+        return self.building_type
+
+    def get_building_size(self):
+        return self.building_size
+    
