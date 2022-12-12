@@ -3,12 +3,11 @@ from game.utils import generate_uid
 
 class Buildings:
     # all buildings are listed in this class
-    def __init__(self, max_occupants, building_size, cost, type_building: BuildingTypes):
+    def __init__(self, max_occupants, building_size : tuple, type_building: BuildingTypes):
         ### need to add : Risk, current occupants
         self.id = generate_uid()
         self.max_occupants = max_occupants
         self.building_size = building_size
-        self.cost = cost
         self.type_building = type_building
         self.number_citizen = 0
         
@@ -23,9 +22,6 @@ class Buildings:
 
     def sub_citizen(self,number_citizen):
         self.number_citizen -= number_citizen
-
-    def get_cost(self):
-        return self.cost
 
     def get_building_type(self):
         return self.building_type
