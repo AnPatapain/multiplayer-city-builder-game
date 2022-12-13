@@ -1,6 +1,5 @@
 import pygame as pg
 
-from class_types.buildind_types import BuildingTypes
 from class_types.road_types import RoadTypes
 from class_types.panel_types import SwitchViewButtonTypes
 from components.button import Button
@@ -11,6 +10,7 @@ from events.event_manager import EventManager
 
 
 class Panel:
+    
     def __init__(self, width, height):
         self.width, self.height = width, height
 
