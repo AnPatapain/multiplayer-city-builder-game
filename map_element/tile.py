@@ -71,7 +71,22 @@ class Tile:
             return Textures.get_texture(self.road.get_road_type())
         return Textures.get_texture(self.type)
 
+    def get_delete_texture(self):
+        if self.road:
+            return Textures.get_delete_texture(self.road.get_road_type())
+        # TODO: get texture of building if it exists
+        return Textures.get_delete_texture(self.type)
+
     def is_buildable(self):
         return self.building is None \
                and self.road is None \
                and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
+
+    def is_destroyable(self):
+        if self.type in (TileTypes.WHEAT, TileTypes.GRASS) : return False
+        else : return True
+
+    def destroy(self):
+        self.road = None # Brute force self road to None
+        self.building = None # Brute force self building to None
+        self.type = TileTypes.GRASS

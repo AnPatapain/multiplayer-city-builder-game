@@ -80,7 +80,6 @@ class World:
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1 and self.panel.has_selected_tile():
-                    print(self.panel.get_selected_tile())
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
 
@@ -114,7 +113,8 @@ class World:
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
-                    'isBuildable': tile.is_buildable()
+                    'isBuildable': tile.is_buildable(),
+                    'isDestroyable' : tile.is_destroyable()
                 }
 
             # Build from start point to end point
@@ -124,15 +124,25 @@ class World:
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
                             tile: Tile = self.grid[row][col]
 
-                            if tile.is_buildable():
-                                # Def road
-                                if selected_tile == RoadTypes.TL_TO_BR:
-                                    self.road_add(row, col)
-                                #Def Building
-                                elif isinstance(selected_tile,BuildingTypes):
-                                    self.building_add(row,col,selected_tile)
-                                else :
-                                    tile.set_type(selected_tile)
+                            if selected_tile != BuildingTypes.PELLE:
+                                if tile.is_buildable():
+                                    # Def road
+                                    if selected_tile == RoadTypes.TL_TO_BR:
+                                        self.road_add(row, col)
+                                    #Def Building
+                                    elif isinstance(selected_tile,BuildingTypes):
+                                        self.building_add(row,col,selected_tile)
+                                    else :
+                                        tile.set_type(selected_tile)
+                            else:
+                                if tile.is_destroyable():
+                                    if  tile.get_road():
+                                        tile.destroy()
+                                        self.road_update(row,col)
+                                    else :
+                                        tile.destroy()
+
+
 
                     self.create_static_map()  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
@@ -147,18 +157,6 @@ class World:
     def draw(self, screen, map_pos):
 
         screen.blit(self.default_surface, map_pos)
-        # for row in range(self.nums_grid_y):
-        #     for col in range(self.nums_grid_x):
-        #         tile: Tile = self.grid[row][col]
-        #         (x, y) = tile.get_render_coord()
-        #         # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-        #         (x_offset, y_offset) = (x + self.default_surface.get_width()/2 + map_pos[0],
-        #                                  y + map_pos[1])
-
-        #         texture_image = tile.get_texture()
-
-        #         if tile.get_type() != TileTypes.GRASS:
-        #             screen.blit(texture_image, (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 
         if self.temp_tile is not None and self.in_build_action is False:
             isometric_coor = self.temp_tile['isometric_coor']
@@ -183,14 +181,18 @@ class World:
                 for row in utils.MyRange(self.start_point[1], self.temp_end_point[1]):
                     for col in utils.MyRange(self.start_point[0], self.temp_end_point[0]):
 
-                        if self.grid[row][col].is_buildable():
-                            (x, y) = self.grid[row][col].get_render_coord()
+                        (x, y) = self.grid[row][col].get_render_coord()
+                        (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
 
-                            (x_offset, y_offset) = (
-                                x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                        if self.grid[row][col].is_buildable() and self.temp_tile and self.temp_tile["name"] != BuildingTypes.PELLE:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+
+                        elif self.grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
+                            building = self.grid[row][col].get_delete_texture()
+                            screen.blit(building,
+                                        (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
     def grid(self) -> list[list[Tile]]:
         grid = []
@@ -212,6 +214,7 @@ class World:
     ''' Testing i'm not sure about this method '''
 
     def create_static_map(self):
+        self.default_surface.fill((0, 0, 0))
         for row in range(self.nums_grid_y):
             for col in range(self.nums_grid_x):
                 tile: Tile = self.grid[row][col]
@@ -221,7 +224,8 @@ class World:
 
                 texture_image = tile.get_texture()
 
-                if not tile.is_buildable() and tile.get_type() != TileTypes.GRASS:
+                # if tile.is_buildable and tile.get_type() != TileTypes.GRASS:
+                if tile.is_buildable:
                     self.default_surface.blit(texture_image,
                                               (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 
@@ -240,6 +244,8 @@ class World:
                     graphic_ = TileTypes.ROCK
                 if normal_random < 2:
                     graphic_ = TileTypes.TREE
+                if normal_random < 3:
+                    graphic_ = TileTypes.BIG_TREE
             return graphic_
 
         tile = Tile(col, row)
@@ -311,6 +317,27 @@ class World:
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)
+
+    def road_update(self, road_row, road_col):
+        if  road_col > 0:
+            if self.grid[road_row][road_col - 1].get_road():
+                self.grid[road_row][road_col - 1].get_road().set_connect(self.grid[road_row][road_col].get_road(), 2)
+
+
+        # TR connection
+        if road_row > 0:
+            if self.grid[road_row - 1][road_col].get_road():
+                self.grid[road_row - 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 3)
+
+        # BR connection
+        if road_col < self.nums_grid_x - 1:
+            if self.grid[road_row][road_col + 1].get_road():
+                self.grid[road_row][road_col + 1].get_road().set_connect(self.grid[road_row][road_col].get_road(), 0)
+
+        # BL connection
+        if road_row < self.nums_grid_y - 1:
+            if self.grid[road_row + 1][road_col].get_road():
+                self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
 
     def building_add(self, row, col, selected_type):
 

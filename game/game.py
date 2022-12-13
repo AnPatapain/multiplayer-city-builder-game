@@ -1,6 +1,7 @@
 import pygame as pg
 
 from events.event_manager import EventManager
+from sounds.sounds import SoundManager
 from .world import World
 from .utils import draw_text
 from .mapcontroller import MapController
@@ -16,6 +17,9 @@ class Game:
         self.clock = clock
         self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
+
+        # sound manager
+        self.sound_manager = SoundManager()
 
         # map_controller update position of surface that the map blited on according to mouse position or key event
         self.map_controller = MapController(self.width, self.height)
@@ -54,7 +58,7 @@ class Game:
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
         draw_text('denier {}'.format(self.game_controller.get_denier()),self.screen, (self.width - 500,20),size=42)
-                
+
         pg.display.flip()
 
     def update(self):

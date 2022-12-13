@@ -5,14 +5,26 @@ from game.setting import IMAGE_PATH
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
+from class_types.panel_types import SwitchViewButtonTypes
 
 
 class Textures:
     textures: dict[pg.Surface] = {}
+    textures_destroy: dict[pg.Surface] = {}
 
     @staticmethod
     def get_texture(texture_id: any) -> pg.Surface:
         return Textures.textures[texture_id]
+
+    @staticmethod
+    def get_delete_texture(texture_id: any) -> pg.Surface:
+        texture = Textures.textures_destroy.get(texture_id)
+        if texture is None:
+            new_texture = Textures.get_texture(texture_id).copy()
+            Textures.fill(new_texture)
+            Textures.textures_destroy[texture_id] = new_texture
+            texture = new_texture
+        return texture
 
     @staticmethod
     def init(screen):
@@ -20,6 +32,7 @@ class Textures:
             TileTypes.GRASS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00069.png'))).convert_alpha(screen),
             TileTypes.ROCK: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00290.png'))).convert_alpha(screen),
             TileTypes.TREE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00041.png'))).convert_alpha(screen),
+            TileTypes.BIG_TREE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00059.png'))).convert_alpha(screen),
 
             # Road texture
             RoadTypes.ALONE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00104.png'))).convert_alpha(screen),
@@ -40,11 +53,69 @@ class Textures:
             RoadTypes.ALL_DIRECTION: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00110.png'))).convert_alpha(screen),
 
             # Buildings texture
-            BuildingTypes.BUILD_SIGN: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00045.png'))).convert_alpha(screen),
-
-            #Building Houses texture
             BuildingTypes.SMALL_TENT: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00001.png'))).convert_alpha(screen),
             BuildingTypes.LARGE_TENT: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00006.png'))).convert_alpha(screen),
             BuildingTypes.SMALL_SHACK: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00011.png'))).convert_alpha(screen),
             BuildingTypes.LARGE_SHACK: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00012.png'))).convert_alpha(screen),
+            BuildingTypes.BUILD_SIGN: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00045.png'))).convert_alpha(screen),
+            BuildingTypes.PREFECTURE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Security_00001.png'))).convert_alpha(screen),
+            BuildingTypes.PELLE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'destroy_design.png'))).convert_alpha(screen),
+
+            # Panel icon texture
+            # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
+
+            SwitchViewButtonTypes.SCULPTURE: pg.image.load(
+                os.path.join(IMAGE_PATH, 'paneling_00018.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.MINI_SCULPTURE: pg.image.load(
+                os.path.join(IMAGE_PATH, 'panelwindows_00013.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.TOP_PANNEL: pg.image.load(
+                os.path.join(IMAGE_PATH, 'paneling_00017.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DYNAMIC_DISPLAY: pg.image.load(
+                os.path.join(IMAGE_PATH, 'paneling_00015.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BARRE: pg.image.load(os.path.join(IMAGE_PATH, 'barre.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.JULIUS: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00079.png')).convert_alpha(
+                screen),
+            SwitchViewButtonTypes.EUROPEAN: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00082.png')).convert_alpha(
+                screen),
+
+            SwitchViewButtonTypes.BUTTON1: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00085.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON2: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00088.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON3: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00091.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON4: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00094.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON5: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00123.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON5_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00124.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON5_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00125.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON6: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00131.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON6_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00132.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON6_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00133.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON7: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00135.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON7_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00136.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON7_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00137.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON8: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00127.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON9: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00163.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON10: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00151.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON11: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00147.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON12: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00143.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON13: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00139.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON14: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00167.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON15: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00159.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON15_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00160.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON15_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00161.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON16: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00155.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON17: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00171.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON18: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00115.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON19: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00119.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BOTTOM_PANNEL: pg.image.load(os.path.join(IMAGE_PATH, 'fenetre.png')).convert_alpha(screen),
         }
+
+    @staticmethod
+    def fill(surface):
+        """Fill all pixels of the surface with color, preserve transparency."""
+        w, h = surface.get_size()
+        for x in range(w):
+            for y in range(h):
+                r, g, b, a = surface.get_at((x, y))
+                if a == 255:
+                    surface.set_at((x, y), pg.Color(150, 0, 24, 100))
+                if r >= 5:
+                    surface.set_at((x, y), pg.Color(r, 0, 24, 100))
