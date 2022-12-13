@@ -30,12 +30,6 @@ class Panel:
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width * 0.8, self.height * 0.04))
         self.building_panel.fill(self.building_panel_color)
 
-        self.build__tree = Button((1500 + 20, 800), (120, 80), image=Textures.get_texture(TileTypes.TREE))
-        self.build__tree.on_click(lambda: self.set_selected_tile(TileTypes.TREE))
-
-        self.build__rock = Button((1500 + 20 + 120 + 20, 800), (120, 80), image=Textures.get_texture(TileTypes.ROCK))
-        self.build__rock.on_click(lambda: self.set_selected_tile(TileTypes.ROCK))
-
         self.build__road = Button((self.width - 49, 277 + 46), (33, 22),
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON7),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_HOVER),
@@ -61,8 +55,6 @@ class Panel:
         self.build__prefecture.on_click(lambda: self.set_selected_tile(BuildingTypes.PREFECTURE))
 
 
-        self.event_manager.register_component(self.build__tree)
-        self.event_manager.register_component(self.build__rock)
         self.event_manager.register_component(self.build__road)
         self.event_manager.register_component(self.destroy_tile)
         self.event_manager.register_component(self.build__house)
@@ -128,8 +120,6 @@ class Panel:
             i+=1
 
 
-        self.build__tree.display(screen)
-        self.build__rock.display(screen)
         self.build__road.display(screen)
         self.destroy_tile.display(screen)
         self.build__house.display(screen)
