@@ -9,6 +9,8 @@ import game.utils as utils
 from game.textures import Textures
 from buildable.road import Road
 
+from components.BuildingCompenant import *
+
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
@@ -122,10 +124,14 @@ class World:
                             tile: Tile = self.grid[row][col]
 
                             if tile.is_buildable():
-                                tile.set_type(selected_tile)
                                 # Def road
                                 if selected_tile == RoadTypes.TL_TO_BR:
                                     self.road_add(row, col)
+                                #Def Building
+                                elif isinstance(selected_tile,BuildingTypes):
+                                    self.building_add(row,col,selected_tile)
+                                else :
+                                    tile.set_type(selected_tile)
 
                     self.create_static_map()  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
@@ -214,7 +220,7 @@ class World:
 
                 texture_image = tile.get_texture()
 
-                if tile.is_buildable and tile.get_type() != TileTypes.GRASS:
+                if not tile.is_buildable() and tile.get_type() != TileTypes.GRASS:
                     self.default_surface.blit(texture_image,
                                               (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
 
@@ -304,3 +310,29 @@ class World:
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)
+
+    def building_add(self, row, col, selected_type):
+        building = building_constructor(selected_type)
+
+        if sum(building.building_size) > 2:
+            x_building = building.building_size[0]
+            y_building = building.building_size[1]
+            #check if all case are buildable
+            try:
+                for x in range(col,col+x_building,1):
+                    for y in range(row,row-y_building,-1):
+                        if not self.grid[y][x].is_buildable():
+                            print("Building can't be construct")
+                            return
+            except IndexError:
+                #We are out of the index of the grid
+                return
+
+            # Put building in each case
+            for x in range(col,col+x_building,1):
+                for y in range(row,row-y_building,-1):
+                    if x != col or y != row:
+                        self.grid[y][x].set_building(building,False)
+
+        #Show first case
+        self.grid[row][col].set_building(building,True)

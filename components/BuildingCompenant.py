@@ -5,15 +5,15 @@ from buildable.house import Houses
 def building_constructor(building_type : BuildingTypes):
     match building_type:
         case BuildingTypes.SMALL_TENT:
-            return Houses(5, (1,1), 0, 0, 0, building_type)
+            return Houses(5, (1, 1), 0, 0, 0, building_type)
         case BuildingTypes.LARGE_TENT:
-            return Houses(28, (2,2), 0, 0, 0, building_type)
+            return Houses(28, (2, 2), 0, 0, 0, building_type)
         case BuildingTypes.SMALL_SHACK:
-            return Houses(36, (2,2), 0, 0, 0, building_type)
+            return Houses(36, (2, 2), 0, 0, 0, building_type)
         case BuildingTypes.LARGE_SHACK:
-            return Houses(44, (2,2), 0, 0, 0, building_type)
+            return Houses(44, (2, 2), 0, 0, 0, building_type)
         case BuildingTypes.SENATE:
-            return Buildings(0,(1,1), building_type)
+            return Buildings(0,(1, 1), building_type)
         case BuildingTypes.ENGINEERS_POST:
             return Buildings(0, (1, 1), building_type)
         case BuildingTypes.PREFECTURE:

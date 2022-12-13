@@ -2,6 +2,7 @@ import pygame as pg
 
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
+from class_types.buildind_types import BuildingTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
@@ -35,9 +36,26 @@ class Panel:
         self.build__road = Button((self.building_panel_rect.left + 20, 800 + 80 + 20), (120, 80), image=Textures.get_texture(RoadTypes.TL_TO_BR))
         self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
 
+        self.build__small_tent = Button((self.building_panel_rect.left + 20, 700), (120, 80), image=Textures.get_texture(BuildingTypes.SMALL_TENT))
+        self.build__small_tent.on_click(lambda: self.set_selected_tile(BuildingTypes.SMALL_TENT))
+
+        self.build__large_tent = Button((self.building_panel_rect.left + 20 + 120, 700), (120, 80), image=Textures.get_texture(BuildingTypes.LARGE_TENT))
+        self.build__large_tent.on_click(lambda: self.set_selected_tile(BuildingTypes.LARGE_TENT))
+
+        self.build__small_shack = Button((self.building_panel_rect.left + 20, 600), (120, 80), image=Textures.get_texture(BuildingTypes.LARGE_SHACK))
+        self.build__small_shack.on_click(lambda: self.set_selected_tile(BuildingTypes.LARGE_SHACK))
+
+        self.build__large_shack = Button((self.building_panel_rect.left + 20 + 120, 600), (120, 80), image=Textures.get_texture(BuildingTypes.LARGE_SHACK))
+        self.build__large_shack.on_click(lambda: self.set_selected_tile(BuildingTypes.LARGE_SHACK))
+
+
         EventManager.register_component(self.build__tree)
         EventManager.register_component(self.build__rock)
         EventManager.register_component(self.build__road)
+        EventManager.register_component(self.build__small_tent)
+        EventManager.register_component(self.build__large_tent)
+        EventManager.register_component(self.build__small_shack)
+        EventManager.register_component(self.build__large_shack)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -64,6 +82,10 @@ class Panel:
         self.build__tree.display(screen)
         self.build__rock.display(screen)
         self.build__road.display(screen)
+        self.build__small_tent.display(screen)
+        self.build__large_tent.display(screen)
+        self.build__small_shack.display(screen)
+        self.build__large_shack.display(screen)
 
     
     def update(self):
