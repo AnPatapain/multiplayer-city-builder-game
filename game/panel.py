@@ -30,25 +30,26 @@ class Panel:
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width * 0.8, self.height * 0.04))
         self.building_panel.fill(self.building_panel_color)
 
-        self.build__road = Button((self.width - 49, 277 + 46), (33, 22),
+        button_size = (39, 26)
+        self.build__road = Button((self.width - 49, 277 + 46), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON7),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_HOVER),
                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_SELECTED))
         self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
 
-        self.destroy_tile = Button((self.width - 99, 277 + 46), (33, 22),
+        self.destroy_tile = Button((self.width - 99, 277 + 46), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON6),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED))
         self.destroy_tile.on_click(lambda: self.set_selected_tile(BuildingTypes.PELLE)) #image qui est sur le curseur
 
-        self.build__house = Button((self.width - 149, 277 + 46), (33, 22),
+        self.build__house = Button((self.width - 149, 277 + 46), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_HOVER),
                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_SELECTED))
         self.build__house.on_click(lambda: self.set_selected_tile(BuildingTypes.SMALL_TENT))
 
-        self.build__prefecture = Button((self.width - 99, 385 + 46), (33, 22),
+        self.build__prefecture = Button((self.width - 99, 385 + 46), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON15),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_SELECTED))
