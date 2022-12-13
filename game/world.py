@@ -1,5 +1,4 @@
 import pygame as pg
-import os
 from perlin_noise import PerlinNoise
 import random as rd
 
