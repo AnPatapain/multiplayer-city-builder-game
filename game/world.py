@@ -77,7 +77,6 @@ class World:
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1 and self.panel.has_selected_tile():
-                    print(self.panel.get_selected_tile())
                     self.start_point = mouse_grid_pos
                     self.in_build_action = True
 
@@ -208,10 +207,10 @@ class World:
     ''' Testing i'm not sure about this method '''
 
     def create_static_map(self):
+        self.default_surface.fill((0, 0, 0))
         for row in range(self.nums_grid_y):
             for col in range(self.nums_grid_x):
                 tile: Tile = self.grid[row][col]
-                print("inside create_static_map", row, col, tile.get_type())
                 (x, y) = tile.get_render_coord()
                 # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
                 (x_offset, y_offset) = (x + self.default_surface.get_width() / 2, y)
