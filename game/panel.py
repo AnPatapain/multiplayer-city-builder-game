@@ -2,6 +2,7 @@ import pygame as pg
 
 from class_types.road_types import RoadTypes
 from class_types.panel_types import SwitchViewButtonTypes
+from class_types.buildind_types import BuildingTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
