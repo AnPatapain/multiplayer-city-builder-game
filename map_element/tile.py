@@ -72,9 +72,12 @@ class Tile:
         return Textures.get_texture(self.type)
 
     def get_delete_texture(self):
+        if not self.show_tile:
+            return Textures.get_texture(TileTypes.GRASS)
         if self.road:
             return Textures.get_delete_texture(self.road.get_road_type())
-        # TODO: get texture of building if it exists
+        if self.building:
+            return Textures.get_texture(self.building.get_building_type())
         return Textures.get_delete_texture(self.type)
 
     def is_buildable(self):
