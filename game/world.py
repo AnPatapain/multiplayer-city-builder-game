@@ -17,8 +17,8 @@ from class_types.buildind_types import BuildingTypes
 
 class World:
 
-    def __init__(self, nums_grid_x, nums_grid_y, width, height, panel,game_controller : GameController):
-        self.game_controller = game_controller
+    def __init__(self, nums_grid_x, nums_grid_y, width, height, panel):
+        self.game_controller = GameController.get_instance()
         self.nums_grid_x = nums_grid_x
         self.nums_grid_y = nums_grid_y
         self.width = width

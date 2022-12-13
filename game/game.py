@@ -14,7 +14,7 @@ class Game:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
-        self.game_controller = GameController()
+        self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
 
         # map_controller update position of surface that the map blited on according to mouse position or key event
@@ -28,7 +28,7 @@ class Game:
         self.mini_map = MiniMap(self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
-        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel,self.game_controller)
+        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
         # Exit the game when pressing <esc>
         EventManager.register_key_listener(pg.K_ESCAPE, exit)

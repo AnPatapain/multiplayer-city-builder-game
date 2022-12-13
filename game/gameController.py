@@ -2,7 +2,10 @@ from buildable.building import Buildings
 from class_types.buildind_types import BuildingTypes
 from buildable.buildableCost import buildable_cost
 
+
+
 class GameController:
+    instance = None
     def __init__(self,initial_denier = 10000):
         self.denier = initial_denier
         self.actual_citizen = 0
@@ -20,3 +23,8 @@ class GameController:
     def get_denier(self):
         return self.denier
 
+    @staticmethod
+    def get_instance():
+        if GameController.instance is None:
+            GameController.instance = GameController()
+        return GameController.instance
