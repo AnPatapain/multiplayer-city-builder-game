@@ -7,6 +7,8 @@ from class_types.panel_types import BuildingButtonTypes, SwitchViewButtonTypes
 from components.button import Button
 from game.textures import Textures
 from game.utils import draw_text
+from map_element.tile import Tile
+
 
 class Panel:
     
@@ -161,8 +163,10 @@ class Panel:
 
     def has_selected_tile(self): return self.selected_tile is not None
 
-    def get_selected_tile(self): return self.selected_tile
+    def get_selected_tile(self) -> Tile: return self.selected_tile
 
     def set_selected_tile(self, value): self.selected_tile = value
 
     def get_panel_rects(self): return self.panel_rects
+
+

@@ -10,10 +10,21 @@ from class_types.panel_types import BuildingButtonTypes, SwitchViewButtonTypes
 
 class Textures:
     textures: dict[pg.Surface] = {}
+    textures_destroy: dict[pg.Surface] = {}
 
     @staticmethod
     def get_texture(texture_id: any) -> pg.Surface:
         return Textures.textures[texture_id]
+
+    @staticmethod
+    def get_delete_texture(texture_id: any) -> pg.Surface:
+        texture = Textures.textures_destroy.get(texture_id)
+        if texture is None:
+            new_texture = Textures.get_texture(texture_id).copy()
+            Textures.fill(new_texture)
+            Textures.textures_destroy[texture_id] = new_texture
+            texture = new_texture
+        return texture
 
     @staticmethod
     def init(screen):
@@ -45,7 +56,7 @@ class Textures:
             BuildingTypes.SMALL_TENT: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00001.png'))).convert_alpha(screen),
             BuildingTypes.BUILD_SIGN: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Housng1a_00045.png'))).convert_alpha(screen),
             BuildingTypes.PREFECTURE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Security_00001.png'))).convert_alpha(screen),
-            BuildingTypes.PELLE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00132.png'))).convert_alpha(screen),
+            BuildingTypes.PELLE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'destroy_design.png'))).convert_alpha(screen),
 
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
@@ -122,3 +133,20 @@ class Textures:
                 screen),
 
         }
+
+    @staticmethod
+    def fill(surface):
+        """Fill all pixels of the surface with color, preserve transparency."""
+        w, h = surface.get_size()
+        for x in range(w):
+            for y in range(h):
+                r, g, b, a = surface.get_at((x, y))
+
+               # surface.set_at((x, y), pg.Color(255, g, b, 180))
+                if a == 255:
+                    surface.set_at((x, y), pg.Color(150, 0, 24, 100))
+
+                if r>=5:
+                    surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+
+                #surface.set_colorkey((255, 0, 0, 180))

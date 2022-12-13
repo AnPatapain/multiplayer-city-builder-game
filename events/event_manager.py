@@ -90,7 +90,7 @@ class EventManager:
             if event.type == pg.MOUSEWHEEL:
                 if event.y > 0 :
                     for cle in Textures.textures.items():
-                        image = Textures.get_texture(cle)
+                        image = Textures.get_texture(cle[0])
                         self.scale_image(image, 1.1 * image.get_width(), 1.1 * image.get_height())
 
 

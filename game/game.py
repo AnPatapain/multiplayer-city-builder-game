@@ -1,3 +1,5 @@
+import tkinter
+
 import pygame as pg
 
 from events.event_manager import EventManager
@@ -60,7 +62,7 @@ class Game:
         self.mini_map.draw(self.screen, self.map_controller.get_map_pos())
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
-                
+
         pg.display.flip()
 
     def update(self):

@@ -184,9 +184,9 @@ class World:
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
                         
                         elif self.grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
-                            destroy_sign = Textures.get_texture(TileTypes.GRASS)
-                            screen.blit(destroy_sign, 
-                                        (x_offset, y_offset - destroy_sign.get_height() + TILE_SIZE))
+                            building = self.grid[row][col].get_delete_texture()
+                            screen.blit(building,
+                                        (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
     def grid(self) -> list[list[Tile]]:
         grid = []
@@ -332,3 +332,4 @@ class World:
         if road_row < self.nums_grid_y - 1:
             if self.grid[road_row + 1][road_col].get_road():
                 self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
+
