@@ -67,7 +67,7 @@ class Panel:
 
         screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
 
-        resource_panel_text = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
+        resource_panel_text = ['File', 'Options', 'Help', 'Advisor']
         
         resource_panel_text_pos = [20, 20]
 

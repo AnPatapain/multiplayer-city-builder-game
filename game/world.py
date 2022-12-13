@@ -1,5 +1,4 @@
 import pygame as pg
-import os
 from perlin_noise import PerlinNoise
 import random as rd
 
@@ -10,6 +9,7 @@ from game.textures import Textures
 from buildable.road import Road
 
 from components.BuildingCompenant import *
+from .gameController import GameController
 
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
@@ -17,7 +17,8 @@ from class_types.buildind_types import BuildingTypes
 
 class World:
 
-    def __init__(self, nums_grid_x, nums_grid_y, width, height, panel):
+    def __init__(self, nums_grid_x, nums_grid_y, width, height, panel,game_controller : GameController):
+        self.game_controller = game_controller
         self.nums_grid_x = nums_grid_x
         self.nums_grid_y = nums_grid_y
         self.width = width
@@ -312,6 +313,10 @@ class World:
         self.grid[road_row][road_col].set_road(road)
 
     def building_add(self, row, col, selected_type):
+
+        if not self.game_controller.has_enough_denier(selected_type):
+            return
+
         building = building_constructor(selected_type)
 
         if sum(building.building_size) > 2:
@@ -336,3 +341,4 @@ class World:
 
         #Show first case
         self.grid[row][col].set_building(building,True)
+        self.game_controller.new_building(building)

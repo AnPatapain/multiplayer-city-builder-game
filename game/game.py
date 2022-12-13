@@ -7,12 +7,14 @@ from .mapcontroller import MapController
 from .panel import Panel
 from .setting import *
 from .mini_map import MiniMap
+from .gameController import GameController
 
 
 class Game:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
+        self.game_controller = GameController()
         self.width, self.height = self.screen.get_size()
 
         # map_controller update position of surface that the map blited on according to mouse position or key event
@@ -26,7 +28,7 @@ class Game:
         self.mini_map = MiniMap(self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
-        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
+        self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel,self.game_controller)
 
         # Exit the game when pressing <esc>
         EventManager.register_key_listener(pg.K_ESCAPE, exit)
@@ -51,6 +53,7 @@ class Game:
         self.mini_map.draw(self.screen, self.map_controller.get_map_pos())
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
+        draw_text('denier {}'.format(self.game_controller.get_denier()),self.screen, (self.width - 500,20),size=42)
                 
         pg.display.flip()
 
