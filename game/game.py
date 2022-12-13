@@ -1,3 +1,5 @@
+import tkinter
+
 import pygame as pg
 
 from events.event_manager import EventManager
