@@ -1,38 +1,34 @@
 import pygame as pg
-from game.setting import DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT
+
 
 class MiniMap:
-    scale_down_ratio = 0.0249
+    def __init__(self) -> None:
+        self.mini_screen_width = 48
+        self.mini_screen_height = 27
 
-    def __init__(self, width, height) -> None:
-        self.screen_width = width
-        self.screen_height = height
+        self.mm_width = 145
+        self.mm_height = 111
 
-        self.mini_screen_width = MiniMap.scale_down_ratio * width
-        self.mini_screen_height = MiniMap.scale_down_ratio * height
+        self.background = pg.Surface((self.mm_width, self.mm_height))
+        self.background.fill((0, 0, 0))
+        pg.draw.polygon(self.background, (0, 255, 0),
+                        [(self.mm_width / 2, 0),
+                         (self.mm_width, self.mm_height / 2),
+                         (self.mm_width / 2, self.mm_height),
+                         (0, self.mm_height / 2)], 1)
 
-        self.mini_default_surface_width = MiniMap.scale_down_ratio * DEFAULT_SURFACE_WIDTH
-        self.mini_default_surface_height = MiniMap.scale_down_ratio * DEFAULT_SURFACE_HEIGHT
+        self.camera_zone_rect = None
 
-        self.mini_default_surface = pg.Surface((self.mini_default_surface_width, self.mini_default_surface_height))
-
-        self.mini_screen_rect = None
-
-        self.mini_map_pos_x = self.screen_width - self.mini_default_surface_width - 8
-        self.mini_map_pos_y = 98
+        # self.pos_x = width - self.mm_width - 8
+        self.pos_x = 1920 - self.mm_width - 8
+        self.pos_y = 81  # 46 = topbar height
 
     def draw(self, screen, map_pos):
-        self.mini_default_surface.fill((0, 0, 0))
         # We need coordination of 4 points to draw rhombus
-        pg.draw.polygon(self.mini_default_surface, (0, 255, 0),
-                        [(self.mini_default_surface_width / 2, 0),
-                         (self.mini_default_surface_width, self.mini_default_surface_height / 2),
-                         (self.mini_default_surface_width / 2, self.mini_default_surface_height),
-                         (0, self.mini_default_surface_height / 2)], 1)
-
-        self.mini_screen_rect = pg.Rect(- map_pos[0] * MiniMap.scale_down_ratio,
-                                        - map_pos[1] * MiniMap.scale_down_ratio,
+        self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.024,
+                                        - map_pos[1] * 0.0465,
                                         self.mini_screen_width, self.mini_screen_height)
 
-        pg.draw.rect(self.mini_default_surface, (255, 255, 0), self.mini_screen_rect, 1)
-        screen.blit(self.mini_default_surface, (self.mini_map_pos_x, self.mini_map_pos_y))
+        temp_bg = self.background.copy()
+        pg.draw.rect(temp_bg, (255, 255, 0), self.camera_zone_rect, 1)
+        screen.blit(temp_bg, (self.pos_x, self.pos_y))
