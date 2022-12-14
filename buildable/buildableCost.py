@@ -5,6 +5,7 @@ buildable_cost = {
     BuildingTypes.LARGE_TENT : 100,
     BuildingTypes.SMALL_SHACK : 500,
     BuildingTypes.LARGE_SHACK : 1000,
+    BuildingTypes.PREFECTURE : 30,
 }
 
 

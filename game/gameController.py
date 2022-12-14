@@ -6,8 +6,8 @@ from buildable.buildableCost import buildable_cost
 
 class GameController:
     instance = None
-    def __init__(self,initial_denier = 10000):
-        self.denier = initial_denier
+    def __init__(self):
+        self.denier = 100000
         self.actual_citizen = 0
         self.max_citizen = 0
 
