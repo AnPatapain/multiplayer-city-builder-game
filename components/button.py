@@ -103,7 +103,7 @@ class Button(Component):
             pos = (self.bg.x, self.bg.y + self.margin)
             center = self.size[0]
 
-        if self.is_hovered and self.image_hover is not None:
+        if (self.is_hovered() or self.is_being_pressed()) and self.image_hover is not None:
             screen.blit(self.image_hover, self.bg)
         elif self.is_selected() and self.image_selected is not None:
             screen.blit(self.image_selected, self.bg)

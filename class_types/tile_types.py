@@ -6,3 +6,4 @@ class TileTypes(Enum):
     WHEAT = 3
     ROCK = 4
     TREE = 5
+    BIG_TREE = 6
