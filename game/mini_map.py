@@ -26,7 +26,7 @@ class MiniMap:
     def draw(self, screen, map_pos):
         # We need coordination of 4 points to draw rhombus
         self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.024,
-                                        - map_pos[1] * 0.0465,
+                                        - map_pos[1] * 0.037,
                                         self.mini_screen_width, self.mini_screen_height)
 
         temp_bg = self.background.copy()
