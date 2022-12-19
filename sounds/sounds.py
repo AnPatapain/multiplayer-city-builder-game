@@ -10,9 +10,5 @@ class SoundManager:
         }
 
     def play(self, name):
-<<<<<<< HEAD
-        pass
-=======
         pass # I comment it because i don't want my beautiful jazz playlist suspended :  )
->>>>>>> main
         # self.sounds[name].play()

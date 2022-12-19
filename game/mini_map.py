@@ -1,4 +1,6 @@
 import pygame as pg
+from events.event_manager import EventManager
+from .mapcontroller import MapController
 
 class MiniMap:
     def __init__(self) -> None:
@@ -25,28 +27,28 @@ class MiniMap:
         self.mini_relative_x = None
         self.mini_relative_y = None
 
-        # EventManager.register_mouse_listener(self.mini_map_mouse_listener)
+        EventManager.register_mouse_listener(self.mini_map_mouse_listener)
 
 
-    # def mini_map_mouse_listener(self):
-    #     mouse_pos = pg.mouse.get_pos()
-    #     mouse_action = pg.mouse.get_pressed()
+    def mini_map_mouse_listener(self):
+        mouse_pos = pg.mouse.get_pos()
+        mouse_action = pg.mouse.get_pressed()
 
-    #     (x, y) = mouse_pos
-    #     if (self.mini_map_pos_x <= x <= self.screen_width) and (self.mini_map_pos_y < y <= self.mini_map_pos_y + self.mini_default_surface_height):
-    #         if mouse_action[0]:
-    #             self.mini_relative_x = x - self.mini_map_pos_x
-    #             self.mini_relative_y = y - self.mini_map_pos_y
-    #         else:
-    #             self.mini_relative_x = None
-    #             self.mini_relative_y = None
+        (x, y) = mouse_pos
+        if (self.pos_x <= x <= self.screen_width) and (self.pos_y < y <= self.pos_y + self.mm_height):
+            if mouse_action[0]:
+                self.mini_relative_x = x - self.pos_x
+                self.mini_relative_y = y - self.pos_y
+            else:
+                self.mini_relative_x = None
+                self.mini_relative_y = None
 
 
-    # def update(self, map_controller: MapController):
-    #     if self.mini_relative_x is not None and self.mini_relative_y is not None:
-    #         corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / self.scale_down_ratio
-    #         corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / self.scale_down_ratio
-    #         map_controller.set_map_pos(corresponding_x, corresponding_y)
+    def update(self, map_controller: MapController):
+        if self.mini_relative_x is not None and self.mini_relative_y is not None:
+            corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / 0.025
+            corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.037
+            map_controller.set_map_pos(corresponding_x, corresponding_y)
         
 
     def draw(self, screen, map_pos):

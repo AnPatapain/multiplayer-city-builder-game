@@ -55,4 +55,3 @@ class Game:
     def update(self):
         self.panel.update()
         self.world.update(self.map_controller.get_map_pos())
-        self.mini_map.update(self.map_controller)
