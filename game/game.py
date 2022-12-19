@@ -18,18 +18,19 @@ class Game:
         # sound manager
         self.sound_manager = SoundManager()
 
-
         # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
         # for displaying available building in game
-        self.panel = Panel(self.width, self.height, self.map_controller)
+        self.panel = Panel(self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
+        MapController.init_()
+
         # Exit the game when pressing <esc>
         EventManager.register_key_listener(pg.K_ESCAPE, exit)
         # Calls the event_handler of the World
-        EventManager.add_hooked_function(self.world.event_handler, self.map_controller.get_map_pos())
+        EventManager.add_hooked_function(self.world.event_handler, MapController.get_map_pos())
 
     # Game Loop
     def run(self):

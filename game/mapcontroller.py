@@ -8,12 +8,16 @@ class MapController:
     height = 1080
     map_pos = [0, 0]
 
-    EventManager.register_mouse_listener(lambda: MapController._mouse_listener)
-    EventManager.register_key_listener(pg.K_DOWN, lambda: MapController.go_down(OFFSET_FOR_KEY), continuous_press=True)
-    EventManager.register_key_listener(pg.K_UP, lambda: MapController.go_up(OFFSET_FOR_KEY), continuous_press=True)
-    EventManager.register_key_listener(pg.K_LEFT, lambda: MapController.go_left(OFFSET_FOR_KEY), continuous_press=True)
-    EventManager.register_key_listener(pg.K_RIGHT, lambda: MapController.go_right(OFFSET_FOR_KEY), continuous_press=True)
+    
 
+    @staticmethod
+    def init_():
+        EventManager.register_mouse_listener(lambda: MapController._mouse_listener())
+        EventManager.register_key_listener(pg.K_DOWN, lambda: MapController.go_down(OFFSET_FOR_KEY), continuous_press=True)
+        EventManager.register_key_listener(pg.K_UP, lambda: MapController.go_up(OFFSET_FOR_KEY), continuous_press=True)
+        EventManager.register_key_listener(pg.K_LEFT, lambda: MapController.go_left(OFFSET_FOR_KEY), continuous_press=True)
+        EventManager.register_key_listener(pg.K_RIGHT, lambda: MapController.go_right(OFFSET_FOR_KEY), continuous_press=True)
+    
     @staticmethod
     def _mouse_listener():
         (x, y) = pg.mouse.get_pos()
