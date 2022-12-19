@@ -331,3 +331,4 @@ class World:
             if self.grid[road_row + 1][road_col].get_road():
                 self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
 
+    def get_grid(self): return self.grid

@@ -155,3 +155,5 @@ class Panel:
 
     def get_panel_rects(self):
         return self.panel_rects
+
+    def get_mini_map(self): return self.mini_map
