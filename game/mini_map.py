@@ -35,7 +35,7 @@ class MiniMap:
         mouse_action = pg.mouse.get_pressed()
 
         (x, y) = mouse_pos
-        if (self.pos_x <= x <= self.screen_width) and (self.pos_y < y <= self.pos_y + self.mm_height):
+        if (self.pos_x <= x <= 1920) and (self.pos_y < y <= self.pos_y + self.mm_height):
             if mouse_action[0]:
                 self.mini_relative_x = x - self.pos_x
                 self.mini_relative_y = y - self.pos_y
@@ -44,11 +44,11 @@ class MiniMap:
                 self.mini_relative_y = None
 
 
-    def update(self, map_controller: MapController):
+    def update(self):
         if self.mini_relative_x is not None and self.mini_relative_y is not None:
             corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / 0.025
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.037
-            map_controller.set_map_pos(corresponding_x, corresponding_y)
+            MapController.set_map_pos(corresponding_x, corresponding_y)
         
 
     def draw(self, screen, map_pos):

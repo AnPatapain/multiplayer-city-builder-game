@@ -121,8 +121,8 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
 
-    def update(self):
-        pass
+    def update(self, map_controller):
+        self.mini_map.update(map_controller)
 
     def scale_image(self, image, width=None,
                     height=None):  # Procedure function which scales up or down the image specified

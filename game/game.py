@@ -18,8 +18,6 @@ class Game:
         # sound manager
         self.sound_manager = SoundManager()
 
-        # map_controller update position of surface that the map blited on according to mouse position or key event
-        self.map_controller = MapController(self.width, self.height)
 
         # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
         # for displaying available building in game
@@ -44,7 +42,7 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        self.world.draw(self.screen, self.map_controller.get_map_pos())
+        self.world.draw(self.screen, MapController.get_map_pos())
 
         self.panel.draw(self.screen)
 
@@ -54,4 +52,4 @@ class Game:
 
     def update(self):
         self.panel.update()
-        self.world.update(self.map_controller.get_map_pos())
+        self.world.update(MapController.get_map_pos())
