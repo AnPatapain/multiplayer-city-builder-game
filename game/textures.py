@@ -7,7 +7,6 @@ from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
 from class_types.panel_types import SwitchViewButtonTypes
 
-
 class Textures:
     textures: dict[pg.Surface] = {}
     textures_destroy: dict[pg.Surface] = {}

@@ -16,9 +16,8 @@ PANEL_WIDTH = 162
 PANEL_HEIGHT = 1080 - TOPBAR_HEIGHT
 
 class Panel:
-    def __init__(self, width, height, map_controller: MapController):
+    def __init__(self, width, height):
         self.width, self.height = width, height
-        self.map_controller = map_controller
 
         # Mini_Map
         self.mini_map = MiniMap()
@@ -85,7 +84,7 @@ class Panel:
         screen.blit(self.building_panel, (self.width - 162, TOPBAR_HEIGHT))
 
         # Can't draw on the building_panel because we need absolute position to move the camera with the mouse listener
-        self.mini_map.draw(screen, self.map_controller.get_map_pos())
+        self.mini_map.draw(screen, MapController.get_map_pos())
 
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON1), (self.width - 155, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON2), (self.width - 116, 230))
@@ -122,7 +121,7 @@ class Panel:
         self.build__prefecture.display(screen)
 
     def update(self):
-        pass
+        self.mini_map.update()
 
     def scale_image(self, image, width=None,
                     height=None):  # Procedure function which scales up or down the image specified
@@ -156,3 +155,5 @@ class Panel:
 
     def get_panel_rects(self):
         return self.panel_rects
+
+    def get_mini_map(self): return self.mini_map
