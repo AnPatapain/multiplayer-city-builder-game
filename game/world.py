@@ -278,7 +278,7 @@ class World:
         for rect in self.panel.get_panel_rects():
             if rect.collidepoint(pg.mouse.get_pos()):
                 mouse_on_panel = True
-        return True if (in_map_limit and not mouse_on_panel) else False
+        return (in_map_limit and not mouse_on_panel)
 
     def road_add(self, road_row, road_col):
         """
@@ -338,6 +338,8 @@ class World:
         if road_row < self.nums_grid_y - 1:
             if self.grid[road_row + 1][road_col].get_road():
                 self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
+
+    def get_grid(self): return self.grid
 
     def building_add(self, row, col, selected_type):
 

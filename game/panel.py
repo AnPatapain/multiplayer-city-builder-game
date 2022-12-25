@@ -4,50 +4,67 @@ from class_types.road_types import RoadTypes
 from class_types.panel_types import SwitchViewButtonTypes
 from class_types.buildind_types import BuildingTypes
 from components.button import Button
+from game.mapcontroller import MapController
+from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
 from events.event_manager import EventManager
 
+TOPBAR_HEIGHT = 46
+PANEL_WIDTH = 162
+PANEL_HEIGHT = 1080 - TOPBAR_HEIGHT
 
 class Panel:
-    
     def __init__(self, width, height):
         self.width, self.height = width, height
+
+        # Mini_Map
+        self.mini_map = MiniMap()
 
         self.ressource_panel_color = (204, 174, 132)
         self.building_panel_color = (230, 162, 64)
 
         # Ressource panel in the top of screen
-        self.ressource_panel = pg.Surface((self.width, self.height * 0.043))
+        self.ressource_panel = pg.Surface((self.width, TOPBAR_HEIGHT))
         self.ressource_panel_rect = self.ressource_panel.get_rect(topleft=(0, 0))
         self.ressource_panel.fill(self.ressource_panel_color)
+        self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
+        self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
+        self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
+        self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
 
         # Building panel in the right screen
-        self.building_panel = pg.Surface((self.width * 0, self.height * 0.96))
-        self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width * 0.8, self.height * 0.04))
+        self.building_panel = pg.Surface((PANEL_WIDTH, self.height))
+        self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width - PANEL_WIDTH, TOPBAR_HEIGHT))
         self.building_panel.fill(self.building_panel_color)
+        self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.TOP_PANNEL), (0, 0))
+        self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BOTTOM_PANNEL), (0, 496 - TOPBAR_HEIGHT))
+        self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (0, PANEL_HEIGHT - 120))
+        self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (7, 216))
+        self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (7, 200 - TOPBAR_HEIGHT))
+        self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (84, 200 - TOPBAR_HEIGHT))
 
         button_size = (39, 26)
-        self.build__road = Button((self.width - 49, 277 + 46), button_size,
+        self.build__road = Button((self.width - 49, 277 + TOPBAR_HEIGHT), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON7),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_HOVER),
                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_SELECTED))
         self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
 
-        self.destroy_tile = Button((self.width - 99, 277 + 46), button_size,
+        self.destroy_tile = Button((self.width - 99, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON6),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED))
         self.destroy_tile.on_click(lambda: self.set_selected_tile(BuildingTypes.PELLE))  # image qui est sur le curseur
 
-        self.build__house = Button((self.width - 149, 277 + 46), button_size,
+        self.build__house = Button((self.width - 149, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_SELECTED))
         self.build__house.on_click(lambda: self.set_selected_tile(BuildingTypes.SMALL_TENT))
 
-        self.build__prefecture = Button((self.width - 99, 385 + 46), button_size,
+        self.build__prefecture = Button((self.width - 99, 385 + TOPBAR_HEIGHT), button_size,
                                         image=Textures.get_texture(SwitchViewButtonTypes.BUTTON15),
                                         image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_HOVER),
                                         image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_SELECTED))
@@ -64,7 +81,7 @@ class Panel:
 
     def draw(self, screen):
         screen.blit(self.ressource_panel, (0, 0))
-        screen.blit(self.building_panel, (self.width * 0.8, self.height * 0.04))
+        screen.blit(self.building_panel, (self.width - 162, TOPBAR_HEIGHT))
 
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
@@ -75,6 +92,8 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (self.width - 155, 200))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (self.width - 78, 200))
+        # Can't draw on the building_panel because we need absolute position to move the camera with the mouse listener
+        self.mini_map.draw(screen, MapController.get_map_pos())
 
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON1), (self.width - 155, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON2), (self.width - 116, 230))
@@ -93,19 +112,12 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON18), (self.width - 100, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
 
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.TOP_PANNEL), (self.width - 162, self.height * 0.043))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BOTTOM_PANNEL), (self.width - 162, 496))
 
         resource_panel_text = ['File', 'Options', 'Help', 'Advisor']
-
         resource_panel_text_pos = [20, 10]
         i = 0
         for text in resource_panel_text:
-
-            temp_pos = resource_panel_text_pos.copy()
-
-            draw_text(text, screen, temp_pos, size=38)
-
+            draw_text(text, screen, resource_panel_text_pos, size=38)
             if i >= 3:
                 resource_panel_text_pos[0] += 280
             else:
@@ -118,7 +130,7 @@ class Panel:
         self.build__prefecture.display(screen)
 
     def update(self):
-        pass
+        self.mini_map.update()
 
     def scale_image(self, image, width=None,
                     height=None):  # Procedure function which scales up or down the image specified
@@ -152,3 +164,5 @@ class Panel:
 
     def get_panel_rects(self):
         return self.panel_rects
+
+    def get_mini_map(self): return self.mini_map
