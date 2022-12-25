@@ -1,14 +1,16 @@
 import pygame as pg
-from perlin_noise import PerlinNoise
-import random as rd
+from PIL import Image
 
+from buildable.final.rock import Rock
+from buildable.final.houses.small_tent import SmallTent
+from buildable.final.structures.prefecture import Prefecture
+from buildable.final.tree import SmallTree
 from map_element.tile import Tile
 from game.setting import *
 import game.utils as utils
 from game.textures import Textures
 from buildable.road import Road
 
-from components.BuildingCompenant import *
 from .gameController import GameController
 
 from class_types.tile_types import TileTypes
@@ -24,9 +26,8 @@ class World:
         self.width = width
         self.height = height
 
-        self.noise_scale = nums_grid_x / 2
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
-        self.grid: [[Tile]] = self.grid()
+        self.grid: list[list[Tile]] = self.load_map()
 
         '''
         create map only once by bliting texture directly on default surface not on screen and then we can blit default surface on screen 
@@ -106,7 +107,7 @@ class World:
         selected_tile = self.panel.get_selected_tile()
         self.temp_tile = None
 
-        if selected_tile is not None:
+        if selected_tile:
             if self.in_map(mouse_grid_pos):
                 tile = self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
                 self.temp_tile = {
@@ -118,30 +119,29 @@ class World:
                 }
 
             # Build from start point to end point
-            if self.in_build_action is False and self.start_point is not None and self.end_point is not None:
+            if not self.in_build_action and self.start_point and self.end_point:
                 if self.in_map(self.start_point) and self.in_map(self.end_point):
+
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
                             tile: Tile = self.grid[row][col]
 
-                            if selected_tile != BuildingTypes.PELLE:
-                                if tile.is_buildable():
-                                    # Def road
-                                    if selected_tile == RoadTypes.TL_TO_BR:
-                                        self.road_add(row, col)
-                                    #Def Building
-                                    elif isinstance(selected_tile,BuildingTypes):
-                                        self.building_add(row,col,selected_tile)
-                                    else :
-                                        tile.set_type(selected_tile)
-                            else:
+                            if selected_tile == BuildingTypes.PELLE:
                                 if tile.is_destroyable():
-                                    if  tile.get_road():
+                                    if tile.get_road():
                                         tile.destroy()
-                                        self.road_update(row,col)
-                                    else :
-                                        tile.destroy()
+                                        self.road_update(row, col)
+                                    tile.destroy()
+                                continue
 
+                            if not tile.is_buildable():
+                                continue
+
+                            match selected_tile:
+                                case RoadTypes.TL_TO_BR:
+                                    self.road_add(row, col)
+                                case _:
+                                    self.building_add(row, col, selected_tile)
 
 
                     self.create_static_map()  # update the static map based upon self.grid
@@ -194,75 +194,19 @@ class World:
                             screen.blit(building,
                                         (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
-    def grid(self) -> list[list[Tile]]:
-        grid = []
-        for row in range(self.nums_grid_y):
 
-            grid.append([])
-
-            for col in range(self.nums_grid_x):
-                iso_tile = self.tile(col, row)
-                grid[row].append(iso_tile)
-
-                (x, y) = iso_tile.get_render_coord()
-                offset_render = (x + self.default_surface.get_width() / 2, y)
-
-                self.default_surface.blit(Textures.get_texture(TileTypes.GRASS), offset_render)
-
-        return grid
-
-    ''' Testing i'm not sure about this method '''
 
     def create_static_map(self):
         self.default_surface.fill((0, 0, 0))
         for row in range(self.nums_grid_y):
             for col in range(self.nums_grid_x):
-                tile: Tile = self.grid[row][col]
-                (x, y) = tile.get_render_coord()
-                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2, y)
-
+                tile = self.grid[row][col]
                 texture_image = tile.get_texture()
 
-                # if tile.is_buildable and tile.get_type() != TileTypes.GRASS:
-                if tile.is_buildable:
-                    self.default_surface.blit(texture_image,
-                                              (x_offset, y_offset - texture_image.get_height() + TILE_SIZE))
+                (x, y) = tile.get_render_coord()
+                offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
 
-    def tile(self, col: int, row: int) -> Tile:
-        def graphic_generator():
-            normal_random = rd.randint(1, 100)
-            noise = PerlinNoise(octaves=1, seed=777)
-            perlin_random = 100 * noise([col / self.noise_scale, row / self.noise_scale])
-
-            # perlin_distribution(perlin_random)
-            graphic_ = TileTypes.GRASS
-            if (perlin_random >= 20) or perlin_random <= -30:
-                graphic_ = TileTypes.TREE
-            else:
-                if normal_random < 4:
-                    graphic_ = TileTypes.ROCK
-                if normal_random < 2:
-                    graphic_ = TileTypes.TREE
-                if normal_random < 3:
-                    graphic_ = TileTypes.BIG_TREE
-            return graphic_
-
-        tile = Tile(col, row)
-        tile.set_type(graphic_generator())
-
-        return tile
-
-    def convert_cart_to_iso(self, x, y):
-        """
-        DESCRIPTION: I don't know how to explain this method
-        You can think this method helps us rotate square and then stretch it out : )
-
-        Params: coordination of one point of the square
-
-        Return: new coordination of the rhombus
-        """
-        return x - y, (x + y) / 2
+                self.default_surface.blit(texture_image, offset)
 
     def in_map(self, grid_pos):
         """
@@ -290,30 +234,32 @@ class World:
 
         # Connect other road:
         # TL connection
-        if  road_col > 0:
-            if self.grid[road_row][road_col - 1].get_road():
-                self.grid[road_row][road_col - 1].get_road().set_connect(road, 2)
-                road_connection[0] = (self.grid[road_row][road_col - 1].get_road())
-
+        if road_col > 0:
+            r1 = self.grid[road_row][road_col - 1].get_road()
+            if r1:
+                r1.set_connect(road, 2)
+                road_connection[0] = r1
 
         # TR connection
         if road_row > 0:
-            if self.grid[road_row - 1][road_col].get_road():
-                self.grid[road_row - 1][road_col].get_road().set_connect(road, 3)
-                road_connection[1] = (self.grid[road_row - 1][road_col].get_road())
+            r2 = self.grid[road_row - 1][road_col].get_road()
+            if r2:
+                r2.set_connect(road, 3)
+                road_connection[1] = r2
 
         # BR connection
         if road_col < self.nums_grid_x - 1:
-            if self.grid[road_row][road_col + 1].get_road():
-                self.grid[road_row][road_col + 1].get_road().set_connect(road, 0)
-                road_connection[2] = (self.grid[road_row][road_col + 1].get_road())
+            r3 = self.grid[road_row][road_col + 1].get_road()
+            if r3:
+                r3.set_connect(road, 0)
+                road_connection[2] = r3
 
         # BL connection
         if road_row < self.nums_grid_y - 1:
-            if self.grid[road_row + 1][road_col].get_road():
-                self.grid[road_row + 1][road_col].get_road().set_connect(road, 1)
-                road_connection[3] = (self.grid[road_row + 1][road_col].get_road())
-
+            r4 = self.grid[road_row + 1][road_col].get_road()
+            if r4:
+                r4.set_connect(road, 1)
+                road_connection[3] = r4
 
         road.set_road_connection(road_connection)
         self.grid[road_row][road_col].set_road(road)
@@ -346,15 +292,19 @@ class World:
         if not self.game_controller.has_enough_denier(selected_type):
             return
 
-        building = building_constructor(selected_type)
+        building = None
+        match selected_type:
+            case BuildingTypes.SMALL_TENT:
+                building = SmallTent(row, col)
+            case BuildingTypes.PREFECTURE:
+                building = Prefecture(row, col)
 
-        if sum(building.building_size) > 2:
-            x_building = building.building_size[0]
-            y_building = building.building_size[1]
+        if sum(building.get_building_size()) > 2:
+            (x_building, y_building) = building.get_building_size()
             #check if all case are buildable
             try:
-                for x in range(col,col+x_building,1):
-                    for y in range(row,row-y_building,-1):
+                for x in range(col,col+x_building, 1):
+                    for y in range(row,row-y_building, -1):
                         if not self.grid[y][x].is_buildable():
                             print("Building can't be construct")
                             return
@@ -366,8 +316,34 @@ class World:
             for x in range(col,col+x_building,1):
                 for y in range(row,row-y_building,-1):
                     if x != col or y != row:
-                        self.grid[y][x].set_building(building,False)
+                        self.grid[y][x].set_building(building, False)
 
         #Show first case
-        self.grid[row][col].set_building(building,True)
+        self.grid[row][col].set_building(building, True)
         self.game_controller.new_building(building)
+
+    def load_map(self, name="default"):
+        img = Image.open("maps/default.png")
+
+        table = []
+
+        for x in range(img.size[0]):
+            table.append([])
+            for y in range(img.size[1]):
+                r, g, b, a = img.getpixel((y, x))
+
+                tile = Tile(row=x, col=y)
+
+                match (r, g, b):
+                    case (255, 242, 0):
+                        tile.set_type(TileTypes.WHEAT)
+                    case (12, 102, 36):
+                        tile.set_building(SmallTree(x, y))
+                    case (0, 162, 232):
+                        tile.set_type(TileTypes.WATER)
+                    case (161, 161, 161):
+                        tile.set_building(Rock(x, y))
+
+                table[x].append(tile)
+
+        return table
