@@ -32,6 +32,8 @@ class Textures:
             TileTypes.ROCK: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00290.png'))).convert_alpha(screen),
             TileTypes.TREE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00041.png'))).convert_alpha(screen),
             TileTypes.BIG_TREE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00059.png'))).convert_alpha(screen),
+            TileTypes.WATER: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00120.png'))).convert_alpha(screen),
+            TileTypes.WHEAT: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00027.png'))).convert_alpha(screen),
 
             # Road texture
             RoadTypes.ALONE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00104.png'))).convert_alpha(screen),
