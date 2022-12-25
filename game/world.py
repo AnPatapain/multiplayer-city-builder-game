@@ -14,6 +14,8 @@ from .gameController import GameController
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
+from .mapcontroller import MapController
+
 
 class World:
 
@@ -91,7 +93,7 @@ class World:
             elif event.type == pg.MOUSEMOTION:
                 self.temp_end_point = mouse_grid_pos
 
-    def update(self, map_pos):
+    def update(self):
         """
         DESCRIPTION: updating the state of the world. For now it updates temp_tile, texture of the world
 
@@ -100,6 +102,7 @@ class World:
         Return: None
         """
         mouse_pos = pg.mouse.get_pos()
+        map_pos = MapController.get_map_pos()
         mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
         mouse_action = pg.mouse.get_pressed()
 
@@ -154,8 +157,8 @@ class World:
                 self.end_point = None
                 self.in_build_action = False
 
-    def draw(self, screen, map_pos):
-
+    def draw(self, screen):
+        map_pos = MapController.get_map_pos()
         screen.blit(self.default_surface, map_pos)
 
         if self.temp_tile is not None and self.in_build_action is False:
