@@ -7,6 +7,7 @@ class Tile:
     def __init__(self, col: int, row: int, tile_type: TileTypes = TileTypes.GRASS):
         self.type = tile_type
         self.building = None
+        self.show_tile = True
         self.road = None
 
         cartesian_coord = [
@@ -40,8 +41,13 @@ class Tile:
     def get_building(self):
         return self.building
 
-    def set_building(self, new_building):
+    def set_building(self, new_building,show_building : bool):
         self.building = new_building
+        self.show_tile = show_building
+        if self.show_tile:
+            self.type = self.building.get_building_type()
+        else:
+            self.type = TileTypes.GRASS
 
     def get_road(self):
         return self.road
@@ -50,16 +56,28 @@ class Tile:
         self.road = new_road
         self.type = self.road.get_road_type()
 
+    def set_show_tile(self,show_tile:bool):
+        self.show_tile = show_tile
+
+    def get_show_tile(self):
+        return self.show_tile
+
     def get_texture(self):
+        if not self.show_tile:
+            return Textures.get_texture(TileTypes.GRASS)
+        if self.building:
+            return Textures.get_texture(self.building.get_building_type())
         if self.road:
             return Textures.get_texture(self.road.get_road_type())
-        # TODO: get texture of building if it exists
         return Textures.get_texture(self.type)
 
     def get_delete_texture(self):
+        if not self.show_tile:
+            return Textures.get_texture(TileTypes.GRASS)
         if self.road:
             return Textures.get_delete_texture(self.road.get_road_type())
-        # TODO: get texture of building if it exists
+        if self.building:
+            return Textures.get_delete_texture(self.building.get_building_type())
         return Textures.get_delete_texture(self.type)
 
     def is_buildable(self):

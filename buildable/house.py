@@ -1,17 +1,18 @@
 from buildable.building import Buildings
+from class_types.buildind_types import BuildingTypes
 
 class Houses(Buildings):
-        def __init__(self, max_occupants, building_size, cost,HasWater, Tax_Multi):
-            Buildings.__init__(self, max_occupants, building_size, cost)
-            self.HasWater = HasWater
-            self.Tax_Multi = Tax_Multi
+        def __init__(self, max_occupants, building_size : tuple, has_water, tax, desirability,building_type : BuildingTypes):
+            Buildings.__init__(self, max_occupants, building_size, building_type)
+            self.has_water = has_water
+            self.tax = tax
+            self.desirability = desirability
 
-        # all Houses are listed in this class
-        #bui_SmallTent = Houses(5, '1x1', 10, False, False, False, 1)
-        #bui_LargeTent = Houses(7, '1x1', 10, False, False, False, 1)
-        #bui_SmallShack = Houses(9, '1x1', 10, False, False, False, 1)
-        #bui_LargeShack = Houses(11, '1x1', 10, False, False, False, 1)
-        #bui_SmallHovel = Houses(13, '1x1', 10, False, False, False, 2)
-        #bui_LargeHovel = Houses(15, '1x1', 10, False, False, False, 2)
-        #bui_SmallCasa = Houses(17, '1x1', 10, False, False, False, 2)
-        #bui_LargeCasa = Houses(19, '1x1', 10, False, False, False, 2)
+        def get_has_water(self):
+            return self.has_water
+
+        def set_has_water(self,has_water):
+            self.has_water = has_water
+
+        def get_tax(self):
+            return self.tax

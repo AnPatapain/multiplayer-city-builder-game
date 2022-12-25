@@ -83,6 +83,15 @@ class Panel:
         screen.blit(self.ressource_panel, (0, 0))
         screen.blit(self.building_panel, (self.width - 162, TOPBAR_HEIGHT))
 
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
+
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (self.width - 162, self.height - 120))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (self.width - 155, 200))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (self.width - 78, 200))
         # Can't draw on the building_panel because we need absolute position to move the camera with the mouse listener
         self.mini_map.draw(screen, MapController.get_map_pos())
 
@@ -104,7 +113,7 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
 
 
-        resource_panel_text = ['File', 'Options', 'Help', 'Advisor', 'Dn: 0', 'Population: 0']
+        resource_panel_text = ['File', 'Options', 'Help', 'Advisor']
         resource_panel_text_pos = [20, 10]
         i = 0
         for text in resource_panel_text:

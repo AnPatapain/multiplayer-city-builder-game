@@ -7,12 +7,14 @@ from .utils import draw_text
 from .mapcontroller import MapController
 from .panel import Panel
 from .setting import *
+from .gameController import GameController
 
 
 class Game:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
+        self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
 
         # sound manager
@@ -48,6 +50,7 @@ class Game:
         self.panel.draw(self.screen)
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
+        draw_text('denier {}'.format(self.game_controller.get_denier()),self.screen, (self.width - 500,20),size=42)
 
         pg.display.flip()
 

@@ -8,6 +8,9 @@ import game.utils as utils
 from game.textures import Textures
 from buildable.road import Road
 
+from components.BuildingCompenant import *
+from .gameController import GameController
+
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
@@ -15,6 +18,7 @@ from class_types.buildind_types import BuildingTypes
 class World:
 
     def __init__(self, nums_grid_x, nums_grid_y, width, height, panel):
+        self.game_controller = GameController.get_instance()
         self.nums_grid_x = nums_grid_x
         self.nums_grid_y = nums_grid_y
         self.width = width
@@ -122,10 +126,14 @@ class World:
 
                             if selected_tile != BuildingTypes.PELLE:
                                 if tile.is_buildable():
-                                    tile.set_type(selected_tile)
                                     # Def road
                                     if selected_tile == RoadTypes.TL_TO_BR:
                                         self.road_add(row, col)
+                                    #Def Building
+                                    elif isinstance(selected_tile,BuildingTypes):
+                                        self.building_add(row,col,selected_tile)
+                                    else :
+                                        tile.set_type(selected_tile)
                             else:
                                 if tile.is_destroyable():
                                     if  tile.get_road():
@@ -332,3 +340,34 @@ class World:
                 self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
 
     def get_grid(self): return self.grid
+
+    def building_add(self, row, col, selected_type):
+
+        if not self.game_controller.has_enough_denier(selected_type):
+            return
+
+        building = building_constructor(selected_type)
+
+        if sum(building.building_size) > 2:
+            x_building = building.building_size[0]
+            y_building = building.building_size[1]
+            #check if all case are buildable
+            try:
+                for x in range(col,col+x_building,1):
+                    for y in range(row,row-y_building,-1):
+                        if not self.grid[y][x].is_buildable():
+                            print("Building can't be construct")
+                            return
+            except IndexError:
+                #We are out of the index of the grid
+                return
+
+            # Put building in each case
+            for x in range(col,col+x_building,1):
+                for y in range(row,row-y_building,-1):
+                    if x != col or y != row:
+                        self.grid[y][x].set_building(building,False)
+
+        #Show first case
+        self.grid[row][col].set_building(building,True)
+        self.game_controller.new_building(building)
