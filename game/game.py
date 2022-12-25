@@ -45,8 +45,7 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        self.world.draw(self.screen, MapController.get_map_pos())
-
+        self.world.draw(self.screen)
         self.panel.draw(self.screen)
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 200, 20), size=42)
@@ -56,4 +55,4 @@ class Game:
 
     def update(self):
         self.panel.update()
-        self.world.update(MapController.get_map_pos())
+        self.world.update()

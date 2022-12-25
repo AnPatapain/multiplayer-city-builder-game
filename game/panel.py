@@ -93,7 +93,7 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (self.width - 155, 200))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (self.width - 78, 200))
         # Can't draw on the building_panel because we need absolute position to move the camera with the mouse listener
-        self.mini_map.draw(screen, MapController.get_map_pos())
+        self.mini_map.draw(screen)
 
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON1), (self.width - 155, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON2), (self.width - 116, 230))
