@@ -51,15 +51,15 @@ class MiniMap:
     def update(self):
         if self.mini_relative_x is not None and self.mini_relative_y is not None:
             corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / 0.025
-            corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.037
+            corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.0465
             MapController.set_map_pos(corresponding_x, corresponding_y)
         
 
     def draw(self, screen):
         # We need coordination of 4 points to draw rhombus
         map_pos = MapController.get_map_pos()
-        self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.024,
-                                        - map_pos[1] * 0.037,
+        self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.025,
+                                        - map_pos[1] * 0.0465,
                                         self.mini_screen_width, self.mini_screen_height)
 
         temp_bg = self.background.copy()
