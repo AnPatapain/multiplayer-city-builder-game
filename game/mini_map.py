@@ -17,12 +17,12 @@ class MiniMap:
         self.mm_height = 111
 
         self.background = pg.Surface((self.mm_width, self.mm_height))
-        self.background.fill((0, 0, 0))
-        pg.draw.polygon(self.background, (0, 255, 0),
-                        [(self.mm_width / 2, 0),
-                         (self.mm_width, self.mm_height / 2),
-                         (self.mm_width / 2, self.mm_height),
-                         (0, self.mm_height / 2)], 1)
+        # self.background.fill((0, 0, 0))
+        # pg.draw.polygon(self.background, (0, 255, 0),
+        #                 [(self.mm_width / 2, 0),
+        #                  (self.mm_width, self.mm_height / 2),
+        #                  (self.mm_width / 2, self.mm_height),
+        #                  (0, self.mm_height / 2)], 1)
 
         self.camera_zone_rect = None
 
@@ -33,6 +33,35 @@ class MiniMap:
         self.mini_relative_y = None
 
         EventManager.register_mouse_listener(self.mini_map_mouse_listener)
+
+
+    def background_generator(self, logic_grid):
+        for row in range(NUMS_GRID_Y):
+            for col in range(NUMS_GRID_X):
+                tile: Tile = logic_grid[row][col]
+                (x, y) = tile.get_render_coord()
+                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
+                (x_offset, y_offset) = (x + DEFAULT_SURFACE_WIDTH / 2, y)
+
+                (mini_x_offset, mini_y_offset) = (x_offset*0.025, y_offset*0.0465)
+
+                color = self.get_color(tile)
+                
+                self.background.fill(color, ( (mini_x_offset, mini_y_offset), (1, 1) ))
+
+    def background_update(self, logic_grid):
+        for row in range(NUMS_GRID_Y):
+            for col in range(NUMS_GRID_X):
+                tile: Tile = logic_grid[row][col]
+                (x, y) = tile.get_render_coord()
+                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
+                (x_offset, y_offset) = (x + DEFAULT_SURFACE_WIDTH / 2, y)
+
+                (mini_x_offset, mini_y_offset) = (x_offset*0.025, y_offset*0.0465)
+
+                color = self.get_color(tile)
+                if tile.type != TileTypes.GRASS:
+                    self.background.fill(color, ( (mini_x_offset, mini_y_offset), (1, 1) ))
 
     def mini_map_mouse_listener(self):
         mouse_pos = pg.mouse.get_pos()
@@ -48,15 +77,17 @@ class MiniMap:
                 self.mini_relative_y = None
 
 
-    def update(self):
+    def update(self, logic_grid):
         if self.mini_relative_x is not None and self.mini_relative_y is not None:
             corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / 0.025
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.0465
             MapController.set_map_pos(corresponding_x, corresponding_y)
+        self.background_update(logic_grid)
         
 
     def draw(self, screen):
         # We need coordination of 4 points to draw rhombus
+
         map_pos = MapController.get_map_pos()
         self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.025,
                                         - map_pos[1] * 0.0465,
@@ -86,3 +117,6 @@ class MiniMap:
             case TileTypes.GRASS: return (76, 153, 0) 
 
             case TileTypes.TREE: return (204, 255, 204)
+
+            case TileTypes.BIG_TREE: return (204, 255, 211)
+        
