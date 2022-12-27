@@ -16,13 +16,8 @@ class MiniMap:
         self.mm_width = 145
         self.mm_height = 111
 
-        self.background = pg.Surface((self.mm_width, self.mm_height))
-        # self.background.fill((0, 0, 0))
-        # pg.draw.polygon(self.background, (0, 255, 0),
-        #                 [(self.mm_width / 2, 0),
-        #                  (self.mm_width, self.mm_height / 2),
-        #                  (self.mm_width / 2, self.mm_height),
-        #                  (0, self.mm_height / 2)], 1)
+        # Create a surface that matches the size of the map, we will transform it later to have the wanted size
+        self.background = pg.Surface((50, 50))
 
         self.camera_zone_rect = None
 
@@ -39,29 +34,18 @@ class MiniMap:
         for row in range(NUMS_GRID_Y):
             for col in range(NUMS_GRID_X):
                 tile: Tile = logic_grid[row][col]
-                (x, y) = tile.get_render_coord()
-                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-                (x_offset, y_offset) = (x + DEFAULT_SURFACE_WIDTH / 2, y)
-
-                (mini_x_offset, mini_y_offset) = (x_offset*0.025, y_offset*0.0465)
-
                 color = self.get_color(tile)
                 
-                self.background.fill(color, ( (mini_x_offset, mini_y_offset), (1, 1) ))
+                self.background.set_at((col, row), color)
 
     def background_update(self, logic_grid):
         for row in range(NUMS_GRID_Y):
             for col in range(NUMS_GRID_X):
                 tile: Tile = logic_grid[row][col]
-                (x, y) = tile.get_render_coord()
-                # cell is placed at 1/2 default_surface.get_width() and be offseted by the position of the default_surface
-                (x_offset, y_offset) = (x + DEFAULT_SURFACE_WIDTH / 2, y)
-
-                (mini_x_offset, mini_y_offset) = (x_offset*0.025, y_offset*0.0465)
-
                 color = self.get_color(tile)
+
                 if tile.type != TileTypes.GRASS:
-                    self.background.fill(color, ( (mini_x_offset, mini_y_offset), (1, 1) ))
+                    self.background.set_at((col, row), color)
 
     def mini_map_mouse_listener(self):
         mouse_pos = pg.mouse.get_pos()
@@ -94,16 +78,20 @@ class MiniMap:
                                         self.mini_screen_width, self.mini_screen_height)
 
         temp_bg = self.background.copy()
+        # The rotation will take the color on the topleft corner to add padding
+        temp_bg.set_at((0, 0), (0, 0, 0))
+        temp_bg = pg.transform.rotate(temp_bg, -45)
+        temp_bg = pg.transform.scale(temp_bg, (self.mm_width, self.mm_height))
+
         pg.draw.rect(temp_bg, (255, 255, 0), self.camera_zone_rect, 1)
         screen.blit(temp_bg, (self.pos_x, self.pos_y))
 
 
     def get_color(self, tile: Tile):
-        color = (0, 255, 0)
-        if tile.get_building() is not None: 
+        if tile.get_building():
             return (255, 255, 0) #yellow
 
-        if tile.get_road() is not None:
+        if tile.get_road():
             # brown
             return (153, 76, 0)
 
