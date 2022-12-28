@@ -47,6 +47,10 @@ class MiniMap:
                 if tile.type != TileTypes.GRASS:
                     self.background.set_at((col, row), color)
 
+                # In case we delete something in the world
+                elif tile.type == TileTypes.GRASS:
+                    self.background.set_at((col, row), (76, 153, 0))
+
     def mini_map_mouse_listener(self):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
