@@ -1,12 +1,14 @@
 import pygame as pg
+
+from buildable.final.rock import Rock
+from buildable.final.tree import SmallTree
 from events.event_manager import EventManager
 from .mapcontroller import MapController
 from .setting import *
 
 from map_element.tile import Tile
 from class_types.tile_types import TileTypes
-from class_types.road_types import RoadTypes
-from .textures import Textures
+
 
 class MiniMap:
     def __init__(self) -> None:
@@ -44,7 +46,7 @@ class MiniMap:
                 tile: Tile = logic_grid[row][col]
                 color = self.get_color(tile)
 
-                if tile.type != TileTypes.GRASS:
+                if tile.type != TileTypes.GRASS or tile.get_building():
                     self.background.set_at((col, row), color)
 
                 # In case we delete something in the world
@@ -93,22 +95,16 @@ class MiniMap:
 
     def get_color(self, tile: Tile):
         if tile.get_building():
-            return (255, 255, 0) #yellow
+            if isinstance(tile.get_building(), Rock):
+                return (96, 96, 96)
+            if isinstance(tile.get_building(), SmallTree):
+                return (204, 255, 204)
+            return (255, 255, 0) # yellow
 
         if tile.get_road():
-            # brown
-            return (153, 76, 0)
+            return (153, 76, 0) # brown
 
         match tile.type:
-            case TileTypes.WATER: return (102, 178, 255) #blue
-            
-            case TileTypes.WHEAT: return (204, 204, 0) #Bold yellow
-
-            case TileTypes.ROCK: return (96, 96, 96) #Gray
-
-            case TileTypes.GRASS: return (76, 153, 0) 
-
-            case TileTypes.TREE: return (204, 255, 204)
-
-            case TileTypes.BIG_TREE: return (204, 255, 211)
-        
+            case TileTypes.WATER: return (102, 178, 255) # blue
+            case TileTypes.WHEAT: return (204, 204, 0) # Bold yellow
+            case TileTypes.GRASS: return (76, 153, 0)
