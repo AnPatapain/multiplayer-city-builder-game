@@ -27,6 +27,8 @@ class Game:
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
+        self.panel.get_mini_map().background_generator(self.world.get_grid())
+
         MapController.init_()
 
         # Exit the game when pressing <esc>
@@ -54,5 +56,5 @@ class Game:
         pg.display.flip()
 
     def update(self):
-        self.panel.update()
+        self.panel.update(self.world.get_grid()) # grid used for updating the background of mini_map
         self.world.update()

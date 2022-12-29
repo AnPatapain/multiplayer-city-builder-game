@@ -97,9 +97,7 @@ class World:
     def update(self):
         """
         DESCRIPTION: updating the state of the world. For now it updates temp_tile, texture of the world
-
-        Params: map_position from mapcontroller module
-
+        
         Return: None
         """
         mouse_pos = pg.mouse.get_pos()
