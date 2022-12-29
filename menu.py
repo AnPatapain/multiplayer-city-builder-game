@@ -38,10 +38,6 @@ class Menu:
                                                       image_hover=pg.image.load('assets/menu_sprites/exit_hover.png').convert())
         self.button__exit.on_click(exit)
 
-        EventManager.register_component(self.button__start_new_career)
-        EventManager.register_component(self.button__load_saved_game)
-        EventManager.register_component(self.button__options)
-        EventManager.register_component(self.button__exit)
 
         EventManager.set_any_input(self.skip_splashscreen)
         self.screen.blit(self.graphics["splash"], (0, 0))
@@ -101,6 +97,10 @@ class Menu:
     def skip_splashscreen(self):
         EventManager.clear_any_input()
         self.splash_screen = False
+        EventManager.register_component(self.button__start_new_career)
+        EventManager.register_component(self.button__load_saved_game)
+        EventManager.register_component(self.button__options)
+        EventManager.register_component(self.button__exit)
 
     def is_splashscreen_skipped(self):
         return not self.splash_screen
