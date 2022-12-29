@@ -1,3 +1,6 @@
+from typing import Optional
+
+from buildable.buildable import Buildable
 from class_types.tile_types import TileTypes
 from game.textures import Textures
 from game.setting import TILE_SIZE
@@ -6,7 +9,7 @@ from game.setting import TILE_SIZE
 class Tile:
     def __init__(self, col: int, row: int, tile_type: TileTypes = TileTypes.GRASS):
         self.type = tile_type
-        self.building = None
+        self.building: Optional[Buildable] = None
         self.show_tile = True
         self.road = None
 
@@ -41,20 +44,15 @@ class Tile:
     def get_building(self):
         return self.building
 
-    def set_building(self, new_building,show_building : bool):
+    def set_building(self, new_building, show_building: bool = True):
         self.building = new_building
         self.show_tile = show_building
-        if self.show_tile:
-            self.type = self.building.get_building_type()
-        else:
-            self.type = TileTypes.GRASS
 
     def get_road(self):
         return self.road
 
-    def set_road(self,new_road):
+    def set_road(self, new_road):
         self.road = new_road
-        self.type = self.road.get_road_type()
 
     def set_show_tile(self,show_tile:bool):
         self.show_tile = show_tile
@@ -66,7 +64,7 @@ class Tile:
         if not self.show_tile:
             return Textures.get_texture(TileTypes.GRASS)
         if self.building:
-            return Textures.get_texture(self.building.get_building_type())
+            return self.building.get_texture()
         if self.road:
             return Textures.get_texture(self.road.get_road_type())
         return Textures.get_texture(self.type)
@@ -77,7 +75,7 @@ class Tile:
         if self.road:
             return Textures.get_delete_texture(self.road.get_road_type())
         if self.building:
-            return Textures.get_delete_texture(self.building.get_building_type())
+            return self.building.get_delete_texture()
         return Textures.get_delete_texture(self.type)
 
     def is_buildable(self):
@@ -86,10 +84,8 @@ class Tile:
                and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
 
     def is_destroyable(self):
-        if self.type in (TileTypes.WHEAT, TileTypes.GRASS) : return False
-        else : return True
+        return (self.building and self.building.is_destroyable()) or self.road
 
     def destroy(self):
-        self.road = None # Brute force self road to None
-        self.building = None # Brute force self building to None
-        self.type = TileTypes.GRASS
+        self.road = None
+        self.building = None
