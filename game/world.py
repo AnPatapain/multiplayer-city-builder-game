@@ -40,7 +40,6 @@ class World:
         self.panel = panel
         self.temp_tile = None
         self.start_point = None
-        self.temp_end_point = None
         self.end_point = None
 
         self.in_build_action = False
@@ -84,6 +83,7 @@ class World:
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1 and self.panel.has_selected_tile():
                     self.start_point = mouse_grid_pos
+                    self.end_point = mouse_grid_pos
                     self.in_build_action = True
 
             elif event.type == pg.MOUSEBUTTONUP:
@@ -92,7 +92,7 @@ class World:
                     self.end_point = mouse_grid_pos
 
             elif event.type == pg.MOUSEMOTION:
-                self.temp_end_point = mouse_grid_pos
+                self.end_point = mouse_grid_pos
 
     def update(self):
         """
@@ -178,9 +178,9 @@ class World:
 
         if self.in_build_action:
 
-            if self.in_map(self.start_point) and self.in_map(self.temp_end_point):
-                for row in utils.MyRange(self.start_point[1], self.temp_end_point[1]):
-                    for col in utils.MyRange(self.start_point[0], self.temp_end_point[0]):
+            if self.in_map(self.start_point) and self.in_map(self.end_point):
+                for row in utils.MyRange(self.start_point[1], self.end_point[1]):
+                    for col in utils.MyRange(self.start_point[0], self.end_point[0]):
 
                         (x, y) = self.grid[row][col].get_render_coord()
                         (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )

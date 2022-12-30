@@ -58,7 +58,7 @@ class MiniMap:
         mouse_action = pg.mouse.get_pressed()
 
         (x, y) = mouse_pos
-        if (self.pos_x <= x <= 1920) and (self.pos_y < y <= self.pos_y + self.mm_height):
+        if (self.pos_x <= x <= 1920 - 8) and (self.pos_y < y <= self.pos_y + self.mm_height):
             if mouse_action[0]:
                 self.mini_relative_x = x - self.pos_x
                 self.mini_relative_y = y - self.pos_y

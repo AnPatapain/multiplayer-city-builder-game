@@ -66,19 +66,13 @@ class Textures:
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
 
-            SwitchViewButtonTypes.SCULPTURE: pg.image.load(
-                os.path.join(IMAGE_PATH, 'paneling_00018.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.MINI_SCULPTURE: pg.image.load(
-                os.path.join(IMAGE_PATH, 'panelwindows_00013.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.TOP_PANNEL: pg.image.load(
-                os.path.join(IMAGE_PATH, 'paneling_00017.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.DYNAMIC_DISPLAY: pg.image.load(
-                os.path.join(IMAGE_PATH, 'paneling_00015.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.SCULPTURE: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00018.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.MINI_SCULPTURE: pg.image.load(os.path.join(IMAGE_PATH, 'panelwindows_00013.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.TOP_PANNEL: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00017.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DYNAMIC_DISPLAY: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00015.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BARRE: pg.image.load(os.path.join(IMAGE_PATH, 'barre.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.JULIUS: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00079.png')).convert_alpha(
-                screen),
-            SwitchViewButtonTypes.EUROPEAN: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00082.png')).convert_alpha(
-                screen),
+            SwitchViewButtonTypes.JULIUS: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00079.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.EUROPEAN: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00082.png')).convert_alpha(screen),
 
             SwitchViewButtonTypes.BUTTON1: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00085.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON2: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00088.png')).convert_alpha(screen),
