@@ -228,9 +228,11 @@ class World:
         else:
             to_update = set()
             for tile in updated_tiles:
+                to_update.add(tile)
                 if len(tile.walkers) != 0:
                     to_update.update(tile.get_adjacente_tiles())
-                to_update.add(tile)
+                # to_update.update(tile.get_adjacente_tiles())
+                # to_update.add(tile)
             for tile in to_update:
                 render_tile(tile)
 
