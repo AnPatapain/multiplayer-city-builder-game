@@ -3,6 +3,7 @@ import pygame as pg
 from buildable.final.rock import Rock
 from buildable.final.tree import SmallTree
 from events.event_manager import EventManager
+from .gameController import GameController
 from .mapcontroller import MapController
 from .setting import *
 
@@ -19,7 +20,7 @@ class MiniMap:
         self.mm_height = 111
 
         # Create a surface that matches the size of the map, we will transform it later to have the wanted size
-        self.background = pg.Surface((50, 50))
+        self.background = pg.Surface((50, 50)).convert()
 
         self.camera_zone_rect = None
 
@@ -67,12 +68,12 @@ class MiniMap:
                 self.mini_relative_y = None
 
 
-    def update(self, logic_grid):
+    def update(self):
         if self.mini_relative_x is not None and self.mini_relative_y is not None:
             corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / 0.025
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.0465
             MapController.set_map_pos(corresponding_x, corresponding_y)
-        self.background_update(logic_grid)
+        self.background_update(GameController.get_instance().get_map())
         
 
     def draw(self, screen):

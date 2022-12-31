@@ -40,7 +40,9 @@ class Game:
     def run(self):
         self.clock.tick(60)
         EventManager.handle_events()
-        
+        gc = GameController.get_instance()
+        for walker in gc.walkers:
+            walker.update()
         self.update()
         self.draw()
 
@@ -56,5 +58,5 @@ class Game:
         pg.display.flip()
 
     def update(self):
-        self.panel.update(self.world.get_grid()) # grid used for updating the background of mini_map
+        self.panel.update()
         self.world.update()

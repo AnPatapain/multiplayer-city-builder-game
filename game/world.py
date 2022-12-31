@@ -28,8 +28,10 @@ class World:
         self.width = width
         self.height = height
 
-        self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
-        self.grid: list[list[Tile]] = self.load_map()
+        self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
+        self.game_controller.set_map(self.load_map())
+        self.grid = self.game_controller.get_map()
+
 
         '''
         create map only once by bliting texture directly on default surface not on screen and then we can blit default surface on screen 
@@ -123,6 +125,8 @@ class World:
             if not self.in_build_action and self.start_point and self.end_point:
                 if self.in_map(self.start_point) and self.in_map(self.end_point):
 
+                    updated_tiles = []
+
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
                             tile: Tile = self.grid[row][col]
@@ -133,6 +137,7 @@ class World:
                                         tile.destroy()
                                         self.road_update(row, col)
                                     tile.destroy()
+                                updated_tiles.append(tile)
                                 continue
 
                             if not tile.is_buildable():
@@ -143,9 +148,9 @@ class World:
                                     self.road_add(row, col)
                                 case _:
                                     self.building_add(row, col, selected_tile)
+                            updated_tiles.append(tile)
 
-
-                    self.create_static_map()  # update the static map based upon self.grid
+                    self.create_static_map(updated_tiles)  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
                     self.end_point = None  # update start point to default after building
 
@@ -157,6 +162,8 @@ class World:
 
     def draw(self, screen):
         map_pos = MapController.get_map_pos()
+        walkers = GameController.get_instance().walkers
+        self.create_static_map([walker.current_tile for walker in walkers])
         screen.blit(self.default_surface, map_pos)
 
         if self.temp_tile is not None and self.in_build_action is False:
@@ -197,17 +204,34 @@ class World:
 
 
 
-    def create_static_map(self):
-        self.default_surface.fill((0, 0, 0))
-        for row in range(self.nums_grid_y):
-            for col in range(self.nums_grid_x):
-                tile = self.grid[row][col]
-                texture_image = tile.get_texture()
+    def create_static_map(self, updated_tiles: list[Tile] = None):
+        # comment below to only render tiles around changes
+        updated_tiles = None
+        def render_tile(_tile):
+            texture_image = _tile.get_texture()
 
-                (x, y) = tile.get_render_coord()
-                offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
+            (x, y) = _tile.get_render_coord()
+            offset_x, offset_y = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
 
-                self.default_surface.blit(texture_image, offset)
+            self.default_surface.blit(texture_image, (offset_x, offset_y))
+
+            for walker in _tile.walkers:
+                self.default_surface.blit(walker.get_texture(), (offset_x + TILE_SIZE/2 + walker.walk_progression, offset_y))
+
+        if updated_tiles is None:
+            self.default_surface.fill((0, 0, 0))
+
+            for row in self.grid:
+                for tile in row:
+                    render_tile(tile)
+
+        else:
+            to_update = set()
+            for tile in updated_tiles:
+                to_update.update(tile.get_adjacente_tiles())
+                to_update.add(tile)
+            for tile in to_update:
+                render_tile(tile)
 
     def in_map(self, grid_pos):
         """

@@ -1,9 +1,13 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from buildable.buildable import Buildable
 from class_types.tile_types import TileTypes
+from game.gameController import GameController
 from game.textures import Textures
 from game.setting import TILE_SIZE
+
+if TYPE_CHECKING:
+    from buildable.buildable import Buildable
+    from walkers.walker import Walker
 
 
 class Tile:
@@ -12,6 +16,10 @@ class Tile:
         self.building: Optional[Buildable] = None
         self.show_tile = True
         self.road = None
+        self.x = row
+        self.y = col
+
+        self.walkers: list['Walker'] = []
 
         cartesian_coord = [
             (col * TILE_SIZE, row * TILE_SIZE),
@@ -87,5 +95,26 @@ class Tile:
         return (self.building and self.building.is_destroyable()) or self.road
 
     def destroy(self):
+        if self.building:
+            self.building.destroy()
+            self.building = None
         self.road = None
-        self.building = None
+
+    def add_walker(self, walker: 'Walker'):
+        self.walkers.append(walker)
+
+    def remove_walker(self, walker: 'Walker'):
+        self.walkers.remove(walker)
+
+    def get_adjacente_tiles(self):
+        adjacentes_tiles = []
+
+        grid = GameController.get_instance().get_map()
+        for x in range(-1, 2):
+            for y in range(-1, 2):
+                try:
+                    adjacentes_tiles.append(grid[self.x + x][self.y + y])
+                except IndexError:
+                    pass
+
+        return adjacentes_tiles

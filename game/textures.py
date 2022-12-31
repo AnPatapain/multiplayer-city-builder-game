@@ -1,19 +1,29 @@
 import os
+from enum import Enum
+
 import pygame as pg
 
+from class_types.walker_types import WalkerTypes
 from game.setting import IMAGE_PATH
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
 from class_types.panel_types import SwitchViewButtonTypes
+from class_types.orientation_types import OrientationTypes
+
 
 class Textures:
     textures: dict[pg.Surface] = {}
+    walker_textures: dict[WalkerTypes, dict[OrientationTypes, dict[int, pg.Surface]]] = {}
     textures_destroy: dict[pg.Surface] = {}
 
     @staticmethod
-    def get_texture(texture_id: any) -> pg.Surface:
+    def get_texture(texture_id: any) -> pg.Surface | dict[Enum, pg.Surface]:
         return Textures.textures[texture_id]
+
+    @staticmethod
+    def get_walker_texture(walker_id: WalkerTypes, direction: OrientationTypes, animation_frame: int) -> pg.Surface:
+        return Textures.walker_textures[walker_id][direction][animation_frame]
 
     @staticmethod
     def get_delete_texture(texture_id: any) -> pg.Surface:
@@ -103,6 +113,38 @@ class Textures:
             SwitchViewButtonTypes.BUTTON19: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00119.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BOTTOM_PANNEL: pg.image.load(os.path.join(IMAGE_PATH, 'fenetre.png')).convert_alpha(screen),
         }
+
+        Textures.walker_textures = {
+            WalkerTypes.MIGRANT: {
+                OrientationTypes.TOP_LEFT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01047.png')).convert_alpha(screen)
+                },
+                OrientationTypes.TOP_RIGHT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01033.png')).convert_alpha(screen)
+                },
+                OrientationTypes.BOTTOM_RIGHT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01083.png')).convert_alpha(screen)
+                },
+                OrientationTypes.BOTTOM_LEFT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01061.png')).convert_alpha(screen)
+                },
+            },
+            WalkerTypes.PREFET: {
+                OrientationTypes.TOP_LEFT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00661.png')).convert_alpha(screen)
+                },
+                OrientationTypes.TOP_RIGHT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00623.png')).convert_alpha(screen)
+                },
+                OrientationTypes.BOTTOM_RIGHT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00657.png')).convert_alpha(screen)
+                },
+                OrientationTypes.BOTTOM_LEFT: {
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00627.png')).convert_alpha(screen)
+                },
+            }
+        }
+
 
     @staticmethod
     def fill(surface):

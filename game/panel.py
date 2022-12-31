@@ -26,7 +26,7 @@ class Panel:
         self.building_panel_color = (230, 162, 64)
 
         # Ressource panel in the top of screen
-        self.ressource_panel = pg.Surface((self.width, TOPBAR_HEIGHT))
+        self.ressource_panel = pg.Surface((self.width, TOPBAR_HEIGHT)).convert()
         self.ressource_panel_rect = self.ressource_panel.get_rect(topleft=(0, 0))
         self.ressource_panel.fill(self.ressource_panel_color)
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
@@ -35,7 +35,7 @@ class Panel:
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
 
         # Building panel in the right screen
-        self.building_panel = pg.Surface((PANEL_WIDTH, self.height))
+        self.building_panel = pg.Surface((PANEL_WIDTH, self.height)).convert()
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width - PANEL_WIDTH, TOPBAR_HEIGHT))
         self.building_panel.fill(self.building_panel_color)
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.TOP_PANNEL), (0, 0))
@@ -129,8 +129,8 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
 
-    def update(self, logic_grid):
-        self.mini_map.update(logic_grid)
+    def update(self):
+        self.mini_map.update()
 
     def scale_image(self, image, width=None,
                     height=None):  # Procedure function which scales up or down the image specified
