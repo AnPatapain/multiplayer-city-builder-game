@@ -150,7 +150,7 @@ class World:
                                     self.building_add(row, col, selected_tile)
                             updated_tiles.append(tile)
 
-                    self.create_static_map(updated_tiles)  # update the static map based upon self.grid
+                    self.create_static_map(updated_tiles=None)  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
                     self.end_point = None  # update start point to default after building
 
@@ -163,8 +163,19 @@ class World:
     def draw(self, screen):
         map_pos = MapController.get_map_pos()
         walkers = GameController.get_instance().walkers
-        self.create_static_map([walker.current_tile for walker in walkers])
+        # self.create_static_map([walker.current_tile for walker in walkers])
         screen.blit(self.default_surface, map_pos)
+
+        for row in range(NUMS_GRID_Y):
+            for col in range(NUMS_GRID_X):
+                _tile = self.grid[row][col]
+                if len(_tile.walkers) == 0:
+                    continue
+                texture_image = _tile.get_texture()
+                (x, y) = _tile.get_render_coord()
+                offset_x, offset_y = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
+                for walker in _tile.walkers:
+                    screen.blit(walker.get_texture(), (offset_x + TILE_SIZE/2 + walker.walk_progression + map_pos[0], offset_y + map_pos[1]))
 
         if self.temp_tile is not None and self.in_build_action is False:
             isometric_coor = self.temp_tile['isometric_coor']
@@ -215,8 +226,8 @@ class World:
 
             self.default_surface.blit(texture_image, (offset_x, offset_y))
 
-            for walker in _tile.walkers:
-                self.default_surface.blit(walker.get_texture(), (offset_x + TILE_SIZE/2 + walker.walk_progression, offset_y))
+            # for walker in _tile.walkers:
+            #     self.default_surface.blit(walker.get_texture(), (offset_x + TILE_SIZE/2 + walker.walk_progression, offset_y))
 
         if updated_tiles is None:
             self.default_surface.fill((0, 0, 0))
