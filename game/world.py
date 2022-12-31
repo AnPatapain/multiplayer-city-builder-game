@@ -206,7 +206,7 @@ class World:
 
     def create_static_map(self, updated_tiles: list[Tile] = None):
         # comment below to only render tiles around changes
-        updated_tiles = None
+        # updated_tiles = None
         def render_tile(_tile):
             texture_image = _tile.get_texture()
 
@@ -228,7 +228,8 @@ class World:
         else:
             to_update = set()
             for tile in updated_tiles:
-                to_update.update(tile.get_adjacente_tiles())
+                if len(tile.walkers) != 0:
+                    to_update.update(tile.get_adjacente_tiles())
                 to_update.add(tile)
             for tile in to_update:
                 render_tile(tile)
