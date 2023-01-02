@@ -38,7 +38,7 @@ class Game:
 
     # Game Loop
     def run(self):
-        self.clock.tick(60)
+        self.clock.tick(50)
         EventManager.handle_events()
         gc = GameController.get_instance()
         for walker in gc.walkers:

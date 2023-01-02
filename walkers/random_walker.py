@@ -32,12 +32,12 @@ class RandomWalker(Walker, ABC):
             if tile.get_road() and tile is not self.previous_tile:
                 found_tiles.append(tile)
 
-        if self.current_tile.x < 50:
+        if self.current_tile.x < 49:
             tile = map[self.current_tile.x+1][self.current_tile.y]
             if tile.get_road() and tile is not self.previous_tile:
                 found_tiles.append(tile)
 
-        if self.current_tile.y < 50:
+        if self.current_tile.y < 49:
             tile = map[self.current_tile.x][self.current_tile.y+1]
             if tile.get_road() and tile is not self.previous_tile:
                 found_tiles.append(tile)

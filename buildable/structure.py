@@ -24,12 +24,12 @@ class Structure(Buildable, ABC):
             if tile.get_road():
                 return tile
 
-        if self.x < 50:
+        if self.x < 49:
             tile = gc.get_map()[self.x+1][self.y]
             if tile.get_road():
                 return tile
 
-        if self.y< 50:
+        if self.y < 49:
             tile = gc.get_map()[self.x][self.y+1]
             if tile.get_road():
                 return tile

@@ -35,7 +35,7 @@ class GameController:
     def set_map(self, map):
         self.grid = map
 
-    def get_map(self):
+    def get_map(self) -> list[list['Tile']]:
         return self.grid
 
     def add_walker(self, walker: 'Walker'):

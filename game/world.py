@@ -125,8 +125,6 @@ class World:
             if not self.in_build_action and self.start_point and self.end_point:
                 if self.in_map(self.start_point) and self.in_map(self.end_point):
 
-                    updated_tiles = []
-
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
                             tile: Tile = self.grid[row][col]
@@ -137,7 +135,6 @@ class World:
                                         tile.destroy()
                                         self.road_update(row, col)
                                     tile.destroy()
-                                updated_tiles.append(tile)
                                 continue
 
                             if not tile.is_buildable():
@@ -148,9 +145,7 @@ class World:
                                     self.road_add(row, col)
                                 case _:
                                     self.building_add(row, col, selected_tile)
-                            updated_tiles.append(tile)
 
-                    self.create_static_map(updated_tiles=None)  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
                     self.end_point = None  # update start point to default after building
 
@@ -162,20 +157,17 @@ class World:
 
     def draw(self, screen):
         map_pos = MapController.get_map_pos()
-        walkers = GameController.get_instance().walkers
-        # self.create_static_map([walker.current_tile for walker in walkers])
         screen.blit(self.default_surface, map_pos)
 
-        for row in range(NUMS_GRID_Y):
-            for col in range(NUMS_GRID_X):
-                _tile = self.grid[row][col]
-                if len(_tile.walkers) == 0:
-                    continue
-                texture_image = _tile.get_texture()
-                (x, y) = _tile.get_render_coord()
-                offset_x, offset_y = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
-                for walker in _tile.walkers:
-                    screen.blit(walker.get_texture(), (offset_x + TILE_SIZE/2 + walker.walk_progression + map_pos[0], offset_y + map_pos[1]))
+        for row in self.grid:
+            for tile in row:
+                (x, y) = tile.get_render_coord()
+                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+
+                if tile.get_road() or tile.get_building():
+                    screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+                for walker in tile.walkers:
+                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2 + walker.walk_progression, y_offset))
 
         if self.temp_tile is not None and self.in_build_action is False:
             isometric_coor = self.temp_tile['isometric_coor']
@@ -190,9 +182,9 @@ class World:
             screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
 
             if self.temp_tile['isBuildable']:
-                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset, 4)
+                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
             else:
-                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset, 4)
+                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
         if self.in_build_action:
 
@@ -215,37 +207,15 @@ class World:
 
 
 
-    def create_static_map(self, updated_tiles: list[Tile] = None):
-        # comment below to only render tiles around changes
-        # updated_tiles = None
-        def render_tile(_tile):
-            texture_image = _tile.get_texture()
+    def create_static_map(self):
+        for row in self.grid:
+            for tile in row:
+                tile: Tile = tile
+                texture_image = Textures.get_texture(tile.type)
+                (x, y) = tile.get_render_coord()
+                offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
+                self.default_surface.blit(texture_image, offset)
 
-            (x, y) = _tile.get_render_coord()
-            offset_x, offset_y = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
-
-            self.default_surface.blit(texture_image, (offset_x, offset_y))
-
-            # for walker in _tile.walkers:
-            #     self.default_surface.blit(walker.get_texture(), (offset_x + TILE_SIZE/2 + walker.walk_progression, offset_y))
-
-        if updated_tiles is None:
-            self.default_surface.fill((0, 0, 0))
-
-            for row in self.grid:
-                for tile in row:
-                    render_tile(tile)
-
-        else:
-            to_update = set()
-            for tile in updated_tiles:
-                to_update.add(tile)
-                if len(tile.walkers) != 0:
-                    to_update.update(tile.get_adjacente_tiles())
-                # to_update.update(tile.get_adjacente_tiles())
-                # to_update.add(tile)
-            for tile in to_update:
-                render_tile(tile)
 
     def in_map(self, grid_pos):
         """
@@ -362,7 +332,7 @@ class World:
         self.game_controller.new_building(building)
 
     def load_map(self, name="default"):
-        img = Image.open("maps/default.png")
+        img = Image.open("maps/small-default.png")
 
         table = []
 
