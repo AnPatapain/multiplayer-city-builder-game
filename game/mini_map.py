@@ -14,6 +14,8 @@ from class_types.tile_types import TileTypes
 
 class MiniMap:
     def __init__(self) -> None:
+        self.is_generated_background = False
+
         self.mini_screen_width = 48
         self.mini_screen_height = 27
 
@@ -48,7 +50,7 @@ class MiniMap:
                 tile: Tile = logic_grid[row][col]
                 color = self.get_color(tile)
 
-                if tile.type != TileTypes.GRASS or tile.get_building():
+                if tile.type != TileTypes.GRASS or tile.get_building() or tile.get_road():
                     self.background.set_at((col, row), color)
 
                 # In case we delete something in the world
@@ -74,11 +76,14 @@ class MiniMap:
             corresponding_x = - (self.mini_relative_x - self.mini_screen_width/2) / 0.025
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height/2) / 0.0465
             MapController.set_map_pos(corresponding_x, corresponding_y)
-        # self.background_update(GameController.get_instance().get_map())
+        self.background_update(GameController.get_instance().get_map())
         
 
     def draw(self, screen):
         # We need coordination of 4 points to draw rhombus
+        if self.is_generated_background == False:
+            self.background_generator(GameController.get_instance().get_map())
+            self.is_generated_background = True
 
         map_pos = MapController.get_map_pos()
         self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.025,

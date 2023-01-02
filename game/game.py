@@ -27,7 +27,7 @@ class Game:
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(NUMS_GRID_X, NUMS_GRID_Y, self.width, self.height, self.panel)
 
-        self.panel.get_mini_map().background_generator(self.world.get_grid())
+        # self.panel.get_mini_map().background_generator(self.game_controller.get_map())
 
         MapController.init_()
 
