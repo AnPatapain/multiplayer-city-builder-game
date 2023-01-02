@@ -1,7 +1,7 @@
 from typing import Optional, TYPE_CHECKING
 
 from class_types.tile_types import TileTypes
-from game.gameController import GameController
+from game.game_controller import GameController
 from game.textures import Textures
 from game.setting import TILE_SIZE
 

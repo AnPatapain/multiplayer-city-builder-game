@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING, Optional
 
 from buildable.buildable import Buildable
 from class_types.buildind_types import BuildingTypes
-from game.gameController import GameController
+from game.game_controller import GameController
+from game.setting import GRID_SIZE
 
 if TYPE_CHECKING:
     from map_element.tile import Tile
@@ -24,12 +25,12 @@ class Structure(Buildable, ABC):
             if tile.get_road():
                 return tile
 
-        if self.x < 49:
+        if self.x < GRID_SIZE-1:
             tile = gc.get_map()[self.x+1][self.y]
             if tile.get_road():
                 return tile
 
-        if self.y < 49:
+        if self.y < GRID_SIZE-1:
             tile = gc.get_map()[self.x][self.y+1]
             if tile.get_road():
                 return tile

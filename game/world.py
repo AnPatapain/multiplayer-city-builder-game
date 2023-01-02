@@ -11,12 +11,12 @@ import game.utils as utils
 from game.textures import Textures
 from buildable.road import Road
 
-from .gameController import GameController
+from .game_controller import GameController
 
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
-from .mapcontroller import MapController
+from .map_controller import MapController
 
 
 class World:
@@ -43,7 +43,6 @@ class World:
         self.temp_tile = None
         self.start_point = None
         self.end_point = None
-
         self.in_build_action = False
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
@@ -73,7 +72,7 @@ class World:
         """
         DESCRIPTION: Handling the events that be gotten from event queue in module event_manager.py
 
-        Params: event retrieved from pg.event.get() in event_manager.py, map_position in mapcontroller.py
+        Params: event retrieved from pg.event.get() in event_manager.py, map_position in map_controller.py
 
         Return: None
         """
@@ -118,7 +117,7 @@ class World:
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
                     'isBuildable': tile.is_buildable(),
-                    'isDestroyable' : tile.is_destroyable()
+                    'isDestroyable': tile.is_destroyable()
                 }
 
             # Build from start point to end point
@@ -169,7 +168,7 @@ class World:
                 for walker in tile.walkers:
                     screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2 + walker.walk_progression, y_offset))
 
-        if self.temp_tile is not None and self.in_build_action is False:
+        if self.temp_tile and not self.in_build_action:
             isometric_coor = self.temp_tile['isometric_coor']
             isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
                                      isometric_coor]

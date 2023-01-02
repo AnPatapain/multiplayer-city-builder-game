@@ -2,7 +2,7 @@ from abc import ABC
 from typing import TYPE_CHECKING, Optional
 
 from class_types.orientation_types import OrientationTypes
-from game.gameController import GameController
+from game.game_controller import GameController
 from game.textures import Textures
 
 if TYPE_CHECKING:

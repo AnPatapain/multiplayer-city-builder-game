@@ -2,7 +2,8 @@ import random
 from abc import ABC
 
 from buildable.buildable import Buildable
-from game.gameController import GameController
+from game.game_controller import GameController
+from game.setting import GRID_SIZE
 from walkers.walker import Walker
 
 
@@ -32,12 +33,12 @@ class RandomWalker(Walker, ABC):
             if tile.get_road() and tile is not self.previous_tile:
                 found_tiles.append(tile)
 
-        if self.current_tile.x < 49:
+        if self.current_tile.x < GRID_SIZE-1:
             tile = map[self.current_tile.x+1][self.current_tile.y]
             if tile.get_road() and tile is not self.previous_tile:
                 found_tiles.append(tile)
 
-        if self.current_tile.y < 49:
+        if self.current_tile.y < GRID_SIZE-1:
             tile = map[self.current_tile.x][self.current_tile.y+1]
             if tile.get_road() and tile is not self.previous_tile:
                 found_tiles.append(tile)

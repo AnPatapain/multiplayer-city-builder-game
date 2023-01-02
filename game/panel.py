@@ -1,15 +1,14 @@
 import pygame as pg
 
-from class_types.road_types import RoadTypes
-from class_types.panel_types import SwitchViewButtonTypes
 from class_types.buildind_types import BuildingTypes
+from class_types.panel_types import SwitchViewButtonTypes
+from class_types.road_types import RoadTypes
 from components.button import Button
-from game.mapcontroller import MapController
+from events.event_manager import EventManager
 from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
-from events.event_manager import EventManager
 
 TOPBAR_HEIGHT = 46
 PANEL_WIDTH = 162
