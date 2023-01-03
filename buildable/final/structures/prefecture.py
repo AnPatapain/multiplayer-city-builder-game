@@ -17,7 +17,3 @@ class Prefecture(Structure):
         if tile:
             self.associated_walker = Prefet(self)
             self.associated_walker.spawn(tile)
-
-    def destroy(self):
-        if self.associated_walker:
-            self.associated_walker.delete()

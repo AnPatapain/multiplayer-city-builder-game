@@ -55,3 +55,10 @@ class Buildable(ABC):
     def new_walker(self):
         print("FIXME: method new_walker not implemented!")
         pass
+
+    def upadte__tick(self):
+        pass
+
+    def update__day(self):
+        pass
+
