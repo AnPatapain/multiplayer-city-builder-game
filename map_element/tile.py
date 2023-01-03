@@ -99,6 +99,8 @@ class Tile:
             self.building.destroy()
             self.building = None
         self.road = None
+        for walker in self.walkers:
+            walker.associated_building.associated_walker.delete()
 
     def add_walker(self, walker: 'Walker'):
         self.walkers.append(walker)

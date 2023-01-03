@@ -31,11 +31,15 @@ class Walker(ABC):
         return Textures.get_walker_texture(self.walker_type, self.orientation, self.animation_frame)
 
     def go_to_next_tile(self):
-        self.current_tile.remove_walker(self)
-        self.next_tile.add_walker(self)
-        self.previous_tile = self.current_tile
-        self.current_tile = self.next_tile
-        self.next_tile = None
+        if self.next_tile.get_road():
+            self.current_tile.remove_walker(self)
+            self.next_tile.add_walker(self)
+            self.previous_tile = self.current_tile
+            self.current_tile = self.next_tile
+            self.next_tile = None
+        else:
+            self.next_tile = None
+            self.previous_tile = self.current_tile
 
     def find_next_tile(self):
         print("FIXME: method find_next_tile not implemented!")
@@ -49,6 +53,7 @@ class Walker(ABC):
 
     def delete(self):
         self.current_tile.remove_walker(self)
+        self.associated_building.associated_walker = None
         GameController.get_instance().remove_walker(self)
         pass
 
