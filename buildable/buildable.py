@@ -1,18 +1,30 @@
 from abc import ABC
+from typing import Optional, TYPE_CHECKING
 
-from class_types.buildind_types import BuildingTypes
+from game.game_controller import GameController
 from game.textures import Textures
+
+if TYPE_CHECKING:
+    from class_types.buildind_types import BuildingTypes
+    from walkers.walker import Walker
+    from map_element.tile import Tile
 
 
 class Buildable(ABC):
-    def __init__(self, x: int, y: int, build_type: BuildingTypes, build_size: tuple[int, int]):
+    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int]):
         self.build_type = build_type
         self.build_size = build_size
+
+        self.associated_walker: Optional['Walker'] = None
 
         self.x = x
         self.y = y
 
         self.is_on_fire = False
+
+    def get_current_tile(self) -> 'Tile':
+        grid = GameController.get_instance().get_map()
+        return grid[self.x][self.y]
 
     def is_destroyable(self):
         return True
@@ -31,3 +43,15 @@ class Buildable(ABC):
 
     def get_build_type(self):
         return self.build_type
+
+    def on_build_action(self):
+        print("FIXME: method on_build_action not implemented!")
+        pass
+
+    def destroy(self):
+        print("FIXME: method destroy not implemented!")
+        pass
+
+    def new_walker(self):
+        print("FIXME: method new_walker not implemented!")
+        pass

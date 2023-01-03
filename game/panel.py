@@ -1,15 +1,14 @@
 import pygame as pg
 
-from class_types.road_types import RoadTypes
-from class_types.panel_types import SwitchViewButtonTypes
 from class_types.buildind_types import BuildingTypes
+from class_types.panel_types import SwitchViewButtonTypes
+from class_types.road_types import RoadTypes
 from components.button import Button
-from game.mapcontroller import MapController
+from events.event_manager import EventManager
 from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
-from events.event_manager import EventManager
 
 TOPBAR_HEIGHT = 46
 PANEL_WIDTH = 162
@@ -26,7 +25,7 @@ class Panel:
         self.building_panel_color = (230, 162, 64)
 
         # Ressource panel in the top of screen
-        self.ressource_panel = pg.Surface((self.width, TOPBAR_HEIGHT))
+        self.ressource_panel = pg.Surface((self.width, TOPBAR_HEIGHT)).convert()
         self.ressource_panel_rect = self.ressource_panel.get_rect(topleft=(0, 0))
         self.ressource_panel.fill(self.ressource_panel_color)
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
@@ -35,7 +34,7 @@ class Panel:
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
 
         # Building panel in the right screen
-        self.building_panel = pg.Surface((PANEL_WIDTH, self.height))
+        self.building_panel = pg.Surface((PANEL_WIDTH, self.height)).convert()
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width - PANEL_WIDTH, TOPBAR_HEIGHT))
         self.building_panel.fill(self.building_panel_color)
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.TOP_PANNEL), (0, 0))
@@ -129,8 +128,8 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
 
-    def update(self, logic_grid):
-        self.mini_map.update(logic_grid)
+    def update(self):
+        self.mini_map.update()
 
     def scale_image(self, image, width=None,
                     height=None):  # Procedure function which scales up or down the image specified

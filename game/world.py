@@ -11,12 +11,12 @@ import game.utils as utils
 from game.textures import Textures
 from buildable.road import Road
 
-from .gameController import GameController
+from .game_controller import GameController
 
 from class_types.tile_types import TileTypes
 from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
-from .mapcontroller import MapController
+from .map_controller import MapController
 
 
 class World:
@@ -28,8 +28,10 @@ class World:
         self.width = width
         self.height = height
 
-        self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT))
-        self.grid: list[list[Tile]] = self.load_map()
+        self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
+        self.game_controller.set_map(self.load_map())
+        self.grid = self.game_controller.get_map()
+
 
         '''
         create map only once by bliting texture directly on default surface not on screen and then we can blit default surface on screen 
@@ -41,7 +43,6 @@ class World:
         self.temp_tile = None
         self.start_point = None
         self.end_point = None
-
         self.in_build_action = False
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
@@ -71,7 +72,7 @@ class World:
         """
         DESCRIPTION: Handling the events that be gotten from event queue in module event_manager.py
 
-        Params: event retrieved from pg.event.get() in event_manager.py, map_position in mapcontroller.py
+        Params: event retrieved from pg.event.get() in event_manager.py, map_position in map_controller.py
 
         Return: None
         """
@@ -116,7 +117,7 @@ class World:
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
                     'isBuildable': tile.is_buildable(),
-                    'isDestroyable' : tile.is_destroyable()
+                    'isDestroyable': tile.is_destroyable()
                 }
 
             # Build from start point to end point
@@ -144,8 +145,6 @@ class World:
                                 case _:
                                     self.building_add(row, col, selected_tile)
 
-
-                    self.create_static_map()  # update the static map based upon self.grid
                     self.start_point = None  # update start point to default after building
                     self.end_point = None  # update start point to default after building
 
@@ -159,7 +158,17 @@ class World:
         map_pos = MapController.get_map_pos()
         screen.blit(self.default_surface, map_pos)
 
-        if self.temp_tile is not None and self.in_build_action is False:
+        for row in self.grid:
+            for tile in row:
+                (x, y) = tile.get_render_coord()
+                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+
+                if tile.get_road() or tile.get_building():
+                    screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+                for walker in tile.walkers:
+                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2 + walker.walk_progression, y_offset))
+
+        if self.temp_tile and not self.in_build_action:
             isometric_coor = self.temp_tile['isometric_coor']
             isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
                                      isometric_coor]
@@ -172,9 +181,9 @@ class World:
             screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
 
             if self.temp_tile['isBuildable']:
-                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset, 4)
+                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
             else:
-                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset, 4)
+                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
         if self.in_build_action:
 
@@ -198,16 +207,14 @@ class World:
 
 
     def create_static_map(self):
-        self.default_surface.fill((0, 0, 0))
-        for row in range(self.nums_grid_y):
-            for col in range(self.nums_grid_x):
-                tile = self.grid[row][col]
-                texture_image = tile.get_texture()
-
+        for row in self.grid:
+            for tile in row:
+                tile: Tile = tile
+                texture_image = Textures.get_texture(tile.type)
                 (x, y) = tile.get_render_coord()
                 offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
-
                 self.default_surface.blit(texture_image, offset)
+
 
     def in_map(self, grid_pos):
         """
@@ -324,7 +331,7 @@ class World:
         self.game_controller.new_building(building)
 
     def load_map(self, name="default"):
-        img = Image.open("maps/default.png")
+        img = Image.open("maps/small-default.png")
 
         table = []
 
