@@ -1,14 +1,15 @@
 import random
 from abc import ABC
+from typing import TYPE_CHECKING
 
-from buildable.buildable import Buildable
-from game.game_controller import GameController
-from game.setting import GRID_SIZE
 from walkers.walker import Walker
+
+if TYPE_CHECKING:
+    from buildable.buildable import Buildable
 
 
 class RandomWalker(Walker, ABC):
-    def __init__(self, walker_type, associated_building: Buildable, max_walk_distance: int):
+    def __init__(self, walker_type, associated_building: 'Buildable', max_walk_distance: int):
         super().__init__(walker_type, associated_building)
 
         self.max_walk_distance = max_walk_distance
@@ -24,34 +25,13 @@ class RandomWalker(Walker, ABC):
         self.walk_progression += 1
 
     def find_next_tile(self):
-        map = GameController.get_instance().get_map()
+        candidates = self.current_tile.get_adjacente_tiles()
+        candidates = list(filter(lambda candidate: candidate is not self.previous_tile and candidate.get_road() is not None, candidates))
 
-        found_tiles = []
-
-        if self.current_tile.x >= 1:
-            tile = map[self.current_tile.x-1][self.current_tile.y]
-            if tile.get_road() and tile is not self.previous_tile:
-                found_tiles.append(tile)
-
-        if self.current_tile.x < GRID_SIZE-1:
-            tile = map[self.current_tile.x+1][self.current_tile.y]
-            if tile.get_road() and tile is not self.previous_tile:
-                found_tiles.append(tile)
-
-        if self.current_tile.y < GRID_SIZE-1:
-            tile = map[self.current_tile.x][self.current_tile.y+1]
-            if tile.get_road() and tile is not self.previous_tile:
-                found_tiles.append(tile)
-
-        if self.current_tile.y >= 1:
-            tile = map[self.current_tile.x][self.current_tile.y-1]
-            if tile.get_road() and tile is not self.previous_tile:
-                found_tiles.append(tile)
-
-        if len(found_tiles) == 0:
+        if len(candidates) == 0:
             if self.previous_tile:
-                found_tiles.append(self.previous_tile)
+                candidates.append(self.previous_tile)
             else:
-                found_tiles.append(self.current_tile)
+                candidates.append(self.current_tile)
 
-        self.next_tile = random.choice(found_tiles)
+        self.next_tile = random.choice(candidates)

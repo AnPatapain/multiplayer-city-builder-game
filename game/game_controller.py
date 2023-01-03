@@ -1,13 +1,12 @@
 from typing import TYPE_CHECKING
 
-from buildable.buildable import Buildable
-from buildable.house import House
 from class_types.buildind_types import BuildingTypes
 from buildable.buildableCost import buildable_cost
 
 if TYPE_CHECKING:
     from walkers.walker import Walker
     from map_element.tile import Tile
+    from buildable.buildable import Buildable
 
 
 class GameController:
@@ -18,15 +17,14 @@ class GameController:
         self.denier = 100000
         self.actual_citizen = 0
         self.max_citizen = 0
-        self.walkers: list[Walker] = []
+        self.walkers: list['Walker'] = []
 
 
-    def new_building(self, building: Buildable):
+    def new_building(self, building: 'Buildable'):
         self.denier -= buildable_cost[building.get_build_type()]
-        if isinstance(building, House):
-            self.max_citizen += building.get_max_citizen()
+        building.on_build_action()
 
-    def has_enough_denier(self, building_type: BuildingTypes):
+    def has_enough_denier(self, building_type: 'BuildingTypes'):
         return buildable_cost[building_type] <= self.denier
 
     def get_denier(self):

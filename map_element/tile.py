@@ -106,15 +106,20 @@ class Tile:
     def remove_walker(self, walker: 'Walker'):
         self.walkers.remove(walker)
 
-    def get_adjacente_tiles(self):
+    def get_adjacente_tiles(self, radius: int = 0):
         adjacentes_tiles = []
 
         grid = GameController.get_instance().get_map()
-        for x in range(-1, 2):
-            for y in range(-1, 2):
-                try:
-                    adjacentes_tiles.append(grid[self.x + x][self.y + y])
-                except IndexError:
-                    pass
+
+        if radius == 0:
+            coords = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        else:
+            coords = [(x, y) for y in range(-radius, radius+1) for x in range(-radius, radius+1)]
+
+        for coord in coords:
+            try:
+                adjacentes_tiles.append(grid[self.x + coord[0]][self.y + coord[1]])
+            except IndexError:
+                continue
 
         return adjacentes_tiles
