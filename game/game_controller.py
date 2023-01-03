@@ -19,6 +19,12 @@ class GameController:
         self.max_citizen = 0
         self.walkers: list['Walker'] = []
 
+        self.current_tick = 0
+        self.current_day = 0
+        self.current_month = 0
+        self.current_year = 0
+        self.total_day = 0
+
 
     def new_building(self, building: 'Buildable'):
         self.denier -= buildable_cost[building.get_build_type()]
@@ -41,6 +47,47 @@ class GameController:
 
     def remove_walker(self, walker: 'Walker'):
         self.walkers.remove(walker)
+
+    def update(self):
+        self.increase_tick()
+
+    def increase_tick(self):
+        if self.current_tick == 50:
+            self.increase_day()
+            self.current_tick = -1
+
+        self.current_tick += 1
+
+        match self.current_tick:
+            case 0:
+                pass
+            case 1:
+                pass
+
+
+    def increase_day(self):
+        if self.current_day == 15:
+            self.increase_month()
+            self.current_day = -1
+
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building:
+                    building.update_day()
+
+        self.current_day += 1
+
+    def increase_month(self):
+        if self.current_month == 12:
+            self.increase_year()
+            self.current_month = -1
+
+        self.current_month += 1
+
+    def increase_year(self):
+        self.current_year += 1
+
 
     @staticmethod
     def get_instance():

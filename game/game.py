@@ -58,3 +58,4 @@ class Game:
     def update(self):
         self.panel.update()
         self.world.update()
+        self.game_controller.update()
