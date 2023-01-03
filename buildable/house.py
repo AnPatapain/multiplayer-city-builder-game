@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from buildable.buildable import Buildable
 from class_types.buildind_types import BuildingTypes
@@ -33,10 +33,12 @@ class House(Buildable, ABC):
     def get_tax(self):
         return self.tax
 
+    @abstractmethod
     def is_upgradable(self) -> bool:
         print("FIXME: method is_upgradable is not implemented!")
         return False
 
+    @abstractmethod
     def conditions_fulfilled(self) -> bool:
         print("FIXME: method conditions_fulfilled is not implemented!")
         return True
