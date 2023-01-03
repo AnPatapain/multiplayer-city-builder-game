@@ -33,6 +33,14 @@ class House(Buildable, ABC):
     def get_tax(self):
         return self.tax
 
+    def update_day(self):
+        if not self.conditions_fulfilled():
+            #TODO : Downgrade house
+            print("FIXME : down house")
+        if self.is_upgradable():
+            #TODO : Upgrade house
+            print("FIXME : up house")
+
     @abstractmethod
     def is_upgradable(self) -> bool:
         print("FIXME: method is_upgradable is not implemented!")
