@@ -35,9 +35,9 @@ class House(Buildable, ABC):
 
     def update_day(self):
         if not self.conditions_fulfilled():
-            #TODO : Downgrade house
             print("FIXME : down house")
         if self.is_upgradable():
+            self.upgrade()
             #TODO : Upgrade house
             print("FIXME : up house")
 
@@ -50,3 +50,28 @@ class House(Buildable, ABC):
     def conditions_fulfilled(self) -> bool:
         print("FIXME: method conditions_fulfilled is not implemented!")
         return True
+
+    @abstractmethod
+    def upgrade(self):
+        pass
+
+    def upgrade_to(self, class_name):
+        """
+            House auto upgrade (testing)
+            Change element:
+                - max_citizen
+                - tax
+                - desirability
+                - build_type
+            No change element:
+                - has_water
+                - current_citizen
+                - position(x,y)
+                - build_size
+        """
+        next_object = class_name(self.x, self.y)
+        self.max_citizen = next_object.max_citizen
+        self.tax = next_object.tax
+        self.desirability = next_object.desirability
+        self.build_type = next_object.build_type
+        self.__class__ = class_name

@@ -1,3 +1,4 @@
+from buildable.final.houses.large_tent import LargeTent
 from buildable.house import House
 from class_types.buildind_types import BuildingTypes
 
@@ -8,7 +9,10 @@ class SmallTent(House):
                          tax=1, desirability=-99, max_citizen=5, prosperity=5)
 
     def is_upgradable(self) -> bool:
-        return super().has_water
+        return True
 
     def conditions_fulfilled(self) -> bool:
         return True
+
+    def upgrade(self):
+        super().upgrade_to(LargeTent)
