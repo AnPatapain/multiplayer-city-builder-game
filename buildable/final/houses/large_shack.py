@@ -12,7 +12,11 @@ class LargeShack(House):
 
     def conditions_fulfilled(self) -> bool:
         #TODO : temple gestion
-        return True
+        return False
 
     def upgrade(self):
         pass
+
+    def downgrade(self):
+        from buildable.final.houses.small_shack import SmallShack
+        super().upgrade_to(SmallShack)

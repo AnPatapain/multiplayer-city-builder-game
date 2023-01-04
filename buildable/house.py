@@ -35,11 +35,9 @@ class House(Buildable, ABC):
 
     def update_day(self):
         if not self.conditions_fulfilled():
-            print("FIXME : down house")
+            self.downgrade()
         if self.is_upgradable():
             self.upgrade()
-            #TODO : Upgrade house
-            print("FIXME : up house")
 
     @abstractmethod
     def is_upgradable(self) -> bool:
@@ -53,6 +51,10 @@ class House(Buildable, ABC):
 
     @abstractmethod
     def upgrade(self):
+        pass
+
+    @abstractmethod
+    def downgrade(self):
         pass
 
     def upgrade_to(self, class_name):
@@ -71,6 +73,9 @@ class House(Buildable, ABC):
         """
         next_object = class_name(self.x, self.y)
         self.max_citizen = next_object.max_citizen
+        #check citizen number
+        if self.max_citizen < self.current_citizen:
+                self.current_citizen = self.max_citizen
         self.tax = next_object.tax
         self.desirability = next_object.desirability
         self.build_type = next_object.build_type

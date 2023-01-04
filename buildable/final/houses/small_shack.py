@@ -1,4 +1,3 @@
-from buildable.final.houses.large_shack import LargeShack
 from buildable.house import House
 from class_types.buildind_types import BuildingTypes
 
@@ -10,12 +9,16 @@ class SmallShack(House):
 
     def is_upgradable(self) -> bool:
         #TODO : Add temple and get if map have any temple
-        print("FIXME : add temple in map")
-        return True
+        return False
 
     def conditions_fulfilled(self) -> bool:
-        return True
-        return super().max_citizen > 9
+        #TODO : Food
+        return False
 
     def upgrade(self):
+        from buildable.final.houses.large_shack import LargeShack
         super().upgrade_to(LargeShack)
+
+    def downgrade(self):
+        from buildable.final.houses.large_tent import LargeTent
+        super().upgrade_to(LargeTent)

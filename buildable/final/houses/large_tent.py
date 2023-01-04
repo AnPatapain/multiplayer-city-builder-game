@@ -1,4 +1,3 @@
-from buildable.final.houses.small_shack import SmallShack
 from buildable.house import House
 from class_types.buildind_types import BuildingTypes
 
@@ -9,10 +8,18 @@ class LargeTent(House):
                          tax=1, desirability=0, max_citizen=11, prosperity=20)
 
     def is_upgradable(self) -> bool:
-        return True
+        #TODO : Food
+        return False
 
     def conditions_fulfilled(self) -> bool:
-        return True
+        return self.get_current_tile().get_water_access()
 
     def upgrade(self):
+        # Prevent circular import
+        from buildable.final.houses.small_shack import SmallShack
         super().upgrade_to(SmallShack)
+
+    def downgrade(self):
+        #Prevent circular import
+        from buildable.final.houses.small_tent import SmallTent
+        super().upgrade_to(SmallTent)
