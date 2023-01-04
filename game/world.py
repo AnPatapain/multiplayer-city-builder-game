@@ -1,22 +1,21 @@
 import pygame as pg
 from PIL import Image
 
-from buildable.final.rock import Rock
+import game.utils as utils
+from buildable.final.buildable.well import Well
 from buildable.final.houses.small_tent import SmallTent
+from buildable.final.rock import Rock
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.tree import SmallTree
-from map_element.tile import Tile
-from game.setting import *
-import game.utils as utils
-from game.textures import Textures
 from buildable.road import Road
-
-from .game_controller import GameController
-
-from class_types.tile_types import TileTypes
-from class_types.road_types import RoadTypes
 from class_types.buildind_types import BuildingTypes
-from .map_controller import MapController
+from class_types.road_types import RoadTypes
+from class_types.tile_types import TileTypes
+from game.game_controller import GameController
+from game.map_controller import MapController
+from game.setting import *
+from game.textures import Textures
+from map_element.tile import Tile
 
 
 class World:
@@ -306,6 +305,8 @@ class World:
                 building = SmallTent(row, col)
             case BuildingTypes.PREFECTURE:
                 building = Prefecture(row, col)
+            case BuildingTypes.WELL:
+                building = Well(row, col)
 
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()

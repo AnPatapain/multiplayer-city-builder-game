@@ -21,7 +21,6 @@ class SwitchViewButtonTypes(Enum):
     BUTTON5 = 12
     BUTTON6 = 13
     BUTTON7 = 14
-    BUTTON8 = 15
     BUTTON9 = 16
     BUTTON10 = 17
     BUTTON11 = 18
@@ -44,3 +43,6 @@ class SwitchViewButtonTypes(Enum):
     BUTTON5_SELECTED = 33
     BUTTON15_HOVER = 34
     BUTTON15_SELECTED = 35
+    BUTTON8 = 36
+    BUTTON8_HOVER = 37
+    BUTTON8_SELECTED = 38
