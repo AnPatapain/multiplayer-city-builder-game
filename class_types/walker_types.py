@@ -5,3 +5,4 @@ class WalkerTypes(Enum):
     MIGRANT = 1
     PREFET = 2
     INGENIEUR = 3
+    IMMIGRANT = 4

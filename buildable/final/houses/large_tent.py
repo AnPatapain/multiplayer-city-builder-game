@@ -8,6 +8,7 @@ class LargeTent(House):
                          tax=1, desirability=0, max_citizen=11, prosperity=20)
 
     def is_upgradable(self) -> bool:
+        return self.is_full()
         #TODO : Food
         return False
 

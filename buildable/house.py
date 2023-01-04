@@ -2,6 +2,9 @@ from abc import ABC, abstractmethod
 
 from buildable.buildable import Buildable
 from class_types.buildind_types import BuildingTypes
+from game.game_controller import GameController
+from walkers.final.destination_walker.immigrant import Immigrant
+
 
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes, build_size: tuple[int, int],
@@ -14,6 +17,12 @@ class House(Buildable, ABC):
         self.tax = tax
         self.desirability = desirability
         self.prosperity = prosperity
+
+    def is_full(self) -> bool:
+        return self.current_citizen >= self.max_citizen
+
+    def empty_space(self) -> int:
+        return self.max_citizen - self.current_citizen
 
     def add_citizen(self, num: int):
         self.current_citizen += num
@@ -56,6 +65,13 @@ class House(Buildable, ABC):
     @abstractmethod
     def downgrade(self):
         pass
+
+    def spawn_migrant(self, quantity: int):
+        if self.associated_walker:
+            return
+
+        self.associated_walker = Immigrant(self, self.get_current_tile(), quantity)
+        self.associated_walker.spawn(GameController.get_instance().spawn_point)
 
     def upgrade_to(self, class_name):
         """

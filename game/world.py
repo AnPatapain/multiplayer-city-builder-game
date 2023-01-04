@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pygame as pg
 from PIL import Image
 
@@ -30,7 +32,7 @@ class World:
         self.height = height
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
-        self.game_controller.set_map(self.load_map())
+        self.load_map()
         self.grid = self.game_controller.get_map()
 
 
@@ -118,8 +120,9 @@ class World:
         self.temp_tile = None
 
         if selected_tile:
+            grid = self.game_controller.get_map()
             if self.in_map(mouse_grid_pos):
-                tile = self.grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
+                tile = grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
                 self.temp_tile = {
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
@@ -134,7 +137,7 @@ class World:
 
                     for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                         for col in utils.MyRange(self.start_point[0], self.end_point[0]):
-                            tile: Tile = self.grid[row][col]
+                            tile: Tile = grid[row][col]
 
                             if selected_tile == BuildingTypes.PELLE:
                                 if tile.is_destroyable():
@@ -166,7 +169,7 @@ class World:
         map_pos = MapController.get_map_pos()
         screen.blit(self.default_surface, map_pos)
 
-        for row in self.grid:
+        for row in self.game_controller.get_map():
             for tile in row:
                 (x, y) = tile.get_render_coord()
                 (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
@@ -199,23 +202,23 @@ class World:
                 for row in utils.MyRange(self.start_point[1], self.end_point[1]):
                     for col in utils.MyRange(self.start_point[0], self.end_point[0]):
 
-                        (x, y) = self.grid[row][col].get_render_coord()
+                        grid = self.game_controller.get_map()
+                        (x, y) = grid[row][col].get_render_coord()
                         (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
 
-                        if self.grid[row][col].is_buildable() and self.temp_tile and self.temp_tile["name"] != BuildingTypes.PELLE:
+                        if grid[row][col].is_buildable() and self.temp_tile and self.temp_tile["name"] != BuildingTypes.PELLE:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
-                        elif self.grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
-                            building = self.grid[row][col].get_delete_texture()
+                        elif grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
+                            building = grid[row][col].get_delete_texture()
                             screen.blit(building,
                                         (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
 
-
     def create_static_map(self):
-        for row in self.grid:
+        for row in self.game_controller.get_map():
             for tile in row:
                 tile: Tile = tile
                 texture_image = Textures.get_texture(tile.type)
@@ -248,60 +251,60 @@ class World:
         road = Road([])
         road_connection = [None, None, None, None]
 
+        grid = self.game_controller.get_map()
         # Connect other road:
         # TL connection
         if road_col > 0:
-            r1 = self.grid[road_row][road_col - 1].get_road()
+            r1 = grid[road_row][road_col - 1].get_road()
             if r1:
                 r1.set_connect(road, 2)
                 road_connection[0] = r1
 
         # TR connection
         if road_row > 0:
-            r2 = self.grid[road_row - 1][road_col].get_road()
+            r2 = grid[road_row - 1][road_col].get_road()
             if r2:
                 r2.set_connect(road, 3)
                 road_connection[1] = r2
 
         # BR connection
         if road_col < self.nums_grid_x - 1:
-            r3 = self.grid[road_row][road_col + 1].get_road()
+            r3 = grid[road_row][road_col + 1].get_road()
             if r3:
                 r3.set_connect(road, 0)
                 road_connection[2] = r3
 
         # BL connection
         if road_row < self.nums_grid_y - 1:
-            r4 = self.grid[road_row + 1][road_col].get_road()
+            r4 = grid[road_row + 1][road_col].get_road()
             if r4:
                 r4.set_connect(road, 1)
                 road_connection[3] = r4
 
         road.set_road_connection(road_connection)
-        self.grid[road_row][road_col].set_road(road)
+        grid[road_row][road_col].set_road(road)
 
     def road_update(self, road_row, road_col):
-        if  road_col > 0:
-            if self.grid[road_row][road_col - 1].get_road():
-                self.grid[road_row][road_col - 1].get_road().set_connect(self.grid[road_row][road_col].get_road(), 2)
+        grid = self.game_controller.get_map()
+        if road_col > 0:
+            if grid[road_row][road_col - 1].get_road():
+                grid[road_row][road_col - 1].get_road().set_connect(grid[road_row][road_col].get_road(), 2)
 
 
         # TR connection
         if road_row > 0:
-            if self.grid[road_row - 1][road_col].get_road():
-                self.grid[road_row - 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 3)
+            if grid[road_row - 1][road_col].get_road():
+                grid[road_row - 1][road_col].get_road().set_connect(grid[road_row][road_col].get_road(), 3)
 
         # BR connection
         if road_col < self.nums_grid_x - 1:
-            if self.grid[road_row][road_col + 1].get_road():
-                self.grid[road_row][road_col + 1].get_road().set_connect(self.grid[road_row][road_col].get_road(), 0)
+            if grid[road_row][road_col + 1].get_road():
+                grid[road_row][road_col + 1].get_road().set_connect(grid[road_row][road_col].get_road(), 0)
 
         # BL connection
         if road_row < self.nums_grid_y - 1:
-            if self.grid[road_row + 1][road_col].get_road():
-                self.grid[road_row + 1][road_col].get_road().set_connect(self.grid[road_row][road_col].get_road(), 1)
-
-    def get_grid(self): return self.grid
+            if grid[road_row + 1][road_col].get_road():
+                grid[road_row + 1][road_col].get_road().set_connect(grid[road_row][road_col].get_road(), 1)
 
     def building_add(self, row, col, selected_type):
 
@@ -320,13 +323,14 @@ class World:
                 print("Building type error")
                 return
 
+        grid = self.game_controller.get_map()
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()
             #check if all case are buildable
             try:
                 for x in range(col,col+x_building, 1):
                     for y in range(row,row-y_building, -1):
-                        if not self.grid[y][x].is_buildable():
+                        if not grid[y][x].is_buildable():
                             print("Building can't be construct")
                             return
             except IndexError:
@@ -337,16 +341,18 @@ class World:
             for x in range(col,col+x_building,1):
                 for y in range(row,row-y_building,-1):
                     if x != col or y != row:
-                        self.grid[y][x].set_building(building, False)
+                        grid[y][x].set_building(building, False)
 
         #Show first case
-        self.grid[row][col].set_building(building, True)
+        grid[row][col].set_building(building, True)
         self.game_controller.new_building(building)
 
-    def load_map(self, name="default"):
-        img = Image.open("maps/small-default.png")
+    def load_map(self):
+        img = Image.open("maps/new_gen.png")
 
-        table = []
+        table: list[list[Tile]] = []
+        spawn_point: Optional[Tile] = None
+        leave_point: Optional[Tile] = None
 
         for x in range(img.size[0]):
             table.append([])
@@ -364,7 +370,32 @@ class World:
                         tile.set_type(TileTypes.WATER)
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
+                    case (237, 28, 35):
+                        pass  # Red color, flag spawn
+                    case (111, 49, 152):
+                        pass  # Purple color, flag leave
+                    case (153, 0, 48):
+                        spawn_point = tile
+                        pass  # Brown/Red, road spawn
+                    case (181, 165, 213):
+                        leave_point = tile
+                        pass  # Purple/Brown, road leave
+
 
                 table[x].append(tile)
 
-        return table
+        self.game_controller.set_map(table)
+        self.game_controller.spawn_point = spawn_point
+        self.game_controller.leave_point = leave_point
+
+        # The map need to exist to add roads
+        for x in range(img.size[0]):
+            for y in range(img.size[1]):
+                r, g, b, a = img.getpixel((y, x))
+                match (r, g, b):
+                    case (156, 90, 60):
+                        self.road_add(x, y) # Brown color, road
+                    case (153, 0, 48):
+                        self.road_add(x, y)
+                    case (181, 165, 213):
+                        self.road_add(x, y)
