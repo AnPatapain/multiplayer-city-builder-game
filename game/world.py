@@ -4,6 +4,7 @@ from PIL import Image
 import game.utils as utils
 from buildable.final.buildable.well import Well
 from buildable.final.houses.small_tent import SmallTent
+from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.rock import Rock
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.tree import SmallTree
@@ -46,7 +47,7 @@ class World:
         self.in_build_action = False
 
         #shortcup
-        EventManager.register_key_listener(pg.K_h,lambda : self.panel.set_selected_tile(BuildingTypes.SMALL_TENT))
+        EventManager.register_key_listener(pg.K_h,lambda : self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
         EventManager.register_key_listener(pg.K_d,lambda : self.panel.set_selected_tile(BuildingTypes.PELLE))
         EventManager.register_key_listener(pg.K_p,lambda : self.panel.set_selected_tile(BuildingTypes.PREFECTURE))
         EventManager.register_key_listener(pg.K_r,lambda : self.panel.set_selected_tile(RoadTypes.TL_TO_BR))
@@ -309,12 +310,15 @@ class World:
 
         building = None
         match selected_type:
-            case BuildingTypes.SMALL_TENT:
-                building = SmallTent(row, col)
+            case BuildingTypes.VACANT_HOUSE:
+                building = VacantHouse(row, col)
             case BuildingTypes.PREFECTURE:
                 building = Prefecture(row, col)
             case BuildingTypes.WELL:
                 building = Well(row, col)
+            case _:
+                print("Building type error")
+                return
 
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()

@@ -61,7 +61,7 @@ class Panel:
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_SELECTED))
-        self.build__house.on_click(lambda: self.set_selected_tile(BuildingTypes.SMALL_TENT))
+        self.build__house.on_click(lambda: self.set_selected_tile(BuildingTypes.VACANT_HOUSE))
 
         self.build__prefecture = Button((self.width - 99, 385 + TOPBAR_HEIGHT), button_size,
                                         image=Textures.get_texture(SwitchViewButtonTypes.BUTTON15),
