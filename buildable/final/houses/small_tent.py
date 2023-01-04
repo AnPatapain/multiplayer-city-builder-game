@@ -9,7 +9,7 @@ class SmallTent(House):
                          tax=1, desirability=-99, max_citizen=5, prosperity=5)
 
     def is_upgradable(self) -> bool:
-        return True
+        return self.get_current_tile().get_water_access()
 
     def conditions_fulfilled(self) -> bool:
         return True

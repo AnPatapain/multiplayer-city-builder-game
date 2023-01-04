@@ -60,7 +60,7 @@ class GameController:
 
         match self.current_tick:
             case 0:
-                pass
+                self.__calculate_water_access()
             case 1:
                 pass
 
@@ -88,6 +88,20 @@ class GameController:
     def increase_year(self):
         self.current_year += 1
 
+
+    def __calculate_water_access(self):
+        wells = []
+        # Set everything to 0, and list wells
+        for row in self.grid:
+            for tile in row:
+                tile.set_water_access(False)
+                if tile.get_building() and tile.get_building().build_type == BuildingTypes.WELL:
+                    wells.append(tile)
+
+        # Put water around each wells
+        for well in wells:
+            for tile in well.get_adjacente_tiles(2):
+                tile.set_water_access(True)
 
     @staticmethod
     def get_instance():

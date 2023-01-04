@@ -69,10 +69,17 @@ class Panel:
                                         image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_SELECTED))
         self.build__prefecture.on_click(lambda: self.set_selected_tile(BuildingTypes.PREFECTURE))
 
+        self.build__well = Button((self.width - 149, 312 + TOPBAR_HEIGHT), button_size,
+                                  image=Textures.get_texture(SwitchViewButtonTypes.BUTTON8),
+                                  image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_HOVER),
+                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_SELECTED))
+        self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
+        EventManager.register_component(self.build__well)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -98,7 +105,6 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON2), (self.width - 116, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON3), (self.width - 78, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON4), (self.width - 39, 230))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON8), (self.width - 150, 312 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON9), (self.width - 100, 312 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON10), (self.width - 49, 312 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON11), (self.width - 150, 349 + 46))
@@ -127,6 +133,7 @@ class Panel:
         self.destroy_tile.display(screen)
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
+        self.build__well.display(screen)
 
     def update(self):
         self.mini_map.update()

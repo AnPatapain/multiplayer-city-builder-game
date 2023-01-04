@@ -19,6 +19,8 @@ class Tile:
         self.x = row
         self.y = col
 
+        self.water_access = False
+
         self.walkers: list['Walker'] = []
 
         cartesian_coord = [
@@ -48,6 +50,12 @@ class Tile:
 
     def set_type(self, new_type):
         self.type = new_type
+
+    def get_water_access(self):
+        return self.water_access
+
+    def set_water_access(self, water_access: bool):
+        self.water_access = water_access
 
     def get_building(self):
         return self.building
