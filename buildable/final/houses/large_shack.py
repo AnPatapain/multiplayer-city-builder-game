@@ -2,21 +2,21 @@ from buildable.house import House
 from class_types.buildind_types import BuildingTypes
 
 
-class SmallTent(House):
+class LargeShack(House):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, BuildingTypes.SMALL_TENT, build_size=(1, 1),
+        super().__init__(x, y, BuildingTypes.LARGE_SHACK, build_size=(1, 1),
                          tax=1, desirability=-99, max_citizen=5, prosperity=5)
 
     def is_upgradable(self) -> bool:
-        return self.get_current_tile().get_water_access()
+        return False
 
     def conditions_fulfilled(self) -> bool:
-        return True
+        #TODO : temple gestion
+        return False
 
     def upgrade(self):
-        #prevent circular import
-        from buildable.final.houses.large_tent import LargeTent
-        super().upgrade_to(LargeTent)
+        pass
 
     def downgrade(self):
-        pass
+        from buildable.final.houses.small_shack import SmallShack
+        super().upgrade_to(SmallShack)
