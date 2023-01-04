@@ -11,6 +11,7 @@ from buildable.road import Road
 from class_types.buildind_types import BuildingTypes
 from class_types.road_types import RoadTypes
 from class_types.tile_types import TileTypes
+from events.event_manager import EventManager
 from game.game_controller import GameController
 from game.map_controller import MapController
 from game.setting import *
@@ -43,6 +44,13 @@ class World:
         self.start_point = None
         self.end_point = None
         self.in_build_action = False
+
+        #shortcup
+        EventManager.register_key_listener(pg.K_h,lambda : self.panel.set_selected_tile(BuildingTypes.SMALL_TENT))
+        EventManager.register_key_listener(pg.K_d,lambda : self.panel.set_selected_tile(BuildingTypes.PELLE))
+        EventManager.register_key_listener(pg.K_p,lambda : self.panel.set_selected_tile(BuildingTypes.PREFECTURE))
+        EventManager.register_key_listener(pg.K_r,lambda : self.panel.set_selected_tile(RoadTypes.TL_TO_BR))
+        EventManager.register_key_listener(pg.K_w,lambda : self.panel.set_selected_tile(BuildingTypes.WELL))
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
         """
