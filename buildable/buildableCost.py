@@ -6,6 +6,12 @@ buildable_cost = {
     BuildingTypes.SMALL_SHACK : 500,
     BuildingTypes.LARGE_SHACK : 1000,
     BuildingTypes.PREFECTURE : 30,
+    BuildingTypes.HOSPITAL : 300,
+    BuildingTypes.WELL : 5,
+    BuildingTypes.SENATE : 400,
+    BuildingTypes.SCHOOL : 50,
+    BuildingTypes.TEMPLE: 50,
+
 }
 
 

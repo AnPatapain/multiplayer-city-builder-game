@@ -1,6 +1,7 @@
 import pygame as pg
 from PIL import Image
 
+from buildable.buildable import Buildable
 from buildable.final.rock import Rock
 from buildable.final.houses.small_tent import SmallTent
 from buildable.final.structures.prefecture import Prefecture
@@ -178,7 +179,10 @@ class World:
                                     y + map_pos[1])
 
             texture = Textures.get_texture(self.temp_tile['name'])
-            screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
+            placement_du_curseur = texture.get_width()//58
+            placement_du_curseur //= 4
+
+            screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE + 58 * placement_du_curseur))
 
             if self.temp_tile['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
@@ -306,6 +310,14 @@ class World:
                 building = SmallTent(row, col)
             case BuildingTypes.PREFECTURE:
                 building = Prefecture(row, col)
+            case BuildingTypes.HOSPITAL:
+                building = Buildable(row,col,BuildingTypes.HOSPITAL, (3, 3))
+            case BuildingTypes.SENATE:
+                building = Buildable(row, col, BuildingTypes.SENATE, (5, 5))
+            case BuildingTypes.SCHOOL:
+                building = Buildable(row, col, BuildingTypes.SCHOOL, (3, 3))
+            case BuildingTypes.TEMPLE:
+                building = Buildable(row, col, BuildingTypes.TEMPLE, (2, 2))
 
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()
@@ -321,14 +333,17 @@ class World:
                 return
 
             # Put building in each case
-            for x in range(col,col+x_building,1):
-                for y in range(row,row-y_building,-1):
+            for x in range(col-1,col+x_building-1,1):
+                for y in range(row-1,row-y_building-1,-1):
                     if x != col or y != row:
                         self.grid[y][x].set_building(building, False)
 
-        #Show first case
+
+        # Show first case
         self.grid[row][col].set_building(building, True)
         self.game_controller.new_building(building)
+
+
 
     def load_map(self, name="default"):
         img = Image.open("maps/small-default.png")
