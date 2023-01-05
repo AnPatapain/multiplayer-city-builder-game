@@ -174,13 +174,14 @@ class World:
             isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
                                      isometric_coor]
 
-            (x, y) = self.temp_tile['render_img_coor']
-            (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0],
-                                    y + map_pos[1])
 
             texture = Textures.get_texture(self.temp_tile['name'])
             placement_du_curseur = texture.get_width()//58
             placement_du_curseur //= 4
+
+            (x, y) = self.temp_tile['render_img_coor']
+            (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+
 
             screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE + 58 * placement_du_curseur))
 
