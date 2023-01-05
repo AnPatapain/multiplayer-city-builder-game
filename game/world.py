@@ -1,3 +1,5 @@
+import random
+
 import pygame as pg
 from PIL import Image
 
@@ -217,7 +219,9 @@ class World:
         for row in self.grid:
             for tile in row:
                 tile: Tile = tile
-                texture_image = Textures.get_texture(tile.type)
+                random_texture_number = random.randint(0, 20)
+                texture_image = Textures.textures[TileTypes.GRASS][random_texture_number]
+                #texture_image = Textures.get_texture(tile.type)
                 (x, y) = tile.get_render_coord()
                 offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
                 self.default_surface.blit(texture_image, offset)

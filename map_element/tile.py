@@ -1,3 +1,4 @@
+import random
 from typing import Optional, TYPE_CHECKING
 
 from class_types.tile_types import TileTypes
@@ -11,8 +12,11 @@ if TYPE_CHECKING:
 
 
 class Tile:
-    def __init__(self, col: int, row: int, tile_type: TileTypes = TileTypes.GRASS):
-        self.type = tile_type
+
+
+
+    def __init__(self, col: int, row: int):
+        self.type = TileTypes.GRASS
         self.building: Optional[Buildable] = None
         self.show_tile = True
         self.road = None
@@ -38,6 +42,11 @@ class Tile:
             min([x for x, y in self.isometric_coord]),
             min([y for x, y in self.isometric_coord])
         )
+
+    def find_key(self,v, dictio : dict):
+        for k, val in dictio.items():
+            if v == val:
+                return k
 
     def get_render_coord(self):
         return self.render_coord
