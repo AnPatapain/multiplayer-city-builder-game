@@ -18,3 +18,7 @@ class BuildingTypes(Enum):
 
 
     PELLE = 100 # i don't know the rule that we used to choose to number, I choose 100 but i don't know why i choose it : )
+
+    GRANARY = 92
+    WHEAT_FARM = 93
+    MARKET = 94
