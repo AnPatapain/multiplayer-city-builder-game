@@ -24,7 +24,3 @@ class Structure(Buildable, ABC):
                 return candidate
 
         return None
-
-    def destroy(self):
-        if self.associated_walker:
-            self.associated_walker.delete()
