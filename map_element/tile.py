@@ -128,7 +128,7 @@ class Tile:
 
         for coord in coords:
             try:
-                if self.x + coord[0] >= GRID_SIZE-1 or self.y + coord[1] >= GRID_SIZE-1 or self.x + coord[0] < 0 or self.y + coord[1] < 0:
+                if self.x + coord[0] > GRID_SIZE-1 or self.y + coord[1] > GRID_SIZE-1 or self.x + coord[0] < 0 or self.y + coord[1] < 0:
                     continue
                 adjacentes_tiles.append(grid[self.x + coord[0]][self.y + coord[1]])
             except IndexError:

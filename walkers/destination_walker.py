@@ -7,13 +7,14 @@ if TYPE_CHECKING:
     from buildable.buildable import Buildable
     from map_element.tile import Tile
 
+
 class Cell:
     def __init__(self, score: int, tile: 'Tile'):
         self.score = score
         self.tile = tile
         self.previous: Optional['Cell'] = None
         self.depth = 10000000
-        
+
 
 class DestinationWalker(Walker, ABC):
     def __init__(self, walker_type, associated_building: 'Buildable', roads_only: bool = True):
@@ -34,49 +35,52 @@ class DestinationWalker(Walker, ABC):
         else:
             return self.current_tile
 
-    def pathfinding(self, roads_only: bool = True) -> bool:
-        open_list: set[Cell] = set()
-        closed_list: set[Cell] = set()
+    def estimate_distance(self, src: 'Tile'):
+        dest_x = abs(abs(src.x) - abs(self.destination.x))
+        dest_y = abs(abs(src.y) - abs(self.destination.y))
+        return dest_x + dest_y
 
-        open_list.add(Cell(1, self.current_tile))
+    def pathfinding(self):
+        open_set: list['Tile'] = [self.current_tile]
+        came_from = {}
+        g_score: dict['Tile', int] = {self.current_tile: 0}
+        f_score: dict['Tile', int] = {self.current_tile: self.estimate_distance(self.current_tile)}
 
-        while len(open_list) > 0:
-            current = open_list.pop()
-            closed_list.add(current)
+        while len(open_set) > 0:
+            open_set.sort(key=lambda tile: f_score[tile])
+            current = open_set.pop(0)
 
-            if current.tile == self.destination:
-                print("Path found")
-                while current and current.tile:
-                    self.path_to_destination.insert(0, current.tile)
-                    current = current.previous
-                # Next tile is already set to the current tile
+            if current == self.destination:
+                self.path_to_destination.insert(0, current)
+                while current in came_from:
+                    current = came_from[current]
+                    self.path_to_destination.insert(0, current)
+
+                # reconstruct path
                 self.path_to_destination.pop(0)
                 self.next_tile = self.find_next_tile()
+
                 return True
 
-            neighbors = current.tile.get_adjacente_tiles()
+            for neighbor in current.get_adjacente_tiles():
+                # Insert into array if not existing
+                try:
+                    temp = g_score[neighbor]
+                except:
+                    g_score[neighbor] = 1000000
+                    f_score[neighbor] = 1000000
 
-            # remove neighbors that are already closed
-            for closed in closed_list:
-                if closed.tile in neighbors:
-                    neighbors.remove(closed.tile)
-
-            for neighbor in neighbors:
-                neighbor_cell = None
-                for opened in open_list:
-                    if opened.tile == neighbor:
-                        neighbor_cell = opened
-                        break
-
-                if neighbor_cell:
-                    if current.depth < neighbor_cell.depth:
-                        neighbor_cell.previous = current
-                        neighbor_cell.score = current.score+1
-
+                if current.get_road() and neighbor.get_road():
+                    tentative_gScore = g_score[current] + 1
                 else:
-                    c = Cell(current.score+1, neighbor)
-                    c.previous = current
-                    c.depth = current.depth+1
-                    open_list.add(c)
+                    tentative_gScore = g_score[current] + 100
+
+                if tentative_gScore < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_gScore
+                    f_score[neighbor] = tentative_gScore + self.estimate_distance(neighbor)
+
+                    if neighbor not in open_set:
+                        open_set.append(neighbor)
 
         return False

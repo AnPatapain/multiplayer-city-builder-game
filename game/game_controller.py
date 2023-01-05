@@ -116,6 +116,8 @@ class GameController:
 
         for row in self.grid:
             for tile in row:
+                if migrant_ammount <= 0:
+                    return
                 building = tile.get_building()
                 if building and isinstance(building, House):
                     house: House = building
