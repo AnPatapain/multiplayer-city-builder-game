@@ -180,10 +180,28 @@ class World:
         if self.builder.get_in_build_action():
 
             if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
+                grid = self.game_controller.get_map()
+
+                if self.panel.selected_tile == RoadTypes.TL_TO_BR:
+                    start = self.game_controller.get_map()[self.builder.get_start_point()[1]][self.builder.get_start_point()[0]]
+                    end = self.game_controller.get_map()[self.builder.get_end_point()[1]][self.builder.get_end_point()[0]]
+                    path = start.find_path_to(end, buildable_or_road=True)
+
+                    if path:
+                        for tile in path:
+                            if tile.get_road():
+                                continue
+                            (x, y) = tile.get_render_coord()
+                            (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                            build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
+                            screen.blit(build_sign,
+                                        (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+
+                    return
+
                 for row in utils.MyRange(self.builder.get_start_point()[1], self.builder.get_end_point()[1]):
                     for col in utils.MyRange(self.builder.get_start_point()[0], self.builder.get_end_point()[0]):
 
-                        grid = self.game_controller.get_map()
                         (x, y) = grid[row][col].get_render_coord()
                         (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
 
