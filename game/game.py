@@ -32,7 +32,7 @@ class Game:
         # Exit the game when pressing <esc>
         EventManager.register_key_listener(pg.K_ESCAPE, exit)
         # Calls the event_handler of the World
-        EventManager.add_hooked_function(self.world.event_handler, MapController.get_map_pos())
+        EventManager.add_hooked_function(self.world.event_handler)
 
     # Game Loop
     def run(self):

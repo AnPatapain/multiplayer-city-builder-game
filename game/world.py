@@ -58,7 +58,7 @@ class World:
         EventManager.register_key_listener(pg.K_f, lambda : self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
         EventManager.register_key_listener(pg.K_m, lambda : self.panel.set_selected_tile(BuildingTypes.MARKET))
 
-    def mouse_pos_to_grid(self, mouse_pos, map_pos):
+    def mouse_pos_to_grid(self, mouse_pos):
         """
         DESCRIPTION: Convert position of mouse to row and col on grid. ex: convert (192.15, 30.14) to (row: 40, col: 10)
         To do that we reverse this process: (col, row) -> convert_to_iso -> offset (1/2 default_surface.width, 0) -> offset (map_pos[0], map_pos[1])
@@ -68,6 +68,8 @@ class World:
         Return: (col, row) of mouse_position in the grid
         """
 
+        map_pos = MapController.get_map_pos()
+        # self.default_surface c'est notre image de fond pour le terrain
         iso_x = mouse_pos[0] - map_pos[0] - self.default_surface.get_width() / 2
         iso_y = mouse_pos[1] - map_pos[1]
 
@@ -80,7 +82,7 @@ class World:
         grid_row = int(cart_y // TILE_SIZE)
         return grid_col, grid_row
 
-    def event_handler(self, event, map_pos):
+    def event_handler(self, event):
 
         """
         DESCRIPTION: Handling the events that be gotten from event queue in module event_manager.py
@@ -91,7 +93,7 @@ class World:
         """
 
         mouse_pos = pg.mouse.get_pos()
-        mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
+        mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos)
 
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
@@ -115,8 +117,7 @@ class World:
         Return: None
         """
         mouse_pos = pg.mouse.get_pos()
-        map_pos = MapController.get_map_pos()
-        mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos, map_pos)
+        mouse_grid_pos = self.mouse_pos_to_grid(mouse_pos)
         mouse_action = pg.mouse.get_pressed()
 
         selected_tile = self.panel.get_selected_tile()
