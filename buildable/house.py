@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from buildable.buildable import Buildable
 from class_types.buildind_types import BuildingTypes
 from game.game_controller import GameController
-from walkers.final.destination_walker.immigrant import Immigrant
+from walkers.final.immigrant import Immigrant
 
 
 class House(Buildable, ABC):
