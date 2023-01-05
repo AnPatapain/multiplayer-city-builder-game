@@ -9,6 +9,7 @@ from buildable.final.houses.small_tent import SmallTent
 from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.rock import Rock
 from buildable.final.structures.prefecture import Prefecture
+from buildable.final.structures.WheatFarm import WheatFarm
 from buildable.final.tree import SmallTree
 from buildable.road import Road
 from class_types.buildind_types import BuildingTypes
@@ -21,6 +22,7 @@ from game.setting import *
 from game.textures import Textures
 from map_element.tile import Tile
 
+from game.builder import Builder
 
 class World:
 
@@ -30,6 +32,8 @@ class World:
         self.nums_grid_y = nums_grid_y
         self.width = width
         self.height = height
+
+        self.builder = Builder(nums_grid_x, nums_grid_y)
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
         self.load_map()
@@ -43,10 +47,6 @@ class World:
 
         # For building feature
         self.panel = panel
-        self.temp_tile = None
-        self.start_point = None
-        self.end_point = None
-        self.in_build_action = False
 
         #shortcup
         EventManager.register_key_listener(pg.K_h,lambda : self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
@@ -54,6 +54,9 @@ class World:
         EventManager.register_key_listener(pg.K_p,lambda : self.panel.set_selected_tile(BuildingTypes.PREFECTURE))
         EventManager.register_key_listener(pg.K_r,lambda : self.panel.set_selected_tile(RoadTypes.TL_TO_BR))
         EventManager.register_key_listener(pg.K_w,lambda : self.panel.set_selected_tile(BuildingTypes.WELL))
+        EventManager.register_key_listener(pg.K_g, lambda : self.panel.set_selected_tile(BuildingTypes.GRANARY))
+        EventManager.register_key_listener(pg.K_f, lambda : self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
+        EventManager.register_key_listener(pg.K_m, lambda : self.panel.set_selected_tile(BuildingTypes.MARKET))
 
     def mouse_pos_to_grid(self, mouse_pos, map_pos):
         """
@@ -93,17 +96,17 @@ class World:
         if self.in_map(mouse_grid_pos):
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1 and self.panel.has_selected_tile():
-                    self.start_point = mouse_grid_pos
-                    self.end_point = mouse_grid_pos
-                    self.in_build_action = True
+                    self.builder.set_start_point(mouse_grid_pos)
+                    self.builder.set_end_point(mouse_grid_pos)
+                    self.builder.set_in_build_action(True)
 
             elif event.type == pg.MOUSEBUTTONUP:
                 if event.button == 1 and self.panel.has_selected_tile():
-                    self.in_build_action = False
-                    self.end_point = mouse_grid_pos
+                    self.builder.set_in_build_action(False)
+                    self.builder.set_end_point(mouse_grid_pos)
 
             elif event.type == pg.MOUSEMOTION:
-                self.end_point = mouse_grid_pos
+                self.builder.set_end_point(mouse_grid_pos)
 
     def update(self):
         """
@@ -117,53 +120,36 @@ class World:
         mouse_action = pg.mouse.get_pressed()
 
         selected_tile = self.panel.get_selected_tile()
-        self.temp_tile = None
+        self.builder.set_temp_tile_info(None)
 
         if selected_tile:
             grid = self.game_controller.get_map()
             if self.in_map(mouse_grid_pos):
                 tile = grid[mouse_grid_pos[1]][mouse_grid_pos[0]]
-                self.temp_tile = {
+
+                self.builder.set_temp_tile_info({
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
                     'isBuildable': tile.is_buildable(),
                     'isDestroyable': tile.is_destroyable()
-                }
+                })
 
             # Build from start point to end point
-            if not self.in_build_action and self.start_point and self.end_point:
-                if self.in_map(self.start_point) and self.in_map(self.end_point):
+            if not self.builder.get_in_build_action() and self.builder.get_start_point() and self.builder.get_end_point():
+                if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
+                    start_point = self.builder.get_start_point()
+                    end_point = self.builder.get_end_point()
+                    self.builder.build_from_start_to_end(selected_tile, start_point, end_point)
 
-                    for row in utils.MyRange(self.start_point[1], self.end_point[1]):
-                        for col in utils.MyRange(self.start_point[0], self.end_point[0]):
-                            tile: Tile = grid[row][col]
-
-                            if selected_tile == BuildingTypes.PELLE:
-                                if tile.is_destroyable():
-                                    if tile.get_road():
-                                        tile.destroy()
-                                        self.road_update(row, col)
-                                    tile.destroy()
-                                continue
-
-                            if not tile.is_buildable():
-                                continue
-
-                            match selected_tile:
-                                case RoadTypes.TL_TO_BR:
-                                    self.road_add(row, col)
-                                case _:
-                                    self.building_add(row, col, selected_tile)
-
-                    self.start_point = None  # update start point to default after building
-                    self.end_point = None  # update start point to default after building
+                    self.builder.set_start_point(None)  # update start point to default after building
+                    self.builder.set_end_point(None)  # update start point to default after building
 
             if mouse_action[2]:
                 self.panel.set_selected_tile(None)
-                self.start_point = None
-                self.end_point = None
-                self.in_build_action = False
+                self.builder.set_start_point(None)
+                self.builder.set_end_point(None)
+                self.builder.set_in_build_action(False)
 
     def draw(self, screen):
         map_pos = MapController.get_map_pos()
@@ -179,39 +165,39 @@ class World:
                 for walker in tile.walkers:
                     screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2 + walker.walk_progression, y_offset))
 
-        if self.temp_tile and not self.in_build_action:
-            isometric_coor = self.temp_tile['isometric_coor']
+        if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
+            isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
             isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
                                      isometric_coor]
 
-            (x, y) = self.temp_tile['render_img_coor']
+            (x, y) = self.builder.get_temp_tile_info()['render_img_coor']
             (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0],
                                     y + map_pos[1])
 
-            texture = Textures.get_texture(self.temp_tile['name'])
+            texture = Textures.get_texture(self.builder.get_temp_tile_info()['name'])
             screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
 
-            if self.temp_tile['isBuildable']:
+            if self.builder.get_temp_tile_info()['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
-        if self.in_build_action:
+        if self.builder.get_in_build_action():
 
-            if self.in_map(self.start_point) and self.in_map(self.end_point):
-                for row in utils.MyRange(self.start_point[1], self.end_point[1]):
-                    for col in utils.MyRange(self.start_point[0], self.end_point[0]):
+            if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
+                for row in utils.MyRange(self.builder.get_start_point()[1], self.builder.get_end_point()[1]):
+                    for col in utils.MyRange(self.builder.get_start_point()[0], self.builder.get_end_point()[0]):
 
                         grid = self.game_controller.get_map()
                         (x, y) = grid[row][col].get_render_coord()
                         (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
 
-                        if grid[row][col].is_buildable() and self.temp_tile and self.temp_tile["name"] != BuildingTypes.PELLE:
+                        if grid[row][col].is_buildable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] != BuildingTypes.PELLE:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
-                        elif grid[row][col].is_destroyable() and self.temp_tile and self.temp_tile["name"] == BuildingTypes.PELLE:
+                        elif grid[row][col].is_destroyable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] == BuildingTypes.PELLE:
                             building = grid[row][col].get_delete_texture()
                             screen.blit(building,
                                         (x_offset, y_offset - building.get_height() + TILE_SIZE))
@@ -242,110 +228,6 @@ class World:
             if rect.collidepoint(pg.mouse.get_pos()):
                 mouse_on_panel = True
         return (in_map_limit and not mouse_on_panel)
-
-    def road_add(self, road_row, road_col):
-        """
-        DESCRIPTION : Make a new road with connection between other road
-        """
-        # Create road
-        road = Road([])
-        road_connection = [None, None, None, None]
-
-        grid = self.game_controller.get_map()
-        # Connect other road:
-        # TL connection
-        if road_col > 0:
-            r1 = grid[road_row][road_col - 1].get_road()
-            if r1:
-                r1.set_connect(road, 2)
-                road_connection[0] = r1
-
-        # TR connection
-        if road_row > 0:
-            r2 = grid[road_row - 1][road_col].get_road()
-            if r2:
-                r2.set_connect(road, 3)
-                road_connection[1] = r2
-
-        # BR connection
-        if road_col < self.nums_grid_x - 1:
-            r3 = grid[road_row][road_col + 1].get_road()
-            if r3:
-                r3.set_connect(road, 0)
-                road_connection[2] = r3
-
-        # BL connection
-        if road_row < self.nums_grid_y - 1:
-            r4 = grid[road_row + 1][road_col].get_road()
-            if r4:
-                r4.set_connect(road, 1)
-                road_connection[3] = r4
-
-        road.set_road_connection(road_connection)
-        grid[road_row][road_col].set_road(road)
-
-    def road_update(self, road_row, road_col):
-        grid = self.game_controller.get_map()
-        if road_col > 0:
-            if grid[road_row][road_col - 1].get_road():
-                grid[road_row][road_col - 1].get_road().set_connect(grid[road_row][road_col].get_road(), 2)
-
-
-        # TR connection
-        if road_row > 0:
-            if grid[road_row - 1][road_col].get_road():
-                grid[road_row - 1][road_col].get_road().set_connect(grid[road_row][road_col].get_road(), 3)
-
-        # BR connection
-        if road_col < self.nums_grid_x - 1:
-            if grid[road_row][road_col + 1].get_road():
-                grid[road_row][road_col + 1].get_road().set_connect(grid[road_row][road_col].get_road(), 0)
-
-        # BL connection
-        if road_row < self.nums_grid_y - 1:
-            if grid[road_row + 1][road_col].get_road():
-                grid[road_row + 1][road_col].get_road().set_connect(grid[road_row][road_col].get_road(), 1)
-
-    def building_add(self, row, col, selected_type):
-
-        if not self.game_controller.has_enough_denier(selected_type):
-            return
-
-        building = None
-        match selected_type:
-            case BuildingTypes.VACANT_HOUSE:
-                building = VacantHouse(row, col)
-            case BuildingTypes.PREFECTURE:
-                building = Prefecture(row, col)
-            case BuildingTypes.WELL:
-                building = Well(row, col)
-            case _:
-                print("Building type error")
-                return
-
-        grid = self.game_controller.get_map()
-        if sum(building.get_building_size()) > 2:
-            (x_building, y_building) = building.get_building_size()
-            #check if all case are buildable
-            try:
-                for x in range(col,col+x_building, 1):
-                    for y in range(row,row-y_building, -1):
-                        if not grid[y][x].is_buildable():
-                            print("Building can't be construct")
-                            return
-            except IndexError:
-                #We are out of the index of the grid
-                return
-
-            # Put building in each case
-            for x in range(col,col+x_building,1):
-                for y in range(row,row-y_building,-1):
-                    if x != col or y != row:
-                        grid[y][x].set_building(building, False)
-
-        #Show first case
-        grid[row][col].set_building(building, True)
-        self.game_controller.new_building(building)
 
     def load_map(self):
         img = Image.open("maps/new_gen.png")
@@ -394,8 +276,8 @@ class World:
                 r, g, b, a = img.getpixel((y, x))
                 match (r, g, b):
                     case (156, 90, 60):
-                        self.road_add(x, y) # Brown color, road
+                        self.builder.road_add(x, y) # Brown color, road
                     case (153, 0, 48):
-                        self.road_add(x, y)
+                        self.builder.road_add(x, y)
                     case (181, 165, 213):
-                        self.road_add(x, y)
+                        self.builder.road_add(x, y)
