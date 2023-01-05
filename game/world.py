@@ -4,14 +4,8 @@ import pygame as pg
 from PIL import Image
 
 import game.utils as utils
-from buildable.final.buildable.well import Well
-from buildable.final.houses.small_tent import SmallTent
-from buildable.final.houses.vacant_house import VacantHouse
-from buildable.final.rock import Rock
-from buildable.final.structures.prefecture import Prefecture
-from buildable.final.structures.WheatFarm import WheatFarm
-from buildable.final.tree import SmallTree
-from buildable.road import Road
+from buildable.final.buildable.rock import Rock
+from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
 from class_types.road_types import RoadTypes
 from class_types.tile_types import TileTypes

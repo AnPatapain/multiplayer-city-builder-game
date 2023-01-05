@@ -1,15 +1,11 @@
-import pygame as pg
 from game.game_controller import GameController
 from class_types.buildind_types import BuildingTypes
 
 # Building
 from buildable.final.buildable.well import Well
-from buildable.final.houses.small_tent import SmallTent
 from buildable.final.houses.vacant_house import VacantHouse
-from buildable.final.rock import Rock
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.structures.WheatFarm import WheatFarm
-from buildable.final.tree import SmallTree
 from buildable.road import Road
 
 #other
