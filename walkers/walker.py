@@ -32,8 +32,8 @@ class Walker(ABC):
 
         self.walk_distance = 0
         self.max_walk_distance = max_walk_distance
-        # goes from -15 to 15, to take 30 tick to navigate through a tile (also used for the offset
-        self.walk_progression = -15
+        # goes from -14 to 14, to take 28 tick to navigate through a tile (also used for the offset
+        self.walk_progression = -14
 
     def get_texture(self):
         if self.walk_progression < 0:
@@ -121,9 +121,9 @@ class Walker(ABC):
         self.delete()
 
     def update(self):
-        if self.walk_progression == 15:
+        if self.walk_progression == 14:
             self.go_to_next_tile()
-            self.walk_progression = -16
+            self.walk_progression = -15
 
         self.animation_frame += 0.3
         self.walk_progression += 1

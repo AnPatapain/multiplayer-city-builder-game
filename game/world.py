@@ -7,6 +7,7 @@ import game.utils as utils
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
+from class_types.orientation_types import OrientationTypes
 from class_types.road_types import RoadTypes
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
@@ -157,8 +158,29 @@ class World:
 
                 if tile.get_road() or tile.get_building():
                     screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+
+                base_x_offset = x_offset
+                base_y_offset = y_offset
                 for walker in tile.walkers:
-                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2, y_offset))
+                    x_offset = x_offset + TILE_SIZE/2
+
+                    orient = walker.orientation_from_previous_tile if walker.walk_progression < 0 else walker.orientation_to_next_tile
+                    match orient:
+                        case OrientationTypes.TOP_RIGHT:
+                            x_offset += walker.walk_progression*2
+                            y_offset -= walker.walk_progression
+                        case OrientationTypes.TOP_LEFT:
+                            x_offset -= walker.walk_progression*2
+                            y_offset -= walker.walk_progression
+                        case OrientationTypes.BOTTOM_LEFT:
+                            x_offset -= walker.walk_progression*2
+                            y_offset += walker.walk_progression
+                        case OrientationTypes.BOTTOM_RIGHT:
+                            x_offset += walker.walk_progression*2
+                            y_offset += walker.walk_progression
+                    screen.blit(walker.get_texture(), (x_offset, y_offset))
+                    x_offset = base_x_offset
+                    y_offset = base_y_offset
 
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
             isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
