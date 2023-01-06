@@ -136,7 +136,7 @@ class Tile:
 
         return adjacentes_tiles
 
-    def find_path_to(self, dest: 'Tile', roads_only: bool = False) -> list['Tile'] | None:
+    def find_path_to(self, dest: 'Tile', roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile'] | None:
         def _estimate_distance(src: 'Tile') -> int:
             dest_x = abs(abs(src.x) - abs(self.x))
             dest_y = abs(abs(src.y) - abs(self.y))
@@ -148,7 +148,7 @@ class Tile:
         f_score: dict['Tile', int] = {self: _estimate_distance(self)}
 
         while len(open_set) > 0:
-            open_set.sort(key=lambda tile: f_score[tile])
+            open_set.sort(key=lambda tile: (f_score[tile]))
             current = open_set.pop(0)
 
             if current == dest:
@@ -163,6 +163,8 @@ class Tile:
             for neighbor in current.get_adjacente_tiles():
                 if roads_only and not neighbor.get_road() and neighbor != dest:
                     continue
+                if buildable_or_road and (not neighbor.is_buildable() and not neighbor.get_road()):
+                    continue
                 # Insert into array if not existing
                 try:
                     temp = g_score[neighbor]
@@ -173,7 +175,10 @@ class Tile:
                 if current.get_road() and neighbor.get_road():
                     tentative_gscore = g_score[current] + 1
                 else:
-                    tentative_gscore = g_score[current] + 100
+                    if buildable_or_road:
+                        tentative_gscore = g_score[current] + 1
+                    else:
+                        tentative_gscore = g_score[current] + 100
 
                 if tentative_gscore < g_score[neighbor]:
                     came_from[neighbor] = current

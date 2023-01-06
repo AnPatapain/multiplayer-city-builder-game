@@ -158,7 +158,7 @@ class World:
                 if tile.get_road() or tile.get_building():
                     screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
                 for walker in tile.walkers:
-                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2 + walker.walk_progression, y_offset))
+                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2, y_offset))
 
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
             isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
@@ -180,10 +180,33 @@ class World:
         if self.builder.get_in_build_action():
 
             if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
+                grid = self.game_controller.get_map()
+
+                if self.panel.selected_tile == RoadTypes.TL_TO_BR:
+                    start = grid[self.builder.get_start_point()[1]][self.builder.get_start_point()[0]]
+                    if not start.is_buildable() and not start.get_road():
+                        return
+                    end = grid[self.builder.get_end_point()[1]][self.builder.get_end_point()[0]]
+                    if not end.is_buildable() and not end.get_road():
+                        return
+                    path = start.find_path_to(end, buildable_or_road=True)
+
+                    if path:
+                        for tile in path:
+                            # Don't display build sign if there is already a road
+                            if tile.get_road() or not tile.is_buildable():
+                                continue
+                            (x, y) = tile.get_render_coord()
+                            (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                            build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
+                            screen.blit(build_sign,
+                                        (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+
+                    return
+
                 for row in utils.MyRange(self.builder.get_start_point()[1], self.builder.get_end_point()[1]):
                     for col in utils.MyRange(self.builder.get_start_point()[0], self.builder.get_end_point()[0]):
 
-                        grid = self.game_controller.get_map()
                         (x, y) = grid[row][col].get_render_coord()
                         (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
 

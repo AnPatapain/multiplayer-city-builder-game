@@ -50,6 +50,25 @@ class Builder:
 
     def build_from_start_to_end(self, selected_tile, start_point, end_point):
         grid = self.game_controller.get_map()
+
+        if selected_tile == RoadTypes.TL_TO_BR:
+            start = grid[start_point[1]][start_point[0]]
+            if not start.is_buildable() and not start.get_road():
+                return
+            end = grid[end_point[1]][end_point[0]]
+            if not end.is_buildable() and not end.get_road():
+                return
+            path = start.find_path_to(end, buildable_or_road=True)
+
+            if path:
+                for tile in path:
+                    if tile.is_buildable():
+                        self.road_add(tile.x, tile.y)
+
+            self.start_point = None  # update start point to default after building
+            self.end_point = None  # update start point to default after building
+            return
+
         
         for row in utils.MyRange(start_point[1], end_point[1]):
             for col in utils.MyRange(start_point[0], end_point[0]):
@@ -66,11 +85,8 @@ class Builder:
                 if not tile.is_buildable():
                     continue
 
-                match selected_tile:
-                    case RoadTypes.TL_TO_BR:
-                        self.road_add(row, col)
-                    case _:
-                        self.building_add(row, col, selected_tile)
+
+                self.building_add(row, col, selected_tile)
 
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
