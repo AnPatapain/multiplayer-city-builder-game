@@ -1,10 +1,13 @@
 from buildable.building import Buildings
 
 class Houses(Buildings):
-        def __init__(self, max_occupants, building_size, cost,HasWater, Tax_Multi):
+
+        def __init__(self, max_occupants, building_size, cost,HasWater, Tax_Multi,dest_risk, fire_risk):
             Buildings.__init__(self, max_occupants, building_size, cost)
             self.HasWater = HasWater
             self.Tax_Multi = Tax_Multi
+            self.dest_risk = dest_risk
+            self.fire_risk = fire_risk
 
         # all Houses are listed in this class
         #bui_SmallTent = Houses(5, '1x1', 10, False, False, False, 1)
