@@ -158,7 +158,7 @@ class World:
                 if tile.get_road() or tile.get_building():
                     screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
                 for walker in tile.walkers:
-                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2 + walker.walk_progression, y_offset))
+                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2, y_offset))
 
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
             isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']

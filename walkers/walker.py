@@ -12,9 +12,9 @@ if TYPE_CHECKING:
     from map_element.tile import Tile
 
 
-
 class Walker(ABC):
-    def __init__(self, walker_type, associated_building: 'Buildable', roads_only: bool = False, max_walk_distance: int = -1):
+    def __init__(self, walker_type, associated_building: 'Buildable', roads_only: bool = False,
+                 max_walk_distance: int = -1):
         self.walker_type: 'WalkerTypes' = walker_type
         self.associated_building: 'Buildable' = associated_building
 
@@ -26,16 +26,20 @@ class Walker(ABC):
         self.path_to_destination: list['Tile'] = []
 
         self.roads_only = roads_only
-        self.orientation = OrientationTypes.TOP_LEFT
+        self.orientation_from_previous_tile = OrientationTypes.TOP_LEFT
+        self.orientation_to_next_tile = OrientationTypes.TOP_LEFT
         self.animation_frame = 1
 
         self.walk_distance = 0
         self.max_walk_distance = max_walk_distance
-        # goes from -10 to 10, to take 20 tick to navigate through a tile (also used for the offset
-        self.walk_progression = -10
+        # goes from -15 to 15, to take 30 tick to navigate through a tile (also used for the offset
+        self.walk_progression = -15
 
     def get_texture(self):
-        return Textures.get_walker_texture(self.walker_type, self.orientation, self.animation_frame)
+        if self.walk_progression < 0:
+            return Textures.get_walker_texture(self.walker_type, self.orientation_from_previous_tile, int(self.animation_frame))
+        else:
+            return Textures.get_walker_texture(self.walker_type, self.orientation_to_next_tile, int(self.animation_frame))
 
     def go_to_next_tile(self):
         if self.max_walk_distance != -1:
@@ -61,7 +65,7 @@ class Walker(ABC):
             self.previous_tile = self.current_tile
 
         self.next_tile = self.find_next_tile()
-
+        self.update_direction()
 
     def find_next_tile(self) -> 'Tile':
         if self.current_tile == self.destination:
@@ -74,7 +78,9 @@ class Walker(ABC):
 
         # Else find an adjacent road to follow automatically
         candidates = self.current_tile.get_adjacente_tiles()
-        candidates = list(filter(lambda candidate: candidate is not self.previous_tile and candidate.get_road() is not None, candidates))
+        candidates = list(
+            filter(lambda candidate: candidate is not self.previous_tile and candidate.get_road() is not None,
+                   candidates))
 
         if len(candidates) == 0:
             if self.previous_tile:
@@ -84,12 +90,26 @@ class Walker(ABC):
 
         return random.choice(candidates)
 
+    def update_direction(self):
+        self.orientation_from_previous_tile = self.orientation_to_next_tile
+
+        # x = col, y = row
+        if self.next_tile.y < self.current_tile.y:
+            self.orientation_to_next_tile = OrientationTypes.TOP_LEFT
+        elif self.next_tile.x < self.current_tile.x:
+            self.orientation_to_next_tile = OrientationTypes.TOP_RIGHT
+        elif self.next_tile.y > self.current_tile.y:
+            self.orientation_to_next_tile = OrientationTypes.BOTTOM_RIGHT
+        elif self.next_tile.x > self.current_tile.x:
+            self.orientation_to_next_tile = OrientationTypes.BOTTOM_LEFT
+
 
     def spawn(self, tile: 'Tile'):
         self.current_tile = tile
         self.current_tile.add_walker(self)
         GameController.get_instance().add_walker(self)
         self.next_tile = self.find_next_tile()
+        self.update_direction()
 
     def delete(self):
         self.current_tile.remove_walker(self)
@@ -101,10 +121,11 @@ class Walker(ABC):
         self.delete()
 
     def update(self):
-        if self.walk_progression == 10:
+        if self.walk_progression == 15:
             self.go_to_next_tile()
-            self.walk_progression = -11
+            self.walk_progression = -16
 
+        self.animation_frame += 0.3
         self.walk_progression += 1
 
     def navigate_to(self, dest: 'Tile'):

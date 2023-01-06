@@ -6,7 +6,7 @@ from walkers.walker import Walker
 
 class Immigrant(Walker):
     def __init__(self, associated_building: Buildable, dest: Tile, quantity: int):
-        super().__init__(WalkerTypes.PREFET, associated_building)
+        super().__init__(WalkerTypes.MIGRANT, associated_building)
         self.destination = dest
         self.quantity = quantity
 

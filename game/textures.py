@@ -23,6 +23,7 @@ class Textures:
 
     @staticmethod
     def get_walker_texture(walker_id: WalkerTypes, direction: OrientationTypes, animation_frame: int) -> pg.Surface:
+        animation_frame = animation_frame % len(Textures.walker_textures[walker_id][direction])
         return Textures.walker_textures[walker_id][direction][animation_frame]
 
     @staticmethod
@@ -122,30 +123,118 @@ class Textures:
         Textures.walker_textures = {
             WalkerTypes.MIGRANT: {
                 OrientationTypes.TOP_LEFT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01047.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01039.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01047.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01055.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01063.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01071.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01079.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01087.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01095.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01103.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01111.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01119.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01127.png')).convert_alpha(screen),
                 },
                 OrientationTypes.TOP_RIGHT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01033.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01033.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01041.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01049.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01057.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01065.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01073.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01081.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01089.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01097.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01105.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01113.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01121.png')).convert_alpha(screen),
                 },
                 OrientationTypes.BOTTOM_RIGHT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01083.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01035.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01043.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01051.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01059.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01067.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01075.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01083.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01091.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01099.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01107.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01115.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01123.png')).convert_alpha(screen),
                 },
                 OrientationTypes.BOTTOM_LEFT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01061.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01037.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01045.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01053.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01061.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01069.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01077.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01085.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01093.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01101.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01109.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01117.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01125.png')).convert_alpha(screen),
                 },
             },
             WalkerTypes.PREFET: {
                 OrientationTypes.TOP_LEFT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00661.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00621.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00629.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00637.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00645.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00653.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00661.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00669.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00677.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00685.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00693.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00701.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00709.png')).convert_alpha(screen),
                 },
                 OrientationTypes.TOP_RIGHT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00623.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00623.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00631.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00639.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00647.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00655.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00663.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00671.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00679.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00687.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00695.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00703.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00615.png')).convert_alpha(screen),
                 },
                 OrientationTypes.BOTTOM_RIGHT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00657.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00617.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00625.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00633.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00641.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00649.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00657.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00665.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00673.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00681.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00689.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00697.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00697.png')).convert_alpha(screen),
                 },
                 OrientationTypes.BOTTOM_LEFT: {
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00627.png')).convert_alpha(screen)
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00619.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00627.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00635.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00643.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00651.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00659.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00667.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00675.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00683.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00691.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00699.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00707.png')).convert_alpha(screen),
                 },
             }
         }
