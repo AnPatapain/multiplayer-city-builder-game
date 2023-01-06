@@ -7,7 +7,10 @@ class Component:
         self.position = position
         self.size = size
         self.on_click_func = lambda: None
-        self.is_hovered = False
+        self.hovered = False
+
+    def is_hovered(self):
+        return self.hovered
 
     @abstractmethod
     def is_hover(self, pos):

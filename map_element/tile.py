@@ -1,13 +1,27 @@
+from typing import Optional, TYPE_CHECKING
+
 from class_types.tile_types import TileTypes
+from game.game_controller import GameController
 from game.textures import Textures
-from game.setting import TILE_SIZE
+from game.setting import TILE_SIZE, GRID_SIZE
+
+if TYPE_CHECKING:
+    from buildable.buildable import Buildable
+    from walkers.walker import Walker
 
 
 class Tile:
     def __init__(self, col: int, row: int, tile_type: TileTypes = TileTypes.GRASS):
         self.type = tile_type
-        self.building = None
+        self.building: Optional[Buildable] = None
+        self.show_tile = True
         self.road = None
+        self.x = row
+        self.y = col
+
+        self.water_access = False
+
+        self.walkers: list['Walker'] = []
 
         cartesian_coord = [
             (col * TILE_SIZE, row * TILE_SIZE),
@@ -37,26 +51,141 @@ class Tile:
     def set_type(self, new_type):
         self.type = new_type
 
+    def get_water_access(self):
+        return self.water_access
+
+    def set_water_access(self, water_access: bool):
+        self.water_access = water_access
+
     def get_building(self):
         return self.building
 
-    def set_building(self, new_building):
+    def set_building(self, new_building, show_building: bool = True):
         self.building = new_building
+        self.show_tile = show_building
 
     def get_road(self):
         return self.road
 
-    def set_road(self,new_road):
+    def set_road(self, new_road):
         self.road = new_road
-        self.type = self.road.get_road_type()
+
+    def set_show_tile(self, show_tile: bool):
+        self.show_tile = show_tile
+
+    def get_show_tile(self):
+        return self.show_tile
 
     def get_texture(self):
+        if not self.show_tile:
+            return Textures.get_texture(TileTypes.GRASS)
+        if self.building:
+            return self.building.get_texture()
         if self.road:
             return Textures.get_texture(self.road.get_road_type())
-        # TODO: get texture of building if it exists
         return Textures.get_texture(self.type)
+
+    def get_delete_texture(self):
+        if not self.show_tile:
+            return Textures.get_texture(TileTypes.GRASS)
+        if self.road:
+            return Textures.get_delete_texture(self.road.get_road_type())
+        if self.building:
+            return self.building.get_delete_texture()
+        return Textures.get_delete_texture(self.type)
 
     def is_buildable(self):
         return self.building is None \
                and self.road is None \
                and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
+
+    def is_destroyable(self):
+        return (self.building and self.building.is_destroyable()) or self.road
+
+    def destroy(self):
+        if self.building:
+            self.building.destroy()
+            self.building = None
+        self.road = None
+        for walker in self.walkers:
+            walker.associated_building.associated_walker.delete()
+
+    def add_walker(self, walker: 'Walker'):
+        self.walkers.append(walker)
+
+    def remove_walker(self, walker: 'Walker'):
+        self.walkers.remove(walker)
+
+    def get_adjacente_tiles(self, radius: int = 0):
+        adjacentes_tiles = []
+
+        grid = GameController.get_instance().get_map()
+
+        if radius == 0:
+            coords = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        else:
+            coords = [(x, y) for y in range(-radius, radius+1) for x in range(-radius, radius+1)]
+
+        for coord in coords:
+            try:
+                if self.x + coord[0] > GRID_SIZE-1 or self.y + coord[1] > GRID_SIZE-1 or self.x + coord[0] < 0 or self.y + coord[1] < 0:
+                    continue
+                adjacentes_tiles.append(grid[self.x + coord[0]][self.y + coord[1]])
+            except IndexError:
+                continue
+
+        return adjacentes_tiles
+
+    def find_path_to(self, dest: 'Tile', roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile'] | None:
+        def _estimate_distance(src: 'Tile') -> int:
+            dest_x = abs(abs(src.x) - abs(self.x))
+            dest_y = abs(abs(src.y) - abs(self.y))
+            return dest_x + dest_y
+
+        open_set: list['Tile'] = [self]
+        came_from: dict['Tile', 'Tile'] = {}
+        g_score: dict['Tile', int] = {self: 0}
+        f_score: dict['Tile', int] = {self: _estimate_distance(self)}
+
+        while len(open_set) > 0:
+            open_set.sort(key=lambda tile: (f_score[tile]))
+            current = open_set.pop(0)
+
+            if current == dest:
+                path_to_destination = []
+                path_to_destination.insert(0, current)
+                while current in came_from:
+                    current = came_from[current]
+                    path_to_destination.insert(0, current)
+
+                return path_to_destination
+
+            for neighbor in current.get_adjacente_tiles():
+                if roads_only and not neighbor.get_road() and neighbor != dest:
+                    continue
+                if buildable_or_road and (not neighbor.is_buildable() and not neighbor.get_road()):
+                    continue
+                # Insert into array if not existing
+                try:
+                    temp = g_score[neighbor]
+                except KeyError:
+                    g_score[neighbor] = 1000000
+                    f_score[neighbor] = 1000000
+
+                if current.get_road() and neighbor.get_road():
+                    tentative_gscore = g_score[current] + 1
+                else:
+                    if buildable_or_road:
+                        tentative_gscore = g_score[current] + 1
+                    else:
+                        tentative_gscore = g_score[current] + 100
+
+                if tentative_gscore < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_gscore
+                    f_score[neighbor] = tentative_gscore + _estimate_distance(neighbor)
+
+                    if neighbor not in open_set:
+                        open_set.append(neighbor)
+
+        return None
