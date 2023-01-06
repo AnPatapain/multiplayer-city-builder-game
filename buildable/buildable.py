@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import Optional, TYPE_CHECKING
 
+from events.risk import Risk
 from game.game_controller import GameController
 from game.textures import Textures
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Buildable(ABC):
-    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int]):
+    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int],fire_risk : int ,destruction_risk: int):
         self.build_type = build_type
         self.build_size = build_size
 
@@ -19,6 +20,9 @@ class Buildable(ABC):
 
         self.x = x
         self.y = y
+
+        self.risk = Risk(fire_risk, destruction_risk)
+        self.count = 0
 
         self.is_on_fire = False
 
@@ -62,4 +66,11 @@ class Buildable(ABC):
 
     def update_day(self):
         pass
+
+    def to_ruin(self):
+
+        from buildable.final.buildable.ruin import Ruin
+        next_object = Ruin(self.x, self.y)
+        self.build_type = next_object.build_type
+        self.__class__ = Ruin
 

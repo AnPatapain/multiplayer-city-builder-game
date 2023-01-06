@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
 from buildable.buildable import Buildable
+from buildable.final.buildable.ruin import Ruin
 from class_types.buildind_types import BuildingTypes
-from events.risk import Risk
 from game.game_controller import GameController
 from walkers.final.immigrant import Immigrant
 
@@ -10,9 +10,9 @@ from walkers.final.immigrant import Immigrant
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes, build_size: tuple[int, int],
                  tax: int, desirability: int, max_citizen: int, prosperity: int,fire_risk : int ,destruction_risk: int):
-        super().__init__(x, y, build_type,build_size)
+        super().__init__(x, y, build_type,build_size,fire_risk ,destruction_risk)
 
-        self.risk = Risk(fire_risk, destruction_risk)
+
         self.max_citizen = max_citizen
         self.current_citizen = 0
 
@@ -48,6 +48,12 @@ class House(Buildable, ABC):
     def update_day(self):
         self.risk.risk_progress()
         print(self.risk.get_fire_status())
+
+        if self.risk.is_on_fire():
+            self.is_on_fire = True
+            self.to_ruin()
+            return
+
         if not self.conditions_fulfilled():
             self.downgrade()
         if self.is_upgradable():
@@ -92,6 +98,7 @@ class House(Buildable, ABC):
                 - current_citizen
                 - position(x,y)
                 - build_size
+                - is_on_fire
         """
         next_object = class_name(self.x, self.y)
         self.max_citizen = next_object.max_citizen

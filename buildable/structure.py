@@ -2,7 +2,6 @@ from abc import ABC
 from typing import TYPE_CHECKING, Optional
 
 from buildable.buildable import Buildable
-from events.risk import Risk
 
 if TYPE_CHECKING:
     from class_types.buildind_types import BuildingTypes
@@ -12,9 +11,7 @@ if TYPE_CHECKING:
 class Structure(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int],
                  max_employee: int,fire_risk : int ,destruction_risk: int):
-        super().__init__(x, y, build_type,build_size)
-
-        self.risk = Risk(fire_risk, destruction_risk)
+        super().__init__(x, y, build_type, build_size,fire_risk ,destruction_risk)
 
         self.max_employee = max_employee
 

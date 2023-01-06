@@ -76,6 +76,8 @@ class Textures:
             BuildingTypes.PELLE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'destroy_design.png'))).convert_alpha(screen),
             BuildingTypes.WELL: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Utilitya_00001.png'))).convert_alpha(screen),
             BuildingTypes.WHEAT_FARM: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'transport_00041.png'))).convert_alpha(screen),
+            BuildingTypes.RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+            BuildingTypes.FIRE_RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
 
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
