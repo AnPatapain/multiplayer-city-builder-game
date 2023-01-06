@@ -14,6 +14,7 @@ class Immigrant(Walker):
         super().spawn(tile)
         self.navigate_to(self.associated_building.get_current_tile())
         self.next_tile = self.path_to_destination.pop(0)
+        self.next_tile = self.path_to_destination.pop(0)
 
     def destination_reached(self):
         self.associated_building.current_citizen += self.quantity
