@@ -4,6 +4,7 @@ import pygame as pg
 from PIL import Image
 
 import game.utils as utils
+from buildable.buildableCost import buildable_cost
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
@@ -178,6 +179,7 @@ class World:
                         case OrientationTypes.BOTTOM_RIGHT:
                             x_offset += walker.walk_progression*2
                             y_offset += walker.walk_progression
+
                     screen.blit(walker.get_texture(), (x_offset, y_offset))
                     x_offset = base_x_offset
                     y_offset = base_y_offset
@@ -199,6 +201,11 @@ class World:
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
+            cost = buildable_cost[self.panel.selected_tile]
+            if self.panel.selected_tile == BuildingTypes.PELLE:
+                cost = 0
+            utils.draw_text(text=str(cost), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
+
         if self.builder.get_in_build_action():
 
             if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
@@ -214,6 +221,7 @@ class World:
                     path = start.find_path_to(end, buildable_or_road=True)
 
                     if path:
+                        to_build_number = 0
                         for tile in path:
                             # Don't display build sign if there is already a road
                             if tile.get_road() or not tile.is_buildable():
@@ -223,9 +231,16 @@ class World:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+                            to_build_number += 1
+
+                        isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
+                        isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
+                                                 isometric_coor]
+                        utils.draw_text(text=str(to_build_number*4), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
                     return
 
+                count = 0
                 for row in utils.MyRange(self.builder.get_start_point()[1], self.builder.get_end_point()[1]):
                     for col in utils.MyRange(self.builder.get_start_point()[0], self.builder.get_end_point()[0]):
 
@@ -234,14 +249,20 @@ class World:
 
                         if grid[row][col].is_buildable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] != BuildingTypes.PELLE:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
+                            count += 1
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
                         elif grid[row][col].is_destroyable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] == BuildingTypes.PELLE:
                             building = grid[row][col].get_delete_texture()
+                            count += 1
                             screen.blit(building,
                                         (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
+                isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
+                isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
+                                                 isometric_coor]
+                utils.draw_text(text=str(count*buildable_cost[self.panel.selected_tile]), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
     def create_static_map(self):
         for row in self.game_controller.get_map():
