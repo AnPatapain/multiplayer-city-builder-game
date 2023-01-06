@@ -49,7 +49,8 @@ class Buildable(ABC):
         pass
 
     def destroy(self):
-        print("FIXME: method destroy not implemented!")
+        if self.associated_walker:
+            self.associated_walker.delete()
         pass
 
     def new_walker(self):

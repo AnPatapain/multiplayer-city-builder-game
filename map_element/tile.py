@@ -6,7 +6,7 @@ import pygame as pg
 from class_types.tile_types import TileTypes
 from game.game_controller import GameController
 from game.textures import Textures
-from game.setting import TILE_SIZE
+from game.setting import TILE_SIZE, GRID_SIZE
 
 if TYPE_CHECKING:
     from buildable.buildable import Buildable
@@ -88,7 +88,7 @@ class Tile:
     def set_road(self, new_road):
         self.road = new_road
 
-    def set_show_tile(self,show_tile:bool):
+    def set_show_tile(self, show_tile: bool):
         self.show_tile = show_tile
 
     def get_show_tile(self):
@@ -149,8 +149,64 @@ class Tile:
 
         for coord in coords:
             try:
+                if self.x + coord[0] > GRID_SIZE-1 or self.y + coord[1] > GRID_SIZE-1 or self.x + coord[0] < 0 or self.y + coord[1] < 0:
+                    continue
                 adjacentes_tiles.append(grid[self.x + coord[0]][self.y + coord[1]])
             except IndexError:
                 continue
 
         return adjacentes_tiles
+
+    def find_path_to(self, dest: 'Tile', roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile'] | None:
+        def _estimate_distance(src: 'Tile') -> int:
+            dest_x = abs(abs(src.x) - abs(self.x))
+            dest_y = abs(abs(src.y) - abs(self.y))
+            return dest_x + dest_y
+
+        open_set: list['Tile'] = [self]
+        came_from: dict['Tile', 'Tile'] = {}
+        g_score: dict['Tile', int] = {self: 0}
+        f_score: dict['Tile', int] = {self: _estimate_distance(self)}
+
+        while len(open_set) > 0:
+            open_set.sort(key=lambda tile: (f_score[tile]))
+            current = open_set.pop(0)
+
+            if current == dest:
+                path_to_destination = []
+                path_to_destination.insert(0, current)
+                while current in came_from:
+                    current = came_from[current]
+                    path_to_destination.insert(0, current)
+
+                return path_to_destination
+
+            for neighbor in current.get_adjacente_tiles():
+                if roads_only and not neighbor.get_road() and neighbor != dest:
+                    continue
+                if buildable_or_road and (not neighbor.is_buildable() and not neighbor.get_road()):
+                    continue
+                # Insert into array if not existing
+                try:
+                    temp = g_score[neighbor]
+                except KeyError:
+                    g_score[neighbor] = 1000000
+                    f_score[neighbor] = 1000000
+
+                if current.get_road() and neighbor.get_road():
+                    tentative_gscore = g_score[current] + 1
+                else:
+                    if buildable_or_road:
+                        tentative_gscore = g_score[current] + 1
+                    else:
+                        tentative_gscore = g_score[current] + 100
+
+                if tentative_gscore < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_gscore
+                    f_score[neighbor] = tentative_gscore + _estimate_distance(neighbor)
+
+                    if neighbor not in open_set:
+                        open_set.append(neighbor)
+
+        return None

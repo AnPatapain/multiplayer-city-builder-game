@@ -19,11 +19,17 @@ class GameController:
         self.max_citizen = 0
         self.walkers: list['Walker'] = []
 
+        self.spawn_point: 'Tile' = None
+        self.leave_point: 'Tile' = None
+
         self.current_tick = 0
         self.current_day = 0
         self.current_month = 0
         self.current_year = 0
         self.total_day = 0
+
+        # Not implemented yet
+        self.sentiment = 80
 
 
     def new_building(self, building: 'Buildable'):
@@ -62,7 +68,7 @@ class GameController:
             case 0:
                 self.__calculate_water_access()
             case 1:
-                pass
+                self.__migration_update()
 
 
     def increase_day(self):
@@ -102,6 +108,35 @@ class GameController:
         for well in wells:
             for tile in well.get_adjacente_tiles(2):
                 tile.set_water_access(True)
+
+    def __migration_update(self):
+        from buildable.house import House
+
+        migrant_ammount = self.sentiment * 12 / 100
+
+        for row in self.grid:
+            for tile in row:
+                if migrant_ammount <= 0:
+                    return
+                building = tile.get_building()
+                if building and isinstance(building, House):
+                    house: House = building
+                    if not house.associated_walker and not house.is_full():
+                        if migrant_ammount <= 4:
+                            if house.empty_space() < migrant_ammount:
+                                house.spawn_migrant(house.empty_space())
+                                migrant_ammount -= house.empty_space()
+                            else:
+                                house.spawn_migrant(migrant_ammount)
+                                migrant_ammount = 0
+                        else:
+                            if house.empty_space() < 4:
+                                house.spawn_migrant(house.empty_space())
+                                migrant_ammount -= house.empty_space()
+                            else:
+                                house.spawn_migrant(4)
+                                migrant_ammount -= 4
+
 
     @staticmethod
     def get_instance():

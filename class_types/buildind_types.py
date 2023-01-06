@@ -1,10 +1,12 @@
 from enum import Enum
 
 class BuildingTypes(Enum):
-    SMALL_TENT = 1
-    LARGE_TENT = 2
-    SMALL_SHACK = 3
-    LARGE_SHACK = 4
+    VACANT_HOUSE = 1
+    SMALL_TENT = 2
+    LARGE_TENT = 3
+    SMALL_SHACK = 4
+    LARGE_SHACK = 5
+
     SENATE = 11
     ENGINEERS_POST = 12
     PREFECTURE = 13
@@ -16,3 +18,7 @@ class BuildingTypes(Enum):
 
 
     PELLE = 100 # i don't know the rule that we used to choose to number, I choose 100 but i don't know why i choose it : )
+
+    GRANARY = 92
+    WHEAT_FARM = 93
+    MARKET = 94

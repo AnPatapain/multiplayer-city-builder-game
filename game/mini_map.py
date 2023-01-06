@@ -1,7 +1,7 @@
 import pygame as pg
 
-from buildable.final.rock import Rock
-from buildable.final.tree import SmallTree
+from buildable.final.buildable.rock import Rock
+from buildable.final.buildable.tree import SmallTree
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from game.game_controller import GameController

@@ -1,6 +1,6 @@
 from buildable.structure import Structure
 from class_types.buildind_types import BuildingTypes
-from walkers.final.random_walkers.Prefet import Prefet
+from walkers.final.prefet import Prefet
 
 
 class Prefecture(Structure):
