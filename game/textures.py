@@ -37,12 +37,16 @@ class Textures:
         return Textures.walker_textures[walker_id][direction][animation_frame]
 
     @staticmethod
-    def get_delete_texture(texture_id: any) -> pg.Surface:
+    def get_delete_texture(texture_id: any, texture_number: int = 0) -> pg.Surface:
         texture = Textures.textures_destroy.get(texture_id)
+        if texture:
+            texture = texture.get(texture_number)
         if texture is None:
-            new_texture = Textures.get_texture(texture_id).copy()
+            new_texture = Textures.get_texture(texture_id, texture_number).copy()
             Textures.fill(new_texture)
-            Textures.textures_destroy[texture_id] = new_texture
+            if Textures.textures_destroy.get(texture_id) is None:
+                Textures.textures_destroy[texture_id] = {}
+            Textures.textures_destroy[texture_id] |= {texture_number: new_texture}
             texture = new_texture
         return texture
 

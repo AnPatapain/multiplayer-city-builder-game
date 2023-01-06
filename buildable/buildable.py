@@ -33,7 +33,7 @@ class Buildable(ABC):
         return Textures.get_texture(self.build_type, texture_number=self.get_current_tile().random_texture_number)
 
     def get_delete_texture(self):
-        return Textures.get_delete_texture(self.build_type)
+        return Textures.get_delete_texture(self.build_type, texture_number=self.get_current_tile().random_texture_number)
 
     def get_build_texture(self):
         return self.get_texture()
