@@ -2,14 +2,17 @@ from abc import ABC, abstractmethod
 
 from buildable.buildable import Buildable
 from class_types.buildind_types import BuildingTypes
+from events.risk import Risk
 from game.game_controller import GameController
 from walkers.final.immigrant import Immigrant
 
 
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes, build_size: tuple[int, int],
-                 tax: int, desirability: int, max_citizen: int, prosperity: int):
-        super().__init__(x, y, build_type, build_size)
+                 tax: int, desirability: int, max_citizen: int, prosperity: int,fire_risk : int ,destruction_risk: int):
+        super().__init__(x, y, build_type,build_size)
+
+        self.risk = Risk(fire_risk, destruction_risk)
         self.max_citizen = max_citizen
         self.current_citizen = 0
 
@@ -43,6 +46,8 @@ class House(Buildable, ABC):
         return self.tax
 
     def update_day(self):
+        self.risk.risk_progress()
+        print(self.risk.get_fire_status())
         if not self.conditions_fulfilled():
             self.downgrade()
         if self.is_upgradable():
@@ -81,6 +86,7 @@ class House(Buildable, ABC):
                 - tax
                 - desirability
                 - build_type
+                - Risk
             No change element:
                 - has_water
                 - current_citizen
@@ -95,4 +101,5 @@ class House(Buildable, ABC):
         self.tax = next_object.tax
         self.desirability = next_object.desirability
         self.build_type = next_object.build_type
+        self.risk = next_object.risk
         self.__class__ = class_name

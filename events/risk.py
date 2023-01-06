@@ -9,12 +9,12 @@ class Risk:
 
 
     def risk_progress(self):
-        if 0 < self.fire_risk_status < 100:     #risk increases as soon as the building is created
+        if 0 <= self.fire_risk_status < 100:     #risk increases as soon as the building is created
 
             if rd.randint(0, 100) < self.fire_risk:      #every type of building has different odds
                 self.fire_risk_status += 10
 
-        if 0 < self.dest_risk_status < 100:  # risk increases as soon as the building is created
+        if 0 <= self.dest_risk_status < 100:  # risk increases as soon as the building is created
 
             if rd.randint(0, 100) < self.dest_risk:  # every type of building has different odds
                 self.dest_risk_status += 10
