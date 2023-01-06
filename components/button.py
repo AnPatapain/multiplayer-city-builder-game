@@ -22,6 +22,7 @@ class Button(Component):
             image_selected: Surface = None,
             center_text: bool = False,
             selectable: bool = False,
+            disable_unselect: bool = False
     ):
         super().__init__(pos, size)
         self.text = text
@@ -31,6 +32,7 @@ class Button(Component):
         self.text_centered = center_text
         self.selectable = selectable
         self.selected = False
+        self.disable_unselect = disable_unselect
         self.being_pressed = False
         self.disabled = False
         self.image = image
@@ -60,6 +62,9 @@ class Button(Component):
 
     def is_selected(self):
         return self.selected
+
+    def is_unselect_disabled(self):
+        return self.disable_unselect
 
     def set_selected(self, status: bool):
         if not self.is_disabled() and self.selectable:
