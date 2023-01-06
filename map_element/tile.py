@@ -1,5 +1,7 @@
 import random
 from typing import Optional, TYPE_CHECKING
+import pygame as pg
+
 
 from class_types.tile_types import TileTypes
 from game.game_controller import GameController
@@ -17,6 +19,7 @@ class Tile:
 
     def __init__(self, col: int, row: int):
         self.type = TileTypes.GRASS
+        self.id_number = 0
         self.building: Optional[Buildable] = None
         self.show_tile = True
         self.road = None
@@ -42,6 +45,12 @@ class Tile:
             min([x for x, y in self.isometric_coord]),
             min([y for x, y in self.isometric_coord])
         )
+
+    def get_id_number(self):
+        return self.id_number
+
+    def set_id_number(self, new_id):
+        self.id_number = new_id
 
     def find_key(self,v, dictio : dict):
         for k, val in dictio.items():
@@ -85,15 +94,18 @@ class Tile:
     def get_show_tile(self):
         return self.show_tile
 
-    def get_texture(self):
+    def get_texture(self) -> pg.Surface:
+        dic = Textures.get_texture(self.get_type())
         if not self.show_tile:
-            return Textures.get_texture(TileTypes.GRASS)
+            return dic[self.get_id_number()]
         if self.building:
             return self.building.get_texture()
         if self.road:
             return Textures.get_texture(self.road.get_road_type())
-        return Textures.get_texture(self.type)
-
+        if self.id_number:
+            return dic[self.get_id_number()]
+        else:
+            return dic
     def get_delete_texture(self):
         if not self.show_tile:
             return Textures.get_texture(TileTypes.GRASS)

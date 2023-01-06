@@ -219,10 +219,31 @@ class World:
         for row in self.grid:
             for tile in row:
                 tile: Tile = tile
-                random_texture_number = random.randint(0, 20)
-                texture_image = Textures.textures[TileTypes.GRASS][random_texture_number]
-                #texture_image = Textures.get_texture(tile.type)
+
+                if tile.type == TileTypes.GRASS:
+                    random_grass_number = random.randint(0, 20)
+                    tile.set_id_number(random_grass_number)
+                elif tile.type == TileTypes.ROCK:
+                    random_rock_number = random.randint(0, 1)
+                    texture_image = Textures.textures[TileTypes.ROCK][random_rock_number]
+                    tile.set_id_number(random_rock_number)
+                elif tile.type == TileTypes.TREE:
+                    random_tree_number = random.randint(0, 36)
+                    texture_image = Textures.textures[TileTypes.TREE][random_tree_number]
+                    tile.set_id_number(random_tree_number)
+                elif tile.type == TileTypes.WHEAT:
+                    random_wheat_number = random.randint(0, 1)
+                    texture_image = Textures.textures[TileTypes.WHEAT][random_wheat_number]
+                    tile.set_id_number(random_wheat_number)
+                elif tile.type == TileTypes.WATER:
+                    random_water_number = random.randint(0, 1)
+                    texture_image = Textures.textures[TileTypes.WATER][random_water_number]
+                    tile.set_id_number(random_water_number)
+
+
+                texture_image = tile.get_texture()
                 (x, y) = tile.get_render_coord()
+                print(texture_image)
                 offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
                 self.default_surface.blit(texture_image, offset)
 

@@ -18,7 +18,7 @@ class Textures:
     textures_destroy: dict[pg.Surface] = {}
 
     @staticmethod
-    def get_texture(texture_id: any) -> pg.Surface | dict[Enum, pg.Surface]:
+    def get_texture(texture_id: any) -> pg.Surface |  dict[int, pg.Surface] | dict[Enum, pg.Surface]:
         return Textures.textures[texture_id]
 
     @staticmethod
@@ -76,12 +76,96 @@ class Textures:
 
             },
 
+            TileTypes.ROCK: {
+                0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00290.png'))).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00291.png'))).convert_alpha(screen),
+            },
 
-            TileTypes.ROCK: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00290.png'))).convert_alpha(screen),
-            TileTypes.TREE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00041.png'))).convert_alpha(screen),
-            TileTypes.BIG_TREE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00059.png'))).convert_alpha(screen),
-            TileTypes.WATER: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00120.png'))).convert_alpha(screen),
-            TileTypes.WHEAT: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00027.png'))).convert_alpha(screen),
+            TileTypes.TREE: {
+                0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00010.png'))).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00011.png'))).convert_alpha(screen),
+                2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00012.png'))).convert_alpha(
+                    screen),
+                3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00013.png'))).convert_alpha(
+                    screen),
+                4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00014.png'))).convert_alpha(
+                    screen),
+                5: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00015.png'))).convert_alpha(
+                    screen),
+                6: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00016.png'))).convert_alpha(
+                    screen),
+                7: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00017.png'))).convert_alpha(
+                    screen),
+                8: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00030.png'))).convert_alpha(
+                    screen),
+                9: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00031.png'))).convert_alpha(
+                    screen),
+                10: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00032.png'))).convert_alpha(
+                    screen),
+                11: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00033.png'))).convert_alpha(
+                    screen),
+                12: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00034.png'))).convert_alpha(
+                    screen),
+                13: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00035.png'))).convert_alpha(
+                    screen),
+                14: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00036.png'))).convert_alpha(
+                    screen),
+                15: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00037.png'))).convert_alpha(
+                    screen),
+                16: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00038.png'))).convert_alpha(
+                    screen),
+                17: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00039.png'))).convert_alpha(
+                    screen),
+                18: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00040.png'))).convert_alpha(
+                    screen),
+                19: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00041.png'))).convert_alpha(
+                    screen),
+                20: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00042.png'))).convert_alpha(
+                    screen),
+                21: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00043.png'))).convert_alpha(
+                    screen),
+                22: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00044.png'))).convert_alpha(
+                    screen),
+                23: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00045.png'))).convert_alpha(
+                    screen),
+                24: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00046.png'))).convert_alpha(
+                    screen),
+                25: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00047.png'))).convert_alpha(
+                    screen),
+                26: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00048.png'))).convert_alpha(
+                    screen),
+                27: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00049.png'))).convert_alpha(
+                    screen),
+                28: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00050.png'))).convert_alpha(
+                    screen),
+                29: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00051.png'))).convert_alpha(
+                    screen),
+                30: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00052.png'))).convert_alpha(
+                    screen),
+                31: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00053.png'))).convert_alpha(
+                    screen),
+                32: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00053.png'))).convert_alpha(
+                    screen),
+                33: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00054.png'))).convert_alpha(
+                    screen),
+                34: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00058.png'))).convert_alpha(
+                    screen),
+                35: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00059.png'))).convert_alpha(
+                    screen),
+                36: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00060.png'))).convert_alpha(
+                    screen),
+            },
+
+            TileTypes.WATER: {
+                0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00120.png'))).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00121.png'))).convert_alpha(screen),
+
+            },
+
+            TileTypes.WHEAT: {
+                0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00027.png'))).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00028.png'))).convert_alpha(screen),
+            },
 
             # Road texture
             RoadTypes.ALONE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00104.png'))).convert_alpha(screen),
