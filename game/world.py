@@ -150,11 +150,24 @@ class World:
         map_pos = MapController.get_map_pos()
         screen.blit(self.default_surface, map_pos)
 
-        for row in self.game_controller.get_map():
-            for tile in row:
-                (x, y) = tile.get_render_coord()
-                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+        map = self.game_controller.get_map()
 
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                tile = map[row][col]
+                (x, y) = tile.get_render_coord()
+
+                # if tile.get_building() and tile.show_tile and sum(tile.get_building().get_building_size()) >= 4:
+                #     if tile.get_building() and tile.get_building().build_type == BuildingTypes.WHEAT_FARM:
+                #         print("wheatFarm ici: ",  tile.y, tile.x, tile.get_show_tile())
+                #     pre_tile = map[row - tile.get_building().build_size[1] + 1][col]
+                #     print("pre_tile", pre_tile.y, pre_tile.x)
+                #     (x, y) = (x, pre_tile.get_render_coord()[1])
+
+                if tile.get_building():
+                    pre_tile = map[row - tile.get_building().build_size[1] + 1][col]
+                    (x, y) = (x, pre_tile.get_render_coord()[1])
+                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
                 if tile.get_road() or tile.get_building():
                     screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
                 for walker in tile.walkers:
@@ -170,7 +183,7 @@ class World:
                                     y + map_pos[1])
 
             texture = Textures.get_texture(self.builder.get_temp_tile_info()['name'])
-            screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
+            # screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
 
             if self.builder.get_temp_tile_info()['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
