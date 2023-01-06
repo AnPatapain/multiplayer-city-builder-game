@@ -1,6 +1,6 @@
 import random as rd
 
-class risk():
+class Risk:
     def __init__(self, fire_risk, dest_risk):
         self.fire_risk = fire_risk
         self.dest_risk = dest_risk
