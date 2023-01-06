@@ -52,13 +52,18 @@ class Builder:
         grid = self.game_controller.get_map()
 
         if selected_tile == RoadTypes.TL_TO_BR:
-            start = self.game_controller.get_map()[start_point[1]][start_point[0]]
-            end = self.game_controller.get_map()[end_point[1]][end_point[0]]
+            start = grid[start_point[1]][start_point[0]]
+            if not start.is_buildable() and not start.get_road():
+                return
+            end = grid[end_point[1]][end_point[0]]
+            if not end.is_buildable() and not end.get_road():
+                return
             path = start.find_path_to(end, buildable_or_road=True)
 
             if path:
                 for tile in path:
-                    self.road_add(tile.x, tile.y)
+                    if tile.is_buildable():
+                        self.road_add(tile.x, tile.y)
 
             self.start_point = None  # update start point to default after building
             self.end_point = None  # update start point to default after building

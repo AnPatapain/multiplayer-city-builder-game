@@ -183,13 +183,18 @@ class World:
                 grid = self.game_controller.get_map()
 
                 if self.panel.selected_tile == RoadTypes.TL_TO_BR:
-                    start = self.game_controller.get_map()[self.builder.get_start_point()[1]][self.builder.get_start_point()[0]]
-                    end = self.game_controller.get_map()[self.builder.get_end_point()[1]][self.builder.get_end_point()[0]]
+                    start = grid[self.builder.get_start_point()[1]][self.builder.get_start_point()[0]]
+                    if not start.is_buildable() and not start.get_road():
+                        return
+                    end = grid[self.builder.get_end_point()[1]][self.builder.get_end_point()[0]]
+                    if not end.is_buildable() and not end.get_road():
+                        return
                     path = start.find_path_to(end, buildable_or_road=True)
 
                     if path:
                         for tile in path:
-                            if tile.get_road():
+                            # Don't display build sign if there is already a road
+                            if tile.get_road() or not tile.is_buildable():
                                 continue
                             (x, y) = tile.get_render_coord()
                             (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
