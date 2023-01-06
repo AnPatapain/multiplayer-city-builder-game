@@ -202,10 +202,11 @@ class World:
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
-            cost = buildable_cost[self.panel.selected_tile]
-            if self.panel.selected_tile == BuildingTypes.PELLE:
-                cost = 0
-            utils.draw_text(text=str(cost), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
+            if self.panel.selected_tile:
+                cost = buildable_cost[self.panel.selected_tile]
+                if self.panel.selected_tile == BuildingTypes.PELLE:
+                    cost = 0
+                utils.draw_text(text=str(cost), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
         if self.builder.get_in_build_action():
 
