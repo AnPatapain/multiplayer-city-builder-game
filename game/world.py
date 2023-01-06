@@ -1,14 +1,15 @@
-from typing import Optional
-
 import random
+from typing import Optional
 
 import pygame as pg
 from PIL import Image
 
 import game.utils as utils
+from buildable.buildableCost import buildable_cost
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
+from class_types.orientation_types import OrientationTypes
 from class_types.road_types import RoadTypes
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
@@ -159,8 +160,30 @@ class World:
 
                 if tile.get_road() or tile.get_building():
                     screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+
+                base_x_offset = x_offset
+                base_y_offset = y_offset
                 for walker in tile.walkers:
-                    screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2, y_offset))
+                    x_offset = x_offset + TILE_SIZE/2
+
+                    orient = walker.orientation_from_previous_tile if walker.walk_progression < 0 else walker.orientation_to_next_tile
+                    match orient:
+                        case OrientationTypes.TOP_RIGHT:
+                            x_offset += walker.walk_progression*2
+                            y_offset -= walker.walk_progression
+                        case OrientationTypes.TOP_LEFT:
+                            x_offset -= walker.walk_progression*2
+                            y_offset -= walker.walk_progression
+                        case OrientationTypes.BOTTOM_LEFT:
+                            x_offset -= walker.walk_progression*2
+                            y_offset += walker.walk_progression
+                        case OrientationTypes.BOTTOM_RIGHT:
+                            x_offset += walker.walk_progression*2
+                            y_offset += walker.walk_progression
+
+                    screen.blit(walker.get_texture(), (x_offset, y_offset))
+                    x_offset = base_x_offset
+                    y_offset = base_y_offset
 
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
             isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
@@ -179,6 +202,11 @@ class World:
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
+            cost = buildable_cost[self.panel.selected_tile]
+            if self.panel.selected_tile == BuildingTypes.PELLE:
+                cost = 0
+            utils.draw_text(text=str(cost), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
+
         if self.builder.get_in_build_action():
 
             if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
@@ -194,6 +222,7 @@ class World:
                     path = start.find_path_to(end, buildable_or_road=True)
 
                     if path:
+                        to_build_number = 0
                         for tile in path:
                             # Don't display build sign if there is already a road
                             if tile.get_road() or not tile.is_buildable():
@@ -203,9 +232,16 @@ class World:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+                            to_build_number += 1
+
+                        isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
+                        isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
+                                                 isometric_coor]
+                        utils.draw_text(text=str(to_build_number*4), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
                     return
 
+                count = 0
                 for row in utils.MyRange(self.builder.get_start_point()[1], self.builder.get_end_point()[1]):
                     for col in utils.MyRange(self.builder.get_start_point()[0], self.builder.get_end_point()[0]):
 
@@ -214,37 +250,27 @@ class World:
 
                         if grid[row][col].is_buildable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] != BuildingTypes.PELLE:
                             build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
+                            count += 1
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
                         elif grid[row][col].is_destroyable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] == BuildingTypes.PELLE:
                             building = grid[row][col].get_delete_texture()
+                            count += 1
                             screen.blit(building,
                                         (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
+                isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
+                isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
+                                                 isometric_coor]
+                utils.draw_text(text=str(count*buildable_cost[self.panel.selected_tile]), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
     def create_static_map(self):
         for row in self.game_controller.get_map():
             for tile in row:
                 tile: Tile = tile
-
-                if tile.type == TileTypes.GRASS:
-                    random_grass_number = random.randint(0, 20)
-                    tile.set_id_number(random_grass_number)
-                    texture_image = Textures.textures[TileTypes.GRASS][random_grass_number]
-
-                elif tile.type == TileTypes.WHEAT:
-                    random_wheat_number = random.randint(0, 1)
-                    texture_image = Textures.textures[TileTypes.WHEAT][random_wheat_number]
-                    tile.set_id_number(random_wheat_number)
-                elif tile.type == TileTypes.WATER:
-                    random_water_number = random.randint(0, 1)
-                    texture_image = Textures.textures[TileTypes.WATER][random_water_number]
-                    tile.set_id_number(random_water_number)
-
-
+                texture_image = Textures.get_texture(tile.type, texture_number=tile.get_random_texture_number())
                 (x, y) = tile.get_render_coord()
-                print(texture_image)
                 offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
                 self.default_surface.blit(texture_image, offset)
 
@@ -282,12 +308,16 @@ class World:
                 match (r, g, b):
                     case (255, 242, 0):
                         tile.set_type(TileTypes.WHEAT)
+                        tile.set_random_texture_number(random.randint(0, 1))
                     case (12, 102, 36):
                         tile.set_building(SmallTree(x, y))
+                        tile.set_random_texture_number(random.randint(0, 30))
                     case (0, 162, 232):
                         tile.set_type(TileTypes.WATER)
+                        tile.set_random_texture_number(random.randint(0, 1))
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
+                        tile.set_random_texture_number(random.randint(0, 1))
                     case (237, 28, 35):
                         pass  # Red color, flag spawn
                     case (111, 49, 152):
@@ -298,7 +328,8 @@ class World:
                     case (181, 165, 213):
                         leave_point = tile
                         pass  # Purple/Brown, road leave
-
+                    case _:
+                        tile.set_random_texture_number(random.randint(0, 20))
 
                 table[x].append(tile)
 

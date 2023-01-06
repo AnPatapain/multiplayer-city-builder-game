@@ -14,17 +14,15 @@ if TYPE_CHECKING:
 
 
 class Tile:
-
-
-
-    def __init__(self, col: int, row: int):
-        self.type = TileTypes.GRASS
-        self.id_number = 0
+    def __init__(self, col: int, row: int, tile_type: TileTypes = TileTypes.GRASS):
+        self.type = tile_type
         self.building: Optional[Buildable] = None
         self.show_tile = True
         self.road = None
         self.x = row
         self.y = col
+
+        self.random_texture_number = 0
 
         self.water_access = False
 
@@ -46,16 +44,11 @@ class Tile:
             min([y for x, y in self.isometric_coord])
         )
 
-    def get_id_number(self):
-        return self.id_number
+    def set_random_texture_number(self, num: int):
+        self.random_texture_number = num
 
-    def set_id_number(self, new_id):
-        self.id_number = new_id
-
-    def find_key(self,v, dictio : dict):
-        for k, val in dictio.items():
-            if v == val:
-                return k
+    def get_random_texture_number(self) -> int:
+        return self.random_texture_number
 
     def get_render_coord(self):
         return self.render_coord
@@ -94,18 +87,15 @@ class Tile:
     def get_show_tile(self):
         return self.show_tile
 
-    def get_texture(self) -> pg.Surface:
-        dic = Textures.get_texture(self.get_type())
+    def get_texture(self):
         if not self.show_tile:
-            return dic[self.get_id_number()]
+            return Textures.get_texture(TileTypes.GRASS)
         if self.building:
             return self.building.get_texture()
         if self.road:
             return Textures.get_texture(self.road.get_road_type())
-        if self.id_number:
-            return dic[self.get_id_number()]
-        else:
-            return dic
+        return Textures.get_texture(self.type, texture_number=self.random_texture_number)
+
     def get_delete_texture(self):
         if not self.show_tile:
             return Textures.get_texture(TileTypes.GRASS)

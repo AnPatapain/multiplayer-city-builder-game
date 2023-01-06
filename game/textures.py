@@ -13,13 +13,23 @@ from class_types.orientation_types import OrientationTypes
 
 
 class Textures:
-    textures: dict[pg.Surface] = {}
+    textures: dict[Enum, pg.Surface | dict[int, pg.Surface]] = {}
     walker_textures: dict[WalkerTypes, dict[OrientationTypes, dict[int, pg.Surface]]] = {}
     textures_destroy: dict[pg.Surface] = {}
 
     @staticmethod
-    def get_texture(texture_id: any) -> pg.Surface |  dict[int, pg.Surface] | dict[Enum, pg.Surface]:
-        return Textures.textures[texture_id]
+    def get_texture(texture_id: any, texture_number: int = 0) -> pg.Surface:
+        texture = Textures.textures[texture_id]
+        if isinstance(texture, dict):
+            if texture_number:
+                try:
+                    return texture[texture_number]
+                except KeyError:
+                    return texture[0]
+            else:
+                return texture[0]
+        else:
+            return texture
 
     @staticmethod
     def get_walker_texture(walker_id: WalkerTypes, direction: OrientationTypes, animation_frame: int) -> pg.Surface:
