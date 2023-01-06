@@ -10,5 +10,3 @@ class Rock(Buildable):
     def is_destroyable(self):
         return False
 
-    def get_texture(self):
-        return Textures.get_texture(self.build_type)[self.get_current_tile().id_number]
