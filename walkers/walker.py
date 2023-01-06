@@ -49,8 +49,7 @@ class Walker(ABC):
                 if not res:
                     self.delete()
                     return
-                else:
-                    self.next_tile = self.path_to_destination.pop(0)
+
             if len(self.path_to_destination) == 0:
                 self.walk_distance += 1
 
@@ -137,5 +136,5 @@ class Walker(ABC):
             self.destination = dest
             self.path_to_destination = path
             # Remove the start of the path, since we are already here
-            self.path_to_destination.pop(0)
+            # self.path_to_destination.pop(0)
             return True
