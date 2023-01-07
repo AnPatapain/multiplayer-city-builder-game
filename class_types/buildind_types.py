@@ -22,3 +22,6 @@ class BuildingTypes(Enum):
     GRANARY = 92
     WHEAT_FARM = 93
     MARKET = 94
+
+    EMPTY_WHEAT_SOL = 95
+    FULL_WHEAT_SOL = 96
