@@ -136,7 +136,7 @@ class Tile:
 
         return adjacentes_tiles
 
-    def find_path_to(self, dest: 'Tile', roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile'] | None:
+    def find_path_to(self, dest: 'Tile', roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile']:
         def _estimate_distance(src: 'Tile') -> int:
             dest_x = abs(abs(src.x) - abs(self.x))
             dest_y = abs(abs(src.y) - abs(self.y))
@@ -188,4 +188,4 @@ class Tile:
                     if neighbor not in open_set:
                         open_set.append(neighbor)
 
-        return None
+        return []

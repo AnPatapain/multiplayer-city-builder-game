@@ -6,7 +6,6 @@ from .world import World
 from .utils import draw_text
 from .map_controller import MapController
 from .panel import Panel
-from .setting import *
 from .game_controller import GameController
 
 
@@ -26,7 +25,7 @@ class Game:
         self.panel = Panel(self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
-        self.world = World(GRID_SIZE, GRID_SIZE, self.width, self.height, self.panel)
+        self.world = World(self.width, self.height, self.panel)
 
         MapController.init_()
 

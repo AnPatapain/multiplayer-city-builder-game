@@ -143,27 +143,6 @@ class Panel:
     def update(self):
         self.mini_map.update()
 
-    def scale_image(self, image, width=None,
-                    height=None):  # Procedure function which scales up or down the image specified
-        # Default case do nothing
-        if (width is None) and (height is None):
-            pass
-
-        elif height is None:  # scale only width
-            scale = width / image.get_width()
-            height = scale * image.get_height()
-            image = pg.transform.scale(image, (int(width), int(height)))
-
-        elif width is None:  # scale only width
-            scale = height / image.get_height()
-            width = scale * image.get_width()
-            image = pg.transform.scale(image, (int(width), int(height)))
-
-        else:
-            image = pg.transform.scale(image, (int(width), int(height)))
-
-        return image
-
     def has_selected_tile(self):
         return self.selected_tile is not None
 
