@@ -204,8 +204,8 @@ class World:
                         case OrientationTypes.BOTTOM_RIGHT:
                             x_offset += walker.walk_progression*2
                             y_offset += walker.walk_progression
-
-                    screen.blit(walker.get_texture(), (x_offset, y_offset))
+                    if self.overlay_types == OverlayTypes.DEFAULT:
+                        screen.blit(walker.get_texture(), (x_offset, y_offset))
                     x_offset = base_x_offset
                     y_offset = base_y_offset
 
