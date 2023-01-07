@@ -30,13 +30,8 @@ class World:
         self.builder = Builder()
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
+
         self.load_map()
-        self.grid = self.game_controller.get_map()
-
-
-        '''
-        create map only once by bliting texture directly on default surface not on screen and then we can blit default surface on screen 
-        '''
         self.create_static_map()
 
         # For building feature
@@ -96,13 +91,17 @@ class World:
                     self.builder.set_end_point(mouse_grid_pos)
                     self.builder.set_in_build_action(True)
 
-            elif event.type == pg.MOUSEBUTTONUP:
-                if event.button == 1 and self.panel.has_selected_tile():
-                    self.builder.set_in_build_action(False)
-                    self.builder.set_end_point(mouse_grid_pos)
-
             elif event.type == pg.MOUSEMOTION:
                 self.builder.set_end_point(mouse_grid_pos)
+
+        if event.type == pg.MOUSEBUTTONUP:
+            if event.button == 1 and self.panel.has_selected_tile():
+                self.builder.set_in_build_action(False)
+                if self.in_map(mouse_grid_pos):
+                    self.builder.set_end_point(mouse_grid_pos)
+                else:
+                    self.builder.set_end_point(None)
+                    self.builder.set_start_point(None)
 
     def update(self):
         """
