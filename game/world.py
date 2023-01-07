@@ -176,6 +176,8 @@ class World:
                             pg_img = self.overlay.get_overlay(tile,self.overlay_types)
                             if pg_img:
                                 screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() +  building_size[1]*TILE_SIZE))
+                            else:
+                                screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                         else:
                             screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                     elif tile.get_road():
