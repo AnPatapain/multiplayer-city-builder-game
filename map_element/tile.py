@@ -23,7 +23,6 @@ class Tile:
         self.y = col
 
         self.random_texture_number = 0
-
         self.water_access = False
 
         self.walkers: list['Walker'] = []
@@ -49,6 +48,12 @@ class Tile:
 
     def get_random_texture_number(self) -> int:
         return self.random_texture_number
+
+    def set_water_texture(self, type):
+        self.water_texture = type
+
+    def get_water_texture(self):
+        return self.water_texture
 
     def get_render_coord(self):
         return self.render_coord

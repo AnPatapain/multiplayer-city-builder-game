@@ -1,5 +1,6 @@
 import pygame as pg
 
+from Backup_game import Backup_game
 from components import button
 from events.event_manager import EventManager
 from sounds.sounds import SoundManager
@@ -12,7 +13,7 @@ class Menu:
 
         self.screen = screen
         self.clock = clock
-        self.graphics = self.load_images()
+        self. graphics = self.load_images()
         self.sound_manager = SoundManager()
 
         # (Width, Height)
@@ -27,6 +28,7 @@ class Menu:
         self.button__load_saved_game = button.Button((button_start, 400), button_size,
                                                       image=pg.image.load('assets/menu_sprites/load saved game.png').convert(),
                                                       image_hover=pg.image.load('assets/menu_sprites/load_saved_game_mouse_on.png').convert())
+#        self.button__load_saved_game.on_click(Backup_game.load_game())
 
         self.button__options = button.Button((button_start, 450), button_size,
                                                       image=pg.image.load('assets/menu_sprites/options.png').convert(),

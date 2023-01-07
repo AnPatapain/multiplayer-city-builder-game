@@ -308,16 +308,17 @@ class World:
                 match (r, g, b):
                     case (255, 242, 0):
                         tile.set_type(TileTypes.WHEAT)
-                        tile.set_random_texture_number(random.randint(0, 1))
+                        tile.set_random_texture_number(random.randint(0, 4))
                     case (12, 102, 36):
                         tile.set_building(SmallTree(x, y))
                         tile.set_random_texture_number(random.randint(0, 30))
                     case (0, 162, 232):
                         tile.set_type(TileTypes.WATER)
-                        tile.set_random_texture_number(random.randint(0, 1))
+                        tile.set_random_texture_number(random.randint(0, 7))
+                        self.riviere(x, y, img, tile)
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
-                        tile.set_random_texture_number(random.randint(0, 1))
+                        tile.set_random_texture_number(random.randint(0, 7))
                     case (237, 28, 35):
                         pass  # Red color, flag spawn
                     case (111, 49, 152):
@@ -348,3 +349,99 @@ class World:
                         self.builder.road_add(x, y)
                     case (181, 165, 213):
                         self.builder.road_add(x, y)
+
+        self.riviere_angle()
+
+    def riviere(self, x, y, img, tile):
+        if 0 <= y <= 39 and 0 <= x <= 39:
+            r_d, r_b, r_g, r_h = 0, 0, 0, 0
+            if x != 0 and y != 0 and x != 39 and y != 39:
+                r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+            else:
+                if x == 0 and y != 0:
+                    r_d = 0
+                    r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                    r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                    r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+                if y == 0 and x != 0:
+                    r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                    r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                    r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+                    r_h = 0
+                if x == 39 and y != 39:
+                    r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                    r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                    r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+                    r_g = 0
+                if y == 39 and x != 39:
+                    r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                    r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                    r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                    r_b = 0
+
+            if r_d != 0:
+                tile.set_random_texture_number(10)
+                if r_h != 0 and r_b == 0:
+                    tile.set_random_texture_number(11)
+                elif r_b != 0 and r_h == 0:
+                    tile.set_random_texture_number(12)
+                elif r_b != 0 and r_h != 0:
+                    tile.set_random_texture_number(13)
+
+            if r_h != 0:
+                tile.set_random_texture_number(14)
+                if r_d != 0 and r_g == 0:
+                    tile.set_random_texture_number(11)
+                elif r_g != 0 and r_d == 0:
+                    tile.set_random_texture_number(15)
+                elif r_d != 0 and r_g != 0:
+                    tile.set_random_texture_number(16)
+
+            if r_g != 0:
+                tile.set_random_texture_number(17)
+                if r_h != 0 and r_b == 0:
+                    tile.set_random_texture_number(18)
+                elif r_b != 0 and r_h == 0:
+                    tile.set_random_texture_number(19)
+                elif r_b != 0 and r_h != 0:
+                    tile.set_random_texture_number(20)
+            if r_b != 0:
+                tile.set_random_texture_number(21)
+                if r_d != 0 and r_g == 0:
+                    tile.set_random_texture_number(22)
+                elif r_g != 0 and r_d == 0:
+                    tile.set_random_texture_number(23)
+                elif r_d != 0 and r_g != 0:
+                    tile.set_random_texture_number(24)
+
+    def riviere_angle(self):
+        grid = self.game_controller.get_map()
+        for x in range(0, 40):
+            for y in range(0, 39):
+                tile = grid[x][y]
+
+                if tile.get_type() == TileTypes.WATER:
+                    tile_g = grid[x][y-1]
+                    tile_d = grid[x][y+1]
+                    tile_h = grid[x-1][y]
+                    tile_b = grid[x+1][y]
+
+
+
+                    if tile_b.get_type() == TileTypes.WATER and tile_g.get_type() == TileTypes.WATER and tile_b.get_random_texture_number() in range(10, 24) and tile_g.get_random_texture_number() in range(10, 24):
+                        if grid[x+1][y-1].get_type() != TileTypes.WATER:
+                            tile.set_random_texture_number(70)
+                        print("bg")
+                    if tile_b.get_type() == TileTypes.WATER and tile_d.get_type() == TileTypes.WATER and tile_b.get_random_texture_number() in range(10, 24) and tile_d.get_random_texture_number() in range(10, 24):
+                        tile.set_random_texture_number(71)
+                        print("bd")
+                    if tile_g.get_type() == TileTypes.WATER and tile_h.get_type() == TileTypes.WATER and tile_h.get_random_texture_number() in range(10, 24) and tile_g.get_random_texture_number() in range(10, 24):
+                        tile.set_random_texture_number(72)
+                        print("hg")
+                    if tile_h.get_type() == TileTypes.WATER and tile_d.get_type() == TileTypes.WATER and tile_h.get_random_texture_number() in range(10, 24) and tile_d.get_random_texture_number() in range(10, 24):
+                        if tile_b.get_type() == TileTypes.WATER:
+                            tile.set_random_texture_number(73)
+                        print("hd")
