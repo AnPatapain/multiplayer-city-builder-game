@@ -9,11 +9,13 @@ from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
 from class_types.orientation_types import OrientationTypes
+from class_types.overlay_types import OverlayTypes
 from class_types.road_types import RoadTypes
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from game.game_controller import GameController
 from game.map_controller import MapController
+from game.overlay import Overlay
 from game.setting import *
 from game.textures import Textures
 from map_element.tile import Tile
@@ -28,6 +30,9 @@ class World:
         self.nums_grid_y = nums_grid_y
         self.width = width
         self.height = height
+
+        self.overlay = Overlay(nums_grid_x,nums_grid_y)
+        self.overlay_types = OverlayTypes.DEFAULT
 
         self.builder = Builder(nums_grid_x, nums_grid_y)
 
@@ -53,6 +58,9 @@ class World:
         EventManager.register_key_listener(pg.K_g, lambda : self.panel.set_selected_tile(BuildingTypes.GRANARY))
         EventManager.register_key_listener(pg.K_f, lambda : self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
         EventManager.register_key_listener(pg.K_m, lambda : self.panel.set_selected_tile(BuildingTypes.MARKET))
+        EventManager.register_key_listener(pg.K_o, lambda: self.set_overlay(OverlayTypes.FIRE))
+        EventManager.register_key_listener(pg.K_i, lambda: self.set_overlay(OverlayTypes.DEFAULT))
+
 
     def mouse_pos_to_grid(self, mouse_pos):
         """
@@ -167,7 +175,13 @@ class World:
                 if tile.get_road() or tile.get_building():
                     if tile.get_building() and tile.get_show_tile():
                         building_size = tile.get_building().get_building_size()
-                        screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() +  building_size[1]*TILE_SIZE))
+                        #print(self.overlay_types)
+                        if self.overlay_types == OverlayTypes.FIRE:
+                            pg_img = self.overlay.get_fire_overlay(row,col)
+                            if pg_img:
+                                screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() +  building_size[1]*TILE_SIZE))
+                        else:
+                            screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                     elif tile.get_road():
                         screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
                     # screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
@@ -355,3 +369,6 @@ class World:
                         self.builder.road_add(x, y)
                     case (181, 165, 213):
                         self.builder.road_add(x, y)
+
+    def set_overlay(self,overlay_types : OverlayTypes):
+        self.overlay_types = overlay_types

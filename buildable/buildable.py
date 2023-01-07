@@ -74,3 +74,5 @@ class Buildable(ABC):
         self.build_type = next_object.build_type
         self.__class__ = Ruin
 
+    def get_risk(self) -> Risk:
+        return self.risk
