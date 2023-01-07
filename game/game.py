@@ -6,7 +6,6 @@ from .world import World
 from .utils import draw_text
 from .map_controller import MapController
 from .panel import Panel
-from .setting import *
 from .game_controller import GameController
 
 
@@ -14,6 +13,7 @@ class Game:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
+        self.paused = False
         self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
 
@@ -25,7 +25,7 @@ class Game:
         self.panel = Panel(self.width, self.height)
 
         # World contains populations or graphical objects like buildings, trees, grass
-        self.world = World(GRID_SIZE, GRID_SIZE, self.width, self.height, self.panel)
+        self.world = World(self.width, self.height, self.panel)
 
         MapController.init_()
 
@@ -33,16 +33,24 @@ class Game:
         EventManager.register_key_listener(pg.K_ESCAPE, exit)
         # Calls the event_handler of the World
         EventManager.add_hooked_function(self.world.event_handler)
+        EventManager.register_key_listener(pg.K_SPACE, self.toogle_pause)
 
     # Game Loop
     def run(self):
         self.clock.tick(50)
         EventManager.handle_events()
         gc = GameController.get_instance()
-        for walker in gc.walkers:
-            walker.update()
-        self.update()
+        if not self.paused:
+            self.game_controller.update()
+            for walker in gc.walkers:
+                walker.update()
+
+        self.world.update()
+        self.panel.update()
         self.draw()
+
+    def toogle_pause(self):
+        self.paused = not self.paused
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -54,8 +62,3 @@ class Game:
         draw_text('denier {}'.format(self.game_controller.get_denier()), self.screen, (self.width - 905, 10), size=42)
 
         pg.display.flip()
-
-    def update(self):
-        self.panel.update()
-        self.world.update()
-        self.game_controller.update()

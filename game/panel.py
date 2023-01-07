@@ -48,31 +48,36 @@ class Panel:
         self.build__road = Button((self.width - 49, 277 + TOPBAR_HEIGHT), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON7),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_HOVER),
-                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_SELECTED))
+                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_SELECTED),
+                                  disable_unselect=True, selectable=True)
         self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
 
         self.destroy_tile = Button((self.width - 99, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON6),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_HOVER),
-                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED))
+                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED),
+                                   disable_unselect=True, selectable=True)
         self.destroy_tile.on_click(lambda: self.set_selected_tile(BuildingTypes.PELLE))  # image qui est sur le curseur
 
         self.build__house = Button((self.width - 149, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_HOVER),
-                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_SELECTED))
+                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_SELECTED),
+                                   disable_unselect=True, selectable=True)
         self.build__house.on_click(lambda: self.set_selected_tile(BuildingTypes.VACANT_HOUSE))
 
         self.build__prefecture = Button((self.width - 99, 385 + TOPBAR_HEIGHT), button_size,
                                         image=Textures.get_texture(SwitchViewButtonTypes.BUTTON15),
                                         image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_HOVER),
-                                        image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_SELECTED))
+                                        image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_SELECTED),
+                                        disable_unselect=True, selectable=True)
         self.build__prefecture.on_click(lambda: self.set_selected_tile(BuildingTypes.PREFECTURE))
 
         self.build__well = Button((self.width - 149, 312 + TOPBAR_HEIGHT), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON8),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_HOVER),
-                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_SELECTED))
+                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_SELECTED),
+                                  disable_unselect=True, selectable=True)
         self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
 
         EventManager.register_component(self.destroy_tile)
@@ -138,27 +143,6 @@ class Panel:
     def update(self):
         self.mini_map.update()
 
-    def scale_image(self, image, width=None,
-                    height=None):  # Procedure function which scales up or down the image specified
-        # Default case do nothing
-        if (width is None) and (height is None):
-            pass
-
-        elif height is None:  # scale only width
-            scale = width / image.get_width()
-            height = scale * image.get_height()
-            image = pg.transform.scale(image, (int(width), int(height)))
-
-        elif width is None:  # scale only width
-            scale = height / image.get_height()
-            width = scale * image.get_width()
-            image = pg.transform.scale(image, (int(width), int(height)))
-
-        else:
-            image = pg.transform.scale(image, (int(width), int(height)))
-
-        return image
-
     def has_selected_tile(self):
         return self.selected_tile is not None
 
@@ -167,6 +151,12 @@ class Panel:
 
     def set_selected_tile(self, value):
         self.selected_tile = value
+        if value is None:
+            self.build__prefecture.set_selected(False)
+            self.build__house.set_selected(False)
+            self.build__well.set_selected(False)
+            self.build__road.set_selected(False)
+            self.destroy_tile.set_selected(False)
 
     def get_panel_rects(self):
         return self.panel_rects
