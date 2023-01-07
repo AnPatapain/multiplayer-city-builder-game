@@ -242,11 +242,11 @@ class World:
                             screen.blit(build_sign,
                                         (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
                             to_build_number += 1
-
-                        isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
-                        isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
+                        if self.builder.get_temp_tile_info():
+                            isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
+                            isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
                                                  isometric_coor]
-                        utils.draw_text(text=str(to_build_number*4), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
+                            utils.draw_text(text=str(to_build_number*4), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
                     return
 
