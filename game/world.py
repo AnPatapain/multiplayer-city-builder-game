@@ -37,15 +37,15 @@ class World:
         # For building feature
         self.panel = panel
 
-        #shortcup
-        EventManager.register_key_listener(pg.K_h,lambda : self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
-        EventManager.register_key_listener(pg.K_d,lambda : self.panel.set_selected_tile(BuildingTypes.PELLE))
-        EventManager.register_key_listener(pg.K_p,lambda : self.panel.set_selected_tile(BuildingTypes.PREFECTURE))
-        EventManager.register_key_listener(pg.K_r,lambda : self.panel.set_selected_tile(RoadTypes.TL_TO_BR))
-        EventManager.register_key_listener(pg.K_w,lambda : self.panel.set_selected_tile(BuildingTypes.WELL))
-        EventManager.register_key_listener(pg.K_g, lambda : self.panel.set_selected_tile(BuildingTypes.GRANARY))
-        EventManager.register_key_listener(pg.K_f, lambda : self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
-        EventManager.register_key_listener(pg.K_m, lambda : self.panel.set_selected_tile(BuildingTypes.MARKET))
+        # Shortcuts
+        EventManager.register_key_listener(pg.K_h, lambda: self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
+        EventManager.register_key_listener(pg.K_d, lambda: self.panel.set_selected_tile(BuildingTypes.PELLE))
+        EventManager.register_key_listener(pg.K_p, lambda: self.panel.set_selected_tile(BuildingTypes.PREFECTURE))
+        EventManager.register_key_listener(pg.K_r, lambda: self.panel.set_selected_tile(RoadTypes.TL_TO_BR))
+        EventManager.register_key_listener(pg.K_w, lambda: self.panel.set_selected_tile(BuildingTypes.WELL))
+        EventManager.register_key_listener(pg.K_g, lambda: self.panel.set_selected_tile(BuildingTypes.GRANARY))
+        EventManager.register_key_listener(pg.K_f, lambda: self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
+        EventManager.register_key_listener(pg.K_m, lambda: self.panel.set_selected_tile(BuildingTypes.MARKET))
 
     def mouse_pos_to_grid(self, mouse_pos):
         """
@@ -147,30 +147,32 @@ class World:
 
     def draw(self, screen):
         map_pos = MapController.get_map_pos()
+        def _offset(_x: int, _y: int): return _x + map_pos[0] + self.default_surface.get_width() / 2, _y + map_pos[1]
         screen.blit(self.default_surface, map_pos)
 
-        map = self.game_controller.get_map()
+        grid = self.game_controller.get_map()
 
-        for row in range(GRID_SIZE):
-            for col in range(GRID_SIZE):
-                tile = map[row][col]
+        # Display builings and walkers
+        for row in grid:
+            for tile in row:
                 (x, y) = tile.get_render_coord()
 
                 if tile.get_building() and tile.get_show_tile():
-                    pre_tile = map[row - tile.get_building().build_size[1] + 1][col]
+                    pre_tile = grid[tile.x - tile.get_building().build_size[1] + 1][tile.y]
                     (x, y) = (x, pre_tile.get_render_coord()[1])
-                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
-                
+                [x_offset, y_offset] = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+
                 if tile.get_road() or tile.get_building():
                     if tile.get_building() and tile.get_show_tile():
                         building_size = tile.get_building().get_building_size()
                         screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() +  building_size[1]*TILE_SIZE))
                     elif tile.get_road():
                         screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
-                    # screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+
 
                 base_x_offset = x_offset
                 base_y_offset = y_offset
+                # Display walker with moving animation
                 for walker in tile.walkers:
                     x_offset = x_offset + TILE_SIZE/2
 
@@ -193,92 +195,90 @@ class World:
                     x_offset = base_x_offset
                     y_offset = base_y_offset
 
+
+        # Display green/red zone when a building is selected and not actively building
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
-            isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
-            isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
-                                     isometric_coor]
 
-            (x, y) = self.builder.get_temp_tile_info()['render_img_coor']
-            (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0],
-                                    y + map_pos[1])
+            temp_tile = self.builder.get_temp_tile_info()
+            texture = Textures.get_texture(temp_tile['name'])
+            isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
 
-            texture = Textures.get_texture(self.builder.get_temp_tile_info()['name'])
-            screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
+            (x, y) = temp_tile['render_img_coor']
+            offset = _offset(x, y - texture.get_height() + TILE_SIZE)
 
-            if self.builder.get_temp_tile_info()['isBuildable']:
+            screen.blit(texture, offset)
+
+            if temp_tile['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
             else:
                 pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
-            if self.panel.selected_tile:
-                cost = buildable_cost[self.panel.selected_tile]
-                if self.panel.selected_tile == BuildingTypes.PELLE:
-                    cost = 0
-                utils.draw_text(text=str(cost), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
-        if self.builder.get_in_build_action():
 
-            if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
-                grid = self.game_controller.get_map()
+        start_point = self.builder.get_start_point()
+        end_point = self.builder.get_end_point()
 
-                if self.panel.selected_tile == RoadTypes.TL_TO_BR:
-                    start = grid[self.builder.get_start_point()[1]][self.builder.get_start_point()[0]]
-                    if not start.is_buildable() and not start.get_road():
-                        return
-                    end = grid[self.builder.get_end_point()[1]][self.builder.get_end_point()[0]]
-                    if not end.is_buildable() and not end.get_road():
-                        return
-                    path = start.find_path_to(end, buildable_or_road=True)
-
-                    if path:
-                        to_build_number = 0
-                        for tile in path:
-                            # Don't display build sign if there is already a road
-                            if tile.get_road() or not tile.is_buildable():
-                                continue
-                            (x, y) = tile.get_render_coord()
-                            (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
-                            build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
-                            screen.blit(build_sign,
-                                        (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
-                            to_build_number += 1
-                        if self.builder.get_temp_tile_info():
-                            isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
-                            isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
-                                                 isometric_coor]
-                            utils.draw_text(text=str(to_build_number*4), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
-
+        # Show signs on current build zone
+        temp_tile = self.builder.get_temp_tile_info()
+        if self.builder.get_in_build_action() and self.in_map(start_point) and self.in_map(end_point) and temp_tile:
+            # Since we use a pathfinding algorithm to build roads, we need to handle their render differently
+            if self.panel.selected_tile == RoadTypes.TL_TO_BR:
+                start = grid[start_point[1]][start_point[0]]
+                if not start.is_buildable() and not start.get_road():
                     return
+                end = grid[end_point[1]][end_point[0]]
+                if not end.is_buildable() and not end.get_road():
+                    return
+                path = start.find_path_to(end, buildable_or_road=True)
 
-                count = 0
-                for row in utils.MyRange(self.builder.get_start_point()[1], self.builder.get_end_point()[1]):
-                    for col in utils.MyRange(self.builder.get_start_point()[0], self.builder.get_end_point()[0]):
+                for tile in path:
+                    # Don't display build sign if there is already a road
+                    if tile.get_road() or not tile.is_buildable():
+                        continue
 
-                        (x, y) = grid[row][col].get_render_coord()
-                        (x_offset, y_offset) = ( x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1] )
+                    (x, y) = tile.get_render_coord()
+                    build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
 
-                        if grid[row][col].is_buildable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] != BuildingTypes.PELLE:
-                            build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
-                            count += 1
-                            screen.blit(build_sign,
-                                        (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+                    offset = _offset(x, y - build_sign.get_height() + TILE_SIZE)
+                    screen.blit(build_sign, offset)
 
-                        elif grid[row][col].is_destroyable() and self.builder.get_temp_tile_info() and self.builder.get_temp_tile_info()["name"] == BuildingTypes.PELLE:
-                            building = grid[row][col].get_delete_texture()
-                            count += 1
-                            screen.blit(building,
-                                        (x_offset, y_offset - building.get_height() + TILE_SIZE))
+                isometric_coor = temp_tile['isometric_coor']
+                isometric_coor_offset = [_offset(x, y) for x, y in isometric_coor]
+                cost = len(path)*4
+                self.display_cost(screen, cost, isometric_coor_offset[1])
 
-                if self.builder.get_temp_tile_info():
-                    isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
-                    isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
-                                                 isometric_coor]
-                    utils.draw_text(text=str(count*buildable_cost[self.panel.selected_tile]), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
+                return
+
+            # If it's not a road, the render is more standard and common to every other types
+            count = 0
+            for row in utils.MyRange(start_point[1], end_point[1]):
+                for col in utils.MyRange(start_point[0], end_point[0]):
+                    tile = grid[row][col]
+
+                    (x, y) = tile.get_render_coord()
+                    (x_offset, y_offset) = _offset(x, y)
+
+                    if tile.is_buildable() and temp_tile["name"] != BuildingTypes.PELLE:
+                        build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
+                        count += 1
+                        screen.blit(build_sign,
+                                    (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
+
+                    elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE:
+                        building = tile.get_delete_texture()
+                        count += 1
+                        screen.blit(building,
+                                    (x_offset, y_offset - building.get_height() + TILE_SIZE))
+
+            isometric_coor = temp_tile['isometric_coor']
+            isometric_coor_offset = [_offset(x, y) for x, y in isometric_coor]
+
+            cost = count*buildable_cost[self.panel.selected_tile]
+            self.display_cost(screen, cost, isometric_coor_offset[1])
 
     def create_static_map(self):
         for row in self.game_controller.get_map():
             for tile in row:
-                tile: Tile = tile
                 texture_image = Textures.get_texture(tile.type)
                 (x, y) = tile.get_render_coord()
                 offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
@@ -294,12 +294,24 @@ class World:
 
         Return: boolean
         """
-        mouse_on_panel = False
-        in_map_limit = (0 <= grid_pos[0] < GRID_SIZE) and (0 <= grid_pos[1] < GRID_SIZE)
         for rect in self.panel.get_panel_rects():
             if rect.collidepoint(pg.mouse.get_pos()):
-                mouse_on_panel = True
-        return (in_map_limit and not mouse_on_panel)
+                return False
+
+        in_map_limit = (0 <= grid_pos[0] < GRID_SIZE) and (0 <= grid_pos[1] < GRID_SIZE)
+        return in_map_limit
+
+    def display_cost(self, screen: pg.Surface, cost: int, coord: tuple[int, int]):
+        if cost == 0:
+            return
+        color = pg.Color(220, 220, 0)
+        if cost > self.game_controller.get_denier():
+            color = pg.Color(220, 0, 0)
+
+        [pos_x, pos_y] = coord
+        pos_x += 5
+        pos_y -= 20
+        utils.draw_text(text=str(cost), screen=screen, pos=(pos_x, pos_y), color=color, size=30)
 
     def load_map(self):
         img = Image.open("maps/new_gen.png")

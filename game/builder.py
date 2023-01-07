@@ -57,10 +57,9 @@ class Builder:
                 return
             path = start.find_path_to(end, buildable_or_road=True)
 
-            if path:
-                for tile in path:
-                    if tile.is_buildable():
-                        self.road_add(tile.x, tile.y)
+            for tile in path:
+                if tile.is_buildable():
+                    self.road_add(tile.x, tile.y)
 
             self.start_point = None  # update start point to default after building
             self.end_point = None  # update start point to default after building
@@ -73,10 +72,9 @@ class Builder:
 
                 if selected_tile == BuildingTypes.PELLE:
                     if tile.is_destroyable():
-                        if tile.get_road():
-                            tile.destroy()
-                            self.road_update(row, col)
                         tile.destroy()
+                        self.road_update(row, col)
+                        self.game_controller.denier -= 2
                     continue
 
                 if not tile.is_buildable():
