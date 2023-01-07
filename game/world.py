@@ -22,14 +22,12 @@ from game.builder import Builder
 
 class World:
 
-    def __init__(self, nums_grid_x, nums_grid_y, width, height, panel):
+    def __init__(self, width, height, panel):
         self.game_controller = GameController.get_instance()
-        self.nums_grid_x = nums_grid_x
-        self.nums_grid_y = nums_grid_y
         self.width = width
         self.height = height
 
-        self.builder = Builder(nums_grid_x, nums_grid_y)
+        self.builder = Builder()
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
         self.load_map()
@@ -297,7 +295,7 @@ class World:
         Return: boolean
         """
         mouse_on_panel = False
-        in_map_limit = (0 <= grid_pos[0] < self.nums_grid_x) and (0 <= grid_pos[1] < self.nums_grid_y)
+        in_map_limit = (0 <= grid_pos[0] < GRID_SIZE) and (0 <= grid_pos[1] < GRID_SIZE)
         for rect in self.panel.get_panel_rects():
             if rect.collidepoint(pg.mouse.get_pos()):
                 mouse_on_panel = True

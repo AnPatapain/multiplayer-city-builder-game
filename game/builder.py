@@ -1,27 +1,24 @@
 from game.game_controller import GameController
 from class_types.buildind_types import BuildingTypes
 
-# Building
 from buildable.final.buildable.well import Well
 from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.structures.WheatFarm import WheatFarm
 from buildable.road import Road
 
-#other
 from game.panel import Panel
 import game.utils as utils
+from game.setting import GRID_SIZE
 from map_element.tile import Tile
 from class_types.road_types import RoadTypes
 
 class Builder:
-    def __init__(self, nums_grid_x, nums_grid_y) -> None:
+    def __init__(self) -> None:
         self.game_controller = GameController.get_instance()
-        self.nums_grid_x = nums_grid_x
-        self.nums_grid_y = nums_grid_y
 
         # Pour construire consécutivement
-        self.panel = Panel(1920,1080)
+        self.panel = Panel(1920, 1080)
         self.temp_tile_info: dict = None
         self.start_point: tuple = None
         self.end_point: tuple = None
@@ -164,14 +161,14 @@ class Builder:
                 road_connection[1] = r2
 
         # BR connection
-        if road_col < self.nums_grid_x - 1:
+        if road_col < GRID_SIZE - 1:
             r3 = grid[road_row][road_col + 1].get_road()
             if r3:
                 r3.set_connect(road, 0)
                 road_connection[2] = r3
 
         # BL connection
-        if road_row < self.nums_grid_y - 1:
+        if road_row < GRID_SIZE - 1:
             r4 = grid[road_row + 1][road_col].get_road()
             if r4:
                 r4.set_connect(road, 1)
@@ -195,11 +192,11 @@ class Builder:
                 grid[road_row - 1][road_col].get_road().set_connect(grid[road_row][road_col].get_road(), 3)
 
         # BR connection
-        if road_col < self.nums_grid_x - 1:
+        if road_col < GRID_SIZE - 1:
             if grid[road_row][road_col + 1].get_road():
                 grid[road_row][road_col + 1].get_road().set_connect(grid[road_row][road_col].get_road(), 0)
 
         # BL connection
-        if road_row < self.nums_grid_y - 1:
+        if road_row < GRID_SIZE - 1:
             if grid[road_row + 1][road_col].get_road():
                 grid[road_row + 1][road_col].get_road().set_connect(grid[road_row][road_col].get_road(), 1)
