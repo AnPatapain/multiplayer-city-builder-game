@@ -352,7 +352,6 @@ class World:
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
                         tile.set_random_texture_number(random.randint(0, 7))
-                        self.random_rock(x, y, img, tile, rock_list)
                     case (237, 28, 35):
                         pass  # Red color, flag spawn
                     case (111, 49, 152):
@@ -383,6 +382,10 @@ class World:
                         self.builder.road_add(x, y)
                     case (181, 165, 213):
                         self.builder.road_add(x, y)
+                    case (161, 161, 161):
+                        tile = table[x][y]
+                        self.random_rock(x, y, img, tile, rock_list)
+
 
         self.riviere_angle()
         self.wheat()
@@ -518,17 +521,25 @@ class World:
 
 
     def random_rock(self, x, y, img, tile, rock_list):
-        if 0 <= y <= 39 and 0 <= x <= 39:
+        if 0 <= y < 39 and 0 < x < 39:
 
             r_g, g_d, b_d, a_d = img.getpixel((y, x - 1))
-            r_h, g_b, b_b, a_b = img.getpixel((y - 1, x))
-            r_hg, g_bd, b_bd, a_bd = img.getpixel((y - 1, x - 1))
+            r_h, g_b, b_b, a_b = img.getpixel((y + 1, x))
+            r_hg, g_bd, b_bd, a_bd = img.getpixel((y + 1, x - 1))
 
-            if (r_g, r_h, r_hg) == (161, 161, 161) and (y, x - 1) not in rock_list and (y - 1, x) not in rock_list and (y - 1, x - 1) not in rock_list:
+            if (r_g, r_h, r_hg) == (161, 161, 161) and (y, x - 1) not in rock_list and (y + 1, x) not in rock_list and (y + 1, x - 1) not in rock_list:
                 tile.set_random_texture_number(random.randint(20, 23))
+                tile.get_building().build_size = (2, 2)
+                rock_list.append((y, x))
                 rock_list.append((y, x-1))
-                rock_list.append((y-1, x))
-                rock_list.append((y-1, x-1))
+                rock_list.append((y+1, x))
+                rock_list.append((y+1, x-1))
+
+                grid = GameController.get_instance().get_map()
+
+                grid[x-1][y].show_tile = False
+                grid[x][y+1].show_tile = False
+                grid[x-1][y+1].show_tile = False
 
 
 
