@@ -131,10 +131,10 @@ class Builder:
             for x in range(col,col+x_building,1):
                 for y in range(row,row-y_building,-1):
                     if x != col or y != row:
-                        grid[y][x].set_building(building, False)
+                        grid[y][x].set_building(building, show_building=False)
 
         #Show first case
-        grid[row][col].set_building(building, True)
+        grid[row][col].set_building(building, show_building=True)
         self.game_controller.new_building(building)
 
     
