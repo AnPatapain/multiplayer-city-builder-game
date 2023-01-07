@@ -39,7 +39,6 @@ class Risk:
         return self.dest_risk_status >= 100
 
     def get_fire_status(self) -> int:
-        print(self.fire_risk_status)
         return self.fire_risk_status
 
     def get_dest_status(self) -> int:

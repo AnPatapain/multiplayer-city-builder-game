@@ -66,14 +66,12 @@ class Overlay:
             match overlay_types:
                 case OverlayTypes.FIRE:
                     if not self.pg_image_fire_overlay[tile.x][tile.y] or building.get_risk().is_update():
-                        print("update overlay")
                         self.pg_image_fire_overlay[tile.x][tile.y] = self.update_overlay(building,overlay_types)
 
                     return self.pg_image_fire_overlay[tile.x][tile.y]
 
                 case OverlayTypes.DESTRUCTION:
                     if not self.pg_image_dest_overlay[tile.x][tile.y] or building.get_risk().is_update():
-                        print("update overlay")
                         self.pg_image_dest_overlay[tile.x][tile.y] = self.update_overlay(building, overlay_types)
 
                     return self.pg_image_dest_overlay[tile.x][tile.y]

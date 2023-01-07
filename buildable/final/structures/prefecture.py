@@ -21,3 +21,8 @@ class Prefecture(Structure):
         super().update_day()
         if not self.associated_walker:
             self.new_walker()
+    
+    def to_ruin(self):
+        if self.associated_walker:
+            self.associated_walker.delete()
+        super().to_ruin()

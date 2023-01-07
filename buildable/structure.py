@@ -27,3 +27,10 @@ class Structure(Buildable, ABC):
 
     def update_day(self):
         self.risk.risk_progress()
+        if self.risk.is_on_fire():
+            self.is_on_fire = True
+            self.to_ruin()
+            return
+        if self.risk.is_destroyed():
+            self.to_ruin()
+            return
