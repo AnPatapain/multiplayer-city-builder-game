@@ -269,10 +269,11 @@ class World:
                             screen.blit(building,
                                         (x_offset, y_offset - building.get_height() + TILE_SIZE))
 
-                isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
-                isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
+                if self.builder.get_temp_tile_info():
+                    isometric_coor = self.builder.get_temp_tile_info()['isometric_coor']
+                    isometric_coor_offset = [(x + map_pos[0] + self.default_surface.get_width() / 2, y + map_pos[1]) for x, y in
                                                  isometric_coor]
-                utils.draw_text(text=str(count*buildable_cost[self.panel.selected_tile]), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
+                    utils.draw_text(text=str(count*buildable_cost[self.panel.selected_tile]), pos=isometric_coor_offset[1], screen=screen, size=30, color=pg.Color(255, 255, 0))
 
     def create_static_map(self):
         for row in self.game_controller.get_map():
