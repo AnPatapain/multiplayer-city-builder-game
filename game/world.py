@@ -157,14 +157,14 @@ class World:
             for tile in row:
                 (x, y) = tile.get_render_coord()
 
-                print(row, col, tile.get_building(), tile.get_show_tile())
+                # print(row, col, tile.get_building(), tile.get_show_tile())
 
                 if tile.get_building() and tile.get_show_tile():
                     if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
-                        pre_tile = map[row - tile.get_building().build_size[1] + 2][col]
+                        pre_tile = grid[tile.x - tile.get_building().build_size[1] + 2][tile.y]
                         (x, y) = (x, pre_tile.get_render_coord()[1])
                     else:
-                        pre_tile = map[row - tile.get_building().build_size[1] + 1][col]
+                        pre_tile = grid[tile.x - tile.get_building().build_size[1] + 1][tile.y]
                         (x, y) = (x, pre_tile.get_render_coord()[1])
                 (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
                 
