@@ -1,7 +1,5 @@
 import pygame as pg
 
-from buildable.final.buildable.rock import Rock
-from buildable.final.buildable.tree import SmallTree
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from game.game_controller import GameController
@@ -33,10 +31,11 @@ class MiniMap:
 
     def render_map(self):
         grid = GameController.get_instance().get_map()
+        buff = pg.surfarray.pixels2d(self.background)
         for row in grid:
             for tile in row:
                 color = self.get_color(tile)
-                self.background.set_at((tile.y, tile.x), color)
+                buff[tile.y][tile.x] = self.background.map_rgb(color)
 
     def mini_map_mouse_listener(self):
         mouse_pos = pg.mouse.get_pos()
@@ -56,7 +55,9 @@ class MiniMap:
             corresponding_x = - (self.mini_relative_x - self.mini_screen_width / 2) / 0.025
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height / 2) / 0.0465
             MapController.set_map_pos(corresponding_x, corresponding_y)
-        self.render_map()
+        # Only render every 10 ticks (5 times per second
+        if GameController.get_instance().current_tick % 10 == 0:
+            self.render_map()
 
     def draw(self, screen: pg.Surface):
         # We need coordination of 4 points to draw rhombus
@@ -75,10 +76,11 @@ class MiniMap:
         screen.blit(temp_bg, (self.pos_x, self.pos_y))
 
     def get_color(self, tile: Tile) -> tuple[int, int, int]:
-        if tile.get_building():
-            if isinstance(tile.get_building(), Rock):
+        b = tile.get_building()
+        if b:
+            if b.build_type == TileTypes.ROCK:
                 return (96, 96, 96)
-            if isinstance(tile.get_building(), SmallTree):
+            if b.build_type == TileTypes.TREE:
                 return (204, 255, 204)
             return (255, 255, 0)  # yellow
 
