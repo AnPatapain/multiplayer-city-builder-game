@@ -51,8 +51,8 @@ class World:
         EventManager.register_key_listener(pg.K_g, lambda: self.panel.set_selected_tile(BuildingTypes.GRANARY))
         EventManager.register_key_listener(pg.K_f, lambda: self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
         EventManager.register_key_listener(pg.K_m, lambda: self.panel.set_selected_tile(BuildingTypes.MARKET))
-        EventManager.register_key_listener(pg.K_o, lambda: self.set_overlay(OverlayTypes.FIRE))
-        EventManager.register_key_listener(pg.K_i, lambda: self.set_overlay(OverlayTypes.DEFAULT))
+        EventManager.register_key_listener(pg.K_o, lambda: self.set_overlay())
+        #EventManager.register_key_listener(pg.K_i, lambda: self.set_overlay(OverlayTypes.DEFAULT))
 
     def mouse_pos_to_grid(self, mouse_pos):
         """
@@ -172,8 +172,8 @@ class World:
                 if tile.get_road() or tile.get_building():
                     if tile.get_building() and tile.get_show_tile():
                         building_size = tile.get_building().get_building_size()
-                        if self.overlay_types == OverlayTypes.FIRE:
-                            pg_img = self.overlay.get_fire_overlay(tile)
+                        if self.overlay_types != OverlayTypes.DEFAULT:
+                            pg_img = self.overlay.get_overlay(tile,self.overlay_types)
                             if pg_img:
                                 screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() +  building_size[1]*TILE_SIZE))
                         else:
@@ -378,5 +378,11 @@ class World:
                     case (181, 165, 213):
                         self.builder.road_add(x, y)
 
-    def set_overlay(self,overlay_types : OverlayTypes):
-        self.overlay_types = overlay_types
+    def set_overlay(self):
+        match self.overlay_types:
+            case OverlayTypes.FIRE:
+                self.overlay_types = OverlayTypes.DESTRUCTION
+            case OverlayTypes.DESTRUCTION:
+                self.overlay_types = OverlayTypes.DEFAULT
+            case OverlayTypes.DEFAULT:
+                self.overlay_types = OverlayTypes.FIRE

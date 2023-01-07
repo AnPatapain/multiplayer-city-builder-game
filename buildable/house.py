@@ -47,7 +47,6 @@ class House(Buildable, ABC):
 
     def update_day(self):
         self.risk.risk_progress()
-        print(self.risk.get_fire_status())
 
         if self.risk.is_on_fire():
             self.is_on_fire = True

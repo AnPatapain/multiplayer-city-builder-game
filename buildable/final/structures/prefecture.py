@@ -5,7 +5,7 @@ from walkers.final.prefet import Prefet
 
 class Prefecture(Structure):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, BuildingTypes.PREFECTURE, build_size=(1, 1), max_employee=6,fire_risk=0,destruction_risk=0)
+        super().__init__(x, y, BuildingTypes.PREFECTURE, build_size=(1, 1), max_employee=6,fire_risk=0,destruction_risk=50)
 
     def new_walker(self):
         if self.associated_walker:
@@ -18,5 +18,6 @@ class Prefecture(Structure):
             self.associated_walker.spawn(tile)
 
     def update_day(self):
+        super().update_day()
         if not self.associated_walker:
             self.new_walker()
