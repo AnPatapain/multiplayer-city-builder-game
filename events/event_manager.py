@@ -75,14 +75,15 @@ class EventManager:
                     for component in EventManager.components:
                         if isinstance(component, Button):
                             if component.is_hover(pos) and component.is_being_pressed():
-                                if component.is_selected():
+                                if component.is_selected() and not component.is_unselect_disabled():
                                     component.set_selected(False)
                                 else:
                                     component.set_selected(True)
                                     component.click()
                                 component.set_being_pressed(False)
                             else:
-                                component.set_selected(False)
+                                if not component.is_unselect_disabled():
+                                    component.set_selected(False)
                                 component.set_being_pressed(False)
                         else:
                             if component.is_hover(pos):
