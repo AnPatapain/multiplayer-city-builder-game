@@ -1,10 +1,10 @@
 from buildable.structure import Structure
 from class_types.buildind_types import BuildingTypes
-from map_element.tile import Tile
 from game.game_controller import GameController
+
 class WheatFarm(Structure):
     def __init__(self, x: int, y: int) -> None:
-        super().__init__(x, y, BuildingTypes.WHEAT_FARM, build_size=(3, 3), max_employee=10)
+        super().__init__(x, y, BuildingTypes.WHEAT_FARM, build_size=(3, 3), max_employee=10,fire_risk=1,destruction_risk=1)
         self.game_controller = GameController.get_instance()
         self.wheat_soil_pos: list[(int, int)] | None = self.get_wheat_soil_pos()
         
