@@ -25,10 +25,12 @@ class Risk:
 
 
     def reset_fire_risk(self):
-        self.fire_risk_status = 0
+        if self.fire_risk > 0:
+            self.fire_risk_status = 0
 
     def reset_dest_risk(self):
-        self.dest_risk_status = 0
+        if self.dest_risk > 0:
+            self.dest_risk_status = 0
 
     def is_on_fire(self) -> bool:
         return self.fire_risk_status >= 100
@@ -37,6 +39,7 @@ class Risk:
         return self.dest_risk_status >= 100
 
     def get_fire_status(self) -> int:
+        print(self.fire_risk_status)
         return self.fire_risk_status
 
     def get_dest_status(self) -> int:

@@ -90,9 +90,14 @@ class Overlay:
         level = 0
         match overlay_types:
             case OverlayTypes.FIRE:
-                level = int(building.get_risk().get_fire_status() / 10)
+                level = building.get_risk().get_fire_status()
             case OverlayTypes.DESTRUCTION:
-                level = int(building.get_risk().get_dest_status() / 10)
+                level = building.get_risk().get_dest_status()
+
+        if level == -1:
+            return None
+        else:
+            level = int(level / 10)
 
         building.get_risk().updated()
 
