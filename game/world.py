@@ -206,7 +206,7 @@ class World:
                                     y + map_pos[1])
 
             texture = Textures.get_texture(self.builder.get_temp_tile_info()['name'])
-            # screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
+            screen.blit(texture, (x_offset, y_offset - texture.get_height() + TILE_SIZE))
 
             if self.builder.get_temp_tile_info()['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
