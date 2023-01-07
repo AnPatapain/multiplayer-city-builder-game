@@ -293,7 +293,7 @@ class World:
         return (in_map_limit and not mouse_on_panel)
 
     def load_map(self):
-        img = Image.open("maps/map.png")
+        img = Image.open("maps/map1.png")
 
         rock_list = []
         table: list[list[Tile]] = []
@@ -423,6 +423,9 @@ class World:
                 elif r_d != 0 and r_g != 0:
                     tile.set_random_texture_number(24)
 
+            if y==31 and x == 17:
+                print(tile.get_random_texture_number())
+                print("D = ", r_d,"g = ", r_g,"h = ", r_h,"b = ", r_b)
 
 
     def riviere_angle(self):
