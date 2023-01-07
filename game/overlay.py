@@ -32,7 +32,7 @@ class OverlaySprite(Enum):
 
 class Overlay:
     def __init__(self, world_width: int, world_height : int):
-        #self.pg_image_fire_overlay = [ [None]*world_height for i in range(world_width)]
+        self.pg_image_fire_overlay = [ [None]*world_height for i in range(world_width)]
         self.gc = GameController.get_instance()
 
         self.sprite = {
@@ -60,9 +60,14 @@ class Overlay:
     def get_fire_overlay(self,x,y) -> pygame.image:
         building = self.gc.get_map()[x][y].get_building()
         if isinstance(building,House) or isinstance(building,Structure):
-            return self.update_fire_overlay(self.gc.get_map()[x][y].get_building())
-        #if not self.pg_image_fire_overlay[x][y]:
-            #image = self.update_fire_overlay(self.gc.get_map()[x][y].get_building())
+            #update des image
+            if not self.pg_image_fire_overlay[x][y] or building.get_risk().is_update():
+                print("update overlay")
+                self.pg_image_fire_overlay[x][y] = self.update_fire_overlay(building)
+
+            return self.pg_image_fire_overlay[x][y]
+        return None
+
 
 
 
@@ -70,6 +75,7 @@ class Overlay:
         if not building.get_risk():
             return None
         level = int(building.get_risk().get_fire_status() / 10)
+        building.get_risk().updated()
 
         if level <= 0:
             return self.to_pg_imgage(self.sprite[OverlaySprite.HOLE])

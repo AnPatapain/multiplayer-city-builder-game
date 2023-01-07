@@ -175,7 +175,6 @@ class World:
                 if tile.get_road() or tile.get_building():
                     if tile.get_building() and tile.get_show_tile():
                         building_size = tile.get_building().get_building_size()
-                        #print(self.overlay_types)
                         if self.overlay_types == OverlayTypes.FIRE:
                             pg_img = self.overlay.get_fire_overlay(row,col)
                             if pg_img:
