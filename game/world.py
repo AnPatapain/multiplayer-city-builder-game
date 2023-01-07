@@ -157,19 +157,17 @@ class World:
                 tile = map[row][col]
                 (x, y) = tile.get_render_coord()
 
-                # if tile.get_building() and tile.show_tile and sum(tile.get_building().get_building_size()) >= 4:
-                #     if tile.get_building() and tile.get_building().build_type == BuildingTypes.WHEAT_FARM:
-                #         print("wheatFarm ici: ",  tile.y, tile.x, tile.get_show_tile())
-                #     pre_tile = map[row - tile.get_building().build_size[1] + 1][col]
-                #     print("pre_tile", pre_tile.y, pre_tile.x)
-                #     (x, y) = (x, pre_tile.get_render_coord()[1])
-
-                if tile.get_building():
+                if tile.get_building() and tile.get_show_tile():
                     pre_tile = map[row - tile.get_building().build_size[1] + 1][col]
                     (x, y) = (x, pre_tile.get_render_coord()[1])
                 (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                
                 if tile.get_road() or tile.get_building():
-                    screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+                    if tile.get_building() and tile.get_show_tile():
+                        building_size = tile.get_building().get_building_size()
+                        screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() +  building_size[1]*TILE_SIZE))
+                    elif tile.get_road():
+                        screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
                 for walker in tile.walkers:
                     screen.blit(walker.get_texture(), (x_offset + TILE_SIZE/2, y_offset))
 
