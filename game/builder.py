@@ -5,8 +5,8 @@ from buildable.final.buildable.well import Well
 from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.structures.WheatFarm import WheatFarm
-from buildable.final.buildable.empty_wheat_soil import Empty_wheat_soil
-from buildable.final.buildable.full_wheat_soil import Full_wheat_soil
+from buildable.final.buildable.wheat_soil_level1 import Wheat_soil_level_1
+from buildable.final.buildable.wheat_soil_level5 import Wheat_soil_level_5
 from buildable.road import Road
 
 from game.panel import Panel
@@ -128,7 +128,7 @@ class Builder:
                 row -= 1
                 x_building, y_building = 2, 2
                 for (x, y) in building.get_wheat_soil_pos():
-                    grid[x][y].set_building(Empty_wheat_soil(row, col))
+                    grid[x][y].set_building(Wheat_soil_level_5(row, col))
 
 
             # Put building in each case

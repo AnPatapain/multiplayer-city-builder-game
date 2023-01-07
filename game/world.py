@@ -157,7 +157,7 @@ class World:
             for tile in row:
                 (x, y) = tile.get_render_coord()
 
-                # print(row, col, tile.get_building(), tile.get_show_tile())
+                print(tile.x, tile.y, tile.get_building(), tile.get_show_tile())
 
                 if tile.get_building() and tile.get_show_tile():
                     if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
