@@ -173,7 +173,7 @@ class World:
                     if tile.get_building() and tile.get_show_tile():
                         building_size = tile.get_building().get_building_size()
                         if self.overlay_types == OverlayTypes.FIRE:
-                            pg_img = self.overlay.get_fire_overlay(row,col)
+                            pg_img = self.overlay.get_fire_overlay(tile)
                             if pg_img:
                                 screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() +  building_size[1]*TILE_SIZE))
                         else:

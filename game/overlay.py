@@ -8,7 +8,9 @@ from buildable.buildable import Buildable
 from buildable.house import House
 from buildable.structure import Structure
 from game.game_controller import GameController
-from game.setting import IMAGE_PATH
+from game.setting import IMAGE_PATH, GRID_SIZE
+from map_element.tile import Tile
+
 
 class OverlaySprite(Enum):
     HOLE = 1
@@ -31,8 +33,8 @@ class OverlaySprite(Enum):
 
 
 class Overlay:
-    def __init__(self, world_width: int, world_height : int):
-        self.pg_image_fire_overlay = [ [None]*world_height for i in range(world_width)]
+    def __init__(self):
+        self.pg_image_fire_overlay = [ [None]*GRID_SIZE for i in range(GRID_SIZE)]
         self.gc = GameController.get_instance()
 
         self.sprite = {
@@ -57,19 +59,16 @@ class Overlay:
         }
 
 
-    def get_fire_overlay(self,x,y) -> pygame.image:
-        building = self.gc.get_map()[x][y].get_building()
+    def get_fire_overlay(self,tile : Tile) -> pygame.image:
+        building = tile.get_building()
         if isinstance(building,House) or isinstance(building,Structure):
             #update des image
-            if not self.pg_image_fire_overlay[x][y] or building.get_risk().is_update():
+            if not self.pg_image_fire_overlay[tile.x][tile.y] or building.get_risk().is_update():
                 print("update overlay")
-                self.pg_image_fire_overlay[x][y] = self.update_fire_overlay(building)
+                self.pg_image_fire_overlay[tile.x][tile.y] = self.update_fire_overlay(building)
 
-            return self.pg_image_fire_overlay[x][y]
+            return self.pg_image_fire_overlay[tile.x][tile.y]
         return None
-
-
-
 
     def update_fire_overlay(self,building : Buildable) -> pygame.image:
         if not building.get_risk():
