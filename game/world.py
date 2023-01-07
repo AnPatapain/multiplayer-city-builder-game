@@ -324,7 +324,7 @@ class World:
         utils.draw_text(text=str(cost), screen=screen, pos=(pos_x, pos_y), color=color, size=30)
 
     def load_map(self):
-        img = Image.open("maps/new_gen.png")
+        img = Image.open("maps/map1.png")
 
         rock_list = []
         table: list[list[Tile]] = []
@@ -426,7 +426,6 @@ class World:
                     tile.set_random_texture_number(12)
                 elif r_b != 0 and r_h != 0:
                     tile.set_random_texture_number(13)
-                return
 
             if r_h != 0:
                 tile.set_random_texture_number(14)
@@ -436,7 +435,6 @@ class World:
                     tile.set_random_texture_number(15)
                 elif r_d != 0 and r_g != 0:
                     tile.set_random_texture_number(16)
-                return
 
             if r_g != 0:
                 tile.set_random_texture_number(17)
@@ -446,7 +444,6 @@ class World:
                     tile.set_random_texture_number(19)
                 elif r_b != 0 and r_h != 0:
                     tile.set_random_texture_number(20)
-                return
 
             if r_b != 0:
                 tile.set_random_texture_number(21)
@@ -456,7 +453,11 @@ class World:
                     tile.set_random_texture_number(23)
                 elif r_d != 0 and r_g != 0:
                     tile.set_random_texture_number(24)
-                return
+
+            if y==31 and x == 17:
+                print(tile.get_random_texture_number())
+                print("D = ", r_d,"g = ", r_g,"h = ", r_h,"b = ", r_b)
+
 
     def riviere_angle(self):
         grid = self.game_controller.get_map()
@@ -518,7 +519,6 @@ class World:
 
     def random_rock(self, x, y, img, tile, rock_list):
         if 0 <= y <= 39 and 0 <= x <= 39:
-            print(x, y)
 
             r_g, g_d, b_d, a_d = img.getpixel((y, x - 1))
             r_h, g_b, b_b, a_b = img.getpixel((y - 1, x))
