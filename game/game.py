@@ -41,7 +41,7 @@ class Game:
         MapController.init_()
 
         # Exit the game when pressing <esc>
-        EventManager.register_key_listener(pg.K_ESCAPE, Game.exit_game)
+        EventManager.register_key_listener(pg.K_ESCAPE, self.exit_game)
         # Calls the event_handler of the World
         EventManager.add_hooked_function(self.world.event_handler)
         EventManager.register_key_listener(pg.K_SPACE, self.toogle_pause)
@@ -62,7 +62,6 @@ class Game:
 
         self.is_running = False
         self.thread_event.set()
-        print("Event set")
         self.draw_thread.join()
         exit()
 
