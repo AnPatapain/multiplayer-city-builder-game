@@ -86,12 +86,29 @@ class Panel:
                                   disable_unselect=True, selectable=True)
         self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
 
+        self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
+                                  image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
+                                  image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
+                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED),
+                                  disable_unselect=True, selectable=True)
+        #self.increase_speed.on_click()
+
+        self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
+                                     image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED),
+                                     disable_unselect=True, selectable=True)
+        # self.increase_speed.on_click()
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
         EventManager.register_component(self.build__well)
         EventManager.register_component(self.change_overlay)
+        EventManager.register_component(self.increase_speed)
+        EventManager.register_component(self.decrease_speed)
+
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -149,6 +166,9 @@ class Panel:
         self.build__prefecture.display(screen)
         self.build__well.display(screen)
         self.change_overlay.display(screen)
+        self.increase_speed.display(screen)
+        self.decrease_speed.display(screen)
+
 
     def update(self):
         self.mini_map.update()
