@@ -1,4 +1,7 @@
+import random
 from typing import Optional, TYPE_CHECKING
+import pygame as pg
+
 
 from class_types.tile_types import TileTypes
 from game.game_controller import GameController
@@ -19,6 +22,7 @@ class Tile:
         self.x = row
         self.y = col
 
+        self.random_texture_number = 0
         self.water_access = False
 
         self.walkers: list['Walker'] = []
@@ -38,6 +42,18 @@ class Tile:
             min([x for x, y in self.isometric_coord]),
             min([y for x, y in self.isometric_coord])
         )
+
+    def set_random_texture_number(self, num: int):
+        self.random_texture_number = num
+
+    def get_random_texture_number(self) -> int:
+        return self.random_texture_number
+
+    def set_water_texture(self, type):
+        self.water_texture = type
+
+    def get_water_texture(self):
+        return self.water_texture
 
     def get_render_coord(self):
         return self.render_coord
@@ -83,7 +99,7 @@ class Tile:
             return self.building.get_texture()
         if self.road:
             return Textures.get_texture(self.road.get_road_type())
-        return Textures.get_texture(self.type)
+        return Textures.get_texture(self.type, texture_number=self.random_texture_number)
 
     def get_delete_texture(self):
         if not self.show_tile:

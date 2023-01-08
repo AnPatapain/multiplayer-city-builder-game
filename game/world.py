@@ -1,3 +1,4 @@
+import random
 from typing import Optional
 
 import pygame as pg
@@ -299,7 +300,7 @@ class World:
     def create_static_map(self):
         for row in self.game_controller.get_map():
             for tile in row:
-                texture_image = Textures.get_texture(tile.type)
+                texture_image = Textures.get_texture(tile.type, texture_number=tile.get_random_texture_number())
                 (x, y) = tile.get_render_coord()
                 offset = (x + self.default_surface.get_width() / 2, y - texture_image.get_height() + TILE_SIZE)
                 self.default_surface.blit(texture_image, offset)
@@ -334,8 +335,9 @@ class World:
         utils.draw_text(text=str(cost), screen=screen, pos=(pos_x, pos_y), color=color, size=30)
 
     def load_map(self):
-        img = Image.open("maps/new_gen.png")
+        img = Image.open("maps/new_gen2.png")
 
+        rock_list = []
         table: list[list[Tile]] = []
         spawn_point: Optional[Tile] = None
         leave_point: Optional[Tile] = None
@@ -350,12 +352,17 @@ class World:
                 match (r, g, b):
                     case (255, 242, 0):
                         tile.set_type(TileTypes.WHEAT)
+                        tile.set_random_texture_number(random.randint(0, 3))
                     case (12, 102, 36):
                         tile.set_building(SmallTree(x, y))
+                        tile.set_random_texture_number(random.randint(7, 30))
                     case (0, 162, 232):
                         tile.set_type(TileTypes.WATER)
+                        tile.set_random_texture_number(random.randint(0, 7))
+                        self.riviere(x, y, img, tile)
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
+                        tile.set_random_texture_number(random.randint(0, 7))
                     case (237, 28, 35):
                         pass  # Red color, flag spawn
                     case (111, 49, 152):
@@ -366,7 +373,8 @@ class World:
                     case (181, 165, 213):
                         leave_point = tile
                         pass  # Purple/Brown, road leave
-
+                    case _:
+                        tile.set_random_texture_number(random.randint(0, 20))
 
                 table[x].append(tile)
 
@@ -385,3 +393,165 @@ class World:
                         self.builder.road_add(x, y)
                     case (181, 165, 213):
                         self.builder.road_add(x, y)
+                    case (161, 161, 161):
+                        tile = table[x][y]
+                        self.random_rock(x, y, img, tile, rock_list)
+
+
+        self.riviere_angle()
+        self.wheat()
+        #self.rochers()
+
+    def riviere(self, x, y, img, tile):
+        if 0 <= y <= 39 and 0 <= x <= 39:
+            r_d, r_b, r_g, r_h = 0, 0, 0, 0
+            if x != 0 and y != 0 and x != 39 and y != 39:
+                r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+            else:
+                if x == 0 and y != 0:
+                    r_d = 0
+                    r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                    r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                    r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+                if y == 0 and x != 0:
+                    r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                    r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                    r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+                    r_h = 0
+                if x == 39 and y != 39:
+                    r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                    r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                    r_b, g_b, b_b, a_b = img.getpixel((y + 1, x))
+                    r_g = 0
+                if y == 39 and x != 39:
+                    r_d, g_d, b_d, a_d = img.getpixel((y, x - 1))
+                    r_g, g_g, b_g, a_g = img.getpixel((y, x + 1))
+                    r_h, g_h, b_h, a_h = img.getpixel((y - 1, x))
+                    r_b = 0
+
+            if r_d != 0:
+                tile.set_random_texture_number(10)
+                if r_h != 0 and r_b == 0:
+                    tile.set_random_texture_number(11)
+                elif r_b != 0 and r_h == 0:
+                    tile.set_random_texture_number(12)
+                elif r_b != 0 and r_h != 0:
+                    tile.set_random_texture_number(13)
+
+            if r_h != 0:
+                tile.set_random_texture_number(14)
+                if r_d != 0 and r_g == 0:
+                    tile.set_random_texture_number(11)
+                elif r_g != 0 and r_d == 0:
+                    tile.set_random_texture_number(15)
+                elif r_d != 0 and r_g != 0:
+                    tile.set_random_texture_number(16)
+
+            if r_g != 0:
+                tile.set_random_texture_number(17)
+                if r_h != 0 and r_b == 0:
+                    tile.set_random_texture_number(18)
+                elif r_b != 0 and r_h == 0:
+                    tile.set_random_texture_number(19)
+                elif r_b != 0 and r_h != 0:
+                    tile.set_random_texture_number(20)
+
+            if r_b != 0:
+                tile.set_random_texture_number(21)
+                if r_d != 0 and r_g == 0:
+                    tile.set_random_texture_number(22)
+                elif r_g != 0 and r_d == 0:
+                    tile.set_random_texture_number(23)
+                elif r_d != 0 and r_g != 0:
+                    tile.set_random_texture_number(24)
+
+            if y==31 and x == 17:
+                print(tile.get_random_texture_number())
+                print("D = ", r_d,"g = ", r_g,"h = ", r_h,"b = ", r_b)
+
+
+    def riviere_angle(self):
+        grid = self.game_controller.get_map()
+        for x in range(0, 40):
+            for y in range(0, 39):
+                tile = grid[x][y]
+
+                if tile.get_type() == TileTypes.WATER:
+                    tile_g = grid[x][y-1]
+                    tile_d = grid[x][y+1]
+                    tile_h = grid[x-1][y]
+                    tile_b = grid[x+1][y]
+
+
+
+                    if tile_b.get_type() == TileTypes.WATER and tile_g.get_type() == TileTypes.WATER and tile_b.get_random_texture_number() in range(10, 24) and tile_g.get_random_texture_number() in range(10, 24):
+                        if grid[x+1][y-1].get_type() != TileTypes.WATER:
+                            tile.set_random_texture_number(70)
+                    if tile_b.get_type() == TileTypes.WATER and tile_d.get_type() == TileTypes.WATER and tile_b.get_random_texture_number() in range(10, 24) and tile_d.get_random_texture_number() in range(10, 24):
+                        tile.set_random_texture_number(71)
+                    if tile_g.get_type() == TileTypes.WATER and tile_h.get_type() == TileTypes.WATER and tile_h.get_random_texture_number() in range(10, 24) and tile_g.get_random_texture_number() in range(10, 24):
+                        tile.set_random_texture_number(72)
+                    if tile_h.get_type() == TileTypes.WATER and tile_d.get_type() == TileTypes.WATER and tile_h.get_random_texture_number() in range(10, 24) and tile_d.get_random_texture_number() in range(10, 24):
+                        if tile_b.get_type() == TileTypes.WATER:
+                            tile.set_random_texture_number(73)
+
+    def wheat(self):
+        grid = self.game_controller.get_map()
+        for x in range(1, 38):
+            for y in range(1, 38):
+                tile = grid[x][y]
+
+                if tile.get_type() == TileTypes.WHEAT:
+                    tile_g = grid[x][y - 1]
+                    tile_d = grid[x][y + 1]
+                    tile_h = grid[x - 1][y]
+                    tile_b = grid[x + 1][y]
+
+                    if tile_b.get_type() != TileTypes.WHEAT and tile_g.get_type() != TileTypes.WHEAT:
+                        tile.set_random_texture_number(10)
+                    if tile_b.get_type() != TileTypes.WHEAT and tile_d.get_type() != TileTypes.WHEAT:
+                        tile.set_random_texture_number(11)
+                    if tile_g.get_type() != TileTypes.WHEAT and tile_h.get_type() != TileTypes.WHEAT:
+                        tile.set_random_texture_number(12)
+                    if tile_h.get_type() != TileTypes.WHEAT and tile_d.get_type() != TileTypes.WHEAT:
+                        tile.set_random_texture_number(13)
+
+        for x in range(1, 38):
+            for y in range(1, 38):
+                tile = grid[x][y]
+
+                if tile.get_type() == TileTypes.WHEAT:
+
+                    adj = tile.get_adjacente_tiles()
+                    for i in range(len(adj)):
+                        if adj[i].get_random_texture_number() in range(10,13):
+                            tile.set_random_texture_number(random.randint(20, 23))
+
+
+    def random_rock(self, x, y, img, tile, rock_list):
+        if 0 <= y < 39 and 0 < x < 39:
+
+            r_g, g_d, b_d, a_d = img.getpixel((y, x - 1))
+            r_h, g_b, b_b, a_b = img.getpixel((y + 1, x))
+            r_hg, g_bd, b_bd, a_bd = img.getpixel((y + 1, x - 1))
+
+            if (r_g, r_h, r_hg) == (161, 161, 161) and (y, x - 1) not in rock_list and (y + 1, x) not in rock_list and (y + 1, x - 1) not in rock_list:
+                tile.set_random_texture_number(random.randint(20, 23))
+                tile.get_building().build_size = (2, 2)
+                rock_list.append((y, x))
+                rock_list.append((y, x-1))
+                rock_list.append((y+1, x))
+                rock_list.append((y+1, x-1))
+
+                grid = GameController.get_instance().get_map()
+
+                grid[x-1][y].show_tile = False
+                grid[x][y+1].show_tile = False
+                grid[x-1][y+1].show_tile = False
+
+
+
+
