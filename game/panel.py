@@ -106,11 +106,39 @@ class Panel:
                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
         self.decrease_speed.on_click(GameController.get_instance().decrease_current_speed)
 
+        self.build__senate = Button((self.width - 49, 349 + 46), button_size,
+                                        image=Textures.get_texture(SwitchViewButtonTypes.BUTTON13),
+                                        image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_HOVER),
+                                        image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_SELECTED))
+        self.build__senate.on_click(lambda: self.set_selected_tile(BuildingTypes.SENATE))
+
+        self.build__hospital = Button((self.width - 100, 312 + 46), button_size,
+                                  image=Textures.get_texture(SwitchViewButtonTypes.BUTTON9),
+                                  image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_HOVER),
+                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_SELECTED))
+        self.build__hospital.on_click(lambda: self.set_selected_tile(BuildingTypes.HOSPITAL))
+
+        self.build__temple = Button((self.width - 49, 312 + 46), button_size,
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON10),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED))
+        self.build__temple.on_click(lambda: self.set_selected_tile(BuildingTypes.TEMPLE))
+
+        self.build__school = Button((self.width - 150, 349 + 46), button_size,
+                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
+                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_HOVER),
+                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED))
+        self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
+        EventManager.register_component(self.build__senate)
         EventManager.register_component(self.build__well)
+        EventManager.register_component(self.build__hospital)
+        EventManager.register_component(self.build__school)
+        EventManager.register_component(self.build__temple)
         EventManager.register_component(self.build__engineer_post)
         EventManager.register_component(self.change_overlay)
         EventManager.register_component(self.increase_speed)
@@ -177,6 +205,10 @@ class Panel:
         self.increase_speed.display(screen)
         self.decrease_speed.display(screen)
 
+        self.build__senate.display(screen)
+        self.build__hospital.display(screen)
+        self.build__school.display(screen)
+        self.build__temple.display(screen)
 
     def update(self):
         self.mini_map.update()
