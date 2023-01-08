@@ -111,7 +111,8 @@ class Game:
 
         if len(fps_moyen) > 100:
             fps_moyen.pop(0)
-        fps_moyen.append(1000 / time_diff)
+        if time_diff:
+            fps_moyen.append(1000 / time_diff)
 
 
     def exit_game(self):
