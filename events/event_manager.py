@@ -2,7 +2,7 @@ import pygame as pg
 
 from components.button import Button
 from components.component import Component
-
+from game.time import Time
 from events.key_listener import KeyListener
 
 
@@ -51,6 +51,10 @@ class EventManager:
             for hooked_function in EventManager.hooked_functions:
                 hooked_function[0](event, *hooked_function[1])
 
+            if event.type == pg.USEREVENT:
+
+                Time.update_date()
+
             if event.type == pg.KEYDOWN:
                 EventManager.any_input()
                 for key_listener in EventManager.key_listeners:
@@ -67,6 +71,7 @@ class EventManager:
                 for component in EventManager.components:
                     if isinstance(component, Button) and component.is_hover(pos):
                         component.set_being_pressed(True)
+
 
             if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click

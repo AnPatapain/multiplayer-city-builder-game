@@ -98,6 +98,8 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
+
 
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (self.width - 162, self.height - 120))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
@@ -127,7 +129,7 @@ class Panel:
         resource_panel_text_pos = [20, 10]
         i = 0
         for text in resource_panel_text:
-            draw_text(text, screen, resource_panel_text_pos, size=38)
+            draw_text(text, screen, resource_panel_text_pos, color=(50, 30, 0), size=38)
             if i >= 3:
                 resource_panel_text_pos[0] += 280
             else:

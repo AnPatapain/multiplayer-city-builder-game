@@ -25,12 +25,27 @@ class GameController:
         self.current_tick = 0
         self.current_day = 0
         self.current_month = 0
-        self.current_year = 0
+        self.current_year = 340
         self.total_day = 0
 
         # Not implemented yet
         self.sentiment = 80
+        self.months = {
+            0: "Jan", 1: "Feb", 2: "Mar", 3: "Apr", 4: "May", 5: "Jun", 6: "Jul", 7: "Aug", 8: "Sep", 9: "Oct",
+            10: "Nov", 11: "Dec"
+        }
 
+    def get_month(self, id: int):
+        return self.months[id]
+
+    def get_actual_citizen(self):
+        return self.actual_citizen
+
+    def get_actual_month(self):
+        return self.current_month
+
+    def get_actual_year(self):
+        return self.current_year
 
     def new_building(self, building: 'Buildable'):
         self.denier -= buildable_cost[building.get_build_type()]
@@ -85,14 +100,15 @@ class GameController:
         self.current_day += 1
 
     def increase_month(self):
-        if self.current_month == 12:
+        if self.current_month == 11:
             self.increase_year()
             self.current_month = -1
 
         self.current_month += 1
 
+
     def increase_year(self):
-        self.current_year += 1
+        self.current_year -= 1
 
 
     def __calculate_water_access(self):

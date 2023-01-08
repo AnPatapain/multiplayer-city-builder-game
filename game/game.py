@@ -2,6 +2,7 @@ import pygame as pg
 
 from events.event_manager import EventManager
 from sounds.sounds import SoundManager
+from .time import Time
 from .world import World
 from .utils import draw_text
 from .map_controller import MapController
@@ -40,6 +41,8 @@ class Game:
         self.clock.tick(50)
         EventManager.handle_events()
         gc = GameController.get_instance()
+        pg.time.set_timer(pg.USEREVENT, 200)
+        #Time().init_timer()
         if not self.paused:
             self.game_controller.update()
             for walker in gc.walkers:
@@ -54,11 +57,17 @@ class Game:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-
         self.world.draw(self.screen)
         self.panel.draw(self.screen)
+        month_number = self.game_controller.get_actual_month()
+        gc = self.game_controller
 
         draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 120, 10), size=42)
-        draw_text('denier {}'.format(self.game_controller.get_denier()), self.screen, (self.width - 905, 10), size=42)
+        draw_text('Denier  {}'.format(self.game_controller.get_denier()), self.screen, (self.width - 905, 10), size=42)
+        draw_text('Pop  {}'.format(self.game_controller.get_actual_citizen()), self.screen, (self.width - 1200, 10), size=42)
+        draw_text('{} '.format(self.game_controller.get_month(month_number)), self.screen, (self.width - 590, 10), color= (255, 255, 0), size=42)
+        draw_text('{} BC'.format(self.game_controller.get_actual_year()), self.screen, (self.width - 500, 10), color= (255, 255, 0), size=42)
 
         pg.display.flip()
+
+
