@@ -16,7 +16,13 @@ from threading import Thread,Event
 def my_thread(func,event : Event):
     fps_moyen = [0]
     while not event.is_set():
-        func(fps_moyen)
+        try:
+            func(fps_moyen)
+        except Exception:
+            event.set()
+            print("\033[91m In render thread :")
+            print("\033[91m" + traceback.format_exc())
+            exit()
 
 class Game:
     def __init__(self, screen):
@@ -51,8 +57,9 @@ class Game:
     # Game Loop
     def run(self):
         self.is_running = True
+        # Main control
         try:
-            while self.is_running:
+            while self.is_running and not self.thread_event.is_set():
                 # We need to recalculate it every time, since it can change
                 targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
                 if not self.paused:
@@ -61,10 +68,13 @@ class Game:
                         walker.update()
 
                 time.sleep(1/targeted_ticks_per_seconds)
-        except Exception as e:
-            print("\033[91m" + traceback.format_exc())
+
+        #Main programm exeption stop the thread and show the traceback
+        except Exception:
             self.thread_event.set()
             self.draw_thread.join()
+            print("\033[91m In logic main program :")
+            print("\033[91m" + traceback.format_exc())
             exit()
 
         self.thread_event.set()
