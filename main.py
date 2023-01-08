@@ -1,5 +1,6 @@
 import pygame as pg
 
+import backup_game
 from events.event_manager import EventManager
 from game.game import Game
 from menu import Menu
@@ -25,6 +26,11 @@ def main():
     # Clear buttons from the menu
     EventManager.reset()
     game = Game(screen, clock)
+
+    # Save load, need to be here to load save after init game
+    if menu.get_save_loading():
+        backup_game.load_game("save.bin")
+
     while is_game_run:
 
         while is_playing:
