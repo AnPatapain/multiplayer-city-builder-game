@@ -66,7 +66,9 @@ class Builder:
             self.end_point = None  # update start point to default after building
             return
 
-        
+        if selected_tile == BuildingTypes.PELLE and grid[start_point[1]][start_point[0]].get_building() and sum(grid[start_point[1]][start_point[0]].get_building().get_building_size()) >=4:
+            end_point = [start_point[0]+grid[start_point[1]][start_point[0]].get_building().get_building_size()[0] - 1, start_point[1]-grid[start_point[1]][start_point[0]].get_building().get_building_size()[1] + 1]
+        print(start_point, end_point)
         for row in utils.MyRange(start_point[1], end_point[1]):
             for col in utils.MyRange(start_point[0], end_point[0]):
                 tile: Tile = grid[row][col]

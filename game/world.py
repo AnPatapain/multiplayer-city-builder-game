@@ -166,14 +166,7 @@ class World:
         for row in grid:
             for tile in row:
                 (x, y) = tile.get_render_coord()
-
-                # if tile.get_building() and tile.get_show_tile():
-                #     if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
-                #         pre_tile = grid[tile.x - tile.get_building().build_size[1] + 2][tile.y]
-                #         (x, y) = (x, pre_tile.get_render_coord()[1])
-                #     else:
-                #         pre_tile = grid[tile.x - tile.get_building().build_size[1] + 1][tile.y]
-                #         (x, y) = (x, pre_tile.get_render_coord()[1])
+                # print(tile.x, tile.y, tile.get_building(), tile.get_show_tile())
                 if tile.get_building() and tile.get_show_tile():
                     pre_tile = grid[tile.x - tile.get_building().build_size[1] + 1][tile.y]
                     (x, y) = (x, pre_tile.get_render_coord()[1])
@@ -189,10 +182,6 @@ class World:
                             else:
                                 screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                         else:
-                            # if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
-                            #     screen.blit(tile.get_texture(), (x_offset,y_offset - tile.get_texture().get_height() + (building_size[1] - 1) * TILE_SIZE))
-                            # else:
-                            #     screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                             screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                     elif tile.get_road():
                         screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
