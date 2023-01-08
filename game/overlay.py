@@ -174,6 +174,17 @@ class Overlay:
     def get_overlay_types(self):
         return self.overlay_types
 
+    def get_name(self):
+        match self.overlay_types:
+            case OverlayTypes.DEFAULT:
+                return "Default"
+            case OverlayTypes.FIRE:
+                return "Fire"
+            case OverlayTypes.DESTRUCTION:
+                return "Damage"
+
+        return "Overlay"
+
     @staticmethod
     def get_instance():
         if Overlay.instance is None:

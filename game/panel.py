@@ -9,6 +9,7 @@ from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
+from game.overlay import Overlay
 
 TOPBAR_HEIGHT = 46
 PANEL_WIDTH = 162
@@ -43,6 +44,10 @@ class Panel:
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (7, 216))
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (7, 200 - TOPBAR_HEIGHT))
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (84, 200 - TOPBAR_HEIGHT))
+
+        # Overlay button
+        self.change_overlay = Button((self.width - 160, 48), (177,25), text_fn=Overlay.get_instance().get_name, center_text=True)
+        self.change_overlay.on_click(lambda: Overlay.get_instance().set_overlay_types())
 
         button_size = (39, 26)
         self.build__road = Button((self.width - 49, 277 + TOPBAR_HEIGHT), button_size,
