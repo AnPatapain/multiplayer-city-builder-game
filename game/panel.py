@@ -89,15 +89,13 @@ class Panel:
         self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
-                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED),
-                                  disable_unselect=True, selectable=True)
+                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
         #self.increase_speed.on_click()
 
         self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED),
-                                     disable_unselect=True, selectable=True)
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
         # self.increase_speed.on_click()
 
         EventManager.register_component(self.destroy_tile)
