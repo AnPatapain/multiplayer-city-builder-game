@@ -16,7 +16,9 @@ class Button(Component):
             self,
             pos,
             size,
+            text_size : int = 38,
             text: str = "",
+            text_fn: () = None,
             image: Surface = None,
             image_hover: Surface = None,
             image_selected: Surface = None,
@@ -26,6 +28,8 @@ class Button(Component):
     ):
         super().__init__(pos, size)
         self.text = text
+        self.text_fn = text_fn
+        self.text_size = text_size
         self.bg_color = BASE_COLOR
         self.bg = Rect(self.position, self.size)
         self.margin = 8
@@ -101,12 +105,14 @@ class Button(Component):
             color = HOVER_COLOR
 
         pg.draw.rect(screen, color, self.bg)
-        center = None
+        center_width = None
+        center_height = None
 
         pos = (self.bg.x + self.margin, self.bg.y + self.margin)
         if self.text_centered:
             pos = (self.bg.x, self.bg.y + self.margin)
-            center = self.size[0]
+            center_width = self.size[0]
+            center_height = self.size[1]
 
         if (self.is_hovered() or self.is_being_pressed()) and self.image_hover is not None:
             screen.blit(self.image_hover, self.bg)
@@ -115,4 +121,6 @@ class Button(Component):
         elif self.image is not None:
             screen.blit(self.image, self.bg)
 
-        utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center)
+        if self.text_fn:
+            self.text = self.text_fn()
+        utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center_width, center_on_height=center_height, size=self.text_size)

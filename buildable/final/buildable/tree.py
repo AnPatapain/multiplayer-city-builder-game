@@ -5,4 +5,4 @@ from game.textures import Textures
 
 class SmallTree(Buildable):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, TileTypes.TREE, (1, 1))
+        super().__init__(x, y, TileTypes.TREE, (1, 1),0,0)

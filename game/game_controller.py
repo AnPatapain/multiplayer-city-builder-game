@@ -103,7 +103,6 @@ class GameController:
         if self.current_month == 11:
             self.increase_year()
             self.current_month = -1
-
         self.current_month += 1
 
 

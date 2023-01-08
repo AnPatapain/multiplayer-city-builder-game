@@ -1,6 +1,5 @@
 import pygame as pg
 
-from Backup_game import Backup_game
 from components import button
 from events.event_manager import EventManager
 from sounds.sounds import SoundManager
@@ -10,6 +9,7 @@ class Menu:
     def __init__(self, screen, clock):
         self.splash_screen = True
         self.active = True
+        self.save_loading = False
 
         self.screen = screen
         self.clock = clock
@@ -28,7 +28,7 @@ class Menu:
         self.button__load_saved_game = button.Button((button_start, 400), button_size,
                                                       image=pg.image.load('assets/menu_sprites/load saved game.png').convert(),
                                                       image_hover=pg.image.load('assets/menu_sprites/load_saved_game_mouse_on.png').convert())
-#        self.button__load_saved_game.on_click(Backup_game.load_game())
+        self.button__load_saved_game.on_click(self.load_save)
 
         self.button__options = button.Button((button_start, 450), button_size,
                                                       image=pg.image.load('assets/menu_sprites/options.png').convert(),
@@ -106,3 +106,10 @@ class Menu:
 
     def is_splashscreen_skipped(self):
         return not self.splash_screen
+
+    def load_save(self):
+        self.save_loading = True
+        self.set_inactive()
+
+    def get_save_loading(self):
+        return self.save_loading

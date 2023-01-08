@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 
 class Structure(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int],
-                 max_employee: int):
-        super().__init__(x, y, build_type, build_size)
+                 max_employee: int,fire_risk : int ,destruction_risk: int):
+        super().__init__(x, y, build_type, build_size,fire_risk ,destruction_risk)
 
         self.max_employee = max_employee
 
@@ -24,3 +24,13 @@ class Structure(Buildable, ABC):
                 return candidate
 
         return None
+
+    def update_day(self):
+        self.risk.risk_progress()
+        if self.risk.is_on_fire():
+            self.is_on_fire = True
+            self.to_ruin()
+            return
+        if self.risk.is_destroyed():
+            self.to_ruin()
+            return
