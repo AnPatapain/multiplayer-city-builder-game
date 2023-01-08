@@ -46,7 +46,8 @@ class Panel:
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (84, 200 - TOPBAR_HEIGHT))
 
         # Overlay button
-        self.change_overlay = Button((self.width - 160, 48), (177,25), text_fn=Overlay.get_instance().get_name, center_text=True)
+        self.change_overlay = Button((self.width - 158, 49), (117,25), text_fn=Overlay.get_instance().get_name,
+                                     center_text=True,text_size=30)
         self.change_overlay.on_click(lambda: Overlay.get_instance().set_overlay_types())
 
         button_size = (39, 26)

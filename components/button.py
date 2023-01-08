@@ -16,6 +16,7 @@ class Button(Component):
             self,
             pos,
             size,
+            text_size : int = 38,
             text: str = "",
             text_fn: () = None,
             image: Surface = None,
@@ -28,6 +29,7 @@ class Button(Component):
         super().__init__(pos, size)
         self.text = text
         self.text_fn = text_fn
+        self.text_size = text_size
         self.bg_color = BASE_COLOR
         self.bg = Rect(self.position, self.size)
         self.margin = 8
@@ -119,4 +121,4 @@ class Button(Component):
 
         if self.text_fn:
             self.text = self.text_fn()
-        utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center)
+        utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center, size=self.text_size)
