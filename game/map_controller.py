@@ -8,7 +8,8 @@ class MapController:
     height = 1080
     map_pos = [0, 0]
 
-    
+    start_moving_coord = None
+    start_moving_pos = None
 
     @staticmethod
     def init_():
@@ -30,6 +31,22 @@ class MapController:
             MapController.go_down(OFFSET_FOR_MOUSE)
         if y <= MapController.width * 0.001:
             MapController.go_up(OFFSET_FOR_MOUSE)
+
+        wheel_pressed = pg.mouse.get_pressed()[1]
+        if MapController.start_moving_coord is None and wheel_pressed:
+            MapController.start_moving_coord = (x, y)
+            MapController.start_moving_pos = MapController.map_pos.copy()
+
+        if MapController.start_moving_coord and wheel_pressed:
+            diff_x = MapController.start_moving_coord[0] - x
+            diff_y = MapController.start_moving_coord[1] - y
+
+            MapController.map_pos[0] = MapController.start_moving_pos[0] - diff_x
+            MapController.map_pos[1] = MapController.start_moving_pos[1] - diff_y
+
+        if not wheel_pressed and MapController.start_moving_coord:
+            MapController.start_moving_coord = None
+            MapController.start_moving_pos = None
 
     @staticmethod
     def go_down(offset: int):
