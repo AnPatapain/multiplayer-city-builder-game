@@ -304,6 +304,8 @@ class Textures:
             BuildingTypes.WHEAT_SOIL_LEVEL_3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00015.png'))).convert_alpha(screen),
             BuildingTypes.WHEAT_SOIL_LEVEL_4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00016.png'))).convert_alpha(screen),
             BuildingTypes.WHEAT_SOIL_LEVEL_5: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00017.png'))).convert_alpha(screen),
+            BuildingTypes.RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+            BuildingTypes.FIRE_RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
 
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),

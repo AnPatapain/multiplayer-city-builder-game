@@ -10,11 +10,13 @@ from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
 from class_types.orientation_types import OrientationTypes
+from class_types.overlay_types import OverlayTypes
 from class_types.road_types import RoadTypes
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from game.game_controller import GameController
 from game.map_controller import MapController
+from game.overlay import Overlay
 from game.setting import *
 from game.textures import Textures
 from map_element.tile import Tile
@@ -28,7 +30,9 @@ class World:
         self.width = width
         self.height = height
 
-        self.builder = Builder()
+        self.builder = Builder(panel)
+        self.overlay = Overlay.get_instance()
+
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
 
@@ -47,6 +51,7 @@ class World:
         EventManager.register_key_listener(pg.K_g, lambda: self.panel.set_selected_tile(BuildingTypes.GRANARY))
         EventManager.register_key_listener(pg.K_f, lambda: self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
         EventManager.register_key_listener(pg.K_m, lambda: self.panel.set_selected_tile(BuildingTypes.MARKET))
+        EventManager.register_key_listener(pg.K_o, lambda: self.overlay.set_overlay_types())
 
     def mouse_pos_to_grid(self, mouse_pos):
         """
@@ -158,8 +163,6 @@ class World:
             for tile in row:
                 (x, y) = tile.get_render_coord()
 
-                # print(tile.x, tile.y, tile.get_building(), tile.get_show_tile())
-
                 if tile.get_building() and tile.get_show_tile():
                     if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
                         pre_tile = grid[tile.x - tile.get_building().build_size[1] + 2][tile.y]
@@ -172,10 +175,17 @@ class World:
                 if tile.get_road() or tile.get_building():
                     if tile.get_building() and tile.get_show_tile():
                         building_size = tile.get_building().get_building_size()
-                        if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
-                            screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() +  (building_size[1]-1)*TILE_SIZE))
+                        if self.overlay.get_overlay_types() != OverlayTypes.DEFAULT:
+                            pg_img = self.overlay.get_overlay(tile)
+                            if pg_img:
+                                screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() +  building_size[1]*TILE_SIZE))
+                            else:
+                                screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                         else:
-                            screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() +  building_size[1]*TILE_SIZE))
+                            if tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
+                                screen.blit(tile.get_texture(), (x_offset,y_offset - tile.get_texture().get_height() + (building_size[1] - 1) * TILE_SIZE))
+                            else:
+                                screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                     elif tile.get_road():
                         screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
 
@@ -200,8 +210,8 @@ class World:
                         case OrientationTypes.BOTTOM_RIGHT:
                             x_offset += walker.walk_progression*2
                             y_offset += walker.walk_progression
-
-                    screen.blit(walker.get_texture(), (x_offset, y_offset))
+                    if self.overlay.get_overlay_types() == OverlayTypes.DEFAULT:
+                        screen.blit(walker.get_texture(), (x_offset, y_offset))
                     x_offset = base_x_offset
                     y_offset = base_y_offset
 
