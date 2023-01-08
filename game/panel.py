@@ -9,6 +9,7 @@ from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
+from game.overlay import Overlay
 
 TOPBAR_HEIGHT = 46
 PANEL_WIDTH = 162
@@ -43,6 +44,11 @@ class Panel:
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (7, 216))
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (7, 200 - TOPBAR_HEIGHT))
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (84, 200 - TOPBAR_HEIGHT))
+
+        # Overlay button
+        self.change_overlay = Button((self.width - 158, 49), (117,25), text_fn=Overlay.get_instance().get_name,
+                                     center_text=True,text_size=30)
+        self.change_overlay.on_click(lambda: Overlay.get_instance().set_overlay_types())
 
         button_size = (39, 26)
         self.build__road = Button((self.width - 49, 277 + TOPBAR_HEIGHT), button_size,
@@ -85,6 +91,7 @@ class Panel:
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
         EventManager.register_component(self.build__well)
+        EventManager.register_component(self.change_overlay)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -139,6 +146,7 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
         self.build__well.display(screen)
+        self.change_overlay.display(screen)
 
     def update(self):
         self.mini_map.update()
