@@ -1,6 +1,5 @@
 from buildable.buildable import Buildable
 from class_types.tile_types import TileTypes
-from game.textures import Textures
 
 
 class Rock(Buildable):
