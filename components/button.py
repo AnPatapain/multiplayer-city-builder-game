@@ -105,12 +105,14 @@ class Button(Component):
             color = HOVER_COLOR
 
         pg.draw.rect(screen, color, self.bg)
-        center = None
+        center_width = None
+        center_height = None
 
         pos = (self.bg.x + self.margin, self.bg.y + self.margin)
         if self.text_centered:
             pos = (self.bg.x, self.bg.y + self.margin)
-            center = self.size[0]
+            center_width = self.size[0]
+            center_height = self.size[1]
 
         if (self.is_hovered() or self.is_being_pressed()) and self.image_hover is not None:
             screen.blit(self.image_hover, self.bg)
@@ -121,4 +123,4 @@ class Button(Component):
 
         if self.text_fn:
             self.text = self.text_fn()
-        utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center, size=self.text_size)
+        utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center_width, center_on_height=center_height, size=self.text_size)
