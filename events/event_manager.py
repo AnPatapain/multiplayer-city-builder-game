@@ -2,7 +2,6 @@ import pygame as pg
 
 from components.button import Button
 from components.component import Component
-from game.time import Time
 from events.key_listener import KeyListener
 
 
@@ -50,10 +49,6 @@ class EventManager:
         for event in pg.event.get():
             for hooked_function in EventManager.hooked_functions:
                 hooked_function[0](event, *hooked_function[1])
-
-            if event.type == pg.USEREVENT:
-
-                Time.update_date()
 
             if event.type == pg.KEYDOWN:
                 EventManager.any_input()
