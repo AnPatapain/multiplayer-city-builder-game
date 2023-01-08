@@ -109,7 +109,7 @@ class GameController:
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
-                if building:
+                if building and tile.get_show_tile():
                     building.update_day()
 
         self.current_day += 1
