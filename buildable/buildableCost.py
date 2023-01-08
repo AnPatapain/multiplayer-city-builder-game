@@ -16,7 +16,6 @@ buildable_cost = {
     BuildingTypes.PELLE: 2,
     RoadTypes.TL_TO_BR: 4,
     BuildingTypes.HOSPITAL: 300,
-    BuildingTypes.WELL: 5,
     BuildingTypes.SENATE: 400,
     BuildingTypes.SCHOOL: 50,
     BuildingTypes.TEMPLE: 50,
