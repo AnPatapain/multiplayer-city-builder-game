@@ -1,11 +1,12 @@
 from buildable.buildable import Buildable
 from class_types.tile_types import TileTypes
+from game.textures import Textures
 
 
 class Rock(Buildable):
-    def __init__(self, x: int, y: int):
-        super().__init__(x, y, TileTypes.ROCK, (1, 1))
+    def __init__(self, x: int, y: int, taille : tuple = (1, 1)):
+        super().__init__(x, y, TileTypes.ROCK, taille)
 
     def is_destroyable(self):
         return False
-    
+
