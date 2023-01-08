@@ -63,3 +63,15 @@ class Buildable(ABC):
     def update_day(self):
         pass
 
+    def upgrade(self):
+        pass
+
+    def upgrade_to(self, class_name):
+        """
+            Copied from buidable/house.py
+            Testing if we can update wheat_soil using this method
+        """
+        next_object = class_name(self.x, self.y)
+        self.build_type = next_object.build_type
+        self.__class__ = class_name
+

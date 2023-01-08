@@ -46,6 +46,7 @@ class House(Buildable, ABC):
         if not self.conditions_fulfilled():
             self.downgrade()
         if self.is_upgradable():
+            print("hehe")
             self.upgrade()
 
     @abstractmethod
