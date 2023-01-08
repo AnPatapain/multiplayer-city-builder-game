@@ -5,8 +5,6 @@ from buildable.final.buildable.well import Well
 from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.structures.WheatFarm import WheatFarm
-from buildable.final.buildable.wheat_soil_level1 import Wheat_soil_level_1
-from buildable.final.buildable.wheat_soil_level5 import Wheat_soil_level_5
 from buildable.road import Road
 
 from game.panel import Panel
