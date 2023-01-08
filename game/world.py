@@ -342,7 +342,7 @@ class World:
         utils.draw_text(text=str(cost), screen=screen, pos=(pos_x, pos_y), color=color, size=30)
 
     def load_map(self):
-        img = Image.open("maps/new_gen2.png")
+        img = Image.open(MAPS_PATH)
 
         rock_list = []
         table: list[list[Tile]] = []
@@ -474,10 +474,6 @@ class World:
                     tile.set_random_texture_number(23)
                 elif r_d != 0 and r_g != 0:
                     tile.set_random_texture_number(24)
-
-            if y==31 and x == 17:
-                print(tile.get_random_texture_number())
-                print("D = ", r_d,"g = ", r_g,"h = ", r_h,"b = ", r_b)
 
 
     def riviere_angle(self):

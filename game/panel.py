@@ -5,6 +5,7 @@ from class_types.panel_types import SwitchViewButtonTypes
 from class_types.road_types import RoadTypes
 from components.button import Button
 from events.event_manager import EventManager
+from game.game_controller import GameController
 from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
@@ -86,12 +87,35 @@ class Panel:
                                   disable_unselect=True, selectable=True)
         self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
 
+        self.build__engineer_post = Button((self.width - 149, 385 + TOPBAR_HEIGHT), button_size,
+                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON14),
+                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_HOVER),
+                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_SELECTED),
+                                   disable_unselect=True, selectable=True)
+        self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
+
+        self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
+                                     image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
+        self.increase_speed.on_click(GameController.get_instance().increase_current_speed)
+
+        self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
+                                     image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
+        self.decrease_speed.on_click(GameController.get_instance().decrease_current_speed)
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
         EventManager.register_component(self.build__well)
+        EventManager.register_component(self.build__engineer_post)
         EventManager.register_component(self.change_overlay)
+        EventManager.register_component(self.increase_speed)
+        EventManager.register_component(self.decrease_speed)
+
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -105,6 +129,8 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
+        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
+
 
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (self.width - 162, self.height - 120))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
@@ -134,7 +160,7 @@ class Panel:
         resource_panel_text_pos = [20, 10]
         i = 0
         for text in resource_panel_text:
-            draw_text(text, screen, resource_panel_text_pos, size=38)
+            draw_text(text, screen, resource_panel_text_pos, color=(50, 30, 0), size=38)
             if i >= 3:
                 resource_panel_text_pos[0] += 280
             else:
@@ -146,7 +172,11 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
         self.build__well.display(screen)
+        self.build__engineer_post.display(screen)
         self.change_overlay.display(screen)
+        self.increase_speed.display(screen)
+        self.decrease_speed.display(screen)
+
 
     def update(self):
         self.mini_map.update()

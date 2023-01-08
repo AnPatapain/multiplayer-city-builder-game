@@ -16,8 +16,7 @@ def main():
     pg.display.set_caption("Taboule Raza")
     pg.display.set_icon(pg.image.load('assets/menu_sprites/game_icon.png'))
     pg.event.set_grab(True)
-    clock = pg.time.Clock()
-    menu = Menu(screen, clock)
+    menu = Menu(screen)
     Textures.init(screen)
 
     while menu.is_active():
@@ -25,7 +24,7 @@ def main():
 
     # Clear buttons from the menu
     EventManager.reset()
-    game = Game(screen, clock)
+    game = Game(screen)
 
     # Save load, need to be here to load save after init game
     if menu.get_save_loading():

@@ -2,7 +2,6 @@ import pygame as pg
 
 from components.button import Button
 from components.component import Component
-
 from events.key_listener import KeyListener
 
 
@@ -67,6 +66,7 @@ class EventManager:
                 for component in EventManager.components:
                     if isinstance(component, Button) and component.is_hover(pos):
                         component.set_being_pressed(True)
+
 
             if event.type == pg.MOUSEBUTTONUP:
                 # Désactive le scroll de la souris pour les click

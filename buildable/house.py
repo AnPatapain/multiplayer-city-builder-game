@@ -110,3 +110,8 @@ class House(Buildable, ABC):
         self.build_type = next_object.build_type
         self.risk = next_object.risk
         self.__class__ = class_name
+
+    def to_ruin(self):
+        if self.associated_walker:
+            self.associated_walker.delete()
+        super().to_ruin()

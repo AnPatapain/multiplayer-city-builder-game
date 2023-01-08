@@ -1,3 +1,4 @@
+from buildable.final.structures.engineer_post import EngineerPost
 from game.game_controller import GameController
 from class_types.buildind_types import BuildingTypes
 
@@ -104,6 +105,8 @@ class Builder:
                 pass
             case BuildingTypes.MARKET:
                 pass
+            case BuildingTypes.ENGINEERS_POST:
+                building = EngineerPost(row,col)
             case _:
                 print("Building type error")
                 return
