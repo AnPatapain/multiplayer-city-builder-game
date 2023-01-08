@@ -49,6 +49,9 @@ class MiniMap:
             else:
                 self.mini_relative_x = None
                 self.mini_relative_y = None
+        else:
+            self.mini_relative_x = None
+            self.mini_relative_y = None
 
     def update(self):
         if self.mini_relative_x and self.mini_relative_y:
