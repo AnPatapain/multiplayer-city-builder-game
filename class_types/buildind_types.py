@@ -12,6 +12,9 @@ class BuildingTypes(Enum):
     PREFECTURE = 13
     WELL = 20
     FOUNTAIN = 21
+    HOSPITAL = 22
+    SCHOOL = 23
+    TEMPLE = 24
 
     BUILD_SIGN = 90
     RUINS = 91
