@@ -324,7 +324,7 @@ class World:
         utils.draw_text(text=str(cost), screen=screen, pos=(pos_x, pos_y), color=color, size=30)
 
     def load_map(self):
-        img = Image.open("maps/map1.png")
+        img = Image.open("maps/new_gen2.png")
 
         rock_list = []
         table: list[list[Tile]] = []
