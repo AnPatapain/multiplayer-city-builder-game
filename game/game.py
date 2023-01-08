@@ -60,7 +60,6 @@ class Game:
 
             time.sleep(1/targeted_ticks_per_seconds)
 
-        self.is_running = False
         self.thread_event.set()
         self.draw_thread.join()
         exit()
