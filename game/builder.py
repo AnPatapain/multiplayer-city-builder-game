@@ -16,11 +16,11 @@ from map_element.tile import Tile
 from class_types.road_types import RoadTypes
 
 class Builder:
-    def __init__(self) -> None:
+    def __init__(self, panel) -> None:
         self.game_controller = GameController.get_instance()
 
         # Pour construire consécutivement
-        self.panel = Panel(1920, 1080)
+        self.panel = panel
         self.temp_tile_info: dict = None
         self.start_point: tuple = None
         self.end_point: tuple = None

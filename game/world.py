@@ -30,7 +30,7 @@ class World:
         self.width = width
         self.height = height
 
-        self.builder = Builder()
+        self.builder = Builder(panel)
         self.overlay = Overlay.get_instance()
 
 
