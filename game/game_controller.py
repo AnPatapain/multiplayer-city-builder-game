@@ -41,7 +41,7 @@ class GameController:
         return self.current_speed
 
     def increase_current_speed(self):
-        if self.current_speed != 4.0:
+        if self.current_speed != 16.0:
             self.current_speed *= 2
 
     def decrease_current_speed(self):

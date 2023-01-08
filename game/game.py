@@ -10,10 +10,16 @@ from .utils import draw_text
 from .map_controller import MapController
 from .panel import Panel
 from .game_controller import GameController
+from threading import Thread,Event
 
+def my_thread(func,event : Event):
+    fps_moyen = [0]
+    while not event.is_set():
+        func(fps_moyen)
 
 class Game:
     def __init__(self, screen):
+        self.is_running = False
         self.screen = screen
         self.paused = False
         self.game_controller = GameController.get_instance()
@@ -29,53 +35,34 @@ class Game:
         # World contains populations or graphical objects like buildings, trees, grass
         self.world = World(self.width, self.height, self.panel)
 
+        self.thread_event = Event()
+        self.draw_thread = Thread(None, my_thread, "1",[self.display,self.thread_event])
+
         MapController.init_()
 
         # Exit the game when pressing <esc>
-        EventManager.register_key_listener(pg.K_ESCAPE, exit)
+        EventManager.register_key_listener(pg.K_ESCAPE, self.exit_game)
         # Calls the event_handler of the World
         EventManager.add_hooked_function(self.world.event_handler)
         EventManager.register_key_listener(pg.K_SPACE, self.toogle_pause)
+        self.draw_thread.start()
 
     # Game Loop
     def run(self):
-        fps_moyen = [0]
-        ms_waited = 0
-
-        while True:
-
+        self.is_running = True
+        while self.is_running:
             # We need to recalculate it every time, since it can change
             targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
-            ms_between_ticks = 1000 / targeted_ticks_per_seconds
-
-            start_logic = time.process_time_ns()
             if not self.paused:
                 self.game_controller.update()
                 for walker in GameController.get_instance().walkers:
                     walker.update()
 
-            end_logic = time.process_time_ns()
-            logic_diff = (end_logic - start_logic) / 1000000
-            ms_waited += logic_diff
+            time.sleep(1/targeted_ticks_per_seconds)
 
-            while ms_waited < ms_between_ticks:
-                start_render = time.process_time_ns()
-                EventManager.handle_events()
-
-                self.world.update()
-                self.panel.update()
-                self.draw(int(numpy.average(fps_moyen)))
-                end_render = time.process_time_ns()
-                time_diff = (end_render - start_render) / 1000000
-
-                if len(fps_moyen) > 100:
-                    fps_moyen.pop(0)
-                fps_moyen.append(1000/time_diff)
-                ms_waited += time_diff
-
-
-            ms_waited = ms_waited - ms_between_ticks
-
+        self.thread_event.set()
+        self.draw_thread.join()
+        exit()
 
 
     def toogle_pause(self):
@@ -95,4 +82,20 @@ class Game:
 
         pg.display.flip()
 
+    def display(self,fps_moyen):
+        start_render = time.process_time_ns()
+        EventManager.handle_events()
 
+        self.world.update()
+        self.panel.update()
+        self.draw(int(numpy.average(fps_moyen)))
+        end_render = time.process_time_ns()
+        time_diff = (end_render - start_render) / 1000000
+
+        if len(fps_moyen) > 100:
+            fps_moyen.pop(0)
+        fps_moyen.append(1000 / time_diff)
+
+
+    def exit_game(self):
+        self.is_running = False
