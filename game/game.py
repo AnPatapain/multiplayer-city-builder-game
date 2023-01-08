@@ -1,4 +1,5 @@
 import time
+import traceback
 
 import numpy
 import pygame as pg
@@ -50,15 +51,21 @@ class Game:
     # Game Loop
     def run(self):
         self.is_running = True
-        while self.is_running:
-            # We need to recalculate it every time, since it can change
-            targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
-            if not self.paused:
-                self.game_controller.update()
-                for walker in GameController.get_instance().walkers:
-                    walker.update()
+        try:
+            while self.is_running:
+                # We need to recalculate it every time, since it can change
+                targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
+                if not self.paused:
+                    self.game_controller.update()
+                    for walker in GameController.get_instance().walkers:
+                        walker.update()
 
-            time.sleep(1/targeted_ticks_per_seconds)
+                time.sleep(1/targeted_ticks_per_seconds)
+        except Exception as e:
+            print("\033[91m" + traceback.format_exc())
+            self.thread_event.set()
+            self.draw_thread.join()
+            exit()
 
         self.thread_event.set()
         self.draw_thread.join()
