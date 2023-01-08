@@ -124,11 +124,11 @@ class Builder:
                 #We are out of the index of the grid
                 return
 
-            if building.get_build_type() == BuildingTypes.WHEAT_FARM:
-                row -= 1
-                x_building, y_building = 2, 2
-                for (x, y) in building.get_wheat_soil_pos():
-                    grid[x][y].set_building(Wheat_soil_level_1(row, col))
+            # if building.get_build_type() == BuildingTypes.WHEAT_FARM:
+            #     row -= 1
+            #     x_building, y_building = 2, 2
+            #     for (x, y) in building.get_wheat_soil_pos():
+            #         grid[x][y].set_building(Wheat_soil_level_1(row, col))
 
 
             # Put building in each case

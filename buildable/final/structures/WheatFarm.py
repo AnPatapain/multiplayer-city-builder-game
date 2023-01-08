@@ -1,6 +1,9 @@
 from buildable.structure import Structure
 from class_types.buildind_types import BuildingTypes
 from game.game_controller import GameController
+from game.textures import Textures
+from game.setting import *
+import pygame as pg
 
 class WheatFarm(Structure):
     def __init__(self, x: int, y: int) -> None:
@@ -10,9 +13,37 @@ class WheatFarm(Structure):
         self.wheat_quantity = 0
         self.max_wheat = 100
 
+        self.farm_img = Textures.get_texture(BuildingTypes.WHEAT_FARM)
+        self.wheat_sol_img = Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_5)
+
         #++++++++++++++++++++ TESTING PURPOSE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.relax_days = 10 # just for testing for seeing the evolution of soil
         
+
+    def get_texture(self):
+        farm_img_height = self.farm_img.get_height()
+        farm_img_width = self.farm_img.get_width()
+
+        rendered = pg.Surface( (116*3, farm_img_height + 60) ).convert_alpha()
+
+        rendered.blit(self.farm_img, ( ( rendered.get_width() - farm_img_width )/2, 0))
+        
+        #soil 1
+        rendered.blit(self.wheat_sol_img, (0, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) ) )
+        #soil2
+        rendered.blit(self.wheat_sol_img, (58, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30 ))
+        
+        #soil 4
+        rendered.blit(self.wheat_sol_img, (58*4, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE)))
+        
+        #soil 2
+        rendered.blit(self.wheat_sol_img, (58*3, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30))
+
+        #soil 3
+        rendered.blit(self.wheat_sol_img, (58*2, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30*2 ))
+        
+        return rendered.convert_alpha()
+
 
     def get_wheat_soil_pos(self):
         row, col = self.x, self.y
@@ -41,15 +72,16 @@ class WheatFarm(Structure):
         return self.wheat_quantity == self.max_wheat
 
     def update_day(self):
-        self.relax_days -= 1
-        if self.is_upgradable():
-            self.produce_wheat()
+        pass
+        # self.relax_days -= 1
+        # if self.is_upgradable():
+        #     self.produce_wheat()
 
-            #Update the image of the wheat soil around the farm 
-            for wheat_soil in self.get_wheat_soils():
-                print(wheat_soil)
-                wheat_soil.upgrade()
-                self.relax_days = 10 # Reset relax days for workers : ) whenever they produce one level
+        #     #Update the image of the wheat soil around the farm 
+        #     for wheat_soil in self.get_wheat_soils():
+        #         print(wheat_soil)
+        #         wheat_soil.upgrade()
+        #         self.relax_days = 10 # Reset relax days for workers : ) whenever they produce one level
     
     def is_upgradable(self):
         '''
