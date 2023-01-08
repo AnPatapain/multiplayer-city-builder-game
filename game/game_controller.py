@@ -28,12 +28,25 @@ class GameController:
         self.current_year = 340
         self.total_day = 0
 
+        self.current_speed = 1.0
+
         # Not implemented yet
         self.sentiment = 80
         self.months = {
             0: "Jan", 1: "Feb", 2: "Mar", 3: "Apr", 4: "May", 5: "Jun", 6: "Jul", 7: "Aug", 8: "Sep", 9: "Oct",
             10: "Nov", 11: "Dec"
         }
+
+    def get_current_speed(self):
+        return self.current_speed
+
+    def increase_current_speed(self):
+        if self.current_speed != 2.0:
+            self.current_speed *= 2
+
+    def decrease_current_speed(self):
+        if self.current_speed != 0.5:
+            self.current_speed /= 2
 
     def get_month(self, id: int):
         return self.months[id]

@@ -5,6 +5,7 @@ from class_types.panel_types import SwitchViewButtonTypes
 from class_types.road_types import RoadTypes
 from components.button import Button
 from events.event_manager import EventManager
+from game.game_controller import GameController
 from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
@@ -94,16 +95,16 @@ class Panel:
         self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
 
         self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
-                                  image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
-                                  image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
-                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
-        #self.increase_speed.on_click()
+                                     image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
+        self.increase_speed.on_click(GameController.get_instance().increase_current_speed)
 
         self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
-        # self.increase_speed.on_click()
+        self.decrease_speed.on_click(GameController.get_instance().decrease_current_speed)
 
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)

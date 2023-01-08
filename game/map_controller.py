@@ -41,8 +41,10 @@ class MapController:
             diff_x = MapController.start_moving_coord[0] - x
             diff_y = MapController.start_moving_coord[1] - y
 
-            MapController.map_pos[0] = MapController.start_moving_pos[0] - diff_x
-            MapController.map_pos[1] = MapController.start_moving_pos[1] - diff_y
+            MapController.set_map_pos(
+                MapController.start_moving_pos[0] - diff_x,
+                MapController.start_moving_pos[1] - diff_y
+            )
 
         if not wheel_pressed and MapController.start_moving_coord:
             MapController.start_moving_coord = None
@@ -50,23 +52,19 @@ class MapController:
 
     @staticmethod
     def go_down(offset: int):
-        if MapController.map_pos[1] > -2100:
-            MapController.map_pos[1] -= offset
+        MapController.set_map_pos(MapController.map_pos[0], MapController.map_pos[1] - offset)
 
     @staticmethod
     def go_up(offset: int):
-        if MapController.map_pos[1] < 300:
-            MapController.map_pos[1] += offset
+        MapController.set_map_pos(MapController.map_pos[0], MapController.map_pos[1] + offset)
 
     @staticmethod
     def go_left(offset: int):
-        if MapController.map_pos[0] < 300:
-            MapController.map_pos[0] += offset
+        MapController.set_map_pos(MapController.map_pos[0] + offset, MapController.map_pos[1])
 
     @staticmethod
     def go_right(offset: int):
-        if MapController.map_pos[0] > -4550:
-            MapController.map_pos[0] -= offset
+        MapController.set_map_pos(MapController.map_pos[0] - offset, MapController.map_pos[1])
 
     @staticmethod
     def get_map_pos():
@@ -74,10 +72,11 @@ class MapController:
     
     @staticmethod
     def set_map_pos(x, y):
-        '''
-        Used in mini_map
-        '''
-        MapController.map_pos[0] = x
-        MapController.map_pos[1] = y
+        if -6100 < MapController.map_pos[0] + x < 300:
+            MapController.map_pos[0] = x
+
+        if -2800 < MapController.map_pos[1] + y < 300:
+            MapController.map_pos[1] = y
+
         return MapController.map_pos
 

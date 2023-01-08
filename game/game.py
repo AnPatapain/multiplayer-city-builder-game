@@ -1,3 +1,6 @@
+import time
+
+import numpy
 import pygame as pg
 
 from events.event_manager import EventManager
@@ -37,30 +40,47 @@ class Game:
 
     # Game Loop
     def run(self):
-        self.clock.tick(50)
-        EventManager.handle_events()
-        gc = GameController.get_instance()
+        ms_waited = 0
+        fps_moyen = [0]
+        while True:
+            start = time.process_time_ns()
 
-        if not self.paused:
-            self.game_controller.update()
-            for walker in gc.walkers:
-                walker.update()
+            # We need to recalculate it every time, since it can change
+            targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
+            ms_between_ticks = 1000 / targeted_ticks_per_seconds
 
-        self.world.update()
-        self.panel.update()
-        self.draw()
+            EventManager.handle_events()
+            gc = GameController.get_instance()
+
+            self.world.update()
+            self.panel.update()
+            self.draw(int(numpy.average(fps_moyen)))
+
+            if not self.paused and ms_waited >= ms_between_ticks:
+                self.game_controller.update()
+                for walker in gc.walkers:
+                    walker.update()
+                ms_waited = 0
+
+            end = time.process_time_ns()
+            time_diff = (end - start) / 1000000
+            if len(fps_moyen) > 60:
+                fps_moyen.pop(0)
+            fps_moyen.append(1000/time_diff)
+
+            ms_waited += time_diff
+
 
     def toogle_pause(self):
         self.paused = not self.paused
 
-    def draw(self):
+    def draw(self, fps):
         self.screen.fill((0, 0, 0))
         self.world.draw(self.screen)
         self.panel.draw(self.screen)
         month_number = self.game_controller.get_actual_month()
-        gc = self.game_controller
 
-        draw_text('fps={}'.format(round(self.clock.get_fps())), self.screen, (self.width - 120, 10), size=42)
+        draw_text('fps={}'.format(fps), self.screen, (self.width - 120, 10), size=42)
         draw_text('Denier  {}'.format(self.game_controller.get_denier()), self.screen, (self.width - 905, 10), size=42)
         draw_text('Pop  {}'.format(self.game_controller.get_actual_citizen()), self.screen, (self.width - 1200, 10), size=42)
         draw_text('{} '.format(self.game_controller.get_month(month_number)), self.screen, (self.width - 590, 10), color=pg.Color(255, 255, 0), size=42)
