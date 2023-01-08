@@ -128,7 +128,7 @@ class Builder:
                 row -= 1
                 x_building, y_building = 2, 2
                 for (x, y) in building.get_wheat_soil_pos():
-                    grid[x][y].set_building(Wheat_soil_level_5(row, col))
+                    grid[x][y].set_building(Wheat_soil_level_1(row, col))
 
 
             # Put building in each case
