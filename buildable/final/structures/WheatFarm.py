@@ -24,7 +24,8 @@ class WheatFarm(Structure):
         farm_img_height = self.farm_img.get_height()
         farm_img_width = self.farm_img.get_width()
 
-        rendered = pg.Surface( (116*3, farm_img_height + 60) ).convert_alpha()
+        rendered = pg.Surface( (116*3, farm_img_height + 60), pg.SRCALPHA, 32)
+        rendered = rendered.convert_alpha()
 
         rendered.blit(self.farm_img, ( ( rendered.get_width() - farm_img_width )/2, 0))
         
@@ -42,7 +43,8 @@ class WheatFarm(Structure):
         #soil 3
         rendered.blit(self.wheat_sol_img, (58*2, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30*2 ))
         
-        return rendered.convert_alpha()
+        return rendered
+
 
 
     def get_wheat_soil_pos(self):
