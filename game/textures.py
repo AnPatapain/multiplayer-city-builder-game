@@ -348,6 +348,12 @@ class Textures:
             SwitchViewButtonTypes.BUTTON18: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00115.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON19: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00119.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BOTTOM_PANNEL: pg.image.load(os.path.join(IMAGE_PATH, 'fenetre.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.INCREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00247.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.INCREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00248.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.INCREASE_SPEED_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00249.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DECREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00251.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DECREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00252.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DECREASE_SPEED_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00253.png')).convert_alpha(screen),
         }
 
         Textures.walker_textures = {

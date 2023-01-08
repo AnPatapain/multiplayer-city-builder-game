@@ -61,7 +61,7 @@ class Menu:
         rect_size = (500, 400)
         rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)
         rect = pg.Rect(rect_pos, rect_size)
-        pg.draw.rect(self.screen, (100, 100, 100), rect)
+        pg.draw.rect(self.screen, (60, 40, 25), rect)
         self.sound_manager.play('menu_demarrer')
 
         logo_start = (self.screen.get_size()[0]/2) - (self.graphics["logo"].get_size()[0]/2)
