@@ -1,6 +1,5 @@
 from buildable.structure import Structure
 from class_types.buildind_types import BuildingTypes
-from game.game_controller import GameController
 from game.textures import Textures
 from game.setting import *
 import pygame as pg
@@ -42,6 +41,11 @@ class WheatFarm(Structure):
         rendered.blit(self.wheat_sol_img, (58*2, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30*2 ))
         
         return rendered
+
+    def get_delete_texture(self):
+        texture = self.get_texture().copy()
+        Textures.fill(texture)
+        return texture
 
     def get_wheat_quantities(self): return self.wheat_quantity
 

@@ -1,3 +1,4 @@
+import math
 import random
 from typing import Optional
 
@@ -178,7 +179,7 @@ class World:
                         if self.overlay.get_overlay_types() != OverlayTypes.DEFAULT:
                             pg_img = self.overlay.get_overlay(tile)
                             if pg_img:
-                                screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() +  building_size[1]*TILE_SIZE))
+                                screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() + building_size[1]*TILE_SIZE))
                             else:
                                 screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
                         else:
@@ -223,6 +224,8 @@ class World:
             (x, y) = temp_tile['render_img_coor']
             offset = _offset(x, y - texture.get_height() + TILE_SIZE)
 
+            number_of_tiles = math.floor(texture.get_height() / TILE_SIZE)
+            offset = _offset(x, y - texture.get_height() + (TILE_SIZE/2)*(number_of_tiles+1))
             screen.blit(texture, offset)
 
             if temp_tile['isBuildable']:
@@ -281,11 +284,12 @@ class World:
                         screen.blit(build_sign,
                                     (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
-                    elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE:
+                    elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE and tile.get_show_tile():
                         building = tile.get_delete_texture()
                         count += 1
-                        screen.blit(building,
-                                    (x_offset, y_offset - building.get_height() + TILE_SIZE))
+                        number_of_tiles = math.floor(building.get_height() / TILE_SIZE)
+                        offset = _offset(x, y - building.get_height() + (TILE_SIZE/2)*(number_of_tiles+1))
+                        screen.blit(building, offset)
 
             isometric_coor = temp_tile['isometric_coor']
             isometric_coor_offset = [_offset(x, y) for x, y in isometric_coor]
