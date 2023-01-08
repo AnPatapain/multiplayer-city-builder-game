@@ -21,6 +21,8 @@ from map_element.tile import Tile
 
 from game.builder import Builder
 
+import backup_game
+
 class World:
 
     def __init__(self, width, height, panel):
@@ -47,6 +49,8 @@ class World:
         EventManager.register_key_listener(pg.K_g, lambda: self.panel.set_selected_tile(BuildingTypes.GRANARY))
         EventManager.register_key_listener(pg.K_f, lambda: self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
         EventManager.register_key_listener(pg.K_m, lambda: self.panel.set_selected_tile(BuildingTypes.MARKET))
+        EventManager.register_key_listener(pg.K_s, lambda: backup_game.save_game("save.bin"))
+        EventManager.register_key_listener(pg.K_l, lambda: backup_game.load_game("save.bin"))
 
     def mouse_pos_to_grid(self, mouse_pos):
         """
