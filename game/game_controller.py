@@ -84,6 +84,8 @@ class GameController:
                 self.__calculate_water_access()
             case 1:
                 self.__migration_update()
+            case 2:
+                self.__calculate_actual_citizen()
 
 
     def increase_day(self):
@@ -109,6 +111,14 @@ class GameController:
     def increase_year(self):
         self.current_year -= 1
 
+    def __calculate_actual_citizen(self):
+        from buildable.house import House
+        self.actual_citizen = 0
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building and isinstance(building,House):
+                    self.actual_citizen += int(building.get_citizen())
 
     def __calculate_water_access(self):
         wells = []
