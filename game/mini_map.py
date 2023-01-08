@@ -52,8 +52,8 @@ class MiniMap:
 
     def update(self):
         if self.mini_relative_x and self.mini_relative_y:
-            corresponding_x = - (self.mini_relative_x - self.mini_screen_width / 2) / 0.025
-            corresponding_y = - (self.mini_relative_y - self.mini_screen_height / 2) / 0.0465
+            corresponding_x = - (self.mini_relative_x - self.mini_screen_width / 2) / 0.035
+            corresponding_y = - (self.mini_relative_y - self.mini_screen_height / 2) / 0.0665
             MapController.set_map_pos(corresponding_x, corresponding_y)
         # Only render every 10 ticks (5 times per second
         if GameController.get_instance().current_tick % 10 == 0:
@@ -62,8 +62,8 @@ class MiniMap:
     def draw(self, screen: pg.Surface):
         # We need coordination of 4 points to draw rhombus
         map_pos = MapController.get_map_pos()
-        self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.025,
-                                        - map_pos[1] * 0.0465,
+        self.camera_zone_rect = pg.Rect(- map_pos[0] * 0.035,
+                                        - map_pos[1] * 0.0665,
                                         self.mini_screen_width, self.mini_screen_height)
 
         temp_bg = self.background.copy()
