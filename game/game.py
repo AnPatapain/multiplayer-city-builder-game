@@ -15,14 +15,14 @@ from threading import Thread,Event
 
 def my_thread(func,event : Event):
     fps_moyen = [0]
-    while not event.is_set():
-        try:
+    try:
+        while not event.is_set():
             func(fps_moyen)
-        except Exception:
-            event.set()
-            print("\033[91m In render thread :")
-            print("\033[91m" + traceback.format_exc())
-            exit()
+    except Exception:
+        event.set()
+        print("\033[91m In render thread :")
+        print("\033[91m" + traceback.format_exc())
+        exit()
 
 class Game:
     def __init__(self, screen):
