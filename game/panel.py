@@ -5,6 +5,7 @@ from class_types.panel_types import SwitchViewButtonTypes
 from class_types.road_types import RoadTypes
 from components.button import Button
 from events.event_manager import EventManager
+from game.game_controller import GameController
 from game.mini_map import MiniMap
 from game.textures import Textures
 from game.utils import draw_text
@@ -86,23 +87,65 @@ class Panel:
                                   disable_unselect=True, selectable=True)
         self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
 
+        self.build__engineer_post = Button((self.width - 149, 385 + TOPBAR_HEIGHT), button_size,
+                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON14),
+                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_HOVER),
+                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_SELECTED),
+                                   disable_unselect=True, selectable=True)
+        self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
+
         self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
-                                  image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
-                                  image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
-                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
-        #self.increase_speed.on_click()
+                                     image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED),
+                                     disable_unselect = True, selectable = True)
+        self.increase_speed.on_click(GameController.get_instance().increase_current_speed)
 
         self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
-        # self.increase_speed.on_click()
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED),
+                                     disable_unselect=True, selectable=True)
+        self.decrease_speed.on_click(GameController.get_instance().decrease_current_speed)
+
+        self.build__senate = Button((self.width - 49, 349 + 46), button_size,
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON13),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_SELECTED),
+                                    disable_unselect=True, selectable=True)
+        self.build__senate.on_click(lambda: self.set_selected_tile(BuildingTypes.SENATE))
+
+        self.build__hospital = Button((self.width - 100, 312 + 46), button_size,
+                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON9),
+                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_HOVER),
+                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_SELECTED),
+                                      disable_unselect=True, selectable=True)
+        self.build__hospital.on_click(lambda: self.set_selected_tile(BuildingTypes.HOSPITAL))
+
+        self.build__temple = Button((self.width - 49, 312 + 46), button_size,
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON10),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED),
+                                    disable_unselect=True, selectable=True)
+        self.build__temple.on_click(lambda: self.set_selected_tile(BuildingTypes.TEMPLE))
+
+        self.build__school = Button((self.width - 150, 349 + 46), button_size,
+                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
+                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_HOVER),
+                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED),
+                                        disable_unselect=True, selectable=True)
+        self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
 
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
+        EventManager.register_component(self.build__senate)
         EventManager.register_component(self.build__well)
+        EventManager.register_component(self.build__hospital)
+        EventManager.register_component(self.build__school)
+        EventManager.register_component(self.build__temple)
+        EventManager.register_component(self.build__engineer_post)
         EventManager.register_component(self.change_overlay)
         EventManager.register_component(self.increase_speed)
         EventManager.register_component(self.decrease_speed)
@@ -163,10 +206,15 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
         self.build__well.display(screen)
+        self.build__engineer_post.display(screen)
         self.change_overlay.display(screen)
         self.increase_speed.display(screen)
         self.decrease_speed.display(screen)
 
+        self.build__senate.display(screen)
+        self.build__hospital.display(screen)
+        self.build__school.display(screen)
+        self.build__temple.display(screen)
 
     def update(self):
         self.mini_map.update()
