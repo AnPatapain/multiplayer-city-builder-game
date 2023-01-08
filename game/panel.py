@@ -97,37 +97,43 @@ class Panel:
         self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED),
+                                     disable_unselect = True, selectable = True)
         self.increase_speed.on_click(GameController.get_instance().increase_current_speed)
 
         self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED),
+                                     disable_unselect=True, selectable=True)
         self.decrease_speed.on_click(GameController.get_instance().decrease_current_speed)
 
         self.build__senate = Button((self.width - 49, 349 + 46), button_size,
-                                        image=Textures.get_texture(SwitchViewButtonTypes.BUTTON13),
-                                        image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_HOVER),
-                                        image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_SELECTED))
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON13),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_SELECTED),
+                                    disable_unselect=True, selectable=True)
         self.build__senate.on_click(lambda: self.set_selected_tile(BuildingTypes.SENATE))
 
         self.build__hospital = Button((self.width - 100, 312 + 46), button_size,
-                                  image=Textures.get_texture(SwitchViewButtonTypes.BUTTON9),
-                                  image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_HOVER),
-                                  image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_SELECTED))
+                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON9),
+                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_HOVER),
+                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_SELECTED),
+                                      disable_unselect=True, selectable=True)
         self.build__hospital.on_click(lambda: self.set_selected_tile(BuildingTypes.HOSPITAL))
 
         self.build__temple = Button((self.width - 49, 312 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON10),
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_HOVER),
-                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED))
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED),
+                                    disable_unselect=True, selectable=True)
         self.build__temple.on_click(lambda: self.set_selected_tile(BuildingTypes.TEMPLE))
 
         self.build__school = Button((self.width - 150, 349 + 46), button_size,
                                       image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
                                       image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_HOVER),
-                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED))
+                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED),
+                                        disable_unselect=True, selectable=True)
         self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
 
         EventManager.register_component(self.destroy_tile)
