@@ -7,7 +7,7 @@ from sounds.sounds import SoundManager
 
 
 class Menu:
-    def __init__(self, screen, clock):
+    def __init__(self, screen):
         self.loading_menu = False
         self.main_menu = True
         self.splash_screen = True
@@ -15,7 +15,6 @@ class Menu:
         self.save_loading = False
 
         self.screen = screen
-        self.clock = clock
         self. graphics = self.load_images()
         self.sound_manager = SoundManager()
 
@@ -68,7 +67,6 @@ class Menu:
 
 
     def run(self):
-        self.clock.tick(60)
         EventManager.handle_events()
 
         if self.is_splashscreen_skipped():
