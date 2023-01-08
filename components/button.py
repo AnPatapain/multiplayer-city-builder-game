@@ -17,6 +17,7 @@ class Button(Component):
             pos,
             size,
             text: str = "",
+            text_fn: () = None,
             image: Surface = None,
             image_hover: Surface = None,
             image_selected: Surface = None,
@@ -26,6 +27,7 @@ class Button(Component):
     ):
         super().__init__(pos, size)
         self.text = text
+        self.text_fn = text_fn
         self.bg_color = BASE_COLOR
         self.bg = Rect(self.position, self.size)
         self.margin = 8
@@ -115,4 +117,6 @@ class Button(Component):
         elif self.image is not None:
             screen.blit(self.image, self.bg)
 
+        if self.text_fn:
+            self.text = self.text_fn()
         utils.draw_text(self.text, screen, pos, TEXT_COLOR, center_on_width=center)

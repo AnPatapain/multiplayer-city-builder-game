@@ -90,6 +90,7 @@ class Panel:
         EventManager.register_component(self.build__prefecture)
         EventManager.register_component(self.build__road)
         EventManager.register_component(self.build__well)
+        EventManager.register_component(self.change_overlay)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -144,6 +145,7 @@ class Panel:
         self.build__house.display(screen)
         self.build__prefecture.display(screen)
         self.build__well.display(screen)
+        self.change_overlay.display(screen)
 
     def update(self):
         self.mini_map.update()
