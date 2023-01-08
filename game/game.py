@@ -13,9 +13,8 @@ from .game_controller import GameController
 
 
 class Game:
-    def __init__(self, screen, clock):
+    def __init__(self, screen):
         self.screen = screen
-        self.clock = clock
         self.paused = False
         self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
@@ -40,35 +39,43 @@ class Game:
 
     # Game Loop
     def run(self):
-        ms_waited = 0
         fps_moyen = [0]
+        ms_waited = 0
+
         while True:
-            start = time.process_time_ns()
 
             # We need to recalculate it every time, since it can change
             targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
             ms_between_ticks = 1000 / targeted_ticks_per_seconds
 
-            EventManager.handle_events()
-            gc = GameController.get_instance()
-
-            self.world.update()
-            self.panel.update()
-            self.draw(int(numpy.average(fps_moyen)))
-
-            if not self.paused and ms_waited >= ms_between_ticks:
+            start_logic = time.process_time_ns()
+            if not self.paused:
                 self.game_controller.update()
-                for walker in gc.walkers:
+                for walker in GameController.get_instance().walkers:
                     walker.update()
-                ms_waited = 0
 
-            end = time.process_time_ns()
-            time_diff = (end - start) / 1000000
-            if len(fps_moyen) > 60:
-                fps_moyen.pop(0)
-            fps_moyen.append(1000/time_diff)
+            end_logic = time.process_time_ns()
+            logic_diff = (end_logic - start_logic) / 1000000
+            ms_waited += logic_diff
 
-            ms_waited += time_diff
+            while ms_waited < ms_between_ticks:
+                start_render = time.process_time_ns()
+                EventManager.handle_events()
+
+                self.world.update()
+                self.panel.update()
+                self.draw(int(numpy.average(fps_moyen)))
+                end_render = time.process_time_ns()
+                time_diff = (end_render - start_render) / 1000000
+
+                if len(fps_moyen) > 100:
+                    fps_moyen.pop(0)
+                fps_moyen.append(1000/time_diff)
+                ms_waited += time_diff
+
+
+            ms_waited = ms_waited - ms_between_ticks
+
 
 
     def toogle_pause(self):
