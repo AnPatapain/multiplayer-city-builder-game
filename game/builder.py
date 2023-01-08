@@ -7,8 +7,6 @@ from buildable.final.buildable.well import Well
 from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.structures.WheatFarm import WheatFarm
-from buildable.final.buildable.wheat_soil_level1 import Wheat_soil_level_1
-from buildable.final.buildable.wheat_soil_level5 import Wheat_soil_level_5
 from buildable.road import Road
 
 from game.panel import Panel
@@ -69,7 +67,9 @@ class Builder:
             self.end_point = None  # update start point to default after building
             return
 
-        
+        if selected_tile == BuildingTypes.PELLE and grid[start_point[1]][start_point[0]].get_building() and sum(grid[start_point[1]][start_point[0]].get_building().get_building_size()) >=4:
+            end_point = [start_point[0]+grid[start_point[1]][start_point[0]].get_building().get_building_size()[0] - 1, start_point[1]-grid[start_point[1]][start_point[0]].get_building().get_building_size()[1] + 1]
+        print(start_point, end_point)
         for row in utils.MyRange(start_point[1], end_point[1]):
             for col in utils.MyRange(start_point[0], end_point[0]):
                 tile: Tile = grid[row][col]
@@ -130,11 +130,11 @@ class Builder:
                 #We are out of the index of the grid
                 return
 
-            if building.get_build_type() == BuildingTypes.WHEAT_FARM:
-                row -= 1
-                x_building, y_building = 2, 2
-                for (x, y) in building.get_wheat_soil_pos():
-                    grid[x][y].set_building(Wheat_soil_level_1(row, col))
+            # if building.get_build_type() == BuildingTypes.WHEAT_FARM:
+            #     row -= 1
+            #     x_building, y_building = 2, 2
+            #     for (x, y) in building.get_wheat_soil_pos():
+            #         grid[x][y].set_building(Wheat_soil_level_1(row, col))
 
 
             # Put building in each case
