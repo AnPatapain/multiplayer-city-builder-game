@@ -41,8 +41,8 @@ class Game:
         self.clock.tick(50)
         EventManager.handle_events()
         gc = GameController.get_instance()
-        pg.time.set_timer(pg.USEREVENT, 200)
-        #Time().init_timer()
+        #pg.time.set_timer(pg.USEREVENT, 200)
+        Time().init_timer()
         if not self.paused:
             self.game_controller.update()
             for walker in gc.walkers:

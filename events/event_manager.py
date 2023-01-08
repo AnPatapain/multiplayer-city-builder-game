@@ -51,9 +51,8 @@ class EventManager:
             for hooked_function in EventManager.hooked_functions:
                 hooked_function[0](event, *hooked_function[1])
 
-            if event.type == pg.USEREVENT:
-
-                Time.update_date()
+            #if event.type == pg.USEREVENT:
+             #   Time.update_date()
 
             if event.type == pg.KEYDOWN:
                 EventManager.any_input()
