@@ -52,7 +52,6 @@ class World:
         EventManager.register_key_listener(pg.K_f, lambda: self.panel.set_selected_tile(BuildingTypes.WHEAT_FARM))
         EventManager.register_key_listener(pg.K_m, lambda: self.panel.set_selected_tile(BuildingTypes.MARKET))
         EventManager.register_key_listener(pg.K_o, lambda: self.overlay.set_overlay_types())
-        #EventManager.register_key_listener(pg.K_i, lambda: self.set_overlay(OverlayTypes.DEFAULT))
 
     def mouse_pos_to_grid(self, mouse_pos):
         """
