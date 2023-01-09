@@ -73,16 +73,19 @@ class Builder:
             self.end_point = None  # update start point to default after building
             return
 
-        if selected_tile == BuildingTypes.PELLE and grid[start_point[1]][start_point[0]].get_building() and sum(grid[start_point[1]][start_point[0]].get_building().get_building_size()) >=4:
-            end_point = [start_point[0]+grid[start_point[1]][start_point[0]].get_building().get_building_size()[0] - 1, start_point[1]-grid[start_point[1]][start_point[0]].get_building().get_building_size()[1] + 1]
         for row in utils.MyRange(start_point[1], end_point[1]):
             for col in utils.MyRange(start_point[0], end_point[0]):
                 tile: Tile = grid[row][col]
 
                 if selected_tile == BuildingTypes.PELLE:
                     if tile.is_destroyable():
-                        tile.destroy()
-                        self.road_update(row, col)
+                        if tile.get_building():
+                            # Ensure we get the real start of the building on the left
+                            real_tile = tile.get_building().get_current_tile()
+                            self.delete_building(real_tile, real_tile.x, real_tile.y)
+                        else:
+                            tile.destroy()
+                            self.road_update(row, col)
                         self.game_controller.denier -= 2
                     continue
 
@@ -94,6 +97,16 @@ class Builder:
 
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
+
+    def delete_building(self, tile_with_building: Tile, x: int, y: int):
+        grid = self.game_controller.get_map()
+        size = tile_with_building.get_building().get_building_size()
+        for row in range(size[0]):
+            for col in range(size[1]):
+                tile = grid[x - row][y + col]
+                tile.destroy()
+                tile.set_show_tile(True)
+
 
     def building_add(self, row, col, selected_type):
         if not self.game_controller.has_enough_denier(selected_type):

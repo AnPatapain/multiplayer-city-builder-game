@@ -81,9 +81,15 @@ class Buildable(ABC):
 
     def to_ruin(self):
         from buildable.final.buildable.ruin import Ruin
-        next_object = Ruin(self.x, self.y)
-        self.build_type = next_object.build_type
-        self.__class__ = Ruin
+        from class_types.buildind_types import BuildingTypes
+
+        grid = GameController.get_instance().get_map()
+        build_size = self.get_building_size()
+
+        for x in range(build_size[0]):
+            for y in range(build_size[1]):
+                tile = grid[self.x - x][self.y + y]
+                tile.set_building(Ruin(self.x - x, self.y + y))
 
     def get_risk(self) -> Risk:
         return self.risk

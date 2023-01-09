@@ -2,7 +2,7 @@ import random
 from typing import Optional, TYPE_CHECKING
 import pygame as pg
 
-
+from buildable.road import Road
 from class_types.tile_types import TileTypes
 from game.game_controller import GameController
 from game.textures import Textures
@@ -18,7 +18,7 @@ class Tile:
         self.type = tile_type
         self.building: Optional[Buildable] = None
         self.show_tile = True
-        self.road = None
+        self.road: Road | None = None
         self.x = row
         self.y = col
 
@@ -80,7 +80,7 @@ class Tile:
         self.building = new_building
         self.show_tile = show_building
 
-    def get_road(self):
+    def get_road(self) -> Road | None:
         return self.road
 
     def set_road(self, new_road):
@@ -116,7 +116,11 @@ class Tile:
                and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
 
     def is_destroyable(self):
-        return (self.building and self.building.is_destroyable()) or self.road
+        real_tile = self
+        # Ensure we check to the left of the building
+        if self.get_building():
+            real_tile = self.get_building().get_current_tile()
+        return (real_tile.show_tile and real_tile.building and real_tile.building.is_destroyable()) or real_tile.road
 
     def destroy(self):
         if self.building:
