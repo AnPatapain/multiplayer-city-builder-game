@@ -59,7 +59,7 @@ class MiniMap:
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height / 2) / 0.0665
             MapController.set_map_pos(corresponding_x, corresponding_y)
         # Only render every 10 ticks (5 times per second
-        if GameController.get_instance().current_tick % 10 == 0:
+        if GameController.get_instance().current_tick % 25 == 0:
             self.render_map()
 
     def draw(self, screen: pg.Surface):
