@@ -1,9 +1,11 @@
+import random
 import time
 import traceback
 
 import numpy
 import pygame as pg
 
+from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from sounds.sounds import SoundManager
 from .world import World
