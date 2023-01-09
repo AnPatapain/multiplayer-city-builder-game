@@ -7,7 +7,7 @@ import pygame as pg
 from PIL import Image
 
 import game.utils as utils
-from buildable.buildableCost import buildable_cost
+from buildable.buildable_datas import buildable_cost
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes

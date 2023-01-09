@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from class_types.buildind_types import BuildingTypes
-from buildable.buildableCost import buildable_cost
+from buildable.buildable_datas import buildable_cost
 
 if TYPE_CHECKING:
     from walkers.walker import Walker

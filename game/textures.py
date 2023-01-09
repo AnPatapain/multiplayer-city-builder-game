@@ -91,7 +91,7 @@ class Textures:
 
             },
 
-            TileTypes.ROCK: {
+            BuildingTypes.ROCK: {
                 0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00071.png'))).convert_alpha(screen),
                 1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00078.png'))).convert_alpha(screen),
                 2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00072.png'))).convert_alpha(
@@ -120,7 +120,7 @@ class Textures:
                     screen)
             },
 
-            TileTypes.TREE: {
+            BuildingTypes.TREE: {
                 0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00010.png'))).convert_alpha(screen),
                 1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00011.png'))).convert_alpha(screen),
                 2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00012.png'))).convert_alpha(
