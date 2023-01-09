@@ -46,6 +46,11 @@ class World:
         # For building feature
         self.panel = panel
 
+        # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
+        # Render in diagonal, thanks Stack Overflow
+        np_arr = numpy.array(self.game_controller.get_map())
+        self.arr_diags = [np_arr[::-1, :].diagonal(i) for i in range(-48, 49)]
+
         # Shortcuts
         EventManager.register_key_listener(pg.K_h, lambda: self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
         EventManager.register_key_listener(pg.K_d, lambda: self.panel.set_selected_tile(BuildingTypes.PELLE))
@@ -164,12 +169,8 @@ class World:
 
         grid = self.game_controller.get_map()
 
-        # Display builings and walkers
-        arr = numpy.array(grid)
-        # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
-        # Render in diagonal, thanks Stack Overflow
-        all_diags = [arr[::-1,:].diagonal(i) for i in range(-48, 49)]
-        for diag in all_diags:
+        # Display builings and walkers with diagonal array
+        for diag in self.arr_diags:
             for tile in diag:
                 (x, y) = tile.get_render_coord()
                 # print(tile.x, tile.y, 'road', tile.get_road(), 'building', tile.get_building(), tile.get_show_tile())
