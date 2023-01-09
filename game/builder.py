@@ -1,8 +1,10 @@
 from buildable.final.structures.engineer_post import EngineerPost
 from buildable.final.structures.hospital import Hospital
+from buildable.final.structures.market import Market
 from buildable.final.structures.senate import Senate
 from buildable.final.structures.shool import School
 from buildable.final.structures.temple import Temple
+from buildable.final.structures.theatre import Theatre
 from game.game_controller import GameController
 from class_types.buildind_types import BuildingTypes
 
@@ -109,11 +111,13 @@ class Builder:
             case BuildingTypes.GRANARY:
                 pass
             case BuildingTypes.MARKET:
-                pass
+                building = Market(row, col)
             case BuildingTypes.ENGINEERS_POST:
                 building = EngineerPost(row,col)
             case BuildingTypes.HOSPITAL:
                 building = Hospital(row,col)
+            case BuildingTypes.THEATRE:
+                building = Theatre(row, col)
             case BuildingTypes.SCHOOL:
                 building = School(row, col)
             case BuildingTypes.SENATE:

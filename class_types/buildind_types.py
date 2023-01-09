@@ -15,6 +15,7 @@ class BuildingTypes(Enum):
     HOSPITAL = 22
     SCHOOL = 23
     TEMPLE = 24
+    THEATRE = 25
 
     BUILD_SIGN = 90
     RUINS = 91
