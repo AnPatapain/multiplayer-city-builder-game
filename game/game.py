@@ -96,6 +96,7 @@ class Game:
         draw_text('Pop  {}'.format(self.game_controller.get_actual_citizen()), self.screen, (self.width - 1200, 10), size=42)
         draw_text('{} '.format(self.game_controller.get_month(month_number)), self.screen, (self.width - 590, 10), color=pg.Color(255, 255, 0), size=42)
         draw_text('{} BC'.format(self.game_controller.get_actual_year()), self.screen, (self.width - 500, 10), color=pg.Color(255, 255, 0), size=42)
+        draw_text('Speed {}%'.format(int(100*self.game_controller.get_actual_speed())), self.screen, (self.width - 150, 510), color=pg.Color(60, 40, 25), size=30)
 
         pg.display.flip()
 
@@ -111,7 +112,8 @@ class Game:
 
         if len(fps_moyen) > 100:
             fps_moyen.pop(0)
-        fps_moyen.append(1000 / time_diff)
+        if time_diff:
+            fps_moyen.append(1000 / time_diff)
 
 
     def exit_game(self):

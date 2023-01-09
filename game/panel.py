@@ -137,6 +137,20 @@ class Panel:
                                         disable_unselect=True, selectable=True)
         self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
 
+        self.build__theatre = Button((self.width - 100, 349 + 46), button_size,
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON12),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_SELECTED),
+                                    disable_unselect=True, selectable=True)
+        self.build__theatre.on_click(lambda: self.set_selected_tile(BuildingTypes.THEATRE))
+
+        self.build__market = Button((self.width - 49, 385 + 46), button_size,
+                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
+                                     disable_unselect=True, selectable=True)
+        self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET))
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
@@ -146,6 +160,8 @@ class Panel:
         EventManager.register_component(self.build__hospital)
         EventManager.register_component(self.build__school)
         EventManager.register_component(self.build__temple)
+        EventManager.register_component(self.build__market)
+        EventManager.register_component(self.build__theatre)
         EventManager.register_component(self.build__engineer_post)
         EventManager.register_component(self.change_overlay)
         EventManager.register_component(self.increase_speed)
@@ -197,6 +213,10 @@ class Panel:
         self.build__hospital.display(screen)
         self.build__school.display(screen)
         self.build__temple.display(screen)
+        self.build__theatre.display(screen)
+        self.build__market.display(screen)
+
+
 
     def update(self):
         self.mini_map.update()
