@@ -40,12 +40,14 @@ class Granary_worker(Walker):
 
         if len(self.current_farm_tiles_list) == 0:
             self.current_farm_tiles_list = myGranary.get_all_farm_tiles()
+        # print(self.current_farm_tiles_list)
 
         # Traverse all the farm in queue
         while len(self.current_farm_tiles_list) != 0:
             if self.current_action == Actions.IDLE:
                 self.go_to_farm_tile(self.current_farm_tiles_list[0])
                 self.current_action = Actions.IN_THE_WAY_TO_FARM # update the current action
+
 
     def destination_reached(self):
         from buildable.final.structures.granary import Granary

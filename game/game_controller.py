@@ -108,6 +108,7 @@ class GameController:
 
 
     def increase_day(self):
+        from class_types.walker_types import WalkerTypes
         if self.current_day == 15:
             self.increase_month()
             self.current_day = -1
