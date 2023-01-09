@@ -34,8 +34,9 @@ class Panel:
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
+        self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
 
-        # Building panel in the right screen
+    # Building panel in the right screen
         self.building_panel = pg.Surface((PANEL_WIDTH, self.height)).convert()
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width - PANEL_WIDTH, TOPBAR_HEIGHT))
         self.building_panel.fill(self.building_panel_color)
@@ -159,17 +160,7 @@ class Panel:
         screen.blit(self.ressource_panel, (0, 0))
         screen.blit(self.building_panel, (self.width - 162, TOPBAR_HEIGHT))
 
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
 
-
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (self.width - 162, self.height - 120))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (self.width - 155, 200))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (self.width - 78, 200))
         # Can't draw on the building_panel because we need absolute position to move the camera with the mouse listener
         self.mini_map.draw(screen)
 
@@ -190,16 +181,7 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
 
 
-        resource_panel_text = ['File', 'Options', 'Help', 'Advisor']
-        resource_panel_text_pos = [20, 10]
-        i = 0
-        for text in resource_panel_text:
-            draw_text(text, screen, resource_panel_text_pos, color=(50, 30, 0), size=38)
-            if i >= 3:
-                resource_panel_text_pos[0] += 280
-            else:
-                resource_panel_text_pos[0] += 150
-            i += 1
+        draw_text("Save", screen, color=pg.Color(50, 30, 0), size=38, pos=(20, 10))
 
         self.build__road.display(screen)
         self.destroy_tile.display(screen)
