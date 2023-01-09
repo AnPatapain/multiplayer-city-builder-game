@@ -281,11 +281,11 @@ class World:
                     tile = grid[row][col]
 
                     (x, y) = tile.get_render_coord()
-                    (x_offset, y_offset) = _offset(x, y)
 
                     if tile.is_buildable() and temp_tile["name"] != BuildingTypes.PELLE:
                         build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                         count += 1
+                        (x_offset, y_offset) = _offset(x, y)
                         screen.blit(build_sign,
                                     (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
