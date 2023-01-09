@@ -73,7 +73,7 @@ class Tile:
     def set_water_access(self, water_access: bool):
         self.water_access = water_access
 
-    def get_building(self):
+    def get_building(self) -> 'Buildable':
         return self.building
 
     def set_building(self, new_building, show_building: bool = True):

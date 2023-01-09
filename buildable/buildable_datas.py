@@ -1,7 +1,9 @@
+from enum import Enum
+
 from class_types.buildind_types import BuildingTypes
 from class_types.road_types import RoadTypes
 
-buildable_cost = {
+buildable_cost: dict[Enum, int] = {
     BuildingTypes.VACANT_HOUSE: 10,
     BuildingTypes.SMALL_TENT: 10,
     BuildingTypes.LARGE_TENT: 100,
@@ -23,4 +25,26 @@ buildable_cost = {
 
 }
 
-
+buildable_size: dict[BuildingTypes | RoadTypes, tuple[int, int]] = {
+    BuildingTypes.TREE: (1, 1),
+    BuildingTypes.ROCK: (1, 1),
+    BuildingTypes.BIG_ROCK: (2, 2),
+    BuildingTypes.VACANT_HOUSE: (1, 1),
+    BuildingTypes.SMALL_TENT: (1, 1),
+    BuildingTypes.LARGE_TENT: (1, 1),
+    BuildingTypes.SMALL_SHACK: (1, 1),
+    BuildingTypes.LARGE_SHACK: (1, 1),
+    BuildingTypes.PREFECTURE: (1, 1),
+    BuildingTypes.ENGINEERS_POST: (1, 1),
+    BuildingTypes.WELL: (1, 1),
+    BuildingTypes.WHEAT_FARM: (3, 3),
+    BuildingTypes.GRANARY: (3, 3),
+    BuildingTypes.MARKET: (2, 2),
+    BuildingTypes.HOSPITAL: (3, 3),
+    BuildingTypes.SENATE: (5, 5),
+    BuildingTypes.SCHOOL: (3, 3),
+    BuildingTypes.TEMPLE: (2, 2),
+    BuildingTypes.THEATRE: (3, 3),
+    BuildingTypes.PELLE: (1, 1),
+    RoadTypes.TL_TO_BR: (1, 1),
+}

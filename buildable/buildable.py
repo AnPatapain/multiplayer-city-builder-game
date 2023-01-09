@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import Optional, TYPE_CHECKING
 
+from buildable.buildable_datas import buildable_size
 from events.risk import Risk
 from game.game_controller import GameController
 from game.textures import Textures
@@ -12,9 +13,8 @@ if TYPE_CHECKING:
 
 
 class Buildable(ABC):
-    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int],fire_risk : int ,destruction_risk: int):
+    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', fire_risk: int, destruction_risk: int):
         self.build_type = build_type
-        self.build_size = build_size
 
         self.associated_walker: Optional['Walker'] = None
 
@@ -43,7 +43,7 @@ class Buildable(ABC):
         return self.get_texture()
 
     def get_building_size(self):
-        return self.build_size
+        return buildable_size[self.build_type]
 
     def get_build_type(self):
         return self.build_type
