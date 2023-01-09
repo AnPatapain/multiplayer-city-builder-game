@@ -25,19 +25,23 @@ class Granary(Structure):
 
     def order_workers_to_get_wheat(self):
         from buildable.final.structures.WheatFarm import WheatFarm
+        from walkers.final.granary_worker import Actions
+
         grid = self.game_controller.get_map()
         wheat_farms = []
         
         for row in grid:
             for tile in row:
                 building = tile.get_building()
-                if isinstance(building, WheatFarm):
+                if isinstance(building, WheatFarm) and tile.get_show_tile():
                     wheat_farms.append(building.get_current_tile())
-    
+
         
         for wheat_farm in wheat_farms:
-            # print(wheat_farm.x, wheat_farm.y)
-            self.associated_walker.go_to_wheat_farm(wheat_farm)
+            worker: Granary_worker = self.associated_walker
+            if len(worker.path_to_destination) == 0:
+                worker.go_to_wheat_farm(wheat_farm)
+            worker.set_action(Actions.GO_TO_FARM)
         
 
     def update_day(self):
