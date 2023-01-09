@@ -31,6 +31,8 @@ class GameController:
 
         self.current_speed = 1.0
 
+        self.save_loading = False
+
         # Not implemented yet
         self.sentiment = 80
         self.months = {
@@ -182,6 +184,14 @@ class GameController:
                                 house.spawn_migrant(4)
                                 migrant_ammount -= 4
 
+    def save_load(self):
+        self.save_loading = True
+
+    def game_reloaded(self):
+        self.save_loading = False
+
+    def is_load_save(self) -> bool:
+        return self.save_loading
 
     @staticmethod
     def get_instance():

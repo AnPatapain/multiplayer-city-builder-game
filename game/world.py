@@ -49,8 +49,7 @@ class World:
 
         # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
         # Render in diagonal, thanks Stack Overflow
-        np_arr = numpy.array(self.game_controller.get_map())
-        self.arr_diags = [np_arr[::-1, :].diagonal(i) for i in range(-48, 49)]
+        self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]
 
         # Shortcuts
         EventManager.register_key_listener(pg.K_h, lambda: self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
@@ -555,3 +554,6 @@ class World:
                 rock_list.append((y, x-1))
                 rock_list.append((y+1, x))
                 rock_list.append((y+1, x-1))
+
+    def load_numpy_array(self):
+        self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]
