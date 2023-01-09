@@ -72,17 +72,13 @@ class WheatFarm(Structure):
                 case 60: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_3))
                 case 80: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_4))
                 case 100: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_5))
-
-            if self.atteindre_max_quantity():
-                self.wheat_quantity = 0
             self.relax_days = 10
 
-    def move_wheat_to_granary(self):
-        '''
-        TODO: Order the associated worker move the wheat to granary 
-        '''
-        from buildable.final.structures.granary import Granary
-        pass
+    def given_wheat_to_granary_worker(self):
+        if self.atteindre_max_quantity():
+            self.wheat_quantity -= 20
+            return self.wheat_quantity
+        else: return 0
 
     def is_upgradable(self):
         '''

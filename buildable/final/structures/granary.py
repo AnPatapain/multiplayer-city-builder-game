@@ -50,3 +50,6 @@ class Granary(Structure):
             self.new_walker()
         else:
             self.order_workers_to_get_wheat()
+        print(self.food_stocked)
+
+    def receive_wheat_from_worker(self, wheat): self.food_stocked += wheat
