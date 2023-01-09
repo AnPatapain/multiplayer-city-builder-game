@@ -57,6 +57,9 @@ class GameController:
     def get_actual_month(self):
         return self.current_month
 
+    def get_actual_speed(self):
+        return self.current_speed
+
     def get_actual_year(self):
         return self.current_year
 
