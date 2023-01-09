@@ -292,7 +292,7 @@ class World:
                     elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE and tile.get_show_tile():
                         building = tile.get_delete_texture()
                         count += 1
-                        number_of_tiles = math.floor(building.get_height() / TILE_SIZE)
+                        number_of_tiles = buildable_size[tile.get_building().build_type][1]
                         offset = _offset(x, y - building.get_height() + (TILE_SIZE/2)*(number_of_tiles+1))
                         screen.blit(building, offset)
 
