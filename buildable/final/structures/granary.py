@@ -9,6 +9,8 @@ class Granary(Structure):
         self.food_stocked = 0
         self.max_food_stocked = 100
         self.game_controller = GameController.get_instance()
+        self.wheat_farm_tiles = []
+
 
     def new_walker(self):
         if self.associated_walker:
@@ -20,33 +22,24 @@ class Granary(Structure):
             self.associated_walker = Granary_worker(self)
             self.associated_walker.spawn(tile)
 
-    def order_workers_to_get_wheat(self):
+    def get_all_farm_tiles(self): 
         from buildable.final.structures.WheatFarm import WheatFarm
-        from walkers.final.granary_worker import Actions
 
         grid = self.game_controller.get_map()
-        wheat_farms = []
-        
+        self.wheat_farm_tiles = []
+
         for row in grid:
             for tile in row:
                 building = tile.get_building()
                 if isinstance(building, WheatFarm) and tile.get_show_tile():
-                    wheat_farms.append(building.get_current_tile())
+                    self.wheat_farm_tiles.append(building.get_current_tile())
 
-        
-        for wheat_farm in wheat_farms:
-            worker: Granary_worker = self.associated_walker
-            if len(worker.path_to_destination) == 0:
-                worker.go_to_wheat_farm(wheat_farm)
-            worker.set_action(Actions.GO_TO_FARM)
+        return self.wheat_farm_tiles.copy()
         
 
     def update_day(self):
         super().update_day()
         if not self.associated_walker:
             self.new_walker()
-        else:
-            self.order_workers_to_get_wheat()
-        print(self.food_stocked)
 
     def receive_wheat_from_worker(self, wheat): self.food_stocked += wheat
