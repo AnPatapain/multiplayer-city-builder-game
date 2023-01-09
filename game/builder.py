@@ -7,6 +7,7 @@ from buildable.final.buildable.well import Well
 from buildable.final.houses.vacant_house import VacantHouse
 from buildable.final.structures.prefecture import Prefecture
 from buildable.final.structures.WheatFarm import WheatFarm
+from buildable.final.structures.granary import Granary
 from buildable.road import Road
 
 from game.panel import Panel
@@ -103,9 +104,9 @@ class Builder:
             case BuildingTypes.WELL:
                 building = Well(row, col)
             case BuildingTypes.WHEAT_FARM:
-                building = WheatFarm(row-1, col)
+                building = WheatFarm(row, col)
             case BuildingTypes.GRANARY:
-                pass
+                building = Granary(row, col)
             case BuildingTypes.MARKET:
                 pass
             case BuildingTypes.ENGINEERS_POST:
@@ -129,13 +130,6 @@ class Builder:
             except IndexError:
                 #We are out of the index of the grid
                 return
-
-            # if building.get_build_type() == BuildingTypes.WHEAT_FARM:
-            #     row -= 1
-            #     x_building, y_building = 2, 2
-            #     for (x, y) in building.get_wheat_soil_pos():
-            #         grid[x][y].set_building(Wheat_soil_level_1(row, col))
-
 
             # Put building in each case
             for x in range(col,col+x_building,1):
