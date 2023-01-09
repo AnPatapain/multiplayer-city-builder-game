@@ -1,8 +1,7 @@
 from buildable.buildable import Buildable
-from class_types.tile_types import TileTypes
-from game.textures import Textures
+from class_types.buildind_types import BuildingTypes
 
 
 class SmallTree(Buildable):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, TileTypes.TREE, (1, 1),0,0)
+        super().__init__(x, y, BuildingTypes.TREE, fire_risk=0, destruction_risk=0)

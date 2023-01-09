@@ -1,14 +1,11 @@
 from buildable.structure import Structure
 from class_types.buildind_types import BuildingTypes
-from game.textures import Textures
-from game.setting import *
-import pygame as pg
 from game.game_controller import GameController
 from walkers.final.granary_worker import Granary_worker
 
 class Granary(Structure):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, BuildingTypes.GRANARY, build_size=(3, 3), max_employee=6, fire_risk=0, destruction_risk=0)
+        super().__init__(x, y, BuildingTypes.GRANARY, max_employee=6, fire_risk=0, destruction_risk=0)
         self.food_stocked = 0
         self.max_food_stocked = 100
         self.game_controller = GameController.get_instance()

@@ -7,7 +7,7 @@ from game.game_controller import GameController
 
 class WheatFarm(Structure):
     def __init__(self, x: int, y: int) -> None:
-        super().__init__(x, y, BuildingTypes.WHEAT_FARM, build_size=(3, 3), max_employee=10,fire_risk=0,destruction_risk=0)
+        super().__init__(x, y, BuildingTypes.WHEAT_FARM, max_employee=10, fire_risk=0, destruction_risk=0)
         self.wheat_quantity = 0
         self.max_wheat = 100
 

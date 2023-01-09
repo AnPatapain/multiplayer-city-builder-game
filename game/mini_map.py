@@ -1,5 +1,6 @@
 import pygame as pg
 
+from class_types.buildind_types import BuildingTypes
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from game.game_controller import GameController
@@ -81,9 +82,9 @@ class MiniMap:
     def get_color(self, tile: Tile) -> tuple[int, int, int]:
         b = tile.get_building()
         if b:
-            if b.build_type == TileTypes.ROCK:
+            if b.build_type == BuildingTypes.ROCK:
                 return (96, 96, 96)
-            if b.build_type == TileTypes.TREE:
+            if b.build_type == BuildingTypes.TREE:
                 return (204, 255, 204)
             return (255, 255, 0)  # yellow
 

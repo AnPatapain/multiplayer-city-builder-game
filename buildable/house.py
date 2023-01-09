@@ -8,9 +8,9 @@ from walkers.final.immigrant import Immigrant
 
 
 class House(Buildable, ABC):
-    def __init__(self, x: int, y: int, build_type: BuildingTypes, build_size: tuple[int, int],
-                 tax: int, desirability: int, max_citizen: int, prosperity: int,fire_risk : int ,destruction_risk: int):
-        super().__init__(x, y, build_type,build_size,fire_risk ,destruction_risk)
+    def __init__(self, x: int, y: int, build_type: BuildingTypes,
+                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int):
+        super().__init__(x, y, build_type, fire_risk, destruction_risk)
 
 
         self.max_citizen = max_citizen

@@ -68,6 +68,8 @@ class Game:
                     self.game_controller.update()
                     for walker in GameController.get_instance().walkers:
                         walker.update()
+                if self.game_controller.is_load_save():
+                    self.load_save()
 
                 time.sleep(1/targeted_ticks_per_seconds)
 
@@ -120,3 +122,7 @@ class Game:
 
     def exit_game(self):
         self.is_running = False
+
+    def load_save(self):
+        self.world.load_numpy_array()
+        self.game_controller.game_reloaded()

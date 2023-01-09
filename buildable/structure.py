@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 
 class Structure(Buildable, ABC):
-    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', build_size: tuple[int, int],
-                 max_employee: int,fire_risk : int ,destruction_risk: int):
-        super().__init__(x, y, build_type, build_size,fire_risk ,destruction_risk)
+    def __init__(self, x: int, y: int, build_type: 'BuildingTypes',
+                 max_employee: int, fire_risk: int, destruction_risk: int):
+        super().__init__(x, y, build_type, fire_risk, destruction_risk)
 
         self.max_employee = max_employee
 

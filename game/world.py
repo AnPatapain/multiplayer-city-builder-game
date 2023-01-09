@@ -7,7 +7,8 @@ import pygame as pg
 from PIL import Image
 
 import game.utils as utils
-from buildable.buildableCost import buildable_cost
+from buildable.buildable_datas import buildable_cost, buildable_size
+from buildable.final.buildable.big_rock import BigRock
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
@@ -48,8 +49,7 @@ class World:
 
         # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
         # Render in diagonal, thanks Stack Overflow
-        np_arr = numpy.array(self.game_controller.get_map())
-        self.arr_diags = [np_arr[::-1, :].diagonal(i) for i in range(-48, 49)]
+        self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]
 
         # Shortcuts
         EventManager.register_key_listener(pg.K_h, lambda: self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
@@ -175,9 +175,9 @@ class World:
                 (x, y) = tile.get_render_coord()
                 # print(tile.x, tile.y, 'road', tile.get_road(), 'building', tile.get_building(), tile.get_show_tile())
                 if tile.get_building() and tile.get_show_tile():
-                    pre_tile = grid[tile.x - tile.get_building().build_size[1] + 1][tile.y]
+                    pre_tile = grid[tile.x - tile.get_building().get_building_size()[1] + 1][tile.y]
                     (x, y) = (x, pre_tile.get_render_coord()[1])
-                (x_offset, y_offset) = (x + self.default_surface.get_width() / 2 + map_pos[0], y + map_pos[1])
+                (x_offset, y_offset) = _offset(x, y)
 
                 if tile.get_road() or tile.get_building():
                     if tile.get_building() and tile.get_show_tile():
@@ -228,10 +228,9 @@ class World:
             isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
 
             (x, y) = temp_tile['render_img_coor']
-            offset = _offset(x, y - texture.get_height() + TILE_SIZE)
 
-            number_of_tiles = math.floor(texture.get_height() / TILE_SIZE)
-            offset = _offset(x, y - texture.get_height() + (TILE_SIZE/2)*(number_of_tiles+1))
+            y_size = buildable_size[temp_tile['name']][1]
+            offset = _offset(x, y - texture.get_height() + (y_size * TILE_SIZE/2) + (TILE_SIZE/2))
             screen.blit(texture, offset)
 
             if temp_tile['isBuildable']:
@@ -282,18 +281,19 @@ class World:
                     tile = grid[row][col]
 
                     (x, y) = tile.get_render_coord()
-                    (x_offset, y_offset) = _offset(x, y)
 
                     if tile.is_buildable() and temp_tile["name"] != BuildingTypes.PELLE:
                         build_sign = Textures.get_texture(BuildingTypes.BUILD_SIGN)
                         count += 1
+                        (x_offset, y_offset) = _offset(x, y)
                         screen.blit(build_sign,
                                     (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
                     elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE and tile.get_show_tile():
                         building = tile.get_delete_texture()
                         count += 1
-                        number_of_tiles = math.floor(building.get_height() / TILE_SIZE)
+                        btype = RoadTypes.TL_TO_BR if tile.get_road() else tile.get_building().get_build_type()
+                        number_of_tiles = buildable_size[btype][1]
                         offset = _offset(x, y - building.get_height() + (TILE_SIZE/2)*(number_of_tiles+1))
                         screen.blit(building, offset)
 
@@ -541,19 +541,20 @@ class World:
             r_hg, g_bd, b_bd, a_bd = img.getpixel((y + 1, x - 1))
 
             if (r_g, r_h, r_hg) == (161, 161, 161) and (y, x - 1) not in rock_list and (y + 1, x) not in rock_list and (y + 1, x - 1) not in rock_list:
-                tile.set_random_texture_number(random.randint(20, 23))
-                tile.get_building().build_size = (2, 2)
+                grid = GameController.get_instance().get_map()
+
+                tile.set_random_texture_number(random.randint(0, 3))
+                rock = BigRock(x, y)
+                tile.set_building(rock)
+                grid[x-1][y].set_building(rock, show_building=False)
+                grid[x][y+1].set_building(rock, show_building=False)
+                grid[x-1][y+1].set_building(rock, show_building=False)
+
+                # tile.get_building().build_size = (2, 2)
                 rock_list.append((y, x))
                 rock_list.append((y, x-1))
                 rock_list.append((y+1, x))
                 rock_list.append((y+1, x-1))
 
-                grid = GameController.get_instance().get_map()
-
-                grid[x-1][y].show_tile = False
-                grid[x][y+1].show_tile = False
-                grid[x-1][y+1].show_tile = False
-
-
-
-
+    def load_numpy_array(self):
+        self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]

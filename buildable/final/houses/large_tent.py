@@ -4,8 +4,8 @@ from class_types.buildind_types import BuildingTypes
 
 class LargeTent(House):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, BuildingTypes.LARGE_TENT, build_size=(1, 1),
-                         tax=1, desirability=0, max_citizen=11, prosperity=20,fire_risk=0,destruction_risk=0)
+        super().__init__(x, y, BuildingTypes.LARGE_TENT, tax=1, desirability=0, max_citizen=11, prosperity=20,
+                         fire_risk=0, destruction_risk=0)
 
     def is_upgradable(self) -> bool:
         return self.is_full()

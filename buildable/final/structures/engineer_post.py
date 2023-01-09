@@ -5,8 +5,7 @@ from walkers.final.engineer import Engineer
 
 class EngineerPost(Structure):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, BuildingTypes.ENGINEERS_POST, build_size=(1, 1), max_employee=6, fire_risk=20,
-                         destruction_risk=0)
+        super().__init__(x, y, BuildingTypes.ENGINEERS_POST, max_employee=6, fire_risk=20, destruction_risk=0)
 
     def new_walker(self):
         if self.associated_walker:

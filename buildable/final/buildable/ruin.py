@@ -5,7 +5,7 @@ from game.textures import Textures
 
 class Ruin(Buildable):
     def __init__(self, x: int, y: int):
-        super().__init__(x, y, BuildingTypes.RUINS, (1, 1), 0, 0)
+        super().__init__(x, y, BuildingTypes.RUINS, fire_risk=0, destruction_risk=0)
 
     def is_destroyable(self):
         return not self.is_on_fire
