@@ -3,15 +3,17 @@ from class_types.buildind_types import BuildingTypes
 from game.textures import Textures
 from game.setting import *
 import pygame as pg
+from game.game_controller import GameController
 
 class WheatFarm(Structure):
     def __init__(self, x: int, y: int) -> None:
-        super().__init__(x, y, BuildingTypes.WHEAT_FARM, build_size=(3, 3), max_employee=10,fire_risk=1,destruction_risk=1)
+        super().__init__(x, y, BuildingTypes.WHEAT_FARM, build_size=(3, 3), max_employee=10,fire_risk=0,destruction_risk=0)
         self.wheat_quantity = 0
         self.max_wheat = 100
 
         self.farm_img = Textures.get_texture(BuildingTypes.WHEAT_FARM)
         self.wheat_sol_img = Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1)
+        self.game_controller = GameController.get_instance()
 
         #++++++++++++++++++++ TESTING PURPOSE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.relax_days = 10 # just for testing for seeing the evolution of soil
@@ -63,7 +65,6 @@ class WheatFarm(Structure):
         self.relax_days -= 1
         if self.is_upgradable():
             self.produce_wheat()
-
             #Update the image of the wheat soil around the farm 
             match self.get_wheat_quantities():
                 case 20: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1))
@@ -72,9 +73,16 @@ class WheatFarm(Structure):
                 case 80: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_4))
                 case 100: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_5))
 
-            
+            if self.atteindre_max_quantity():
+                self.wheat_quantity = 0
             self.relax_days = 10
 
+    def move_wheat_to_granary(self):
+        '''
+        TODO: Order the associated worker move the wheat to granary 
+        '''
+        from buildable.final.structures.granary import Granary
+        pass
 
     def is_upgradable(self):
         '''

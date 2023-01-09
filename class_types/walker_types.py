@@ -6,3 +6,4 @@ class WalkerTypes(Enum):
     PREFET = 2
     ENGINEER = 3
     IMMIGRANT = 4
+    GRANARY_WORKER = 5

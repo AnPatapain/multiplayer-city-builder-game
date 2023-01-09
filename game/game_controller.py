@@ -18,6 +18,7 @@ class GameController:
         self.actual_citizen = 0
         self.max_citizen = 0
         self.walkers: list['Walker'] = []
+        self.foods = 0
 
         self.spawn_point: 'Tile' = None
         self.leave_point: 'Tile' = None
@@ -112,7 +113,7 @@ class GameController:
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
-                if building:
+                if building and tile.get_show_tile():
                     building.update_day()
 
         self.current_day += 1
@@ -135,6 +136,9 @@ class GameController:
                 building = tile.get_building()
                 if building and isinstance(building,House):
                     self.actual_citizen += int(building.get_citizen())
+
+    def __calculate_actual_foods(self):
+        pass
 
     def __calculate_water_access(self):
         wells = []

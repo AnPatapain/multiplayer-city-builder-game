@@ -24,12 +24,12 @@ class BuildingTypes(Enum):
 
     PELLE = 100 # i don't know the rule that we used to choose to number, I choose 100 but i don't know why i choose it : )
 
-    GRANARY = 92
-    WHEAT_FARM = 93
-    MARKET = 94
+    GRANARY = 200
+    WHEAT_FARM = 201
+    MARKET = 202
 
-    WHEAT_SOIL_LEVEL_1 = 95
-    WHEAT_SOIL_LEVEL_2 = 96
-    WHEAT_SOIL_LEVEL_3 = 97
-    WHEAT_SOIL_LEVEL_4 = 98
-    WHEAT_SOIL_LEVEL_5 = 99
+    WHEAT_SOIL_LEVEL_1 = 203
+    WHEAT_SOIL_LEVEL_2 = 204
+    WHEAT_SOIL_LEVEL_3 = 205
+    WHEAT_SOIL_LEVEL_4 = 205
+    WHEAT_SOIL_LEVEL_5 = 205
