@@ -151,6 +151,7 @@ class Panel:
                                      disable_unselect=True, selectable=True)
         self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET))
 
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
@@ -240,3 +241,5 @@ class Panel:
         return self.panel_rects
 
     def get_mini_map(self): return self.mini_map
+
+    def get_buttons_list(self): return self.button_list

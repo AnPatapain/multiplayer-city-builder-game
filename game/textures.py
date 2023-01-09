@@ -76,17 +76,17 @@ class Textures:
                     screen),
                 14: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00246.png'))).convert_alpha(
                     screen),
-                15: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00247.png'))).convert_alpha(
+                15: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00274.png'))).convert_alpha(
                     screen),
-                16: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00248.png'))).convert_alpha(
+                16: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00285.png'))).convert_alpha(
                     screen),
-                17: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00249.png'))).convert_alpha(
+                17: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00286.png'))).convert_alpha(
                     screen),
-                18: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00250.png'))).convert_alpha(
+                18: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00287.png'))).convert_alpha(
                     screen),
-                19: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00251.png'))).convert_alpha(
+                19: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00288.png'))).convert_alpha(
                     screen),
-                20: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00252.png'))).convert_alpha(
+                20: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00289.png'))).convert_alpha(
                     screen),
 
             },
