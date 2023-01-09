@@ -1,5 +1,6 @@
 import pygame as pg
 
+from class_types.buildind_types import BuildingTypes
 from class_types.tile_types import TileTypes
 from events.event_manager import EventManager
 from game.game_controller import GameController
@@ -59,7 +60,7 @@ class MiniMap:
             corresponding_y = - (self.mini_relative_y - self.mini_screen_height / 2) / 0.0665
             MapController.set_map_pos(corresponding_x, corresponding_y)
         # Only render every 10 ticks (5 times per second
-        if GameController.get_instance().current_tick % 10 == 0:
+        if GameController.get_instance().current_tick % 25 == 0:
             self.render_map()
 
     def draw(self, screen: pg.Surface):
@@ -81,9 +82,9 @@ class MiniMap:
     def get_color(self, tile: Tile) -> tuple[int, int, int]:
         b = tile.get_building()
         if b:
-            if b.build_type == TileTypes.ROCK:
+            if b.build_type == BuildingTypes.ROCK:
                 return (96, 96, 96)
-            if b.build_type == TileTypes.TREE:
+            if b.build_type == BuildingTypes.TREE:
                 return (204, 255, 204)
             return (255, 255, 0)  # yellow
 

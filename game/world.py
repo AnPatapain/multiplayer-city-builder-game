@@ -2,11 +2,12 @@ import math
 import random
 from typing import Optional
 
+import numpy
 import pygame as pg
 from PIL import Image
 
 import game.utils as utils
-from buildable.buildableCost import buildable_cost
+from buildable.buildable_datas import buildable_cost
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
@@ -44,6 +45,10 @@ class World:
 
         # For building feature
         self.panel = panel
+
+        # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
+        # Render in diagonal, thanks Stack Overflow
+        self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]
 
         # Shortcuts
         EventManager.register_key_listener(pg.K_h, lambda: self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
@@ -163,9 +168,9 @@ class World:
 
         grid = self.game_controller.get_map()
 
-        # Display builings and walkers
-        for row in grid:
-            for tile in row:
+        # Display builings and walkers with diagonal array
+        for diag in self.arr_diags:
+            for tile in diag:
                 (x, y) = tile.get_render_coord()
                 # print(tile.x, tile.y, 'road', tile.get_road(), 'building', tile.get_building(), tile.get_show_tile())
                 if tile.get_building() and tile.get_show_tile():
@@ -549,5 +554,5 @@ class World:
                 grid[x-1][y+1].show_tile = False
 
 
-
-
+    def load_numpy_array(self):
+        self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]

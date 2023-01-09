@@ -91,7 +91,7 @@ class Textures:
 
             },
 
-            TileTypes.ROCK: {
+            BuildingTypes.ROCK: {
                 0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00071.png'))).convert_alpha(screen),
                 1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00078.png'))).convert_alpha(screen),
                 2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00072.png'))).convert_alpha(
@@ -120,7 +120,7 @@ class Textures:
                     screen)
             },
 
-            TileTypes.TREE: {
+            BuildingTypes.TREE: {
                 0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00010.png'))).convert_alpha(screen),
                 1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00011.png'))).convert_alpha(screen),
                 2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land1a_00012.png'))).convert_alpha(
@@ -312,6 +312,9 @@ class Textures:
             BuildingTypes.RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
             BuildingTypes.FIRE_RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
             BuildingTypes.GRANARY: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00051.png'))).convert_alpha(screen),
+            BuildingTypes.THEATRE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00001.png'))).convert_alpha(screen),
+            BuildingTypes.MARKET: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00001.png'))).convert_alpha(screen),
+
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
 
@@ -349,6 +352,8 @@ class Textures:
             SwitchViewButtonTypes.BUTTON11_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00148.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON11_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00149.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON12: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00143.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON12_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00144.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON12_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00145.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON13: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00139.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON13_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00140.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON13_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00141.png')).convert_alpha(screen),
@@ -359,6 +364,8 @@ class Textures:
             SwitchViewButtonTypes.BUTTON15_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00160.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON15_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00161.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON16: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00155.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON16_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00156.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.BUTTON16_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00157.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON17: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00171.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON18: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00115.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON19: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00119.png')).convert_alpha(screen),

@@ -35,9 +35,8 @@ class OverlaySprite(Enum):
 class Overlay:
     instance = None
     def __init__(self):
-        self.pg_image_fire_overlay = [ [None]*GRID_SIZE for i in range(GRID_SIZE)]
-        self.pg_image_dest_overlay = [ [None]*GRID_SIZE for i in range(GRID_SIZE)]
         self.overlay_types = OverlayTypes.DEFAULT
+        self.pg_image_overlay = [None for i in range(11)]
 
         self.sprite = {
             OverlaySprite.HOLE : Image.open(os.path.join(IMAGE_PATH, 'Land2a_00001.png')),
@@ -63,44 +62,35 @@ class Overlay:
 
     def get_overlay(self,tile : Tile) -> pygame.image:
         building = tile.get_building()
-        if isinstance(building,House) or isinstance(building,Structure):
-            #Image update
+        if isinstance(building, House) or isinstance(building, Structure):
+            if not building.get_risk():
+                return None
+
+            level = 0
             match self.overlay_types:
                 case OverlayTypes.FIRE:
-                    if not self.pg_image_fire_overlay[tile.x][tile.y] or building.get_risk().is_update():
-                        self.pg_image_fire_overlay[tile.x][tile.y] = self.update_overlay(building)
-
-                    return self.pg_image_fire_overlay[tile.x][tile.y]
-
+                    level = building.get_risk().get_fire_status()
                 case OverlayTypes.DESTRUCTION:
-                    if not self.pg_image_dest_overlay[tile.x][tile.y] or building.get_risk().is_update():
-                        self.pg_image_dest_overlay[tile.x][tile.y] = self.update_overlay(building)
-
-                    return self.pg_image_dest_overlay[tile.x][tile.y]
-
+                    level = building.get_risk().get_dest_status()
                 case _:
                     print("Bad Overlay")
                     return None
+
+            if level == -1:
+                return None
+            else:
+                level = int(level / 10)
+
+            building.get_risk().updated()
+            if not self.pg_image_overlay[level]:
+                self.pg_image_overlay[level] = self.build_overlay(level)
+
+            return self.pg_image_overlay[level]
+
         return None
 
-    def update_overlay(self,building : Buildable) -> pygame.image:
-        if not building.get_risk():
-            return None
 
-        level = 0
-        match self.overlay_types:
-            case OverlayTypes.FIRE:
-                level = building.get_risk().get_fire_status()
-            case OverlayTypes.DESTRUCTION:
-                level = building.get_risk().get_dest_status()
-
-        if level == -1:
-            return None
-        else:
-            level = int(level / 10)
-
-        building.get_risk().updated()
-
+    def build_overlay(self,level) -> pygame.image:
         if level <= 0:
             return self.to_pg_imgage(self.sprite[OverlaySprite.HOLE])
 

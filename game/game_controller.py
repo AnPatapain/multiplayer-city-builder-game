@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from class_types.buildind_types import BuildingTypes
-from buildable.buildableCost import buildable_cost
+from buildable.buildable_datas import buildable_cost
 
 if TYPE_CHECKING:
     from walkers.walker import Walker
@@ -31,6 +31,8 @@ class GameController:
 
         self.current_speed = 1.0
 
+        self.save_loading = False
+
         # Not implemented yet
         self.sentiment = 80
         self.months = {
@@ -57,6 +59,9 @@ class GameController:
 
     def get_actual_month(self):
         return self.current_month
+
+    def get_actual_speed(self):
+        return self.current_speed
 
     def get_actual_year(self):
         return self.current_year
@@ -110,7 +115,7 @@ class GameController:
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
-                if building:
+                if building and tile.get_show_tile():
                     building.update_day()
 
         self.current_day += 1
@@ -179,6 +184,14 @@ class GameController:
                                 house.spawn_migrant(4)
                                 migrant_ammount -= 4
 
+    def save_load(self):
+        self.save_loading = True
+
+    def game_reloaded(self):
+        self.save_loading = False
+
+    def is_load_save(self) -> bool:
+        return self.save_loading
 
     @staticmethod
     def get_instance():

@@ -2,11 +2,14 @@ import pygame as pg
 
 from components import button
 from events.event_manager import EventManager
+from game.utils import draw_text
 from sounds.sounds import SoundManager
 
 
 class Menu:
     def __init__(self, screen):
+        self.loading_menu = False
+        self.main_menu = True
         self.splash_screen = True
         self.active = True
         self.save_loading = False
@@ -27,7 +30,7 @@ class Menu:
         self.button__load_saved_game = button.Button((button_start, 400), button_size,
                                                       image=pg.image.load('assets/menu_sprites/load saved game.png').convert(),
                                                       image_hover=pg.image.load('assets/menu_sprites/load_saved_game_mouse_on.png').convert())
-        self.button__load_saved_game.on_click(self.load_save)
+        self.button__load_saved_game.on_click(self.set_loading_menu)
 
         self.button__options = button.Button((button_start, 450), button_size,
                                                       image=pg.image.load('assets/menu_sprites/options.png').convert(),
@@ -39,8 +42,26 @@ class Menu:
                                                       image_hover=pg.image.load('assets/menu_sprites/exit_hover.png').convert())
         self.button__exit.on_click(exit)
 
+        self.save1 = button.Button((button_start, 300), button_size, text="Save1")
+        self.save1.on_click(self.set_inactive)
 
-        EventManager.set_any_input(self.skip_splashscreen)
+        self.save2 = button.Button((button_start, 350), button_size, text="Save2")
+        #self.save2.on_click(self.load_save)
+
+        self.save3 = button.Button((button_start, 400), button_size, text="Save3")
+        #self.save3.set_disabled(True)
+
+        self.save4 = button.Button((button_start, 450), button_size, text="Save4")
+        #self.save4.on_click(exit)
+
+        self.come_back_to_main_menu = button.Button((button_start, 500), (50,45), text="<")
+        self.come_back_to_main_menu.on_click(self.set_main_menu)
+
+
+        if self.is_load_menu() and not self.main_menu:
+            EventManager.set_any_input(self.event_load_menu)
+        else:
+            EventManager.set_any_input(self.skip_splashscreen)
         self.screen.blit(self.graphics["splash"], (0, 0))
         pg.display.flip()
 
@@ -54,7 +75,7 @@ class Menu:
 
     def affichage(self):
         self.screen.blit(self.graphics["background"], (0, 0))
-        # self.sound_manager.play('menu_demarrer')
+        #self.sound_manager.play('menu_demarrer')
 
         rect_size = (500, 400)
         rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)
@@ -63,14 +84,24 @@ class Menu:
         self.sound_manager.play('menu_demarrer')
 
         logo_start = (self.screen.get_size()[0]/2) - (self.graphics["logo"].get_size()[0]/2)
-        self.screen.blit(self.graphics["logo"], (logo_start, 200))
 
-        self.button__start_new_career.display(self.screen)
-        self.button__load_saved_game.display(self.screen)
-        self.button__options.display(self.screen)
-        self.button__exit.display(self.screen)
+        if self.main_menu:
+            self.screen.blit(self.graphics["logo"], (logo_start, 200))
+            self.button__start_new_career.display(self.screen)
+            self.button__load_saved_game.display(self.screen)
+            self.button__options.display(self.screen)
+            self.button__exit.display(self.screen)
+        if self.is_load_menu() and not self.main_menu:
+            draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
+            self.save1.display(self.screen)
+            self.save2.display(self.screen)
+            self.save3.display(self.screen)
+            self.save4.display(self.screen)
+            self.come_back_to_main_menu.display(self.screen)
+
+
+
         pg.display.flip()
-
 
     def load_images(self):
         background = pg.image.load('assets/menu_sprites/background_menu.jpg').convert()
@@ -81,6 +112,7 @@ class Menu:
 
         splash = pg.image.load('assets/menu_sprites/splash_screen.jpg').convert()
         splash = pg.transform.scale(splash, self.screen.get_size())
+
 
         return {
             'background': background,
@@ -102,6 +134,19 @@ class Menu:
         EventManager.register_component(self.button__options)
         EventManager.register_component(self.button__exit)
 
+    def event_load_menu(self):
+        EventManager.clear_any_input()
+        self.main_menu = False
+        EventManager.register_component(self.save1)
+        EventManager.register_component(self.save2)
+        EventManager.register_component(self.save3)
+        EventManager.register_component(self.save4)
+        EventManager.register_component(self.come_back_to_main_menu)
+
+
+
+
+
     def is_splashscreen_skipped(self):
         return not self.splash_screen
 
@@ -111,3 +156,14 @@ class Menu:
 
     def get_save_loading(self):
         return self.save_loading
+
+    def is_load_menu(self):
+        return self.loading_menu
+
+    def set_loading_menu(self):
+        self.loading_menu = True
+        self.main_menu = False
+
+    def set_main_menu(self):
+        self.main_menu = True
+        self.loading_menu = False

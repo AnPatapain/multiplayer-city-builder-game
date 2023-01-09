@@ -34,8 +34,9 @@ class Panel:
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
+        self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
 
-        # Building panel in the right screen
+    # Building panel in the right screen
         self.building_panel = pg.Surface((PANEL_WIDTH, self.height)).convert()
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width - PANEL_WIDTH, TOPBAR_HEIGHT))
         self.building_panel.fill(self.building_panel_color)
@@ -136,6 +137,20 @@ class Panel:
                                         disable_unselect=True, selectable=True)
         self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
 
+        self.build__theatre = Button((self.width - 100, 349 + 46), button_size,
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON12),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_SELECTED),
+                                    disable_unselect=True, selectable=True)
+        self.build__theatre.on_click(lambda: self.set_selected_tile(BuildingTypes.THEATRE))
+
+        self.build__market = Button((self.width - 49, 385 + 46), button_size,
+                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
+                                     disable_unselect=True, selectable=True)
+        self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET))
+
         EventManager.register_component(self.destroy_tile)
         EventManager.register_component(self.build__house)
         EventManager.register_component(self.build__prefecture)
@@ -145,6 +160,8 @@ class Panel:
         EventManager.register_component(self.build__hospital)
         EventManager.register_component(self.build__school)
         EventManager.register_component(self.build__temple)
+        EventManager.register_component(self.build__market)
+        EventManager.register_component(self.build__theatre)
         EventManager.register_component(self.build__engineer_post)
         EventManager.register_component(self.change_overlay)
         EventManager.register_component(self.increase_speed)
@@ -159,17 +176,7 @@ class Panel:
         screen.blit(self.ressource_panel, (0, 0))
         screen.blit(self.building_panel, (self.width - 162, TOPBAR_HEIGHT))
 
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (0, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BARRE), (500, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
 
-
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.SCULPTURE), (self.width - 162, self.height - 120))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (self.width - 155, self.height * 0.043 + 216))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (self.width - 155, 200))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (self.width - 78, 200))
         # Can't draw on the building_panel because we need absolute position to move the camera with the mouse listener
         self.mini_map.draw(screen)
 
@@ -177,29 +184,12 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON2), (self.width - 116, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON3), (self.width - 78, 230))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON4), (self.width - 39, 230))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON9), (self.width - 100, 312 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON10), (self.width - 49, 312 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON11), (self.width - 150, 349 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON12), (self.width - 100, 349 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON13), (self.width - 49, 349 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON14), (self.width - 150, 385 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON15), (self.width - 100, 385 + 46))
-        screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON16), (self.width - 49, 385 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON17), (self.width - 150, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON18), (self.width - 100, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
 
 
-        resource_panel_text = ['File', 'Options', 'Help', 'Advisor']
-        resource_panel_text_pos = [20, 10]
-        i = 0
-        for text in resource_panel_text:
-            draw_text(text, screen, resource_panel_text_pos, color=(50, 30, 0), size=38)
-            if i >= 3:
-                resource_panel_text_pos[0] += 280
-            else:
-                resource_panel_text_pos[0] += 150
-            i += 1
+        draw_text("Save", screen, color=pg.Color(50, 30, 0), size=38, pos=(20, 10))
 
         self.build__road.display(screen)
         self.destroy_tile.display(screen)
@@ -215,6 +205,10 @@ class Panel:
         self.build__hospital.display(screen)
         self.build__school.display(screen)
         self.build__temple.display(screen)
+        self.build__theatre.display(screen)
+        self.build__market.display(screen)
+
+
 
     def update(self):
         self.mini_map.update()

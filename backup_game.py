@@ -12,6 +12,7 @@ def load_game(backup_name):
         return None
     file= open(path_game, "rb")
     GameController.get_instance().__dict__ = pickle.load(file)
+    GameController.get_instance().save_load()
     file.close()
 
 def save_game(backup_name):

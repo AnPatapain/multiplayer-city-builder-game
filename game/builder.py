@@ -1,5 +1,10 @@
 from buildable.final.structures.engineer_post import EngineerPost
 from buildable.final.structures.hospital import Hospital
+from buildable.final.structures.market import Market
+from buildable.final.structures.senate import Senate
+from buildable.final.structures.shool import School
+from buildable.final.structures.temple import Temple
+from buildable.final.structures.theatre import Theatre
 from game.game_controller import GameController
 from class_types.buildind_types import BuildingTypes
 
@@ -70,7 +75,6 @@ class Builder:
 
         if selected_tile == BuildingTypes.PELLE and grid[start_point[1]][start_point[0]].get_building() and sum(grid[start_point[1]][start_point[0]].get_building().get_building_size()) >=4:
             end_point = [start_point[0]+grid[start_point[1]][start_point[0]].get_building().get_building_size()[0] - 1, start_point[1]-grid[start_point[1]][start_point[0]].get_building().get_building_size()[1] + 1]
-        print(start_point, end_point)
         for row in utils.MyRange(start_point[1], end_point[1]):
             for col in utils.MyRange(start_point[0], end_point[0]):
                 tile: Tile = grid[row][col]
@@ -108,11 +112,19 @@ class Builder:
             case BuildingTypes.GRANARY:
                 building = Granary(row, col)
             case BuildingTypes.MARKET:
-                pass
+                building = Market(row, col)
             case BuildingTypes.ENGINEERS_POST:
                 building = EngineerPost(row,col)
             case BuildingTypes.HOSPITAL:
                 building = Hospital(row,col)
+            case BuildingTypes.THEATRE:
+                building = Theatre(row, col)
+            case BuildingTypes.SCHOOL:
+                building = School(row, col)
+            case BuildingTypes.SENATE:
+                building = Senate(row, col)
+            case BuildingTypes.TEMPLE:
+                building = Temple(row, col)
             case _:
                 print("Building type error")
                 return

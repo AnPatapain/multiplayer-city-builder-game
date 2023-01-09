@@ -19,6 +19,8 @@ buildable_cost = {
     BuildingTypes.SENATE: 400,
     BuildingTypes.SCHOOL: 50,
     BuildingTypes.TEMPLE: 50,
+    BuildingTypes.THEATRE: 50,
+
 }
 
 
