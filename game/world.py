@@ -2,6 +2,7 @@ import math
 import random
 from typing import Optional
 
+import numpy
 import pygame as pg
 from PIL import Image
 
@@ -164,8 +165,12 @@ class World:
         grid = self.game_controller.get_map()
 
         # Display builings and walkers
-        for row in grid:
-            for tile in row:
+        arr = numpy.array(grid)
+        # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
+        # Render in diagonal, thanks Stack Overflow
+        all_diags = [arr[::-1,:].diagonal(i) for i in range(-48, 49)]
+        for diag in all_diags:
+            for tile in diag:
                 (x, y) = tile.get_render_coord()
                 print(tile.x, tile.y, 'road', tile.get_road(), 'building', tile.get_building(), tile.get_show_tile())
                 if tile.get_building() and tile.get_show_tile():
