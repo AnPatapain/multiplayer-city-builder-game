@@ -172,7 +172,7 @@ class World:
         for diag in all_diags:
             for tile in diag:
                 (x, y) = tile.get_render_coord()
-                # print(tile.x, tile.y, tile.get_building(), tile.get_show_tile())
+                # print(tile.x, tile.y, 'road', tile.get_road(), 'building', tile.get_building(), tile.get_show_tile())
                 if tile.get_building() and tile.get_show_tile():
                     pre_tile = grid[tile.x - tile.get_building().build_size[1] + 1][tile.y]
                     (x, y) = (x, pre_tile.get_render_coord()[1])

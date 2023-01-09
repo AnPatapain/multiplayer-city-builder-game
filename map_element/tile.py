@@ -123,6 +123,7 @@ class Tile:
             self.building.destroy()
             self.building = None
         self.road = None
+        self.show_tile = True
         for walker in self.walkers:
             walker.associated_building.associated_walker.delete()
 
