@@ -276,6 +276,7 @@ class World:
 
             # If it's not a road, the render is more standard and common to every other types
             count = 0
+            already_selected = []
             for row in utils.MyRange(start_point[1], end_point[1]):
                 for col in utils.MyRange(start_point[0], end_point[0]):
                     tile = grid[row][col]
@@ -289,7 +290,14 @@ class World:
                         screen.blit(build_sign,
                                     (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
-                    elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE and tile.get_show_tile():
+                    elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE and tile.get_building() not in already_selected:
+                        # Go to the left of the building, for buildinds larger than 1x1
+                        if tile.get_building():
+                            tile = tile.get_building().get_current_tile()
+                            (x, y) = tile.get_render_coord()
+                            # Keep track of already selected building since some buildings spans on multiple (thus they can be selected multiple time)
+                            already_selected.append(tile.get_building())
+
                         building = tile.get_delete_texture()
                         count += 1
                         btype = RoadTypes.TL_TO_BR if tile.get_road() else tile.get_building().get_build_type()
