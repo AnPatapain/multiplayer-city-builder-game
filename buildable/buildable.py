@@ -68,6 +68,9 @@ class Buildable(ABC):
     def update_day(self):
         pass
 
+    def update_happiness(self):
+        pass
+
     def upgrade(self):
         pass
 
