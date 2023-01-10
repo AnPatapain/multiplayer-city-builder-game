@@ -79,6 +79,9 @@ class EventManager:
                                     component.set_selected(False)
                                 else:
                                     component.set_selected(True)
+                                    for button in EventManager.components:
+                                        if button.position != component.position:
+                                            button.selected = False
                                     component.click()
                                 component.set_being_pressed(False)
                             else:

@@ -24,7 +24,7 @@ class Button(Component):
             image_selected: Surface = None,
             center_text: bool = False,
             selectable: bool = False,
-            disable_unselect: bool = False
+            disable_unselect: bool = False,
     ):
         super().__init__(pos, size)
         self.text = text
@@ -102,7 +102,8 @@ class Button(Component):
         elif self.is_hovered():
             color = HOVER_COLOR
         elif self.is_being_pressed():
-            color = HOVER_COLOR
+            color = SELECTED_COLOR
+
 
         pg.draw.rect(screen, color, self.bg)
         center_width = None
