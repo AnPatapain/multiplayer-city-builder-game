@@ -110,10 +110,18 @@ class Tile:
             return self.building.get_delete_texture()
         return Textures.get_delete_texture(self.type)
 
-    def is_buildable(self):
-        return self.building is None \
-               and self.road is None \
-               and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
+    def is_buildable(self, build_size: tuple[int, int] = (1, 1)):
+        grid = GameController.get_instance().get_map()
+        for x in range(build_size[0]):
+            for y in range(build_size[1]):
+                if self.x - x < 0 or self.y + y > GRID_SIZE-1:
+                    return False
+
+                tile = grid[self.x - x][self.y + y]
+                if tile.get_building() or tile.get_road() or tile.type not in (TileTypes.WHEAT, TileTypes.GRASS):
+                    return False
+
+        return True
 
     def is_destroyable(self):
         real_tile = self

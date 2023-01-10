@@ -142,7 +142,7 @@ class World:
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
-                    'isBuildable': tile.is_buildable(),
+                    'isBuildable': tile.is_buildable(buildable_size[selected_tile]),
                     'isDestroyable': tile.is_destroyable()
                 })
 
@@ -179,19 +179,20 @@ class World:
                     (x, y) = (x, pre_tile.get_render_coord()[1])
                 (x_offset, y_offset) = _offset(x, y)
 
-                if tile.get_road() or tile.get_building():
-                    if tile.get_building() and tile.get_show_tile():
-                        building_size = tile.get_building().get_building_size()
-                        if self.overlay.get_overlay_types() != OverlayTypes.DEFAULT:
-                            pg_img = self.overlay.get_overlay(tile)
-                            if pg_img:
-                                screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() + building_size[1]*TILE_SIZE))
-                            else:
-                                screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
+                if tile.get_road() or (tile.get_building() and tile.get_show_tile()):
+                    # Since roads are not considered as buildings, default their size to (1, 1)
+                    building_size = tile.get_building().get_building_size() if tile.get_building() else (1, 1)
+                    texture = tile.get_texture()
+
+                    if self.overlay.get_overlay_types() != OverlayTypes.DEFAULT:
+                        pg_img = self.overlay.get_overlay(tile)
+                        if pg_img:
+                            screen.blit(pg_img, (x_offset, y_offset - pg_img.get_height() + building_size[1] * TILE_SIZE))
                         else:
-                            screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + building_size[1] * TILE_SIZE))
-                    elif tile.get_road():
-                        screen.blit(tile.get_texture(), (x_offset, y_offset - tile.get_texture().get_height() + TILE_SIZE))
+                            screen.blit(texture, (x_offset, y_offset - texture.get_height() + building_size[1] * TILE_SIZE))
+                    else:
+                        screen.blit(texture, (x_offset, y_offset - texture.get_height() + building_size[1] * TILE_SIZE))
+
 
 
                 base_x_offset = x_offset
