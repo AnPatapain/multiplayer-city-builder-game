@@ -43,6 +43,9 @@ class Granary(Structure):
 
     def update_day(self):
         super().update_day()
-        print(self.get_adjacent_tiles(0))
+        print('[')
+        for tile in self.get_adjacent_tiles(radius=1):
+            print(tile.x, tile.y)
+        print(']')
         # if not self.associated_walker:
             # self.new_walker()
