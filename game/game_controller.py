@@ -126,6 +126,12 @@ class GameController:
             self.current_month = -1
         self.current_month += 1
 
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building and tile.get_show_tile():
+                    building.update_happiness()
+
 
     def increase_year(self):
         self.current_year -= 1
