@@ -109,6 +109,9 @@ class World:
                     self.builder.set_in_build_action(True)
 
             elif event.type == pg.MOUSEMOTION:
+                temp_tile = self.builder.get_temp_tile_info()
+                if self.builder.get_in_build_action() and temp_tile and temp_tile["name"] not in [BuildingTypes.PELLE, RoadTypes.TL_TO_BR, BuildingTypes.VACANT_HOUSE]:
+                    self.builder.set_start_point(mouse_grid_pos)
                 self.builder.set_end_point(mouse_grid_pos)
 
         if event.type == pg.MOUSEBUTTONUP:
@@ -226,18 +229,22 @@ class World:
 
             temp_tile = self.builder.get_temp_tile_info()
             texture = Textures.get_texture(temp_tile['name'])
+            #texture = Textures.fill(texture, change=True)
+            texture.set_alpha(150)
             isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
 
             (x, y) = temp_tile['render_img_coor']
 
             y_size = buildable_size[temp_tile['name']][1]
             offset = _offset(x, y - texture.get_height() + (y_size * TILE_SIZE/2) + (TILE_SIZE/2))
+            #iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
             screen.blit(texture, offset)
+            texture.set_alpha(255)
 
-            if temp_tile['isBuildable']:
+            """if temp_tile['isBuildable']:
                 pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
             else:
-                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
+                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)"""
 
 
 

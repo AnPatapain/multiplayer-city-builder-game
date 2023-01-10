@@ -614,13 +614,16 @@ class Textures:
 
 
     @staticmethod
-    def fill(surface):
+    def fill(surface, change : bool = False):
         """Fill all pixels of the surface with color, preserve transparency."""
         w, h = surface.get_size()
         for x in range(w):
             for y in range(h):
                 r, g, b, a = surface.get_at((x, y))
-                if a == 255:
-                    surface.set_at((x, y), pg.Color(150, 0, 24, 100))
-                if r >= 5:
-                    surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+                if not change:
+                    if a == 255:
+                        surface.set_at((x, y), pg.Color(150, 0, 24, 100))
+                    if r >= 5:
+                        surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+                else:
+                    surface.set_at((x,y), pg.Color(r, g, b, 100))
