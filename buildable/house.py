@@ -9,7 +9,8 @@ from walkers.final.immigrant import Immigrant
 
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes,
-                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int):
+                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int,
+                 happiness: int, destruction_risk: int):
         super().__init__(x, y, build_type, fire_risk, destruction_risk)
 
 
@@ -18,6 +19,7 @@ class House(Buildable, ABC):
 
         self.has_water = False
         self.tax = tax
+        self.happiness = happiness
         self.desirability = desirability
         self.prosperity = prosperity
 
