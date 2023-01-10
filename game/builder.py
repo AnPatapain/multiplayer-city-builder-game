@@ -80,7 +80,9 @@ class Builder:
                 if selected_tile == BuildingTypes.PELLE:
                     if tile.is_destroyable():
                         if tile.get_building():
-                            self.delete_building(tile,row,col)
+                            # Ensure we get the real start of the building on the left
+                            real_tile = tile.get_building().get_current_tile()
+                            self.delete_building(real_tile, real_tile.x, real_tile.y)
                         else:
                             tile.destroy()
                             self.road_update(row, col)
@@ -96,7 +98,7 @@ class Builder:
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
 
-    def delete_building(self,tile_with_building : Tile,x,y):
+    def delete_building(self, tile_with_building: Tile, x: int, y: int):
         grid = self.game_controller.get_map()
         size = tile_with_building.get_building().get_building_size()
         for row in range(size[0]):

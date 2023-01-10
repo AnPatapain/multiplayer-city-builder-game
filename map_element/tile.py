@@ -116,7 +116,11 @@ class Tile:
                and self.type in (TileTypes.WHEAT, TileTypes.GRASS)
 
     def is_destroyable(self):
-        return (self.show_tile and self.building and self.building.is_destroyable() ) or self.road
+        real_tile = self
+        # Ensure we check to the left of the building
+        if self.get_building():
+            real_tile = self.get_building().get_current_tile()
+        return (real_tile.show_tile and real_tile.building and real_tile.building.is_destroyable()) or real_tile.road
 
     def destroy(self):
         if self.building:
