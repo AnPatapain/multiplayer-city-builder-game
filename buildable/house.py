@@ -60,8 +60,7 @@ class House(Buildable, ABC):
             print("hehe")
             self.upgrade()
 
-    def update_happiness(self):
-        # it happens once every two weeks
+        # happiness
         if GameController.get_actual_citizen() < 200:
             self.happiness = 60
         if 200 <= GameController.get_actual_citizen() < 300:
