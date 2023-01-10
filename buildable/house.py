@@ -9,8 +9,7 @@ from walkers.final.immigrant import Immigrant
 
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes,
-                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int,
-                 happiness: int, destruction_risk: int):
+                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int):
         super().__init__(x, y, build_type, fire_risk, destruction_risk)
 
 
@@ -19,7 +18,7 @@ class House(Buildable, ABC):
 
         self.has_water = False
         self.tax = tax
-        self.happiness = happiness
+        self.happiness = 60
         self.desirability = desirability
         self.prosperity = prosperity
 
@@ -60,6 +59,13 @@ class House(Buildable, ABC):
         if self.is_upgradable():
             print("hehe")
             self.upgrade()
+
+        # happiness
+        if GameController.get_actual_citizen() < 200:
+            self.happiness = 60
+        if 200 <= GameController.get_actual_citizen() < 300:
+            self.happiness = 50
+
 
     @abstractmethod
     def is_upgradable(self) -> bool:
