@@ -16,8 +16,7 @@ class Structure(Buildable, ABC):
         self.max_employee = max_employee
 
     def find_adjacent_road(self) -> Optional['Tile']:
-        current_tile = self.get_current_tile()
-        candidates = current_tile.get_adjacente_tiles()
+        candidates = self.get_adjacent_tiles()
 
         for candidate in candidates:
             if candidate.get_road():
