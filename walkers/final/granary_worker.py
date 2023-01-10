@@ -22,45 +22,45 @@ class Granary_worker(Walker):
         self.current_farm_tiles_list = [] # list of farm tile
         self.is_finish_in_one_farm = False
 
-    def receive_wheat_from_farm(self, farm: WheatFarm):   
-        self.actual_wheat += farm.given_wheat_to_granary_worker()
+    # def receive_wheat_from_farm(self, farm: WheatFarm):   
+    #     self.actual_wheat += farm.given_wheat_to_granary_worker()
 
-    def move_wheat_to_granary(self, granary):
-        granary.receive_wheat_from_worker(self.actual_wheat)
-        self.actual_wheat = 0
-
-
-    def update(self):
-        from buildable.final.structures.granary import Granary
-        super().update()
-        myGranary: Granary = self.associated_building
-
-        if len(self.current_farm_tiles_list) == 0:
-            self.current_farm_tiles_list = myGranary.get_all_farm_tiles()
-        print(self.current_farm_tiles_list)
-
-        # Traverse the farm at the beginning of the queue
-        if len(self.current_farm_tiles_list) != 0:
-            if self.current_action == Actions.IDLE:
-                self.navigate_to(self.current_farm_tiles_list[0])
-                self.current_action = Actions.IN_THE_WAY_TO_FARM # update the current action
+    # def move_wheat_to_granary(self, granary):
+    #     granary.receive_wheat_from_worker(self.actual_wheat)
+    #     self.actual_wheat = 0
 
 
-    def destination_reached(self):
-        from buildable.final.structures.granary import Granary
-        # print(self.current_tile.get_building(), self.current_tile.get_show_tile())
+    # def update(self):
+    #     from buildable.final.structures.granary import Granary
+    #     super().update()
+    #     myGranary: Granary = self.associated_building
 
-        if self.current_tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
-            print("Hit the farm")
-            farm: WheatFarm = self.current_tile.get_building()
-            # self.receive_wheat_from_farm(farm)
-            self.navigate_to(self.associated_building.get_current_tile())
-            self.current_action = Actions.IN_THE_WAY_TO_GRANARY
-            self.current_farm_tiles_list.pop(0)
+    #     if len(self.current_farm_tiles_list) == 0:
+    #         self.current_farm_tiles_list = myGranary.get_all_farm_tiles()
+    #     # print(self.current_farm_tiles_list)
+
+    #     # Traverse the farm at the beginning of the queue
+    #     if len(self.current_farm_tiles_list) != 0:
+    #         if self.current_action == Actions.IDLE:
+    #             self.navigate_to(self.current_farm_tiles_list[0])
+    #             self.current_action = Actions.IN_THE_WAY_TO_FARM # update the current action
+
+
+    # def destination_reached(self):
+    #     from buildable.final.structures.granary import Granary
+    #     # print(self.current_tile.get_building(), self.current_tile.get_show_tile())
+
+    #     if self.current_tile.get_building().get_build_type() == BuildingTypes.WHEAT_FARM:
+    #         print("Hit the farm")
+    #         farm: WheatFarm = self.current_tile.get_building()
+    #         # self.receive_wheat_from_farm(farm)
+    #         self.navigate_to(self.associated_building.get_current_tile())
+    #         self.current_action = Actions.IN_THE_WAY_TO_GRANARY
+    #         self.current_farm_tiles_list.pop(0)
             
 
-        elif self.current_tile.get_building().get_build_type() == BuildingTypes.GRANARY:
-            print("Back to my granary")
-            self.current_action = Actions.IDLE
-            # myGranary: Granary = self.current_tile.get_building()
-            # self.move_wheat_to_granary(myGranary)
+    #     elif self.current_tile.get_building().get_build_type() == BuildingTypes.GRANARY:
+    #         print("Back to my granary")
+    #         self.current_action = Actions.IDLE
+    #         # myGranary: Granary = self.current_tile.get_building()
+    #         # self.move_wheat_to_granary(myGranary)

@@ -18,7 +18,7 @@ class GameController:
         self.actual_citizen = 0
         self.max_citizen = 0
         self.walkers: list['Walker'] = []
-        self.foods = 0
+        self.actual_foods = 0
 
         self.spawn_point: 'Tile' = None
         self.leave_point: 'Tile' = None
@@ -106,6 +106,9 @@ class GameController:
             case 2:
                 self.__calculate_actual_citizen()
 
+            case 3:
+                self.__calculate_actual_foods()
+
 
     def increase_day(self):
         from class_types.walker_types import WalkerTypes
@@ -141,7 +144,14 @@ class GameController:
                     self.actual_citizen += int(building.get_citizen())
 
     def __calculate_actual_foods(self):
-        pass
+        from buildable.final.structures.granary import Granary
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building and isinstance(building, Granary):
+                    building: Granary = building
+                    self.actual_foods += building.get_wheat_stocked()
+                    print("ACTUAL FOOD: ", self.actual_foods)
 
     def __calculate_water_access(self):
         wells = []

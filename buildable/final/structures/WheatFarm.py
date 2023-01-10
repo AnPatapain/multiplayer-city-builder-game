@@ -4,6 +4,7 @@ from game.textures import Textures
 from game.setting import *
 import pygame as pg
 from game.game_controller import GameController
+from walkers.final.farm_worker import Farm_worker
 
 class WheatFarm(Structure):
     def __init__(self, x: int, y: int) -> None:
@@ -14,6 +15,8 @@ class WheatFarm(Structure):
         self.farm_img = Textures.get_texture(BuildingTypes.WHEAT_FARM)
         self.wheat_sol_img = Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1)
         self.game_controller = GameController.get_instance()
+
+        self.granary_tiles = []
 
         #++++++++++++++++++++ TESTING PURPOSE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.relax_days = 10 # just for testing for seeing the evolution of soil
@@ -61,7 +64,44 @@ class WheatFarm(Structure):
     def atteindre_max_quantity(self):
         return self.wheat_quantity == self.max_wheat
 
+    def is_upgradable(self):
+        '''
+        TODO: check whether the workers in Wheat Farm has enough food to work (I think so). 
+            For now return True if we don't produce enough wheat 
+        '''
+        return (not self.atteindre_max_quantity() and self.relax_days == 0)
+
+
+    def get_all_granary_tiles(self): 
+        from buildable.final.structures.granary import Granary
+
+        grid = self.game_controller.get_map()
+        self.granary_tiles = []
+
+        for row in grid:
+            for tile in row:
+                building = tile.get_building()
+                if isinstance(building, Granary) and tile.get_show_tile():
+                    self.granary_tiles.append(building.get_current_tile())
+
+        return self.granary_tiles.copy()
+
+
+    def give_wheat_to_worker(self):
+        if self.atteindre_max_quantity():
+            given_wheat_quantity = self.wheat_quantity
+            self.wheat_quantity = 0
+            return given_wheat_quantity
+        else:
+            return 0
+
+            
     def update_day(self):
+        super().update_day()
+        #Spawn the farm worker
+        if not self.associated_walker:
+            self.new_walker()
+
         self.relax_days -= 1
         if self.is_upgradable():
             self.produce_wheat()
@@ -74,17 +114,19 @@ class WheatFarm(Structure):
                 case 100: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_5))
             self.relax_days = 10
 
-    def given_wheat_to_granary_worker(self):
-        if self.atteindre_max_quantity():
-            self.wheat_quantity -= 20
-            return self.wheat_quantity
-        else: return 0
 
-    def is_upgradable(self):
-        '''
-        TODO: check whether the workers in Wheat Farm has enough food to work (I think so). 
-            For now return True if we don't produce enough wheat 
-        '''
-        return (not self.atteindre_max_quantity() and self.relax_days == 0)
+    def new_walker(self):
+        if self.associated_walker:
+            print("A walker is already assigned to this building!")
+            return
+
+        tile = self.find_adjacent_road()
+        if tile:
+            self.associated_walker = Farm_worker(self)
+            self.associated_walker.spawn(tile)
+
+
+    
+        
         
     
