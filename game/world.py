@@ -145,7 +145,7 @@ class World:
                     'name': selected_tile,
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
-                    'isBuildable': tile.is_buildable(),
+                    'isBuildable': tile.is_buildable(buildable_size[selected_tile]),
                     'isDestroyable': tile.is_destroyable()
                 })
 
