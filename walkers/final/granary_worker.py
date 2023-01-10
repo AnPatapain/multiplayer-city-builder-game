@@ -22,9 +22,6 @@ class Granary_worker(Walker):
         self.current_farm_tiles_list = [] # list of farm tile
         self.is_finish_in_one_farm = False
 
-    def go_to_farm_tile(self, tile):
-        self.navigate_to(tile)
-
     def receive_wheat_from_farm(self, farm: WheatFarm):   
         self.actual_wheat += farm.given_wheat_to_granary_worker()
 
@@ -40,12 +37,12 @@ class Granary_worker(Walker):
 
         if len(self.current_farm_tiles_list) == 0:
             self.current_farm_tiles_list = myGranary.get_all_farm_tiles()
-        # print(self.current_farm_tiles_list)
+        print(self.current_farm_tiles_list)
 
-        # Traverse all the farm in queue
-        while len(self.current_farm_tiles_list) != 0:
+        # Traverse the farm at the beginning of the queue
+        if len(self.current_farm_tiles_list) != 0:
             if self.current_action == Actions.IDLE:
-                self.go_to_farm_tile(self.current_farm_tiles_list[0])
+                self.navigate_to(self.current_farm_tiles_list[0])
                 self.current_action = Actions.IN_THE_WAY_TO_FARM # update the current action
 
 
