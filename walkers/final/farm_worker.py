@@ -39,6 +39,10 @@ class Farm_worker(Walker):
         if len(self.current_granary_list) == 0:
             self.current_granary_list = myFarm.get_all_granary_tiles()
 
+        # print(self.current_granary_list, self.current_action)
+        # print(self.current_action)
+        # if self.current_action == Actions.IDLE: print("je fait rien")
+
         # Traverse the farm at the beginning of the queue
         if len(self.current_granary_list) != 0:
             if self.current_action == Actions.IDLE:
@@ -51,7 +55,7 @@ class Farm_worker(Walker):
         building = self.current_tile.get_building()
 
         if building.get_build_type() == BuildingTypes.GRANARY:
-            print("Hit the granary")
+            # print("Hit the granary")
             self.move_wheat_in_hand_to_granary(building)
             self.navigate_to(self.associated_building.get_current_tile()) #back to the farm
             self.current_action = Actions.IN_THE_WAY_TO_FARM
@@ -59,6 +63,6 @@ class Farm_worker(Walker):
             
 
         elif building.get_build_type() == BuildingTypes.WHEAT_FARM:
-            print("Back to my farm")
+            # print("Back to my farm")
             self.get_food_from_associated_farm()
             self.current_action = Actions.IDLE

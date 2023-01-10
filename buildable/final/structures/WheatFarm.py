@@ -103,15 +103,17 @@ class WheatFarm(Structure):
             self.new_walker()
 
         self.relax_days -= 1
+
+        print('upgradable', self.is_upgradable(), 'wheat_quantities', self.get_wheat_quantities())
         if self.is_upgradable():
-            self.produce_wheat()
             #Update the image of the wheat soil around the farm 
             match self.get_wheat_quantities():
-                case 20: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1))
+                case 20 | 0: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1))
                 case 40: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_2))
                 case 60: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_3))
                 case 80: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_4))
                 case 100: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_5))
+            self.produce_wheat()
             self.relax_days = 10
 
 
