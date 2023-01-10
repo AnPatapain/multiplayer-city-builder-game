@@ -89,24 +89,22 @@ class Panel:
         self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
 
         self.build__engineer_post = Button((self.width - 149, 385 + TOPBAR_HEIGHT), button_size,
-                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON14),
-                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_HOVER),
-                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_SELECTED),
-                                   disable_unselect=True, selectable=True, text_pop_up="Build Engineer post")
+                                           image=Textures.get_texture(SwitchViewButtonTypes.BUTTON14),
+                                           image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_HOVER),
+                                           image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_SELECTED),
+                                           disable_unselect=True, selectable=True, text_pop_up="Build Engineer post")
         self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
 
         self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED),
-                                     disable_unselect = True, selectable = True)
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
         self.increase_speed.on_click(GameController.get_instance().increase_current_speed)
 
         self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED),
-                                     disable_unselect=True, selectable=True)
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
         self.decrease_speed.on_click(GameController.get_instance().decrease_current_speed)
 
         self.build__senate = Button((self.width - 49, 349 + 46), button_size,
@@ -131,43 +129,34 @@ class Panel:
         self.build__temple.on_click(lambda: self.set_selected_tile(BuildingTypes.TEMPLE))
 
         self.build__school = Button((self.width - 150, 349 + 46), button_size,
-                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
-                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_HOVER),
-                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED),
-                                        disable_unselect=True, selectable=True, text_pop_up="Build School")
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED),
+                                    disable_unselect=True, selectable=True, text_pop_up="Build School")
         self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
 
         self.build__theatre = Button((self.width - 100, 349 + 46), button_size,
-                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON12),
-                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_HOVER),
-                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_SELECTED),
-                                    disable_unselect=True, selectable=True, text_pop_up="Build Theatre")
+                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON12),
+                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_HOVER),
+                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_SELECTED),
+                                     disable_unselect=True, selectable=True, text_pop_up="Build Theatre")
         self.build__theatre.on_click(lambda: self.set_selected_tile(BuildingTypes.THEATRE))
 
         self.build__market = Button((self.width - 49, 385 + 46), button_size,
-                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
-                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
-                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
-                                     disable_unselect=True, selectable=True, text_pop_up="Build Market")
+                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
+                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
+                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
+                                    disable_unselect=True, selectable=True, text_pop_up="Build Market")
         self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET))
 
+        self.button_list = [
+            self.destroy_tile, self.build__house, self.build__prefecture, self.build__road, self.build__senate,
+            self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__market,
+            self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed, self.decrease_speed
+        ]
 
-        EventManager.register_component(self.destroy_tile)
-        EventManager.register_component(self.build__house)
-        EventManager.register_component(self.build__prefecture)
-        EventManager.register_component(self.build__road)
-        EventManager.register_component(self.build__senate)
-        EventManager.register_component(self.build__well)
-        EventManager.register_component(self.build__hospital)
-        EventManager.register_component(self.build__school)
-        EventManager.register_component(self.build__temple)
-        EventManager.register_component(self.build__market)
-        EventManager.register_component(self.build__theatre)
-        EventManager.register_component(self.build__engineer_post)
-        EventManager.register_component(self.change_overlay)
-        EventManager.register_component(self.increase_speed)
-        EventManager.register_component(self.decrease_speed)
-
+        for button in self.button_list:
+            EventManager.register_component(button)
 
         # Selected building (defaultly, nothing is selected)
         self.selected_tile = None
@@ -189,27 +178,10 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON18), (self.width - 100, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
 
-
         draw_text("Save", screen, color=pg.Color(50, 30, 0), size=38, pos=(20, 10))
 
-        self.build__road.display(screen)
-        self.destroy_tile.display(screen)
-        self.build__prefecture.display(screen)
-        self.build__well.display(screen)
-        self.build__engineer_post.display(screen)
-        self.change_overlay.display(screen)
-        self.increase_speed.display(screen)
-        self.decrease_speed.display(screen)
-
-        self.build__senate.display(screen)
-        self.build__hospital.display(screen)
-        self.build__school.display(screen)
-        self.build__temple.display(screen)
-        self.build__theatre.display(screen)
-        self.build__market.display(screen)
-        self.build__house.display(screen)
-
-
+        for button in self.get_buttons_list():
+            button.display(screen)
 
 
     def update(self):
@@ -224,15 +196,13 @@ class Panel:
     def set_selected_tile(self, value):
         self.selected_tile = value
         if value is None:
-            self.build__prefecture.set_selected(False)
-            self.build__house.set_selected(False)
-            self.build__well.set_selected(False)
-            self.build__road.set_selected(False)
-            self.destroy_tile.set_selected(False)
+            for button in self.get_buttons_list():
+                button.set_selected(False)
 
     def get_panel_rects(self):
         return self.panel_rects
 
     def get_mini_map(self): return self.mini_map
 
-    def get_buttons_list(self): return self.button_list
+    def get_buttons_list(self):
+        return self.button_list
