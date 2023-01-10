@@ -85,11 +85,8 @@ class Buildable(ABC):
                 if base_x - x < 0 or base_y + y > GRID_SIZE:
                     continue
 
-                if y != 0 or y != build_size[1] or x != 0 or x != build_size[0]:
-                    continue
-
                 current_tile = grid[base_x - x][base_y + y]
-                excluded_tiles.add(excluded_tiles)
+                excluded_tiles.add(current_tile)
                 tiles.update(current_tile.get_adjacente_tiles(radius))
 
         tiles.difference_update(excluded_tiles)
