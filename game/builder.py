@@ -1,3 +1,4 @@
+from buildable.buildable import Buildable
 from buildable.final.structures.engineer_post import EngineerPost
 from buildable.final.structures.hospital import Hospital
 from buildable.final.structures.market import Market
@@ -15,7 +16,6 @@ from buildable.final.structures.WheatFarm import WheatFarm
 from buildable.final.structures.granary import Granary
 from buildable.road import Road
 
-from game.panel import Panel
 import game.utils as utils
 from game.setting import GRID_SIZE
 from map_element.tile import Tile
@@ -80,9 +80,7 @@ class Builder:
                 if selected_tile == BuildingTypes.PELLE:
                     if tile.is_destroyable():
                         if tile.get_building():
-                            # Ensure we get the real start of the building on the left
-                            real_tile = tile.get_building().get_current_tile()
-                            self.delete_building(real_tile, real_tile.x, real_tile.y)
+                            self.delete_building(tile.get_building())
                         else:
                             tile.destroy()
                             self.road_update(row, col)
@@ -98,15 +96,9 @@ class Builder:
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
 
-    def delete_building(self, tile_with_building: Tile, x: int, y: int):
-        grid = self.game_controller.get_map()
-        size = tile_with_building.get_building().get_building_size()
-        for row in range(size[0]):
-            for col in range(size[1]):
-                tile = grid[x - row][y + col]
-                tile.destroy()
-                tile.set_show_tile(True)
-
+    def delete_building(self, tile_with_building: 'Buildable'):
+        for tile in tile_with_building.get_all_building_tiles():
+            tile.destroy()
 
     def building_add(self, row, col, selected_type):
         if not self.game_controller.has_enough_denier(selected_type):
