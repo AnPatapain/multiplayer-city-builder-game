@@ -143,18 +143,13 @@ class Builder:
                 return
 
         grid = self.game_controller.get_map()
+
+        if not grid[row][col].is_buildable(building.get_building_size()):
+            print("Building can't be constructed")
+            return
+
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()
-            #check if all case are buildable
-            try:
-                for x in range(col,col+x_building, 1):
-                    for y in range(row,row-y_building, -1):
-                        if not grid[y][x].is_buildable():
-                            print("Building can't be construct")
-                            return
-            except IndexError:
-                #We are out of the index of the grid
-                return
 
             # Put building in each case
             for x in range(col,col+x_building,1):
