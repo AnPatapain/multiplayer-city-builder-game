@@ -203,10 +203,37 @@ class Panel:
 
     def set_selected_tile(self, value):
         self.selected_tile = value
-        if value is None:
+        print(value)
+        if value == BuildingTypes.VACANT_HOUSE:
+            self.build__house.set_selected(True)
             for button in self.get_buttons_list():
-                button.set_selected(False)
-
+                if button != self.build__house:
+                    button.set_selected(False)
+        elif value == BuildingTypes.PELLE:
+            self.destroy_tile.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.destroy_tile:
+                    button.set_selected(False)
+        elif value == BuildingTypes.PREFECTURE:
+            self.build__prefecture.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__prefecture:
+                    button.set_selected(False)
+        elif value == 6:
+            self.build__road.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__road:
+                    button.set_selected(False)
+        elif value == BuildingTypes.WHEAT_FARM or value == BuildingTypes.MARKET or value == BuildingTypes.GRANARY:
+            self.build__market.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__market:
+                    button.set_selected(False)
+        elif value == BuildingTypes.WELL:
+            self.build__well.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__well:
+                    button.set_selected(False)
     def get_panel_rects(self):
         return self.panel_rects
 
