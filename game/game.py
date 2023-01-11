@@ -5,9 +5,12 @@ import traceback
 import numpy
 import pygame as pg
 
+from class_types.panel_types import SwitchViewButtonTypes
 from class_types.tile_types import TileTypes
+from components.button import Button
 from events.event_manager import EventManager
 from sounds.sounds import SoundManager
+from .textures import Textures
 from .world import World
 from .utils import draw_text
 from .map_controller import MapController
@@ -46,6 +49,11 @@ class Game:
 
         self.thread_event = Event()
         self.draw_thread = Thread(None, my_thread, "1",[self.display,self.thread_event])
+
+        self.pause_game = Button((self.width - 50, 490 + 46), (39, 26),
+                                 image=Textures.get_texture(SwitchViewButtonTypes.PAUSE_GAME), )
+        self.pause_game.on_click(self.toogle_pause)
+        EventManager.register_component(self.pause_game)
 
         MapController.init_()
 
@@ -88,6 +96,11 @@ class Game:
 
     def toogle_pause(self):
         self.paused = not self.paused
+        if self.paused:
+            self.pause_game.image = Textures.get_texture(SwitchViewButtonTypes.CONTINUE_GAME)
+        else:
+            self.pause_game.image = Textures.get_texture(SwitchViewButtonTypes.PAUSE_GAME)
+
 
     def draw(self, fps):
         self.screen.fill((0, 0, 0))
@@ -102,6 +115,7 @@ class Game:
         draw_text('{} BC'.format(self.game_controller.get_actual_year()), self.screen, (self.width - 500, 10), color=pg.Color(255, 255, 0), size=42)
         draw_text('Speed {}%'.format(int(100*self.game_controller.get_actual_speed())), self.screen, (self.width - 150, 510), color=pg.Color(60, 40, 25), size=30)
 
+        self.pause_game.display(self.screen)
         pg.display.flip()
 
     def display(self,fps_moyen):

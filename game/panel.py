@@ -180,8 +180,16 @@ class Panel:
 
         draw_text("Save", screen, color=pg.Color(50, 30, 0), size=38, pos=(20, 10))
 
+        last_button_to_display = None
+
         for button in self.get_buttons_list():
-            button.display(screen)
+            if not button.is_hovered():
+                button.display(screen)
+            elif button.is_hovered():
+                last_button_to_display = button
+
+        if last_button_to_display is not None:
+            last_button_to_display.display(screen)
 
 
     def update(self):

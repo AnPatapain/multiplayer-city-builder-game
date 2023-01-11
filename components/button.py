@@ -58,6 +58,7 @@ class Button(Component):
             self.hovered = True
 
 
+
     def not_hover(self):
         if self.is_hovered() and not self.is_disabled():
             self.bg_color = BASE_COLOR
@@ -122,11 +123,9 @@ class Button(Component):
 
         if (self.is_hovered() or self.is_being_pressed()) and self.image_hover is not None:
             screen.blit(self.image_hover, self.bg)
-            print(self.text_pop_up)
             if self.text_pop_up is not None:
                 mouse_position = pg.mouse.get_pos()
                 screen.blit(self.surface_text_pop_up, (mouse_position[0] - 100, mouse_position[1]+20))
-                print(self.text_pop_up)
         elif self.is_selected() and self.image_selected is not None:
             screen.blit(self.image_selected, self.bg)
         elif self.image is not None:
