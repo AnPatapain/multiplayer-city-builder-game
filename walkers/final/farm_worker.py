@@ -42,7 +42,8 @@ class Farm_worker(Walker):
         # Traverse the farm at the beginning of the queue
         if len(self.current_granary_list) != 0:
             if self.current_action == Actions.IDLE:
-                self.navigate_to(self.current_granary_list[0])
+                self.navigate_to(self.current_granary_list[0].get_building().get_all_building_tiles())
+                self.current_granary_list.pop(0)
                 self.current_action = Actions.IN_THE_WAY_TO_GRANARY # update the current action
 
 
@@ -53,7 +54,7 @@ class Farm_worker(Walker):
         if building.get_build_type() == BuildingTypes.GRANARY:
             print("Hit the granary")
             self.move_wheat_in_hand_to_granary(building)
-            self.navigate_to(self.associated_building.get_current_tile()) #back to the farm
+            self.navigate_to(self.associated_building.get_all_building_tiles()) #back to the farm
             self.current_action = Actions.IN_THE_WAY_TO_FARM
             self.current_granary_list.pop(0)
             

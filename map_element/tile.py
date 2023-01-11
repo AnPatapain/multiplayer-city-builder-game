@@ -165,7 +165,7 @@ class Tile:
 
         return adjacentes_tiles
 
-    def find_path_to(self, dest: 'Tile', roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile']:
+    def find_path_to(self, dest: list['Tile'], roads_only: bool = False, buildable_or_road: bool = False) -> list['Tile']:
         def _estimate_distance(src: 'Tile') -> int:
             dest_x = abs(abs(src.x) - abs(self.x))
             dest_y = abs(abs(src.y) - abs(self.y))
@@ -176,11 +176,14 @@ class Tile:
         g_score: dict['Tile', int] = {self: 0}
         f_score: dict['Tile', int] = {self: _estimate_distance(self)}
 
+        if isinstance(dest, Tile):
+            dest = [dest]
+
         while len(open_set) > 0:
             open_set.sort(key=lambda tile: (f_score[tile]))
             current = open_set.pop(0)
 
-            if current == dest:
+            if current in dest:
                 path_to_destination = []
                 path_to_destination.insert(0, current)
                 while current in came_from:
@@ -190,7 +193,7 @@ class Tile:
                 return path_to_destination
 
             for neighbor in current.get_adjacente_tiles():
-                if roads_only and not neighbor.get_road() and neighbor != dest:
+                if roads_only and not neighbor.get_road() and neighbor not in dest:
                     continue
                 if buildable_or_road and (not neighbor.is_buildable() and not neighbor.get_road()):
                     continue

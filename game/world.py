@@ -255,7 +255,7 @@ class World:
                 end = grid[end_point[1]][end_point[0]]
                 if not end.is_buildable() and not end.get_road():
                     return
-                path = start.find_path_to(end, buildable_or_road=True)
+                path = start.find_path_to([end], buildable_or_road=True)
 
                 for tile in path:
                     # Don't display build sign if there is already a road
