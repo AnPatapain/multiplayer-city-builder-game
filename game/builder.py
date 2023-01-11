@@ -24,7 +24,7 @@ from map_element.tile import Tile
 from class_types.road_types import RoadTypes
 
 class TempTile(TypedDict):
-    name: str
+    name: BuildingTypes | RoadTypes
     isometric_coor: list[tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int]]
     render_img_coor: tuple[int, int]
     isBuildable: bool
