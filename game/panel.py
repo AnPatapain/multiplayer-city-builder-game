@@ -234,6 +234,7 @@ class Panel:
             for button in self.get_buttons_list():
                 if button != self.build__well:
                     button.set_selected(False)
+
     def get_panel_rects(self):
         return self.panel_rects
 
