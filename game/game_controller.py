@@ -187,7 +187,7 @@ class GameController:
                 building = tile.get_building()
                 if building and isinstance(building, House):
                     house: House = building
-                    if not house.associated_walker and not house.is_full():
+                    if house.can_accept_new_migrant():
                         if migrant_ammount <= 4:
                             if house.empty_space() < migrant_ammount:
                                 house.spawn_migrant(house.empty_space())

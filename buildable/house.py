@@ -59,7 +59,7 @@ class House(Buildable, ABC):
                 self.downgrade()
                 self.downgrade_progress = 0
             else:
-                self.downgrade_progress += 0
+                self.downgrade_progress += 1
             return
 
         # Reset downgrade progress if conditions are fulfilled
@@ -96,6 +96,9 @@ class House(Buildable, ABC):
 
         self.associated_walker = Immigrant(self, self.get_current_tile(), quantity)
         self.associated_walker.spawn(GameController.get_instance().spawn_point)
+
+    def can_accept_new_migrant(self):
+        return not self.associated_walker and not self.is_full() and self.has_road_in_range()
 
     def upgrade_to(self, class_name):
         """
