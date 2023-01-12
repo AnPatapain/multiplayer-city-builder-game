@@ -3,6 +3,7 @@ from typing import Optional, TYPE_CHECKING
 import pygame as pg
 
 from buildable.road import Road
+from class_types.buildind_types import BuildingTypes
 from class_types.tile_types import TileTypes
 from game.game_controller import GameController
 from game.textures import Textures
@@ -197,6 +198,10 @@ class Tile:
                     continue
                 if buildable_or_road and (not neighbor.is_buildable() and not neighbor.get_road()):
                     continue
+                # Exclude rocks from every pathfinding
+                if neighbor.get_building() and neighbor.get_building().get_build_type() in [BuildingTypes.ROCK, BuildingTypes.BIG_ROCK]:
+                    continue
+
                 # Insert into array if not existing
                 try:
                     temp = g_score[neighbor]
