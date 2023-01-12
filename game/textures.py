@@ -374,6 +374,9 @@ class Textures:
             SwitchViewButtonTypes.DECREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00251.png')).convert_alpha(screen),
             SwitchViewButtonTypes.DECREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00252.png')).convert_alpha(screen),
             SwitchViewButtonTypes.DECREASE_SPEED_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00253.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.PAUSE_GAME: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'pause_game.png')), (39, 26)).convert_alpha(screen),
+            SwitchViewButtonTypes.CONTINUE_GAME: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'continue_game.png')), (39, 26)).convert_alpha(screen)
+
         }
 
         Textures.walker_textures = {
@@ -672,13 +675,16 @@ class Textures:
 
 
     @staticmethod
-    def fill(surface):
+    def fill(surface, change : bool = False):
         """Fill all pixels of the surface with color, preserve transparency."""
         w, h = surface.get_size()
         for x in range(w):
             for y in range(h):
                 r, g, b, a = surface.get_at((x, y))
-                if a == 255:
-                    surface.set_at((x, y), pg.Color(150, 0, 24, 100))
-                if r >= 5:
-                    surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+                if not change:
+                    if a == 255:
+                        surface.set_at((x, y), pg.Color(150, 0, 24, 100))
+                    if r >= 5:
+                        surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+                else:
+                    surface.set_at((x,y), pg.Color(r, g, b, 100))

@@ -109,6 +109,9 @@ class World:
                     self.builder.set_in_build_action(True)
 
             elif event.type == pg.MOUSEMOTION:
+                temp_tile = self.builder.get_temp_tile_info()
+                if self.builder.get_in_build_action() and temp_tile and temp_tile["name"] not in [BuildingTypes.PELLE, RoadTypes.TL_TO_BR, BuildingTypes.VACANT_HOUSE]:
+                    self.builder.set_start_point(mouse_grid_pos)
                 self.builder.set_end_point(mouse_grid_pos)
 
         if event.type == pg.MOUSEBUTTONUP:
@@ -223,21 +226,26 @@ class World:
 
         # Display green/red zone when a building is selected and not actively building
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
-
             temp_tile = self.builder.get_temp_tile_info()
-            texture = Textures.get_texture(temp_tile['name'])
-            isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
 
+            isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
             (x, y) = temp_tile['render_img_coor']
+
+
+
+
+            if temp_tile['isBuildable']:
+                texture = Textures.get_texture(temp_tile['name']).copy()
+                texture.set_alpha(150)
+            else:
+                texture = Textures.get_delete_texture(temp_tile['name'])
+
 
             y_size = buildable_size[temp_tile['name']][1]
             offset = _offset(x, y - texture.get_height() + (y_size * TILE_SIZE/2) + (TILE_SIZE/2))
+            #iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
             screen.blit(texture, offset)
 
-            if temp_tile['isBuildable']:
-                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
-            else:
-                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
 
 

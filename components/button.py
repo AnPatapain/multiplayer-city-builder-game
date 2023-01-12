@@ -25,6 +25,7 @@ class Button(Component):
             center_text: bool = False,
             selectable: bool = False,
             disable_unselect: bool = False,
+            text_pop_up: str = ""
     ):
         super().__init__(pos, size)
         self.text = text
@@ -42,6 +43,9 @@ class Button(Component):
         self.image = image
         self.image_selected = image_selected
         self.image_hover = image_hover
+        self.text_pop_up = text_pop_up
+        self.surface_text_pop_up = pg.font.SysFont('default_font', 22).render(self.text_pop_up, False, (0,0,0), (255,255,255))
+
 
     def is_hover(self, pos):
         return self.bg.collidepoint(pos)
@@ -52,6 +56,8 @@ class Button(Component):
             if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
                 pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
             self.hovered = True
+
+
 
     def not_hover(self):
         if self.is_hovered() and not self.is_disabled():
@@ -117,6 +123,9 @@ class Button(Component):
 
         if (self.is_hovered() or self.is_being_pressed()) and self.image_hover is not None:
             screen.blit(self.image_hover, self.bg)
+            if self.text_pop_up is not None:
+                mouse_position = pg.mouse.get_pos()
+                screen.blit(self.surface_text_pop_up, (mouse_position[0] - 100, mouse_position[1]+20))
         elif self.is_selected() and self.image_selected is not None:
             screen.blit(self.image_selected, self.bg)
         elif self.image is not None:

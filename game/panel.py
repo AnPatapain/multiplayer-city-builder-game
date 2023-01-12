@@ -57,42 +57,42 @@ class Panel:
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON7),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_HOVER),
                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON7_SELECTED),
-                                  disable_unselect=True, selectable=True)
+                                  disable_unselect=True, selectable=True, text_pop_up="Build road")
         self.build__road.on_click(lambda: self.set_selected_tile(RoadTypes.TL_TO_BR))
 
         self.destroy_tile = Button((self.width - 99, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON6),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED),
-                                   disable_unselect=True, selectable=True)
+                                   disable_unselect=True, selectable=True, text_pop_up="Destroy")
         self.destroy_tile.on_click(lambda: self.set_selected_tile(BuildingTypes.PELLE))  # image qui est sur le curseur
 
         self.build__house = Button((self.width - 149, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_HOVER),
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON5_SELECTED),
-                                   disable_unselect=True, selectable=True)
+                                   disable_unselect=True, selectable=True, text_pop_up="Build house")
         self.build__house.on_click(lambda: self.set_selected_tile(BuildingTypes.VACANT_HOUSE))
 
         self.build__prefecture = Button((self.width - 99, 385 + TOPBAR_HEIGHT), button_size,
                                         image=Textures.get_texture(SwitchViewButtonTypes.BUTTON15),
                                         image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_HOVER),
                                         image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON15_SELECTED),
-                                        disable_unselect=True, selectable=True)
+                                        disable_unselect=True, selectable=True, text_pop_up="Build Prefecture")
         self.build__prefecture.on_click(lambda: self.set_selected_tile(BuildingTypes.PREFECTURE))
 
         self.build__well = Button((self.width - 149, 312 + TOPBAR_HEIGHT), button_size,
                                   image=Textures.get_texture(SwitchViewButtonTypes.BUTTON8),
                                   image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_HOVER),
                                   image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON8_SELECTED),
-                                  disable_unselect=True, selectable=True)
+                                  disable_unselect=True, selectable=True, text_pop_up="Build well")
         self.build__well.on_click(lambda: self.set_selected_tile(BuildingTypes.WELL))
 
         self.build__engineer_post = Button((self.width - 149, 385 + TOPBAR_HEIGHT), button_size,
                                            image=Textures.get_texture(SwitchViewButtonTypes.BUTTON14),
                                            image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_HOVER),
                                            image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON14_SELECTED),
-                                           disable_unselect=True, selectable=True)
+                                           disable_unselect=True, selectable=True, text_pop_up="Build Engineer post")
         self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
 
         self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
@@ -111,42 +111,42 @@ class Panel:
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON13),
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON13_SELECTED),
-                                    disable_unselect=True, selectable=True)
+                                    disable_unselect=True, selectable=True, text_pop_up="Build Senate")
         self.build__senate.on_click(lambda: self.set_selected_tile(BuildingTypes.SENATE))
 
         self.build__hospital = Button((self.width - 100, 312 + 46), button_size,
                                       image=Textures.get_texture(SwitchViewButtonTypes.BUTTON9),
                                       image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_HOVER),
                                       image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON9_SELECTED),
-                                      disable_unselect=True, selectable=True)
+                                      disable_unselect=True, selectable=True, text_pop_up="Build Hospital")
         self.build__hospital.on_click(lambda: self.set_selected_tile(BuildingTypes.HOSPITAL))
 
         self.build__temple = Button((self.width - 49, 312 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON10),
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED),
-                                    disable_unselect=True, selectable=True)
+                                    disable_unselect=True, selectable=True, text_pop_up="Religion")
         self.build__temple.on_click(lambda: self.set_selected_tile(BuildingTypes.TEMPLE))
 
         self.build__school = Button((self.width - 150, 349 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON11_SELECTED),
-                                    disable_unselect=True, selectable=True)
+                                    disable_unselect=True, selectable=True, text_pop_up="Build School")
         self.build__school.on_click(lambda: self.set_selected_tile(BuildingTypes.SCHOOL))
 
         self.build__theatre = Button((self.width - 100, 349 + 46), button_size,
                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON12),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_HOVER),
                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON12_SELECTED),
-                                     disable_unselect=True, selectable=True)
+                                     disable_unselect=True, selectable=True, text_pop_up="Build Theatre")
         self.build__theatre.on_click(lambda: self.set_selected_tile(BuildingTypes.THEATRE))
 
         self.build__market = Button((self.width - 49, 385 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
-                                    disable_unselect=True, selectable=True)
+                                    disable_unselect=True, selectable=True, text_pop_up="Build Market")
         self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET))
 
         self.button_list = [
@@ -180,8 +180,16 @@ class Panel:
 
         draw_text("Save", screen, color=pg.Color(50, 30, 0), size=38, pos=(20, 10))
 
+        last_button_to_display = None
+
         for button in self.get_buttons_list():
-            button.display(screen)
+            if not button.is_hovered():
+                button.display(screen)
+            elif button.is_hovered():
+                last_button_to_display = button
+
+        if last_button_to_display is not None:
+            last_button_to_display.display(screen)
 
 
     def update(self):
@@ -195,9 +203,37 @@ class Panel:
 
     def set_selected_tile(self, value):
         self.selected_tile = value
-        if value is None:
+        print(value)
+        if value == BuildingTypes.VACANT_HOUSE:
+            self.build__house.set_selected(True)
             for button in self.get_buttons_list():
-                button.set_selected(False)
+                if button != self.build__house:
+                    button.set_selected(False)
+        elif value == BuildingTypes.PELLE:
+            self.destroy_tile.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.destroy_tile:
+                    button.set_selected(False)
+        elif value == BuildingTypes.PREFECTURE:
+            self.build__prefecture.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__prefecture:
+                    button.set_selected(False)
+        elif value == 6:
+            self.build__road.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__road:
+                    button.set_selected(False)
+        elif value == BuildingTypes.WHEAT_FARM or value == BuildingTypes.MARKET or value == BuildingTypes.GRANARY:
+            self.build__market.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__market:
+                    button.set_selected(False)
+        elif value == BuildingTypes.WELL:
+            self.build__well.set_selected(True)
+            for button in self.get_buttons_list():
+                if button != self.build__well:
+                    button.set_selected(False)
 
     def get_panel_rects(self):
         return self.panel_rects
