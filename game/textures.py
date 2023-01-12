@@ -313,6 +313,8 @@ class Textures:
             BuildingTypes.THEATRE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00001.png'))).convert_alpha(screen),
             BuildingTypes.MARKET: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00001.png'))).convert_alpha(screen),
 
+            BuildingTypes.ENTRY_FLAG: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00087.png'))).convert_alpha(screen),
+            BuildingTypes.LEAVE_FLAG: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00089.png'))).convert_alpha(screen),
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
 
