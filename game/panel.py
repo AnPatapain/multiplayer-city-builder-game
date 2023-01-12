@@ -203,8 +203,11 @@ class Panel:
 
     def set_selected_tile(self, value):
         self.selected_tile = value
-        print(value)
-        if value == BuildingTypes.VACANT_HOUSE:
+
+        if value is None:
+            for button in self.get_buttons_list():
+                button.set_selected(False)
+        elif value == BuildingTypes.VACANT_HOUSE:
             self.build__house.set_selected(True)
             for button in self.get_buttons_list():
                 if button != self.build__house:
@@ -219,7 +222,7 @@ class Panel:
             for button in self.get_buttons_list():
                 if button != self.build__prefecture:
                     button.set_selected(False)
-        elif value == 6:
+        elif value == RoadTypes.TL_TO_BR:
             self.build__road.set_selected(True)
             for button in self.get_buttons_list():
                 if button != self.build__road:
