@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 from buildable.buildable import Buildable
-from buildable.final.buildable.ruin import Ruin
 from class_types.buildind_types import BuildingTypes
 from game.game_controller import GameController
 from walkers.final.immigrant import Immigrant
@@ -12,7 +11,6 @@ class House(Buildable, ABC):
                  tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int):
         super().__init__(x, y, build_type, fire_risk, destruction_risk)
 
-
         self.max_citizen = max_citizen
         self.current_citizen = 0
 
@@ -20,6 +18,9 @@ class House(Buildable, ABC):
         self.tax = tax
         self.desirability = desirability
         self.prosperity = prosperity
+
+        # Max 5
+        self.downgrade_progress: int = 0
 
     def is_full(self) -> bool:
         return self.current_citizen >= self.max_citizen
@@ -39,7 +40,7 @@ class House(Buildable, ABC):
     def get_has_water(self):
         return self.has_water
 
-    def set_has_water(self,has_water):
+    def set_has_water(self, has_water):
         self.has_water = has_water
 
     def get_tax(self):
@@ -54,9 +55,16 @@ class House(Buildable, ABC):
             return
 
         if not self.conditions_fulfilled():
-            self.downgrade()
+            if self.downgrade_progress > 5:
+                self.downgrade()
+                self.downgrade_progress = 0
+            else:
+                self.downgrade_progress += 0
+            return
+
+        # Reset downgrade progress if conditions are fulfilled
+        self.downgrade_progress = 0
         if self.is_upgradable():
-            print("hehe")
             self.upgrade()
 
     @abstractmethod
@@ -64,10 +72,15 @@ class House(Buildable, ABC):
         print("FIXME: method is_upgradable is not implemented!")
         return False
 
-    @abstractmethod
+    def has_road_in_range(self):
+        for adj in self.get_adjacent_tiles(2):
+            if adj.get_road():
+                return True
+
+        return False
+
     def conditions_fulfilled(self) -> bool:
-        print("FIXME: method conditions_fulfilled is not implemented!")
-        return True
+        return self.has_road_in_range()
 
     @abstractmethod
     def upgrade(self):
@@ -78,7 +91,7 @@ class House(Buildable, ABC):
         pass
 
     def spawn_migrant(self, quantity: int):
-        if self.associated_walker:
+        if self.associated_walker or not self.has_road_in_range():
             return
 
         self.associated_walker = Immigrant(self, self.get_current_tile(), quantity)
@@ -102,9 +115,9 @@ class House(Buildable, ABC):
         """
         next_object = class_name(self.x, self.y)
         self.max_citizen = next_object.max_citizen
-        #check citizen number
+        # check citizen number
         if self.max_citizen < self.current_citizen:
-                self.current_citizen = self.max_citizen
+            self.current_citizen = self.max_citizen
         self.tax = next_object.tax
         self.desirability = next_object.desirability
         self.build_type = next_object.build_type
