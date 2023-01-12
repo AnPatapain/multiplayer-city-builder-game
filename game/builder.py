@@ -137,6 +137,9 @@ class Builder:
             case BuildingTypes.SCHOOL:
                 building = School(row, col)
             case BuildingTypes.SENATE:
+                if self.game_controller.map_has_senate():
+                    print("Senate already present!")
+                    return
                 building = Senate(row, col)
             case BuildingTypes.TEMPLE:
                 building = Temple(row, col)

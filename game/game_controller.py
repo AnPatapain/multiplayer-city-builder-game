@@ -91,6 +91,14 @@ class GameController:
     def update(self):
         self.increase_tick()
 
+    def map_has_senate(self):
+        for row in self.grid:
+            for tile in row:
+                if tile.get_building() and tile.get_building().get_build_type() == BuildingTypes.SENATE:
+                    return True
+
+        return False
+
     def increase_tick(self):
         if self.current_tick == 50:
             self.increase_day()

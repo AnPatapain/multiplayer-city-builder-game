@@ -228,11 +228,7 @@ class World:
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
             temp_tile = self.builder.get_temp_tile_info()
 
-            isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
             (x, y) = temp_tile['render_img_coor']
-
-
-
 
             if temp_tile['isBuildable']:
                 texture = Textures.get_texture(temp_tile['name']).copy()
@@ -243,9 +239,7 @@ class World:
 
             y_size = buildable_size[temp_tile['name']][1]
             offset = _offset(x, y - texture.get_height() + (y_size * TILE_SIZE/2) + (TILE_SIZE/2))
-            #iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
             screen.blit(texture, offset)
-
 
 
 

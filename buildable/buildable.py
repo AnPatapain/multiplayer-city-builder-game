@@ -4,7 +4,6 @@ from typing import Optional, TYPE_CHECKING
 from buildable.buildable_datas import buildable_size
 from events.risk import Risk
 from game.game_controller import GameController
-from game.setting import GRID_SIZE
 from game.textures import Textures
 
 if TYPE_CHECKING:
