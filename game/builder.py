@@ -1,3 +1,6 @@
+from typing import TypedDict, Optional
+
+from buildable.buildable import Buildable
 from buildable.final.structures.engineer_post import EngineerPost
 from buildable.final.structures.hospital import Hospital
 from buildable.final.structures.market import Market
@@ -15,11 +18,17 @@ from buildable.final.structures.WheatFarm import WheatFarm
 from buildable.final.structures.granary import Granary
 from buildable.road import Road
 
-from game.panel import Panel
 import game.utils as utils
 from game.setting import GRID_SIZE
 from map_element.tile import Tile
 from class_types.road_types import RoadTypes
+
+class TempTile(TypedDict):
+    name: BuildingTypes | RoadTypes
+    isometric_coor: list[tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int]]
+    render_img_coor: tuple[int, int]
+    isBuildable: bool
+    isDestroyable: bool
 
 class Builder:
     def __init__(self, panel) -> None:
@@ -27,33 +36,34 @@ class Builder:
 
         # Pour construire consécutivement
         self.panel = panel
-        self.temp_tile_info: dict = None
-        self.start_point: tuple = None
-        self.end_point: tuple = None
+        self.temp_tile_info: Optional[TempTile] = None
+        self.start_point: Optional[tuple[int, int]] = None
+        self.end_point: Optional[tuple[int, int]] = None
         self.in_build_action = False
 
         
-    def set_start_point(self, start_point: tuple):
+    def set_start_point(self, start_point: Optional[tuple[int, int]]):
         self.start_point = start_point
 
     def get_start_point(self): return self.start_point
 
-    def set_end_point(self, end_point: tuple):
+    def set_end_point(self, end_point: Optional[tuple[int, int]]):
         self.end_point = end_point
 
     def get_end_point(self): return self.end_point
 
-    def set_temp_tile_info(self, temp_tile_info: dict):
+    def set_temp_tile_info(self, temp_tile_info: Optional[TempTile]):
         self.temp_tile_info = temp_tile_info
 
-    def get_temp_tile_info(self): return self.temp_tile_info
+    def get_temp_tile_info(self) -> TempTile:
+        return self.temp_tile_info
 
     def set_in_build_action(self, in_build_action: bool):
         self.in_build_action = in_build_action
     
     def get_in_build_action(self): return self.in_build_action
 
-    def build_from_start_to_end(self, selected_tile, start_point, end_point):
+    def build_from_start_to_end(self, selected_tile: BuildingTypes | RoadTypes, start_point: tuple[int, int], end_point: tuple[int, int]):
         grid = self.game_controller.get_map()
 
         if selected_tile == RoadTypes.TL_TO_BR:
@@ -63,7 +73,7 @@ class Builder:
             end = grid[end_point[1]][end_point[0]]
             if not end.is_buildable() and not end.get_road():
                 return
-            path = start.find_path_to(end, buildable_or_road=True)
+            path = start.find_path_to([end], buildable_or_road=True)
 
             for tile in path:
                 if tile.is_buildable():
@@ -80,9 +90,7 @@ class Builder:
                 if selected_tile == BuildingTypes.PELLE:
                     if tile.is_destroyable():
                         if tile.get_building():
-                            # Ensure we get the real start of the building on the left
-                            real_tile = tile.get_building().get_current_tile()
-                            self.delete_building(real_tile, real_tile.x, real_tile.y)
+                            self.delete_building(tile.get_building())
                         else:
                             tile.destroy()
                             self.road_update(row, col)
@@ -98,17 +106,11 @@ class Builder:
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
 
-    def delete_building(self, tile_with_building: Tile, x: int, y: int):
-        grid = self.game_controller.get_map()
-        size = tile_with_building.get_building().get_building_size()
-        for row in range(size[0]):
-            for col in range(size[1]):
-                tile = grid[x - row][y + col]
-                tile.destroy()
-                tile.set_show_tile(True)
+    def delete_building(self, tile_with_building: 'Buildable'):
+        for tile in tile_with_building.get_all_building_tiles():
+            tile.destroy()
 
-
-    def building_add(self, row, col, selected_type):
+    def building_add(self, row: int, col: int, selected_type: RoadTypes | BuildingTypes):
         if not self.game_controller.has_enough_denier(selected_type):
             return
 
@@ -143,18 +145,13 @@ class Builder:
                 return
 
         grid = self.game_controller.get_map()
+
+        if not grid[row][col].is_buildable(building.get_building_size()):
+            print("Building can't be constructed")
+            return
+
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()
-            #check if all case are buildable
-            try:
-                for x in range(col,col+x_building, 1):
-                    for y in range(row,row-y_building, -1):
-                        if not grid[y][x].is_buildable():
-                            print("Building can't be construct")
-                            return
-            except IndexError:
-                #We are out of the index of the grid
-                return
 
             # Put building in each case
             for x in range(col,col+x_building,1):
@@ -168,7 +165,7 @@ class Builder:
 
     
 
-    def road_add(self, road_row, road_col):
+    def road_add(self, road_row: int, road_col: int):
         """
         DESCRIPTION : Make a new road with connection between other road
         """
@@ -210,13 +207,11 @@ class Builder:
         grid[road_row][road_col].set_road(road)
 
 
-
-    def road_update(self, road_row, road_col):
+    def road_update(self, road_row: int, road_col: int):
         grid = self.game_controller.get_map()
         if road_col > 0:
             if grid[road_row][road_col - 1].get_road():
                 grid[road_row][road_col - 1].get_road().set_connect(grid[road_row][road_col].get_road(), 2)
-
 
         # TR connection
         if road_row > 0:

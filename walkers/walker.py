@@ -42,10 +42,11 @@ class Walker(ABC):
             return Textures.get_walker_texture(self.walker_type, self.orientation_to_next_tile, int(self.animation_frame))
 
     def go_to_next_tile(self):
+        # If max_walk_distance was set we must check if the current walk distance reach it or not if it does navigate the walker to its building
         if self.max_walk_distance != -1:
             if self.walk_distance == self.max_walk_distance:
                 self.walk_distance = -1
-                res = self.navigate_to(self.associated_building.get_current_tile())
+                res = self.navigate_to(self.associated_building.get_all_building_tiles())
                 if not res:
                     self.delete()
                     return
@@ -127,13 +128,13 @@ class Walker(ABC):
         self.animation_frame += 0.3
         self.walk_progression += 1
 
-    def navigate_to(self, dest: 'Tile'):
+    def navigate_to(self, dest: list['Tile']):
         path = self.current_tile.find_path_to(dest, roads_only=self.roads_only)
 
         if not path:
             return False
         else:
-            self.destination = dest
+            self.destination = path[-1]
             self.path_to_destination = path
             # Remove the start of the path, since we are already here
             # self.path_to_destination.pop(0)
