@@ -11,7 +11,7 @@ class VacantHouse(House):
         return self.current_citizen > 0
 
     def conditions_fulfilled(self) -> bool:
-        return True
+        return super().conditions_fulfilled()
 
     def upgrade(self):
         #prevent circular import
@@ -19,4 +19,4 @@ class VacantHouse(House):
         super().upgrade_to(SmallTent)
 
     def downgrade(self):
-        pass
+        self.get_current_tile().destroy()

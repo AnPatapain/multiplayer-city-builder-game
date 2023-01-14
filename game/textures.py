@@ -301,18 +301,77 @@ class Textures:
             BuildingTypes.TEMPLE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Security_00045.png'))).convert_alpha(screen),
             BuildingTypes.SCHOOL: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Security_00018.png'))).convert_alpha(screen),
             BuildingTypes.WELL: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Utilitya_00001.png'))).convert_alpha(screen),
-            BuildingTypes.WHEAT_FARM: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00012.png'))).convert_alpha(screen),
-            BuildingTypes.WHEAT_SOIL_LEVEL_1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00013.png'))).convert_alpha(screen),
-            BuildingTypes.WHEAT_SOIL_LEVEL_2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00014.png'))).convert_alpha(screen),
-            BuildingTypes.WHEAT_SOIL_LEVEL_3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00015.png'))).convert_alpha(screen),
-            BuildingTypes.WHEAT_SOIL_LEVEL_4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00016.png'))).convert_alpha(screen),
-            BuildingTypes.WHEAT_SOIL_LEVEL_5: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00017.png'))).convert_alpha(screen),
-            BuildingTypes.RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
-            BuildingTypes.FIRE_RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+            BuildingTypes.WHEAT_FARM: {
+                0: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat1.png")),
+                1: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat2.png")),
+                2: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat3.png")),
+                3: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat4.png")),
+                4: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat5.png")),
+            },
+            BuildingTypes.RUINS: {
+                0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00187.png'))).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00196.png'))).convert_alpha(screen),
+                2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00205.png'))).convert_alpha(screen),
+                3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+                4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00223.png'))).convert_alpha(screen),
+            },
+            BuildingTypes.FIRE_RUINS: {
+                # First ruin
+                0: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00188.png")),
+                1: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00189.png")),
+                2: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00190.png")),
+                3: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00191.png")),
+                4: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00192.png")),
+                5: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00193.png")),
+                6: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00194.png")),
+                7: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00195.png")),
+
+                # Second ruin
+                8: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00197.png")),
+                9: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00198.png")),
+                10: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00199.png")),
+                11: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00200.png")),
+                12: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00201.png")),
+                13: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00202.png")),
+                14: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00203.png")),
+                15: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00204.png")),
+
+                # Third ruin
+                16: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00206.png")),
+                17: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00207.png")),
+                18: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00208.png")),
+                19: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00209.png")),
+                20: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00210.png")),
+                21: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00211.png")),
+                22: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00212.png")),
+                23: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00213.png")),
+
+                # Fourth ruin
+                24: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00215.png")),
+                25: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00216.png")),
+                26: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00217.png")),
+                27: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00218.png")),
+                28: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00219.png")),
+                29: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00220.png")),
+                30: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00221.png")),
+                31: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00222.png")),
+
+                # Fifth ruin
+                32: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00224.png")),
+                33: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00225.png")),
+                34: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00226.png")),
+                35: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00227.png")),
+                36: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00228.png")),
+                37: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00229.png")),
+                38: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00230.png")),
+                39: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00231.png")),
+            },
             BuildingTypes.GRANARY: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00051.png'))).convert_alpha(screen),
             BuildingTypes.THEATRE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00001.png'))).convert_alpha(screen),
             BuildingTypes.MARKET: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00001.png'))).convert_alpha(screen),
 
+            BuildingTypes.ENTRY_FLAG: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00087.png'))).convert_alpha(screen),
+            BuildingTypes.LEAVE_FLAG: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'land3a_00089.png'))).convert_alpha(screen),
             # Panel icon texture
             # BuildingButtonTypes.ROAD: pg.image.load(os.path.join(IMAGE_PATH, '')).convert_alpha(screen),
 
@@ -374,6 +433,9 @@ class Textures:
             SwitchViewButtonTypes.DECREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00251.png')).convert_alpha(screen),
             SwitchViewButtonTypes.DECREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00252.png')).convert_alpha(screen),
             SwitchViewButtonTypes.DECREASE_SPEED_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00253.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.PAUSE_GAME: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'pause_game.png')), (39, 26)).convert_alpha(screen),
+            SwitchViewButtonTypes.CONTINUE_GAME: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'continue_game.png')), (39, 26)).convert_alpha(screen)
+
         }
 
         Textures.walker_textures = {
@@ -668,17 +730,78 @@ class Textures:
                     11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01229.png')).convert_alpha(screen),
                 },
             },
+            WalkerTypes.TAX_COLLECTOR: {
+                OrientationTypes.TOP_LEFT: {
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00623.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00631.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00639.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00647.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00655.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00663.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00671.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00679.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00687.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00695.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00703.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00711.png')).convert_alpha(screen),
+                },
+                OrientationTypes.TOP_RIGHT: {
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00617.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00625.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00633.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00641.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00649.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00657.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00665.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00673.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00681.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00689.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00697.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00705.png')).convert_alpha(screen),
+                },
+                OrientationTypes.BOTTOM_RIGHT: {
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00619.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00627.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00635.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00643.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00651.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00659.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00667.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00675.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00683.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00691.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00699.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00707.png')).convert_alpha(screen),
+                },
+                OrientationTypes.BOTTOM_LEFT: {
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00621.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00629.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00637.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00645.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00653.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00661.png')).convert_alpha(screen),
+                    6: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00669.png')).convert_alpha(screen),
+                    7: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00677.png')).convert_alpha(screen),
+                    8: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00685.png')).convert_alpha(screen),
+                    9: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00693.png')).convert_alpha(screen),
+                    10: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00701.png')).convert_alpha(screen),
+                    11: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00709.png')).convert_alpha(screen),
+                }
+            }
         }
 
 
     @staticmethod
-    def fill(surface):
+    def fill(surface, change : bool = False):
         """Fill all pixels of the surface with color, preserve transparency."""
         w, h = surface.get_size()
         for x in range(w):
             for y in range(h):
                 r, g, b, a = surface.get_at((x, y))
-                if a == 255:
-                    surface.set_at((x, y), pg.Color(150, 0, 24, 100))
-                if r >= 5:
-                    surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+                if not change:
+                    if a == 255:
+                        surface.set_at((x, y), pg.Color(150, 0, 24, 100))
+                    if r >= 5:
+                        surface.set_at((x, y), pg.Color(r, 0, 24, 100))
+                else:
+                    surface.set_at((x,y), pg.Color(r, g, b, 100))

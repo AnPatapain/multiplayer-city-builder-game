@@ -12,8 +12,6 @@ class WheatFarm(Structure):
         self.wheat_quantity = 0
         self.max_wheat = 100
 
-        self.farm_img = Textures.get_texture(BuildingTypes.WHEAT_FARM)
-        self.wheat_sol_img = Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1)
         self.game_controller = GameController.get_instance()
 
         self.granary_tiles = []
@@ -23,38 +21,16 @@ class WheatFarm(Structure):
         
 
     def get_texture(self):
-        farm_img_height = self.farm_img.get_height()
-        farm_img_width = self.farm_img.get_width()
-
-        rendered = pg.Surface( (116*3, farm_img_height + 60), pg.SRCALPHA, 32)
-        rendered = rendered.convert_alpha()
-
-        rendered.blit(self.farm_img, ( ( rendered.get_width() - farm_img_width )/2, 0))
-        
-        #soil 1
-        rendered.blit(self.wheat_sol_img, (0, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) ) )
-        #soil2
-        rendered.blit(self.wheat_sol_img, (58, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30 ))
-        
-        #soil 4
-        rendered.blit(self.wheat_sol_img, (58*4, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE)))
-        
-        #soil 2
-        rendered.blit(self.wheat_sol_img, (58*3, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30))
-
-        #soil 3
-        rendered.blit(self.wheat_sol_img, (58*2, farm_img_height - 60 - (self.wheat_sol_img.get_height() - TILE_SIZE) + 30*2 ))
-        
-        return rendered
+        if self.atteindre_max_quantity():
+            return Textures.get_texture(BuildingTypes.WHEAT_FARM, 4)
+        return Textures.get_texture(BuildingTypes.WHEAT_FARM, self.wheat_quantity//20)
 
     def get_delete_texture(self):
-        texture = self.get_texture().copy()
-        Textures.fill(texture)
-        return texture
+        if self.atteindre_max_quantity():
+            return Textures.get_delete_texture(BuildingTypes.WHEAT_FARM, 4)
+        return Textures.get_delete_texture(BuildingTypes.WHEAT_FARM, self.wheat_quantity//20)
 
     def get_wheat_quantities(self): return self.wheat_quantity
-
-    def set_wheat_soil_img(self, img): self.wheat_sol_img = img
 
     def produce_wheat(self):
         if not self.atteindre_max_quantity():
@@ -106,13 +82,6 @@ class WheatFarm(Structure):
 
         print('upgradable', self.is_upgradable(), 'wheat_quantities', self.get_wheat_quantities())
         if self.is_upgradable():
-            #Update the image of the wheat soil around the farm 
-            match self.get_wheat_quantities():
-                case 20 | 0: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_1))
-                case 40: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_2))
-                case 60: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_3))
-                case 80: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_4))
-                case 100: self.set_wheat_soil_img(Textures.get_texture(BuildingTypes.WHEAT_SOIL_LEVEL_5))
             self.produce_wheat()
             self.relax_days = 10
 
@@ -126,9 +95,3 @@ class WheatFarm(Structure):
         if tile:
             self.associated_walker = Farm_worker(self)
             self.associated_walker.spawn(tile)
-
-
-    
-        
-        
-    

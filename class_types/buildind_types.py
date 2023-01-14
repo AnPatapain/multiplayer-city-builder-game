@@ -20,6 +20,8 @@ class BuildingTypes(Enum):
     BUILD_SIGN = 90
     RUINS = 91
     FIRE_RUINS = 92
+    ENTRY_FLAG = 93
+    LEAVE_FLAG = 94
 
 
     PELLE = 100 # i don't know the rule that we used to choose to number, I choose 100 but i don't know why i choose it : )

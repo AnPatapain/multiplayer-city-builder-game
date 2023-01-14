@@ -4,7 +4,6 @@ from typing import Optional, TYPE_CHECKING
 from buildable.buildable_datas import buildable_size
 from events.risk import Risk
 from game.game_controller import GameController
-from game.setting import GRID_SIZE
 from game.textures import Textures
 
 if TYPE_CHECKING:
@@ -27,7 +26,18 @@ class Buildable(ABC):
 
         self.is_on_fire = False
 
-    def get_current_tile(self) -> 'Tile':
+    def get_all_building_tiles(self) -> list['Tile']:
+        grid = GameController.get_instance().get_map()
+        build_size = self.get_building_size()
+
+        tiles = []
+        for x in range(build_size[0]):
+            for y in range(build_size[1]):
+                tiles.append(grid[self.x - x][self.y + y])
+
+        return tiles
+
+    def get_current_tile(self)-> 'Tile':
         grid = GameController.get_instance().get_map()
         return grid[self.x][self.y]
 
@@ -72,22 +82,12 @@ class Buildable(ABC):
         pass
 
     def get_adjacent_tiles(self, radius: int = 0):
-        build_size = self.get_building_size()
-
         tiles = set()
         excluded_tiles = set()
-        grid = GameController.get_instance().get_map()
-        base_tile = self.get_current_tile()
-        base_x, base_y = base_tile.x, base_tile.y
 
-        for x in range(build_size[0]):
-            for y in range(build_size[1]):
-                if base_x - x < 0 or base_y + y > GRID_SIZE:
-                    continue
-
-                current_tile = grid[base_x - x][base_y + y]
-                excluded_tiles.add(current_tile)
-                tiles.update(current_tile.get_adjacente_tiles(radius))
+        for current_tile in self.get_all_building_tiles():
+            excluded_tiles.add(current_tile)
+            tiles.update(current_tile.get_adjacente_tiles(radius))
 
         tiles.difference_update(excluded_tiles)
         return list(tiles)
@@ -101,17 +101,12 @@ class Buildable(ABC):
         self.build_type = next_object.build_type
         self.__class__ = class_name
 
-    def to_ruin(self):
+    def to_ruin(self, on_fire: bool = False):
         from buildable.final.buildable.ruin import Ruin
-        from class_types.buildind_types import BuildingTypes
 
-        grid = GameController.get_instance().get_map()
-        build_size = self.get_building_size()
-
-        for x in range(build_size[0]):
-            for y in range(build_size[1]):
-                tile = grid[self.x - x][self.y + y]
-                tile.set_building(Ruin(self.x - x, self.y + y))
+        for tile in self.get_all_building_tiles():
+            tile.set_building(Ruin(tile.x, tile.y))
+            tile.get_building().is_on_fire = on_fire
 
     def get_risk(self) -> Risk:
         return self.risk

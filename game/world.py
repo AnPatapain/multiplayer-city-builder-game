@@ -9,6 +9,8 @@ from PIL import Image
 import game.utils as utils
 from buildable.buildable_datas import buildable_cost, buildable_size
 from buildable.final.buildable.big_rock import BigRock
+from buildable.final.buildable.entry_sign import EntrySign
+from buildable.final.buildable.leave_sign import LeaveSign
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
@@ -109,6 +111,9 @@ class World:
                     self.builder.set_in_build_action(True)
 
             elif event.type == pg.MOUSEMOTION:
+                temp_tile = self.builder.get_temp_tile_info()
+                if self.builder.get_in_build_action() and temp_tile and temp_tile["name"] not in [BuildingTypes.PELLE, RoadTypes.TL_TO_BR, BuildingTypes.VACANT_HOUSE]:
+                    self.builder.set_start_point(mouse_grid_pos)
                 self.builder.set_end_point(mouse_grid_pos)
 
         if event.type == pg.MOUSEBUTTONUP:
@@ -223,21 +228,20 @@ class World:
 
         # Display green/red zone when a building is selected and not actively building
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
-
             temp_tile = self.builder.get_temp_tile_info()
-            texture = Textures.get_texture(temp_tile['name'])
-            isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
 
             (x, y) = temp_tile['render_img_coor']
+
+            if temp_tile['isBuildable']:
+                texture = Textures.get_texture(temp_tile['name']).copy()
+                texture.set_alpha(150)
+            else:
+                texture = Textures.get_delete_texture(temp_tile['name'])
+
 
             y_size = buildable_size[temp_tile['name']][1]
             offset = _offset(x, y - texture.get_height() + (y_size * TILE_SIZE/2) + (TILE_SIZE/2))
             screen.blit(texture, offset)
-
-            if temp_tile['isBuildable']:
-                pg.draw.polygon(screen, (0, 255, 0), isometric_coor_offset)
-            else:
-                pg.draw.polygon(screen, (255, 0, 0), isometric_coor_offset)
 
 
 
@@ -255,7 +259,7 @@ class World:
                 end = grid[end_point[1]][end_point[0]]
                 if not end.is_buildable() and not end.get_road():
                     return
-                path = start.find_path_to(end, buildable_or_road=True)
+                path = start.find_path_to([end], buildable_or_road=True)
 
                 for tile in path:
                     # Don't display build sign if there is already a road
@@ -378,10 +382,10 @@ class World:
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
                         tile.set_random_texture_number(random.randint(0, 7))
-                    case (237, 28, 35):
-                        pass  # Red color, flag spawn
+                    case (237, 28, 36):
+                        tile.set_building(EntrySign(x, y))
                     case (111, 49, 152):
-                        pass  # Purple color, flag leave
+                        tile.set_building(LeaveSign(x, y))
                     case (153, 0, 48):
                         spawn_point = tile
                         pass  # Brown/Red, road spawn
