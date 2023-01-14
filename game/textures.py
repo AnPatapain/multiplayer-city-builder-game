@@ -310,10 +310,9 @@ class Textures:
             BuildingTypes.RUINS: {
                 0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00187.png'))).convert_alpha(screen),
                 1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00196.png'))).convert_alpha(screen),
-                # Not yet fire texture
-                # 2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00205.png'))).convert_alpha(screen),
-                # 3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
-                # 4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00223.png'))).convert_alpha(screen),
+                2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00205.png'))).convert_alpha(screen),
+                3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+                4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00223.png'))).convert_alpha(screen),
             },
             BuildingTypes.FIRE_RUINS: {
                 # First ruin
@@ -335,6 +334,36 @@ class Textures:
                 13: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00202.png")),
                 14: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00203.png")),
                 15: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00204.png")),
+
+                # Third ruin
+                16: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00206.png")),
+                17: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00207.png")),
+                18: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00208.png")),
+                19: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00209.png")),
+                20: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00210.png")),
+                21: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00211.png")),
+                22: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00212.png")),
+                23: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00205/Land2a_00213.png")),
+
+                # Fourth ruin
+                24: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00215.png")),
+                25: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00216.png")),
+                26: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00217.png")),
+                27: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00218.png")),
+                28: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00219.png")),
+                29: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00220.png")),
+                30: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00221.png")),
+                31: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00214/Land2a_00222.png")),
+
+                # Fifth ruin
+                32: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00224.png")),
+                33: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00225.png")),
+                34: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00226.png")),
+                35: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00227.png")),
+                36: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00228.png")),
+                37: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00229.png")),
+                38: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00230.png")),
+                39: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00231.png")),
             },
             BuildingTypes.GRANARY: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00051.png'))).convert_alpha(screen),
             BuildingTypes.THEATRE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00001.png'))).convert_alpha(screen),

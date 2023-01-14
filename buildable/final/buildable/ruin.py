@@ -9,7 +9,7 @@ class Ruin(Buildable):
     def __init__(self, x: int, y: int):
         super().__init__(x, y, BuildingTypes.RUINS, fire_risk=0, destruction_risk=0)
 
-        self.ruin_type = randint(0, 1)  # randint(0, 4)
+        self.ruin_type = randint(0, 4)
         self.animation = 0
 
     def is_destroyable(self):
@@ -17,7 +17,7 @@ class Ruin(Buildable):
 
     def update_tick(self):
         if self.is_on_fire:
-            self.animation += 0.3
+            self.animation += 0.4
 
     def update_day(self):
         if self.is_on_fire:
