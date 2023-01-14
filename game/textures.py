@@ -307,8 +307,35 @@ class Textures:
             BuildingTypes.WHEAT_SOIL_LEVEL_3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00015.png'))).convert_alpha(screen),
             BuildingTypes.WHEAT_SOIL_LEVEL_4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00016.png'))).convert_alpha(screen),
             BuildingTypes.WHEAT_SOIL_LEVEL_5: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00017.png'))).convert_alpha(screen),
-            BuildingTypes.RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
-            BuildingTypes.FIRE_RUINS: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+            BuildingTypes.RUINS: {
+                0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00187.png'))).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00196.png'))).convert_alpha(screen),
+                # Not yet fire texture
+                # 2: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00205.png'))).convert_alpha(screen),
+                # 3: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00214.png'))).convert_alpha(screen),
+                # 4: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00223.png'))).convert_alpha(screen),
+            },
+            BuildingTypes.FIRE_RUINS: {
+                # First ruin
+                0: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00188.png")),
+                1: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00189.png")),
+                2: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00190.png")),
+                3: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00191.png")),
+                4: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00192.png")),
+                5: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00193.png")),
+                6: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00194.png")),
+                7: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00187/Land2a_00195.png")),
+
+                # Second ruin
+                8: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00197.png")),
+                9: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00198.png")),
+                10: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00199.png")),
+                11: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00200.png")),
+                12: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00201.png")),
+                13: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00202.png")),
+                14: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00203.png")),
+                15: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00196/Land2a_00204.png")),
+            },
             BuildingTypes.GRANARY: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00051.png'))).convert_alpha(screen),
             BuildingTypes.THEATRE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00001.png'))).convert_alpha(screen),
             BuildingTypes.MARKET: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00001.png'))).convert_alpha(screen),
@@ -676,7 +703,7 @@ class Textures:
             WalkerTypes.TAX_COLLECTOR: {
                 OrientationTypes.TOP_LEFT: {
                     0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00623.png')).convert_alpha(screen),
-                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_006131.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00631.png')).convert_alpha(screen),
                     2: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00639.png')).convert_alpha(screen),
                     3: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00647.png')).convert_alpha(screen),
                     4: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_00655.png')).convert_alpha(screen),

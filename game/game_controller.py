@@ -117,6 +117,11 @@ class GameController:
             case 3:
                 self.__calculate_actual_foods()
 
+        for row in self.get_map():
+            for tile in row:
+                if tile.get_building():
+                    tile.get_building().update_tick()
+
 
     def increase_day(self):
         from class_types.walker_types import WalkerTypes

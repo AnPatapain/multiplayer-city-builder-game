@@ -101,11 +101,12 @@ class Buildable(ABC):
         self.build_type = next_object.build_type
         self.__class__ = class_name
 
-    def to_ruin(self):
+    def to_ruin(self, on_fire: bool = False):
         from buildable.final.buildable.ruin import Ruin
 
         for tile in self.get_all_building_tiles():
             tile.set_building(Ruin(tile.x, tile.y))
+            tile.get_building().is_on_fire = on_fire
 
     def get_risk(self) -> Risk:
         return self.risk

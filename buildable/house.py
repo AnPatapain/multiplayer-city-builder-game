@@ -50,8 +50,7 @@ class House(Buildable, ABC):
         self.risk.risk_progress()
 
         if self.risk.is_on_fire():
-            self.is_on_fire = True
-            self.to_ruin()
+            self.to_ruin(on_fire=True)
             return
 
         if not self.conditions_fulfilled():
@@ -127,7 +126,7 @@ class House(Buildable, ABC):
         self.risk = next_object.risk
         self.__class__ = class_name
 
-    def to_ruin(self):
+    def to_ruin(self, on_fire: bool = False):
         if self.associated_walker:
             self.associated_walker.delete()
-        super().to_ruin()
+        super().to_ruin(on_fire=on_fire)
