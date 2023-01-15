@@ -302,11 +302,18 @@ class Textures:
             BuildingTypes.SCHOOL: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Security_00018.png'))).convert_alpha(screen),
             BuildingTypes.WELL: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Utilitya_00001.png'))).convert_alpha(screen),
             BuildingTypes.WHEAT_FARM: {
-                0: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat1.png")),
-                1: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat2.png")),
-                2: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat3.png")),
-                3: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat4.png")),
-                4: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat5.png")),
+                0: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat1.png")).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat2.png")).convert_alpha(screen),
+                2: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat3.png")).convert_alpha(screen),
+                3: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat4.png")).convert_alpha(screen),
+                4: pg.transform.scale2x(pg.image.load("assets/wheat_farm/wheat5.png")).convert_alpha(screen),
+            },
+            BuildingTypes.GRANARY: {
+                0: pg.transform.scale2x(pg.image.load("assets/granary/granary0.png")).convert_alpha(screen),
+                1: pg.transform.scale2x(pg.image.load("assets/granary/granary1.png")).convert_alpha(screen),
+                2: pg.transform.scale2x(pg.image.load("assets/granary/granary2.png")).convert_alpha(screen),
+                3: pg.transform.scale2x(pg.image.load("assets/granary/granary3.png")).convert_alpha(screen),
+                4: pg.transform.scale2x(pg.image.load("assets/granary/granary4.png")).convert_alpha(screen),
             },
             BuildingTypes.RUINS: {
                 0: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Land2a_00187.png'))).convert_alpha(screen),
@@ -366,7 +373,6 @@ class Textures:
                 38: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00230.png")),
                 39: pg.transform.scale2x(pg.image.load("assets/fire_sprites/00223/Land2a_00231.png")),
             },
-            BuildingTypes.GRANARY: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00051.png'))).convert_alpha(screen),
             BuildingTypes.THEATRE: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'entertainment_00001.png'))).convert_alpha(screen),
             BuildingTypes.MARKET: pg.transform.scale2x(pg.image.load(os.path.join(IMAGE_PATH, 'Commerce_00001.png'))).convert_alpha(screen),
 
