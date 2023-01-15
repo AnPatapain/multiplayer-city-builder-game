@@ -158,6 +158,7 @@ class GameController:
 
     def __calculate_actual_foods(self):
         from buildable.final.structures.granary import Granary
+        self.actual_foods = 0
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
