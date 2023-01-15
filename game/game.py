@@ -109,6 +109,7 @@ class Game:
         month_number = self.game_controller.get_actual_month()
 
         draw_text('fps={}'.format(fps), self.screen, (self.width - 120, 10), size=42)
+        draw_text('food={}'.format(self.game_controller.actual_foods), self.screen, (self.width - 300, 10), size=42)
         draw_text('Denier  {}'.format(self.game_controller.get_denier()), self.screen, (self.width - 905, 10), size=42)
         draw_text('Pop  {}'.format(self.game_controller.get_actual_citizen()), self.screen, (self.width - 1200, 10), size=42)
         draw_text('{} '.format(self.game_controller.get_month(month_number)), self.screen, (self.width - 590, 10), color=pg.Color(255, 255, 0), size=42)

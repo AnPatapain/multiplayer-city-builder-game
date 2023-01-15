@@ -48,21 +48,6 @@ class WheatFarm(Structure):
         return (not self.atteindre_max_quantity() and self.relax_days == 0)
 
 
-    def get_all_granary_tiles(self): 
-        from buildable.final.structures.granary import Granary
-
-        grid = self.game_controller.get_map()
-        self.granary_tiles = []
-
-        for row in grid:
-            for tile in row:
-                building = tile.get_building()
-                if isinstance(building, Granary) and tile.get_show_tile():
-                    self.granary_tiles.append(building.get_current_tile())
-
-        return self.granary_tiles.copy()
-
-
     def give_wheat_to_worker(self):
         if self.atteindre_max_quantity():
             given_wheat_quantity = self.wheat_quantity
@@ -79,6 +64,8 @@ class WheatFarm(Structure):
             self.new_walker()
 
         self.relax_days -= 1
+
+        # print('upgradable', self.is_upgradable(), 'wheat_quantities', self.get_wheat_quantities())
         if self.is_upgradable():
             self.produce_wheat()
             self.relax_days = 10

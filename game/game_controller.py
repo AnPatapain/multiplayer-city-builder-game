@@ -164,7 +164,7 @@ class GameController:
                 if building and isinstance(building, Granary):
                     building: Granary = building
                     self.actual_foods += building.get_wheat_stocked()
-                    print("ACTUAL FOOD: ", self.actual_foods)
+                    # print("ACTUAL FOOD: ", self.actual_foods)
 
     def __calculate_water_access(self):
         wells = []
