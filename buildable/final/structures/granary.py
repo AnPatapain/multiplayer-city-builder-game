@@ -13,10 +13,8 @@ class Granary(Structure):
 
     def receive_wheat_from_farm_worker(self, wheat_quantity): 
         self.wheat_stocked += wheat_quantity
-        print("wheat received: ", self.wheat_stocked)
     
     def get_wheat_stocked(self):
-        print("wheat in Granary", self.wheat_stocked) 
         return self.wheat_stocked
 
     def update_day(self):

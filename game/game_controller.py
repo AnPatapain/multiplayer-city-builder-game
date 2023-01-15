@@ -159,14 +159,13 @@ class GameController:
     def __calculate_actual_foods(self):
         from buildable.final.structures.granary import Granary
         self.actual_foods = 0
-        print("actual food before go into for loop", self.actual_foods)
+
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
-                if building and isinstance(building, Granary) and building.get_current_tile().get_show_tile():
+                if building and isinstance(building, Granary) and tile.get_show_tile():
                     building: Granary = building
                     self.actual_foods += building.get_wheat_stocked()
-                    print("ACTUAL FOOD: ", self.actual_foods)
 
     def __calculate_water_access(self):
         wells = []
