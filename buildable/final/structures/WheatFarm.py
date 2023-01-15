@@ -10,12 +10,7 @@ class WheatFarm(Structure):
     def __init__(self, x: int, y: int) -> None:
         super().__init__(x, y, BuildingTypes.WHEAT_FARM, max_employee=10, fire_risk=0, destruction_risk=0)
         self.wheat_quantity = 0
-        self.max_wheat = 100
-
-        self.game_controller = GameController.get_instance()
-
-        self.granary_tiles = []
-
+        self.max_wheat = 80
         #++++++++++++++++++++ TESTING PURPOSE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.relax_days = 10 # just for testing for seeing the evolution of soil
         
@@ -33,9 +28,7 @@ class WheatFarm(Structure):
     def get_wheat_quantities(self): return self.wheat_quantity
 
     def produce_wheat(self):
-        if not self.atteindre_max_quantity():
-            # We have 5 level of wheat soil around the farm so i think each level correspond to 20 quantity of wheat (I can't find it in docs)
-            self.wheat_quantity += 20
+        self.wheat_quantity += 20
 
     def atteindre_max_quantity(self):
         return self.wheat_quantity == self.max_wheat
@@ -65,7 +58,6 @@ class WheatFarm(Structure):
 
         self.relax_days -= 1
 
-        # print('upgradable', self.is_upgradable(), 'wheat_quantities', self.get_wheat_quantities())
         if self.is_upgradable():
             self.produce_wheat()
             self.relax_days = 10
