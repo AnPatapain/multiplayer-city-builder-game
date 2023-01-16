@@ -321,6 +321,7 @@ class Textures:
             SwitchViewButtonTypes.TOP_PANNEL: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00017.png')).convert_alpha(screen),
             SwitchViewButtonTypes.DYNAMIC_DISPLAY: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00015.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BARRE: pg.image.load(os.path.join(IMAGE_PATH, 'barre.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.FILE_BUTTON: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'file_button.png')), (100,46)).convert_alpha(screen),
             SwitchViewButtonTypes.JULIUS: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00079.png')).convert_alpha(screen),
             SwitchViewButtonTypes.EUROPEAN: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00082.png')).convert_alpha(screen),
 
@@ -368,11 +369,11 @@ class Textures:
             SwitchViewButtonTypes.BUTTON18: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00115.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BUTTON19: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00119.png')).convert_alpha(screen),
             SwitchViewButtonTypes.BOTTOM_PANNEL: pg.image.load(os.path.join(IMAGE_PATH, 'fenetre.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.INCREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00247.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.INCREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00248.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.INCREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'system_00015.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.INCREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'system_00016.png')).convert_alpha(screen),
             SwitchViewButtonTypes.INCREASE_SPEED_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00249.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.DECREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00251.png')).convert_alpha(screen),
-            SwitchViewButtonTypes.DECREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00252.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DECREASE_SPEED: pg.image.load(os.path.join(IMAGE_PATH, 'system_00017.png')).convert_alpha(screen),
+            SwitchViewButtonTypes.DECREASE_SPEED_HOVER: pg.image.load(os.path.join(IMAGE_PATH, 'system_00018.png')).convert_alpha(screen),
             SwitchViewButtonTypes.DECREASE_SPEED_SELECTED: pg.image.load(os.path.join(IMAGE_PATH, 'paneling_00253.png')).convert_alpha(screen),
             SwitchViewButtonTypes.PAUSE_GAME: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'pause_game.png')), (39, 26)).convert_alpha(screen),
             SwitchViewButtonTypes.CONTINUE_GAME: pg.transform.scale(pg.image.load(os.path.join(IMAGE_PATH, 'continue_game.png')), (39, 26)).convert_alpha(screen)

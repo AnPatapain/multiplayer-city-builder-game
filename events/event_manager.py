@@ -10,6 +10,7 @@ class EventManager:
     # of the system. For example, a button changes its color and the cursor when its hovered
     components: list[Component] = []
 
+    menu_deroulant = []
     # Key listeners are functions that are called when the matching key is pressed
     key_listeners: list[KeyListener] = []
 
@@ -66,6 +67,11 @@ class EventManager:
                 for component in EventManager.components:
                     if isinstance(component, Button) and component.is_hover(pos):
                         component.set_being_pressed(True)
+                    if isinstance(component, Button) and not component.is_hover(pos):
+                        component.sous_menu_printing = False
+                for sous_menu in EventManager.menu_deroulant:
+                    if sous_menu.get_isActive() and not sous_menu.rectangle.collidepoint(pos):
+                        sous_menu.set_isActive()
 
 
             if event.type == pg.MOUSEBUTTONUP:
@@ -104,6 +110,11 @@ class EventManager:
         """
 
         EventManager.components.append(component)
+
+    @staticmethod
+    def register_menu_deroulant(sous_menu):
+        EventManager.menu_deroulant.append(sous_menu)
+
 
     @staticmethod
     def remove_component(component: Component):

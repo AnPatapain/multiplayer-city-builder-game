@@ -25,7 +25,8 @@ class Button(Component):
             center_text: bool = False,
             selectable: bool = False,
             disable_unselect: bool = False,
-            text_pop_up: str = ""
+            text_pop_up: str = "",
+            sous_menu_button : bool = False
     ):
         super().__init__(pos, size)
         self.text = text
@@ -45,6 +46,7 @@ class Button(Component):
         self.image_hover = image_hover
         self.text_pop_up = text_pop_up
         self.surface_text_pop_up = pg.font.SysFont('default_font', 22).render(self.text_pop_up, False, (0,0,0), (255,255,255))
+        self.sous_menu_button = sous_menu_button
 
 
     def is_hover(self, pos):
@@ -98,6 +100,7 @@ class Button(Component):
             if not self.selectable:
                 self.not_hover()
             super().click()
+
 
     def display(self, screen: Surface):
         color = BASE_COLOR

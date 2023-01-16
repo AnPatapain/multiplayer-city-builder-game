@@ -1,9 +1,11 @@
 import pygame as pg
 
+import backup_game
 from class_types.buildind_types import BuildingTypes
 from class_types.panel_types import SwitchViewButtonTypes
 from class_types.road_types import RoadTypes
 from components.button import Button
+from components.menu_deroulant import Menu_Deroulant
 from events.event_manager import EventManager
 from game.game_controller import GameController
 from game.mini_map import MiniMap
@@ -17,11 +19,12 @@ PANEL_WIDTH = 162
 PANEL_HEIGHT = 1080 - TOPBAR_HEIGHT
 
 class Panel:
-    def __init__(self, width, height):
-        self.width, self.height = width, height
+    def __init__(self, width, height, screen):
+        self.width, self.height, self.screen = width, height, screen
 
         # Mini_Map
         self.mini_map = MiniMap()
+        self.sous_menu = False
 
         self.ressource_panel_color = (204, 174, 132)
         self.building_panel_color = (230, 162, 64)
@@ -46,6 +49,27 @@ class Panel:
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.MINI_SCULPTURE), (7, 216))
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.JULIUS), (7, 200 - TOPBAR_HEIGHT))
         self.building_panel.blit(Textures.get_texture(SwitchViewButtonTypes.EUROPEAN), (84, 200 - TOPBAR_HEIGHT))
+
+
+
+        self.file_continue_game = Button((0,46),(200, 46), text="Continue Game", center_text=False, text_size=30)
+        self.file_continue_game.on_click(lambda : self.set_sous_menu(False))
+
+        self.file_save_game = Button((0, 92), (200, 46), text="Save Game", center_text=False, text_size=30)
+        self.file_save_game.on_click(lambda: backup_game.save_game("save.bin"))
+
+        self.file_load_game = Button((0, 138), (200, 46), text="Load Game", center_text=False, text_size=30)
+        self.file_load_game.on_click(lambda: backup_game.load_game("save.bin"),lambda : self.set_sous_menu(False))
+
+        self.file_exit_game = Button((0,184),(200, 46), text="Exit Game", center_text=False, text_size=30)
+        self.file_exit_game.on_click(lambda : pg.quit())
+
+        self.file_sous_menu_list = [self.file_continue_game, self.file_save_game, self.file_load_game, self.file_exit_game]
+
+        self.file = Button((0, 0), (100, 46), image=Textures.get_texture(SwitchViewButtonTypes.FILE_BUTTON), selectable=True)
+        self.file_menu = Menu_Deroulant(self.file, self.file_sous_menu_list, self.screen)
+        EventManager.register_menu_deroulant(self.file_menu)
+        self.file.on_click2(lambda : self.set_sous_menu(True))
 
         # Overlay button
         self.change_overlay = Button((self.width - 158, 49), (117,25), text_fn=Overlay.get_instance().get_name,
@@ -95,13 +119,13 @@ class Panel:
                                            disable_unselect=True, selectable=True, text_pop_up="Build Engineer post")
         self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
 
-        self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), button_size,
+        self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), (24,24),
                                      image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
         self.increase_speed.on_click(GameController.get_instance().increase_current_speed)
 
-        self.decrease_speed = Button((self.width - 100, 490 + TOPBAR_HEIGHT), button_size,
+        self.decrease_speed = Button((self.width - 119, 490 + TOPBAR_HEIGHT), (24,24),
                                      image=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_HOVER),
                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.DECREASE_SPEED_SELECTED))
@@ -152,7 +176,8 @@ class Panel:
         self.button_list = [
             self.destroy_tile, self.build__house, self.build__prefecture, self.build__road, self.build__senate,
             self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__market,
-            self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed, self.decrease_speed
+            self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed, self.decrease_speed,
+            self.file
         ]
 
         for button in self.button_list:
@@ -178,7 +203,7 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON18), (self.width - 100, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
 
-        draw_text("Save", screen, color=pg.Color(50, 30, 0), size=38, pos=(20, 10))
+        draw_text("Options         Help         Advisors", screen, color=pg.Color(50, 30, 0), size=38, pos=(120, 10))
 
         last_button_to_display = None
 
@@ -190,6 +215,10 @@ class Panel:
 
         if last_button_to_display is not None:
             last_button_to_display.display(screen)
+
+        if self.sous_menu:
+            if self.file_menu.get_isActive():
+                self.file_menu.display()
 
 
     def update(self):
@@ -242,3 +271,11 @@ class Panel:
 
     def get_buttons_list(self):
         return self.button_list
+
+    def set_sous_menu(self, status):
+        self.sous_menu = status
+
+
+
+
+
