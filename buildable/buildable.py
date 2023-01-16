@@ -4,6 +4,7 @@ from typing import Optional, TYPE_CHECKING
 from buildable.buildable_datas import buildable_size
 from events.risk import Risk
 from game.game_controller import GameController
+from game.setting import GRID_SIZE
 from game.textures import Textures
 
 if TYPE_CHECKING:
@@ -26,7 +27,18 @@ class Buildable(ABC):
 
         self.is_on_fire = False
 
-    def get_current_tile(self) -> 'Tile':
+    def get_all_building_tiles(self) -> list['Tile']:
+        grid = GameController.get_instance().get_map()
+        build_size = self.get_building_size()
+
+        tiles = []
+        for x in range(build_size[0]):
+            for y in range(build_size[1]):
+                tiles.append(grid[self.x - x][self.y + y])
+
+        return tiles
+
+    def get_current_tile(self)-> 'Tile':
         grid = GameController.get_instance().get_map()
         return grid[self.x][self.y]
 
@@ -70,6 +82,17 @@ class Buildable(ABC):
     def upgrade(self):
         pass
 
+    def get_adjacent_tiles(self, radius: int = 0):
+        tiles = set()
+        excluded_tiles = set()
+
+        for current_tile in self.get_all_building_tiles():
+            excluded_tiles.add(current_tile)
+            tiles.update(current_tile.get_adjacente_tiles(radius))
+
+        tiles.difference_update(excluded_tiles)
+        return list(tiles)
+
     def upgrade_to(self, class_name):
         """
             Copied from buidable/house.py
@@ -81,15 +104,9 @@ class Buildable(ABC):
 
     def to_ruin(self):
         from buildable.final.buildable.ruin import Ruin
-        from class_types.buildind_types import BuildingTypes
 
-        grid = GameController.get_instance().get_map()
-        build_size = self.get_building_size()
-
-        for x in range(build_size[0]):
-            for y in range(build_size[1]):
-                tile = grid[self.x - x][self.y + y]
-                tile.set_building(Ruin(self.x - x, self.y + y))
+        for tile in self.get_all_building_tiles():
+            tile.set_building(Ruin(tile.x, tile.y))
 
     def get_risk(self) -> Risk:
         return self.risk
