@@ -166,16 +166,29 @@ class Panel:
                                      disable_unselect=True, selectable=True, text_pop_up="Build Theatre")
         self.build__theatre.on_click(lambda: self.set_selected_tile(BuildingTypes.THEATRE))
 
-        self.build__market = Button((self.width - 49, 385 + 46), button_size,
+        self.build__commerce = Button((self.width - 49, 385 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
                                     disable_unselect=True, selectable=True, text_pop_up="Build Market")
-        self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET))
+        self.build__commerce.on_click2(lambda : self.set_sous_menu(True))
+
+        self.build__farm = Button((1000, 431), (200, 26), text="Wheat Farm", center_text=False, text_size=26)
+        self.build__farm.on_click(lambda: self.set_selected_tile(BuildingTypes.WHEAT_FARM),lambda : self.set_sous_menu(False))
+
+        self.build__market = Button((1000, 459), (200, 26), text="Market", center_text=False, text_size=26)
+        self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET), lambda: self.set_sous_menu(False))
+
+        self.build__granary = Button((1000, 487), (200, 26), text="Granary", center_text=False, text_size=26)
+        self.build__granary.on_click(lambda: self.set_selected_tile(BuildingTypes.GRANARY), lambda: self.set_sous_menu(False))
+
+        self.commerce_menu = Menu_Deroulant(self.build__commerce, [self.build__farm, self.build__granary, self.build__market], self.screen)
+        EventManager.register_menu_deroulant(self.commerce_menu)
+
 
         self.button_list = [
             self.destroy_tile, self.build__house, self.build__prefecture, self.build__road, self.build__senate,
-            self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__market,
+            self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__commerce,
             self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed, self.decrease_speed,
             self.file
         ]
@@ -217,8 +230,9 @@ class Panel:
             last_button_to_display.display(screen)
 
         if self.sous_menu:
-            if self.file_menu.get_isActive():
-                self.file_menu.display()
+            for sous_menu in [self.file_menu, self.commerce_menu]:
+                if sous_menu.get_isActive():
+                    sous_menu.display()
 
 
     def update(self):
@@ -254,9 +268,9 @@ class Panel:
                 if button != self.build__road:
                     button.set_selected(False)
         elif value == BuildingTypes.WHEAT_FARM or value == BuildingTypes.MARKET or value == BuildingTypes.GRANARY:
-            self.build__market.set_selected(True)
+            self.build__commerce.set_selected(True)
             for button in self.get_buttons_list():
-                if button != self.build__market:
+                if button != self.build__commerce:
                     button.set_selected(False)
         elif value == BuildingTypes.WELL:
             self.build__well.set_selected(True)
