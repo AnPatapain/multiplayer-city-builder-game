@@ -52,24 +52,7 @@ class Panel:
 
 
 
-        self.file_continue_game = Button((0,46),(200, 46), text="Continue Game", center_text=False, text_size=30)
-        self.file_continue_game.on_click(lambda : self.set_sous_menu(False))
-
-        self.file_save_game = Button((0, 92), (200, 46), text="Save Game", center_text=False, text_size=30)
-        self.file_save_game.on_click(lambda: backup_game.save_game("save.bin"))
-
-        self.file_load_game = Button((0, 138), (200, 46), text="Load Game", center_text=False, text_size=30)
-        self.file_load_game.on_click(lambda: backup_game.load_game("save.bin"),lambda : self.set_sous_menu(False))
-
-        self.file_exit_game = Button((0,184),(200, 46), text="Exit Game", center_text=False, text_size=30)
-        self.file_exit_game.on_click(lambda : pg.quit())
-
-        self.file_sous_menu_list = [self.file_continue_game, self.file_save_game, self.file_load_game, self.file_exit_game]
-
-        self.file = Button((0, 0), (100, 46), image=Textures.get_texture(SwitchViewButtonTypes.FILE_BUTTON), selectable=True)
-        self.file_menu = Menu_Deroulant(self.file, self.file_sous_menu_list, self.screen)
-        EventManager.register_menu_deroulant(self.file_menu)
-        self.file.on_click2(lambda : self.set_sous_menu(True))
+        #################################### BUTTONS ####################################################
 
         # Overlay button
         self.change_overlay = Button((self.width - 158, 49), (117,25), text_fn=Overlay.get_instance().get_name,
@@ -150,7 +133,7 @@ class Panel:
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED),
                                     disable_unselect=True, selectable=True, text_pop_up="Religion")
-        self.build__temple.on_click(lambda: self.set_selected_tile(BuildingTypes.TEMPLE))
+        self.build__temple.on_click2(lambda : self.set_sous_menu(True))
 
         self.build__school = Button((self.width - 150, 349 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
@@ -173,6 +156,24 @@ class Panel:
                                     disable_unselect=True, selectable=True, text_pop_up="Build Market")
         self.build__commerce.on_click2(lambda : self.set_sous_menu(True))
 
+        self.file = Button((0, 0), (100, 46), image=Textures.get_texture(SwitchViewButtonTypes.FILE_BUTTON), selectable=True)
+        self.file.on_click2(lambda: self.set_sous_menu(True))
+
+
+        self.button_list = [
+            self.destroy_tile, self.build__house, self.build__prefecture, self.build__road, self.build__senate,
+            self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__commerce,
+            self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed,
+            self.decrease_speed,
+            self.file
+        ]
+
+        for button in self.button_list:
+            EventManager.register_component(button)
+
+        #################################### MENUS ####################################################
+
+        #Commerce Menu
         self.build__farm = Button((1000, 431), (200, 26), text="Wheat Farm", center_text=False, text_size=26)
         self.build__farm.on_click(lambda: self.set_selected_tile(BuildingTypes.WHEAT_FARM),lambda : self.set_sous_menu(False))
 
@@ -185,18 +186,45 @@ class Panel:
         self.commerce_menu = Menu_Deroulant(self.build__commerce, [self.build__farm, self.build__granary, self.build__market], self.screen)
         EventManager.register_menu_deroulant(self.commerce_menu)
 
+        #File Menu
+        self.file_continue_game = Button((0, 46), (200, 46), text="Continue Game", center_text=False, text_size=30)
+        self.file_continue_game.on_click(lambda: self.set_sous_menu(False))
 
-        self.button_list = [
-            self.destroy_tile, self.build__house, self.build__prefecture, self.build__road, self.build__senate,
-            self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__commerce,
-            self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed, self.decrease_speed,
-            self.file
-        ]
+        self.file_save_game = Button((0, 92), (200, 46), text="Save Game", center_text=False, text_size=30)
+        self.file_save_game.on_click(lambda: backup_game.save_game("save.bin"))
 
-        for button in self.button_list:
-            EventManager.register_component(button)
+        self.file_load_game = Button((0, 138), (200, 46), text="Load Game", center_text=False, text_size=30)
+        self.file_load_game.on_click(lambda: backup_game.load_game("save.bin"), lambda: self.set_sous_menu(False))
 
-        # Selected building (defaultly, nothing is selected)
+        self.file_exit_game = Button((0, 184), (200, 46), text="Exit Game", center_text=False, text_size=30)
+        self.file_exit_game.on_click(lambda: pg.quit())
+
+        self.file_sous_menu_list = [self.file_continue_game, self.file_save_game, self.file_load_game,
+                                    self.file_exit_game]
+
+        self.file_menu = Menu_Deroulant(self.file, self.file_sous_menu_list, self.screen)
+        EventManager.register_menu_deroulant(self.file_menu)
+
+        #Religion Menu
+        self.ceres = Button((1000, 358), (200, 26), text="Ceres", center_text=False, text_size=26)
+        self.ceres.on_click(lambda: self.set_selected_tile(BuildingTypes.CERES), lambda: self.set_sous_menu(False))
+
+        self.mars = Button((1000, 386), (200, 26), text="Mars", center_text=False, text_size=26)
+        self.mars.on_click(lambda: self.set_selected_tile(BuildingTypes.MARS), lambda: self.set_sous_menu(False))
+
+        self.mercury = Button((1000, 414), (200, 26), text="Mercury", center_text=False, text_size=26)
+        self.mercury.on_click(lambda: self.set_selected_tile(BuildingTypes.MERCURY), lambda: self.set_sous_menu(False))
+
+        self.venus = Button((1000, 442), (200, 26), text="Venus", center_text=False, text_size=26)
+        self.venus.on_click(lambda: self.set_selected_tile(BuildingTypes.VENUS), lambda: self.set_sous_menu(False))
+
+        self.neptune = Button((1000, 470), (200, 26), text="Neptune", center_text=False, text_size=26)
+        self.neptune.on_click(lambda: self.set_selected_tile(BuildingTypes.NEPTUNE), lambda: self.set_sous_menu(False))
+
+        self.religion_menu = Menu_Deroulant(self.build__temple, [self.ceres, self.mars, self.mercury, self.venus, self.neptune], self.screen)
+        EventManager.register_menu_deroulant(self.religion_menu)
+
+        ################################"" Selected building (defaultly, nothing is selected)
         self.selected_tile = None
         self.panel_rects = [self.ressource_panel_rect, self.building_panel_rect]
 
@@ -230,7 +258,7 @@ class Panel:
             last_button_to_display.display(screen)
 
         if self.sous_menu:
-            for sous_menu in [self.file_menu, self.commerce_menu]:
+            for sous_menu in [self.file_menu, self.commerce_menu, self.religion_menu]:
                 if sous_menu.get_isActive():
                     sous_menu.display()
 

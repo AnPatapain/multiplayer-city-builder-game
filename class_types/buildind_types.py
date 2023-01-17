@@ -36,3 +36,9 @@ class BuildingTypes(Enum):
     WHEAT_SOIL_LEVEL_3 = 205
     WHEAT_SOIL_LEVEL_4 = 205
     WHEAT_SOIL_LEVEL_5 = 205
+
+    CERES = 206
+    MARS = 207
+    MERCURY = 208
+    VENUS = 209
+    NEPTUNE = 210
