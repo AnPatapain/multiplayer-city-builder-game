@@ -11,7 +11,10 @@ class SmallTent(House):
         return self.get_current_tile().get_water_access()
 
     def conditions_fulfilled(self) -> bool:
-        return True
+        if not super().conditions_fulfilled():
+            return False
+
+        return self.current_citizen > 0
 
     def upgrade(self):
         #prevent circular import

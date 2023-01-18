@@ -130,7 +130,6 @@ class Walker(ABC):
 
     def navigate_to(self, dest: list['Tile']):
         path = self.current_tile.find_path_to(dest, roads_only=self.roads_only)
-
         if not path:
             return False
         else:

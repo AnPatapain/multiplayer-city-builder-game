@@ -20,6 +20,8 @@ class BuildingTypes(Enum):
     BUILD_SIGN = 90
     RUINS = 91
     FIRE_RUINS = 92
+    ENTRY_FLAG = 93
+    LEAVE_FLAG = 94
 
 
     PELLE = 100 # i don't know the rule that we used to choose to number, I choose 100 but i don't know why i choose it : )
@@ -31,11 +33,6 @@ class BuildingTypes(Enum):
     WHEAT_FARM = 201
     MARKET = 202
 
-    WHEAT_SOIL_LEVEL_1 = 203
-    WHEAT_SOIL_LEVEL_2 = 204
-    WHEAT_SOIL_LEVEL_3 = 205
-    WHEAT_SOIL_LEVEL_4 = 205
-    WHEAT_SOIL_LEVEL_5 = 205
 
     CERES = 206
     MARS = 207

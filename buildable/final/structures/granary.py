@@ -11,37 +11,12 @@ class Granary(Structure):
         self.game_controller = GameController.get_instance()
         self.wheat_farm_tiles = []
 
-    def receive_wheat_from_farm_worker(self, wheat_quantity): self.wheat_stocked += wheat_quantity
+    def receive_wheat_from_farm_worker(self, wheat_quantity): 
+        self.wheat_stocked += wheat_quantity
     
-    def get_wheat_stocked(self): return self.wheat_stocked
-
-    # def get_all_farm_tiles(self): 
-    #     from buildable.final.structures.WheatFarm import WheatFarm
-
-    #     grid = self.game_controller.get_map()
-    #     self.wheat_farm_tiles = []
-
-    #     for row in grid:
-    #         for tile in row:
-    #             building = tile.get_building()
-    #             if isinstance(building, WheatFarm) and tile.get_show_tile():
-    #                 self.wheat_farm_tiles.append(building.get_current_tile())
-
-    #     return self.wheat_farm_tiles.copy()
-
-
-    # def new_walker(self):
-    #     if self.associated_walker:
-    #         print("A walker is already assigned to this building!")
-    #         return
-
-    #     tile = self.find_adjacent_road()
-    #     if tile:
-    #         self.associated_walker = Granary_worker(self)
-    #         self.associated_walker.spawn(tile)
-        
+    def get_wheat_stocked(self):
+        return self.wheat_stocked
 
     def update_day(self):
         super().update_day()
-        # if not self.associated_walker:
-            # self.new_walker()
+        

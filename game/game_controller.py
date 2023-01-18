@@ -91,6 +91,14 @@ class GameController:
     def update(self):
         self.increase_tick()
 
+    def map_has_senate(self):
+        for row in self.grid:
+            for tile in row:
+                if tile.get_building() and tile.get_building().get_build_type() == BuildingTypes.SENATE:
+                    return True
+
+        return False
+
     def increase_tick(self):
         if self.current_tick == 50:
             self.increase_day()
@@ -108,6 +116,11 @@ class GameController:
 
             case 3:
                 self.__calculate_actual_foods()
+
+        for row in self.get_map():
+            for tile in row:
+                if tile.get_building():
+                    tile.get_building().update_tick()
 
 
     def increase_day(self):
@@ -145,13 +158,14 @@ class GameController:
 
     def __calculate_actual_foods(self):
         from buildable.final.structures.granary import Granary
+        self.actual_foods = 0
+
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
-                if building and isinstance(building, Granary):
+                if building and isinstance(building, Granary) and tile.get_show_tile():
                     building: Granary = building
                     self.actual_foods += building.get_wheat_stocked()
-                    print("ACTUAL FOOD: ", self.actual_foods)
 
     def __calculate_water_access(self):
         wells = []
@@ -179,7 +193,7 @@ class GameController:
                 building = tile.get_building()
                 if building and isinstance(building, House):
                     house: House = building
-                    if not house.associated_walker and not house.is_full():
+                    if house.can_accept_new_migrant():
                         if migrant_ammount <= 4:
                             if house.empty_space() < migrant_ammount:
                                 house.spawn_migrant(house.empty_space())

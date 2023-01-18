@@ -54,7 +54,9 @@ buildable_size: dict[BuildingTypes | RoadTypes, tuple[int, int]] = {
     BuildingTypes.NEPTUNE: (2, 2),
     BuildingTypes.THEATRE: (3, 3),
     BuildingTypes.PELLE: (1, 1),
-    BuildingTypes.RUINS : (1,1),
-    BuildingTypes.FIRE_RUINS : (1 , 1),
+    BuildingTypes.RUINS: (1, 1),
+    BuildingTypes.FIRE_RUINS: (1, 1),
     RoadTypes.TL_TO_BR: (1, 1),
+    BuildingTypes.ENTRY_FLAG: (1, 1),
+    BuildingTypes.LEAVE_FLAG: (1, 1),
 }

@@ -9,6 +9,8 @@ from PIL import Image
 import game.utils as utils
 from buildable.buildable_datas import buildable_cost, buildable_size
 from buildable.final.buildable.big_rock import BigRock
+from buildable.final.buildable.entry_sign import EntrySign
+from buildable.final.buildable.leave_sign import LeaveSign
 from buildable.final.buildable.rock import Rock
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
@@ -228,11 +230,7 @@ class World:
         if self.builder.get_temp_tile_info() and not self.builder.get_in_build_action():
             temp_tile = self.builder.get_temp_tile_info()
 
-            isometric_coor_offset = [_offset(x, y) for x, y in temp_tile['isometric_coor']]
             (x, y) = temp_tile['render_img_coor']
-
-
-
 
             if temp_tile['isBuildable']:
                 texture = Textures.get_texture(temp_tile['name']).copy()
@@ -243,9 +241,7 @@ class World:
 
             y_size = buildable_size[temp_tile['name']][1]
             offset = _offset(x, y - texture.get_height() + (y_size * TILE_SIZE/2) + (TILE_SIZE/2))
-            #iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
             screen.blit(texture, offset)
-
 
 
 
@@ -386,10 +382,10 @@ class World:
                     case (161, 161, 161):
                         tile.set_building(Rock(x, y))
                         tile.set_random_texture_number(random.randint(0, 7))
-                    case (237, 28, 35):
-                        pass  # Red color, flag spawn
+                    case (237, 28, 36):
+                        tile.set_building(EntrySign(x, y))
                     case (111, 49, 152):
-                        pass  # Purple color, flag leave
+                        tile.set_building(LeaveSign(x, y))
                     case (153, 0, 48):
                         spawn_point = tile
                         pass  # Brown/Red, road spawn

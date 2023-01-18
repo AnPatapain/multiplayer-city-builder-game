@@ -8,3 +8,4 @@ class WalkerTypes(Enum):
     IMMIGRANT = 4
     GRANARY_WORKER = 5
     FARM_WORKER = 6
+    TAX_COLLECTOR = 7
