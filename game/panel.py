@@ -39,7 +39,7 @@ class Panel:
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 - 304, 0))
         self.ressource_panel.blit(Textures.get_texture(SwitchViewButtonTypes.DYNAMIC_DISPLAY), (1000 + 304, 0))
 
-    # Building panel in the right screen
+        # Building panel in the right screen
         self.building_panel = pg.Surface((PANEL_WIDTH, self.height)).convert()
         self.building_panel_rect = self.building_panel.get_rect(topleft=(self.width - PANEL_WIDTH, TOPBAR_HEIGHT))
         self.building_panel.fill(self.building_panel_color)
@@ -55,8 +55,8 @@ class Panel:
         #################################### BUTTONS ####################################################
 
         # Overlay button
-        self.change_overlay = Button((self.width - 158, 49), (117,25), text_fn=Overlay.get_instance().get_name,
-                                     center_text=True,text_size=30)
+        self.change_overlay = Button((self.width - 158, 49), (117, 25), text_fn=Overlay.get_instance().get_name,
+                                     center_text=True, text_size=30)
         self.change_overlay.on_click(lambda: Overlay.get_instance().set_overlay_types())
 
         button_size = (39, 26)
@@ -102,7 +102,7 @@ class Panel:
                                            disable_unselect=True, selectable=True, text_pop_up="Build Engineer post")
         self.build__engineer_post.on_click(lambda: self.set_selected_tile(BuildingTypes.ENGINEERS_POST))
 
-        self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), (24,24),
+        self.increase_speed = Button((self.width - 149, 490 + TOPBAR_HEIGHT), (24, 24),
                                      image=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED),
                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_HOVER),
                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.INCREASE_SPEED_SELECTED))
@@ -133,7 +133,7 @@ class Panel:
                                     image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_HOVER),
                                     image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON10_SELECTED),
                                     disable_unselect=True, selectable=True, text_pop_up="Religion")
-        self.build__temple.on_click2(lambda : self.set_sous_menu(True))
+        self.build__temple.on_click2(lambda: self.set_sous_menu(True))
 
         self.build__school = Button((self.width - 150, 349 + 46), button_size,
                                     image=Textures.get_texture(SwitchViewButtonTypes.BUTTON11),
@@ -150,11 +150,11 @@ class Panel:
         self.build__theatre.on_click(lambda: self.set_selected_tile(BuildingTypes.THEATRE))
 
         self.build__commerce = Button((self.width - 49, 385 + 46), button_size,
-                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
-                                    image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
-                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
-                                    disable_unselect=True, selectable=True, text_pop_up="Build Market")
-        self.build__commerce.on_click2(lambda : self.set_sous_menu(True))
+                                      image=Textures.get_texture(SwitchViewButtonTypes.BUTTON16),
+                                      image_hover=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_HOVER),
+                                      image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON16_SELECTED),
+                                      disable_unselect=True, selectable=True, text_pop_up="Build Market")
+        self.build__commerce.on_click2(lambda: self.set_sous_menu(True))
 
         self.file = Button((0, 0), (100, 46), image=Textures.get_texture(SwitchViewButtonTypes.FILE_BUTTON), selectable=True)
         self.file.on_click2(lambda: self.set_sous_menu(True))
@@ -173,20 +173,20 @@ class Panel:
 
         #################################### MENUS ####################################################
 
-        #Commerce Menu
-        self.build__farm = Button((1000, 431), (200, 26), text="Wheat Farm", center_text=False, text_size=26)
-        self.build__farm.on_click(lambda: self.set_selected_tile(BuildingTypes.WHEAT_FARM),lambda : self.set_sous_menu(False))
+        # Commerce Menu
+        self.build__farm = Button((self.width - 370, 431), (200, 26), text="Wheat Farm", center_text=False, text_size=26)
+        self.build__farm.on_click(lambda: self.set_selected_tile(BuildingTypes.WHEAT_FARM), lambda: self.set_sous_menu(False))
 
-        self.build__market = Button((1000, 459), (200, 26), text="Market", center_text=False, text_size=26)
+        self.build__market = Button((self.width - 370, 459), (200, 26), text="Market", center_text=False, text_size=26)
         self.build__market.on_click(lambda: self.set_selected_tile(BuildingTypes.MARKET), lambda: self.set_sous_menu(False))
 
-        self.build__granary = Button((1000, 487), (200, 26), text="Granary", center_text=False, text_size=26)
+        self.build__granary = Button((self.width - 370, 487), (200, 26), text="Granary", center_text=False, text_size=26)
         self.build__granary.on_click(lambda: self.set_selected_tile(BuildingTypes.GRANARY), lambda: self.set_sous_menu(False))
 
         self.commerce_menu = Menu_Deroulant(self.build__commerce, [self.build__farm, self.build__granary, self.build__market], self.screen)
         EventManager.register_menu_deroulant(self.commerce_menu)
 
-        #File Menu
+        # File Menu
         self.file_continue_game = Button((0, 46), (200, 46), text="Continue Game", center_text=False, text_size=30)
         self.file_continue_game.on_click(lambda: self.set_sous_menu(False))
 
@@ -205,20 +205,20 @@ class Panel:
         self.file_menu = Menu_Deroulant(self.file, self.file_sous_menu_list, self.screen)
         EventManager.register_menu_deroulant(self.file_menu)
 
-        #Religion Menu
-        self.ceres = Button((1000, 358), (200, 26), text="Ceres", center_text=False, text_size=26)
+        # Religion Menu
+        self.ceres = Button((self.width - 370, 358), (200, 26), text="Ceres", center_text=False, text_size=26)
         self.ceres.on_click(lambda: self.set_selected_tile(BuildingTypes.CERES), lambda: self.set_sous_menu(False))
 
-        self.mars = Button((1000, 386), (200, 26), text="Mars", center_text=False, text_size=26)
+        self.mars = Button((self.width - 370, 386), (200, 26), text="Mars", center_text=False, text_size=26)
         self.mars.on_click(lambda: self.set_selected_tile(BuildingTypes.MARS), lambda: self.set_sous_menu(False))
 
-        self.mercury = Button((1000, 414), (200, 26), text="Mercury", center_text=False, text_size=26)
+        self.mercury = Button((self.width - 370, 414), (200, 26), text="Mercury", center_text=False, text_size=26)
         self.mercury.on_click(lambda: self.set_selected_tile(BuildingTypes.MERCURY), lambda: self.set_sous_menu(False))
 
-        self.venus = Button((1000, 442), (200, 26), text="Venus", center_text=False, text_size=26)
+        self.venus = Button((self.width - 370, 442), (200, 26), text="Venus", center_text=False, text_size=26)
         self.venus.on_click(lambda: self.set_selected_tile(BuildingTypes.VENUS), lambda: self.set_sous_menu(False))
 
-        self.neptune = Button((1000, 470), (200, 26), text="Neptune", center_text=False, text_size=26)
+        self.neptune = Button((self.width - 370, 470), (200, 26), text="Neptune", center_text=False, text_size=26)
         self.neptune.on_click(lambda: self.set_selected_tile(BuildingTypes.NEPTUNE), lambda: self.set_sous_menu(False))
 
         self.religion_menu = Menu_Deroulant(self.build__temple, [self.ceres, self.mars, self.mercury, self.venus, self.neptune], self.screen)
@@ -316,8 +316,3 @@ class Panel:
 
     def set_sous_menu(self, status):
         self.sous_menu = status
-
-
-
-
-
