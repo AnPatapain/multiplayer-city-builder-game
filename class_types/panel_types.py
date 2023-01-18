@@ -11,6 +11,7 @@ class SwitchViewButtonTypes(Enum):
     TOP_PANNEL = 3
     DYNAMIC_DISPLAY = 4
     BARRE = 5
+    FILE_BUTTON = 100
     MINI_SCULPTURE = 6
     JULIUS = 7
     BUTTON1 = 8
@@ -41,7 +42,7 @@ class SwitchViewButtonTypes(Enum):
     BUTTON6_SELECTED = 31
     BUTTON5_HOVER = 32
     BUTTON5_SELECTED = 33
-    BUTTON14_HOVER = 46
+    BUTTON14_HOVER = 1000
     BUTTON14_SELECTED = 47
     BUTTON15_HOVER = 34
     BUTTON15_SELECTED = 35

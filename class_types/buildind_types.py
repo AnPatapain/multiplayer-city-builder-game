@@ -33,3 +33,9 @@ class BuildingTypes(Enum):
     WHEAT_FARM = 201
     MARKET = 202
 
+
+    CERES = 206
+    MARS = 207
+    MERCURY = 208
+    VENUS = 209
+    NEPTUNE = 210
