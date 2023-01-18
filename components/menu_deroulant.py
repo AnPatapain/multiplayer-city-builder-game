@@ -17,12 +17,16 @@ class Menu_Deroulant:
         self.position = ()
         self.calcul_taille_position()
         self.rectangle = pygame.Rect(self.position[0], self.position[1], self.taille[0], self.taille[1])
+        self.unselect_function = lambda: True
 
     def get_sous_menu_buttons(self):
         return self.sous_menu_buttons
 
     def get_isActive(self):
         return self.isActive
+
+    def on_unselect(self, func):
+        self.unselect_function = func
 
     def set_isActive(self):
         self.isActive = not self.isActive
@@ -32,6 +36,7 @@ class Menu_Deroulant:
             if self.isActive:
                 EventManager.register_component(button)
             else:
+                self.unselect_function()
                 button.sous_menu_printing = False
                 EventManager.remove_component(button)
 

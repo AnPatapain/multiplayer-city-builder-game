@@ -256,7 +256,7 @@ class World:
         temp_tile = self.builder.get_temp_tile_info()
         if self.builder.get_in_build_action() and self.in_map(start_point) and self.in_map(end_point) and temp_tile:
             # Since we use a pathfinding algorithm to build roads, we need to handle their render differently
-            if self.panel.selected_tile == RoadTypes.TL_TO_BR:
+            if self.panel.get_selected_tile() == RoadTypes.TL_TO_BR:
                 start = grid[start_point[1]][start_point[0]]
                 if not start.is_buildable() and not start.get_road():
                     return

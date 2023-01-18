@@ -184,6 +184,7 @@ class Panel:
         self.build__granary.on_click(lambda: self.set_selected_tile(BuildingTypes.GRANARY), lambda: self.set_sous_menu(False))
 
         self.commerce_menu = Menu_Deroulant(self.build__commerce, [self.build__farm, self.build__granary, self.build__market], self.screen)
+        self.commerce_menu.on_unselect(lambda: self.build__commerce.set_selected(False) if self.get_selected_tile() is None else True)
         EventManager.register_menu_deroulant(self.commerce_menu)
 
         # File Menu
@@ -222,6 +223,7 @@ class Panel:
         self.neptune.on_click(lambda: self.set_selected_tile(BuildingTypes.NEPTUNE), lambda: self.set_sous_menu(False))
 
         self.religion_menu = Menu_Deroulant(self.build__temple, [self.ceres, self.mars, self.mercury, self.venus, self.neptune], self.screen)
+        self.religion_menu.on_unselect(lambda: self.build__temple.set_selected(False) if self.get_selected_tile() is None else True)
         EventManager.register_menu_deroulant(self.religion_menu)
 
         ################################"" Selected building (defaultly, nothing is selected)
@@ -274,37 +276,38 @@ class Panel:
 
     def set_selected_tile(self, value):
         self.selected_tile = value
-        print(value)
-        if value == BuildingTypes.VACANT_HOUSE:
+
+        if value is None:
+            for button in self.get_buttons_list():
+                button.set_selected(False)
+        elif value == BuildingTypes.VACANT_HOUSE:
+            for button in self.get_buttons_list():
+                button.set_selected(False)
             self.build__house.set_selected(True)
-            for button in self.get_buttons_list():
-                if button != self.build__house:
-                    button.set_selected(False)
         elif value == BuildingTypes.PELLE:
+            for button in self.get_buttons_list():
+                button.set_selected(False)
             self.destroy_tile.set_selected(True)
-            for button in self.get_buttons_list():
-                if button != self.destroy_tile:
-                    button.set_selected(False)
         elif value == BuildingTypes.PREFECTURE:
+            for button in self.get_buttons_list():
+                button.set_selected(False)
             self.build__prefecture.set_selected(True)
+        elif value == RoadTypes.TL_TO_BR:
             for button in self.get_buttons_list():
-                if button != self.build__prefecture:
-                    button.set_selected(False)
-        elif value == 6:
+                button.set_selected(False)
             self.build__road.set_selected(True)
+        elif value in [BuildingTypes.WHEAT_FARM, BuildingTypes.MARKET, BuildingTypes.GRANARY]:
             for button in self.get_buttons_list():
-                if button != self.build__road:
-                    button.set_selected(False)
-        elif value == BuildingTypes.WHEAT_FARM or value == BuildingTypes.MARKET or value == BuildingTypes.GRANARY:
+                button.set_selected(False)
             self.build__commerce.set_selected(True)
+        elif value in [BuildingTypes.VENUS, BuildingTypes.CERES, BuildingTypes.MARS, BuildingTypes.MERCURY, BuildingTypes.NEPTUNE]:
             for button in self.get_buttons_list():
-                if button != self.build__commerce:
-                    button.set_selected(False)
+                button.set_selected(False)
+            self.build__temple.set_selected(True)
         elif value == BuildingTypes.WELL:
-            self.build__well.set_selected(True)
             for button in self.get_buttons_list():
-                if button != self.build__well:
-                    button.set_selected(False)
+                button.set_selected(False)
+            self.build__well.set_selected(True)
 
     def get_panel_rects(self):
         return self.panel_rects
