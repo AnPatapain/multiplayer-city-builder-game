@@ -55,8 +55,9 @@ class WheatFarm(Structure):
         #Spawn the farm worker
         if not self.associated_walker:
             self.new_walker()
-
-        self.relax_days -= 1
+        if self.relax_days > 0:
+            self.relax_days -= 1
+        # print("ready to produce: ", self.is_upgradable())
 
         if self.is_upgradable():
             self.produce_wheat()

@@ -32,7 +32,7 @@ class Farm_worker(Walker):
         from buildable.final.structures.WheatFarm import WheatFarm
         myFarm: WheatFarm = self.associated_building
         self.wheat_in_hand = myFarm.give_wheat_to_worker()
-        print("Weed in my hand", self.wheat_in_hand)  
+        # print("Weed in my hand", self.wheat_in_hand)  
 
 
     def update(self):
@@ -43,24 +43,28 @@ class Farm_worker(Walker):
         if len(self.current_granary_list) == 0:
             self.get_all_granary_tiles()
             
-
+        print(len(self.current_granary_list))
+        
         if len(self.current_granary_list) != 0:
             if self.current_action == Actions.IDLE:
-                self.navigate_to(self.current_granary_list[0].get_building().get_all_building_tiles())
-                self.current_action = Actions.IN_THE_WAY_TO_GRANARY # update the current action
+                if self.current_granary_list[0].get_building():
+                    self.navigate_to(self.current_granary_list[0].get_building().get_all_building_tiles())
+                    self.current_action = Actions.IN_THE_WAY_TO_GRANARY # update the current action
+                else: 
+                    self.current_granary_list.pop(0)
 
 
     def destination_reached(self):
         # print(self.current_tile.get_building(), self.current_tile.get_show_tile())
         building = self.current_tile.get_building()
 
-        if building.get_build_type() == BuildingTypes.GRANARY:
+        if building and building.get_build_type() == BuildingTypes.GRANARY:
             self.move_wheat_in_hand_to_granary(building)
             self.navigate_to(self.associated_building.get_all_building_tiles()) #back to the farm
             self.current_action = Actions.IN_THE_WAY_TO_FARM
             tile_poped = self.current_granary_list.pop(0)
 
-        elif building.get_build_type() == BuildingTypes.WHEAT_FARM:
+        elif building and building.get_build_type() == BuildingTypes.WHEAT_FARM:
             self.get_food_from_associated_farm()
             self.current_action = Actions.IDLE
 
