@@ -42,9 +42,8 @@ class Farm_worker(Walker):
 
         if len(self.current_granary_list) == 0:
             self.get_all_granary_tiles()
-            
-        print(len(self.current_granary_list))
         
+
         if len(self.current_granary_list) != 0:
             if self.current_action == Actions.IDLE:
                 if self.current_granary_list[0].get_building():
