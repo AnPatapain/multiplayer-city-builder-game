@@ -69,6 +69,12 @@ class WheatFarm(Structure):
 
         tile = self.find_adjacent_road()
         if tile:
-            self.associated_walker = Farm_worker(self)
-            self.associated_walker.spawn(tile)
-            self.associated_walker.get_food_from_associated_farm()
+            new_worker = Farm_worker(self)
+            dest = new_worker.find_granary()
+            if dest:
+                self.associated_walker = new_worker
+                self.associated_walker.spawn(tile)
+                self.associated_walker.navigate_to(dest.get_all_building_tiles())
+                self.associated_walker.update_direction()
+                self.associated_walker.get_food_from_associated_farm()
+
