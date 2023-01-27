@@ -16,33 +16,33 @@ class WheatFarm(Structure):
         
 
     def get_texture(self):
-        if self.atteindre_max_quantity():
+        if self.is_fully_grown():
             return Textures.get_texture(BuildingTypes.WHEAT_FARM, 4)
         return Textures.get_texture(BuildingTypes.WHEAT_FARM, self.wheat_quantity//20)
 
     def get_delete_texture(self):
-        if self.atteindre_max_quantity():
+        if self.is_fully_grown():
             return Textures.get_delete_texture(BuildingTypes.WHEAT_FARM, 4)
         return Textures.get_delete_texture(BuildingTypes.WHEAT_FARM, self.wheat_quantity//20)
 
-    def get_wheat_quantities(self): return self.wheat_quantity
+    def get_wheat_quantity(self): return self.wheat_quantity
 
     def produce_wheat(self):
         self.wheat_quantity += 20
 
-    def atteindre_max_quantity(self):
+    def is_fully_grown(self):
         return self.wheat_quantity == self.max_wheat
 
-    def is_upgradable(self):
+    def can_produce_wheat(self):
         '''
         TODO: check whether the workers in Wheat Farm has enough food to work (I think so). 
             For now return True if we don't produce enough wheat 
         '''
-        return (not self.atteindre_max_quantity() and self.relax_days == 0)
+        return (not self.is_fully_grown() and self.relax_days == 0)
 
 
     def give_wheat_to_worker(self):
-        if self.atteindre_max_quantity():
+        if self.is_fully_grown():
             given_wheat_quantity = self.wheat_quantity
             self.wheat_quantity = 0
             return given_wheat_quantity
@@ -52,16 +52,17 @@ class WheatFarm(Structure):
             
     def update_day(self):
         super().update_day()
-        #Spawn the farm worker
-        if not self.associated_walker:
-            self.new_walker()
         if self.relax_days > 0:
             self.relax_days -= 1
-        # print("ready to produce: ", self.is_upgradable())
 
-        if self.is_upgradable():
+        if self.can_produce_wheat():
             self.produce_wheat()
             self.relax_days = 10
+        else:
+            if self.is_fully_grown():
+                # Spawn the farmworker
+                if not self.associated_walker:
+                    self.new_walker()
 
 
     def new_walker(self):
