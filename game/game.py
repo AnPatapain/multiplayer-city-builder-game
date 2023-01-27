@@ -1,12 +1,9 @@
-import random
 import time
 import traceback
-
 import numpy
 import pygame as pg
 
 from class_types.panel_types import SwitchViewButtonTypes
-from class_types.tile_types import TileTypes
 from components.button import Button
 from events.event_manager import EventManager
 from sounds.sounds import SoundManager
@@ -16,9 +13,9 @@ from .utils import draw_text
 from .map_controller import MapController
 from .panel import Panel
 from .game_controller import GameController
-from threading import Thread,Event
+from threading import Thread, Event
 
-def my_thread(func,event : Event):
+def my_thread(func, event: Event):
     fps_moyen = [0]
     try:
         while not event.is_set():
@@ -48,7 +45,7 @@ class Game:
         self.world = World(self.width, self.height, self.panel)
 
         self.thread_event = Event()
-        self.draw_thread = Thread(None, my_thread, "1",[self.display,self.thread_event])
+        self.draw_thread = Thread(None, my_thread, "1", [self.display, self.thread_event])
 
         self.pause_game = Button((self.width - 50, 490 + 46), (39, 26),
                                  image=Textures.get_texture(SwitchViewButtonTypes.PAUSE_GAME), )
@@ -81,7 +78,7 @@ class Game:
 
                 time.sleep(1/targeted_ticks_per_seconds)
 
-        #Main programm exeption stop the thread and show the traceback
+        # Main programm exeption stop the thread and show the traceback
         except Exception:
             self.thread_event.set()
             self.draw_thread.join()
