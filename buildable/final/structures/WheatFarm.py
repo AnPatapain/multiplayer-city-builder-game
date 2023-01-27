@@ -1,9 +1,6 @@
 from buildable.structure import Structure
 from class_types.buildind_types import BuildingTypes
 from game.textures import Textures
-from game.setting import *
-import pygame as pg
-from game.game_controller import GameController
 from walkers.final.farm_worker import Farm_worker
 
 class WheatFarm(Structure):
@@ -74,3 +71,4 @@ class WheatFarm(Structure):
         if tile:
             self.associated_walker = Farm_worker(self)
             self.associated_walker.spawn(tile)
+            self.associated_walker.get_food_from_associated_farm()
