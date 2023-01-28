@@ -9,3 +9,5 @@ class WalkerTypes(Enum):
     GRANARY_WORKER = 5
     FARM_WORKER = 6
     TAX_COLLECTOR = 7
+
+    PREFET_EXTINGUISHING_FIRE = 8

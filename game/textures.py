@@ -566,6 +566,16 @@ class Textures:
                     11: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00707.png')).convert_alpha(screen),
                 },
             },
+            WalkerTypes.PREFET_EXTINGUISHING_FIRE: {
+                OrientationTypes.BOTTOM_RIGHT: {
+                    0: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00865.png')).convert_alpha(screen),
+                    1: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00873.png')).convert_alpha(screen),
+                    2: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00881.png')).convert_alpha(screen),
+                    3: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00889.png')).convert_alpha(screen),
+                    4: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00897.png')).convert_alpha(screen),
+                    5: pg.image.load(os.path.join(IMAGE_PATH, 'citizen02_00905.png')).convert_alpha(screen),
+                },
+            },
             WalkerTypes.ENGINEER: {
                 OrientationTypes.TOP_LEFT: {
                     0: pg.image.load(os.path.join(IMAGE_PATH, 'Citizen01_01143.png')).convert_alpha(screen),

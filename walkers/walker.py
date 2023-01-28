@@ -44,13 +44,6 @@ class Walker(ABC):
     def go_to_next_tile(self):
         # If max_walk_distance was set we must check if the current walk distance reach it or not if it does navigate the walker to its building
         if self.max_walk_distance != -1:
-            if self.walk_distance == self.max_walk_distance:
-                self.walk_distance = -1
-                res = self.navigate_to(self.associated_building.get_all_building_tiles())
-                if not res:
-                    self.delete()
-                    return
-
             if len(self.path_to_destination) == 0:
                 self.walk_distance += 1
 
@@ -66,6 +59,9 @@ class Walker(ABC):
 
         self.next_tile = self.find_next_tile()
         self.update_direction()
+
+    def on_walk_distance_reached(self):
+        pass
 
     def find_next_tile(self) -> 'Tile':
         if self.current_tile == self.destination:
@@ -125,6 +121,15 @@ class Walker(ABC):
             self.go_to_next_tile()
             self.walk_progression = -15
 
+        if self.walk_progression == 0 and self.walk_distance != -1:
+            if self.walk_distance == self.max_walk_distance:
+                self.on_walk_distance_reached()
+                self.walk_distance = -1
+                res = self.navigate_to(self.associated_building.get_all_building_tiles())
+                if not res:
+                    self.delete()
+                    return
+
         self.animation_frame += 0.3
         self.walk_progression += 1
 
@@ -135,6 +140,9 @@ class Walker(ABC):
         else:
             self.destination = path[-1]
             self.path_to_destination = path
-            # Remove the start of the path, since we are already here
-            # self.path_to_destination.pop(0)
+            self.path_to_destination.pop(0)
+            self.next_tile = self.path_to_destination.pop(0)
+            self.previous_tile = self.current_tile
+            self.update_direction()
+
             return True

@@ -22,7 +22,7 @@ class Ruin(Buildable):
     def update_day(self):
         if self.is_on_fire:
             self.count += 1
-            if self.count > 3:
+            if self.count > 10:
                 self.is_on_fire = False
 
     def get_texture_index(self):
