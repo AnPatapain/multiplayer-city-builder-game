@@ -1,5 +1,6 @@
 import pygame as pg
 
+import backup_game
 from components import button
 from events.event_manager import EventManager
 from game.utils import draw_text
@@ -93,11 +94,13 @@ class Menu:
             self.button__exit.display(self.screen)
         if self.is_load_menu() and not self.main_menu:
             draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
+            print(backup_game.list_fichiers)
             self.save1.display(self.screen)
             self.save2.display(self.screen)
             self.save3.display(self.screen)
             self.save4.display(self.screen)
             self.come_back_to_main_menu.display(self.screen)
+            self.event_load_menu()
 
 
 
@@ -137,6 +140,10 @@ class Menu:
     def event_load_menu(self):
         EventManager.clear_any_input()
         self.main_menu = False
+        EventManager.remove_component(self.button__start_new_career)
+        EventManager.remove_component(self.button__load_saved_game)
+        EventManager.remove_component(self.button__options)
+        EventManager.remove_component(self.button__exit)
         EventManager.register_component(self.save1)
         EventManager.register_component(self.save2)
         EventManager.register_component(self.save3)
@@ -167,3 +174,4 @@ class Menu:
     def set_main_menu(self):
         self.main_menu = True
         self.loading_menu = False
+        self.skip_splashscreen()

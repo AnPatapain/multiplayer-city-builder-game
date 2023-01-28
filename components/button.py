@@ -55,8 +55,8 @@ class Button(Component):
     def hover(self):
         if not self.is_hovered() and not self.is_disabled():
             self.bg_color = HOVER_COLOR
-            if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
-                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
+            #if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
+                #pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
             self.hovered = True
 
 
@@ -64,8 +64,8 @@ class Button(Component):
     def not_hover(self):
         if self.is_hovered() and not self.is_disabled():
             self.bg_color = BASE_COLOR
-            if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
-                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
+            #if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
+                #pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
             self.hovered = False
 
     def set_margin(self, margin: int):
