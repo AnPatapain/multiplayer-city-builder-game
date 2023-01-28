@@ -68,7 +68,6 @@ class GameController:
 
     def new_building(self, building: 'Buildable'):
         self.denier -= buildable_cost[building.get_build_type()]
-        building.on_build_action()
 
     def has_enough_denier(self, building_type: 'BuildingTypes'):
         return buildable_cost[building_type] <= self.denier

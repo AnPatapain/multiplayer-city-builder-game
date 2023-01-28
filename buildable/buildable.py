@@ -59,10 +59,6 @@ class Buildable(ABC):
     def get_build_type(self):
         return self.build_type
 
-    def on_build_action(self):
-        print("FIXME: method on_build_action not implemented!")
-        pass
-
     def destroy(self):
         if self.associated_walker:
             self.associated_walker.delete()
