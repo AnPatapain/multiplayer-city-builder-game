@@ -1,10 +1,14 @@
-from buildable.buildable import Buildable
+from typing import TYPE_CHECKING
+
+from buildable.final.structures.granary import Granary
 from class_types.buildind_types import BuildingTypes
-from buildable.house import House
 from class_types.walker_types import WalkerTypes
 from game.game_controller import GameController
 from walkers.walker import Walker
 from enum import Enum
+
+if TYPE_CHECKING:
+    from buildable.final.structures.WheatFarm import WheatFarm
 
 class Actions(Enum):
     IDLE = 0
@@ -13,13 +17,29 @@ class Actions(Enum):
 
 
 class Farm_worker(Walker):
-    def __init__(self, associated_building: Buildable):
+    def __init__(self, associated_building: 'WheatFarm'):
         super().__init__(WalkerTypes.FARM_WORKER, associated_building, roads_only=True)
+        self.associated_building: 'WheatFarm' = associated_building
         self.game_controller = GameController.get_instance()
         self.current_action = Actions.IDLE
         self.wheat_in_hand = 0
         self.current_granary_list = [] # list of farm tile
 
+
+    def find_granary(self) -> Granary:
+        grid = self.game_controller.get_map()
+
+        candidates: list[Granary] = []
+        for row in grid:
+            for tile in row:
+                if tile.get_building() and tile.get_building().get_build_type() == BuildingTypes.GRANARY and tile.get_show_tile():
+                    candidates.append(tile.get_building())
+
+        spawn_point = self.associated_building.find_adjacent_road()
+        for candidate in candidates:
+            path = spawn_point.find_path_to(candidate.get_all_building_tiles(), roads_only=True)
+            if path:
+                return candidate
 
     def move_wheat_in_hand_to_granary(self, granary):
         from buildable.final.structures.granary import Granary
@@ -29,40 +49,37 @@ class Farm_worker(Walker):
 
 
     def get_food_from_associated_farm(self):
-        from buildable.final.structures.WheatFarm import WheatFarm
-        myFarm: WheatFarm = self.associated_building
-        self.wheat_in_hand = myFarm.give_wheat_to_worker()
-        print("Weed in my hand", self.wheat_in_hand)  
+        self.wheat_in_hand = self.associated_building.give_wheat_to_worker()
 
 
     def update(self):
-        from buildable.final.structures.WheatFarm import WheatFarm
         super().update()
-        myFarm: WheatFarm = self.associated_building
 
         if len(self.current_granary_list) == 0:
             self.get_all_granary_tiles()
-            
+        
 
         if len(self.current_granary_list) != 0:
             if self.current_action == Actions.IDLE:
-                self.navigate_to(self.current_granary_list[0].get_building().get_all_building_tiles())
-                self.current_action = Actions.IN_THE_WAY_TO_GRANARY # update the current action
+                if self.current_granary_list[0].get_building():
+                    self.navigate_to(self.current_granary_list[0].get_building().get_all_building_tiles())
+                    self.current_action = Actions.IN_THE_WAY_TO_GRANARY # update the current action
+                else: 
+                    self.current_granary_list.pop(0)
 
 
     def destination_reached(self):
         # print(self.current_tile.get_building(), self.current_tile.get_show_tile())
         building = self.current_tile.get_building()
 
-        if building.get_build_type() == BuildingTypes.GRANARY:
+        if building and building.get_build_type() == BuildingTypes.GRANARY:
             self.move_wheat_in_hand_to_granary(building)
             self.navigate_to(self.associated_building.get_all_building_tiles()) #back to the farm
             self.current_action = Actions.IN_THE_WAY_TO_FARM
             tile_poped = self.current_granary_list.pop(0)
 
-        elif building.get_build_type() == BuildingTypes.WHEAT_FARM:
-            self.get_food_from_associated_farm()
-            self.current_action = Actions.IDLE
+        elif building and building.get_build_type() == BuildingTypes.WHEAT_FARM:
+            self.delete()
 
     def get_all_granary_tiles(self): 
         from buildable.final.structures.granary import Granary

@@ -1,11 +1,6 @@
-from buildable.buildable import Buildable
-from class_types.buildind_types import BuildingTypes
-from buildable.house import House
 from buildable.structure import Structure
 from class_types.walker_types import WalkerTypes
 from walkers.walker import Walker
-from game.textures import Textures
-from buildable.final.structures.WheatFarm import WheatFarm
 from enum import Enum
 
 class Actions(Enum):
@@ -15,7 +10,7 @@ class Actions(Enum):
 
 
 class Granary_worker(Walker):
-    def __init__(self, associated_building: Buildable):
+    def __init__(self, associated_building: Structure):
         super().__init__(WalkerTypes.GRANARY_WORKER, associated_building, roads_only=True)
         self.current_action = Actions.IDLE
         self.wheat_in_hand = 0

@@ -82,19 +82,19 @@ class MiniMap:
     def get_color(self, tile: Tile) -> tuple[int, int, int]:
         b = tile.get_building()
         if b:
-            if b.build_type == BuildingTypes.ROCK:
-                return (96, 96, 96)
+            if b.build_type in [BuildingTypes.ROCK, BuildingTypes.BIG_ROCK]:
+                return (120, 120, 120)  # Gray
             if b.build_type == BuildingTypes.TREE:
-                return (204, 255, 204)
-            return (255, 255, 0)  # yellow
+                return (0, 100, 0)  # Dark green
+            return (255, 140, 0)  # Orange
 
         if tile.get_road():
-            return (153, 76, 0)  # brown
+            return (153, 76, 0)  # Brown
 
         match tile.type:
             case TileTypes.WATER:
-                return (102, 178, 255)  # blue
+                return (0, 92, 184)  # Blue
             case TileTypes.WHEAT:
-                return (204, 204, 0)  # Bold yellow
+                return (220, 220, 0)  # Bold yellow
             case TileTypes.GRASS:
-                return (76, 153, 0)
+                return (76, 153, 0)  # Green
