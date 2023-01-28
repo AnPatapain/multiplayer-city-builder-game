@@ -19,7 +19,7 @@ class State(Enum):
 
 class Prefet(Walker):
     def __init__(self, associated_building: Buildable):
-        super().__init__(WalkerTypes.PREFET, associated_building, max_walk_distance=10, roads_only=True)
+        super().__init__(WalkerTypes.PREFET, associated_building, max_walk_distance=30, roads_only=True)
         self.state = State.PATROL
         self.building_being_extinguished: Optional['Buildable'] = None
         self.extinguish_progress = 0
