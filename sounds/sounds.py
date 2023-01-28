@@ -5,8 +5,13 @@ class SoundManager:
     def __init__(self):
         pg.mixer.init(44100, -16, 2, 2048)
         self.sounds = {
-            'menu_demarrer': pg.mixer.Sound("sounds/mp3/Rome1.mp3"),
-            'debut_jeu': pg.mixer.Sound('sounds/mp3/Rome1.mp3')
+            'bouton_hover': pg.mixer.Sound("sounds/wavs/ICON1.WAV"),
+            'bouton_select': pg.mixer.Sound('sounds/wavs/ARROW.WAV'),
+            'ecoulement_batiment': pg.mixer.Sound('sounds/wavs/EXPLOD1.WAV'),
+            'batiment_en_feu': pg.mixer.Sound('sounds/wavs/burning_ruin.wav'),
+            'build_action': pg.mixer.Sound('sounds/wavs/BUILD1.WAV'),
+            'fire_splash': pg.mixer.Sound('sounds/wavs/Fire_splash.wav'),
+
         }
 
     def play(self, name):

@@ -66,10 +66,13 @@ class Menu:
         self.screen.blit(self.graphics["splash"], (0, 0))
         pg.display.flip()
 
+        pg.mixer.music.load('sounds/wavs/ROME4.WAV')
+        pg.mixer.music.set_volume(0.6)
+        pg.mixer.music.play(0, 0, 2000)
+
 
     def run(self):
         EventManager.handle_events()
-
         if self.is_splashscreen_skipped():
             self.affichage()
 
@@ -127,6 +130,7 @@ class Menu:
 
     def set_inactive(self):
         self.active = False
+        pg.mixer.music.stop()
 
     def skip_splashscreen(self):
         EventManager.clear_any_input()

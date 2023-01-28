@@ -12,6 +12,7 @@ from buildable.final.buildable.big_rock import BigRock
 from buildable.final.buildable.entry_sign import EntrySign
 from buildable.final.buildable.leave_sign import LeaveSign
 from buildable.final.buildable.rock import Rock
+from buildable.final.buildable.ruin import Ruin
 from buildable.final.buildable.tree import SmallTree
 from class_types.buildind_types import BuildingTypes
 from class_types.orientation_types import OrientationTypes
@@ -25,6 +26,7 @@ from game.overlay import Overlay
 from game.setting import *
 from game.textures import Textures
 from map_element.tile import Tile
+from sounds.sounds import SoundManager
 
 from game.builder import Builder
 
@@ -48,7 +50,11 @@ class World:
 
         # For building feature
         self.panel = panel
+        pg.mixer.music.load('sounds/wavs/ROME1.WAV')
+        pg.mixer.music.set_volume(0.5)
+        pg.mixer.music.play(3, 0, 5000)
 
+        self.sound_manager = SoundManager()
         # https://stackoverflow.com/questions/6313308/get-all-the-diagonals-in-a-matrix-list-of-lists-in-python
         # Render in diagonal, thanks Stack Overflow
         self.arr_diags = [numpy.array(self.game_controller.get_map())[::-1, :].diagonal(i) for i in range(-48, 49)]
@@ -109,6 +115,7 @@ class World:
                     self.builder.set_start_point(mouse_grid_pos)
                     self.builder.set_end_point(mouse_grid_pos)
                     self.builder.set_in_build_action(True)
+                    self.sound_manager.play('build_action')
 
             elif event.type == pg.MOUSEMOTION:
                 temp_tile = self.builder.get_temp_tile_info()
