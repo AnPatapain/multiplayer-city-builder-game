@@ -152,6 +152,11 @@ class Builder:
         if not grid[row][col].is_buildable(building.get_building_size()):
             print("Building can't be constructed")
             return
+        
+        if building.get_build_type() is BuildingTypes.WHEAT_FARM:
+            if not grid[row][col].is_buildable_for_farm(building.get_building_size()):
+                print("Farm can't be constructed")
+                return 
 
         if sum(building.get_building_size()) > 2:
             (x_building, y_building) = building.get_building_size()
