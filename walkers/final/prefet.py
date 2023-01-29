@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import Optional
 
+import pygame
+
 from buildable.buildable import Buildable
 from buildable.final.buildable.ruin import Ruin
 from buildable.house import House
@@ -28,11 +30,12 @@ class Prefet(Walker):
         super().update()
         tiles = self.current_tile.get_adjacente_tiles(2)
         if self.state == State.EXTINGUISH_FIRE:
+            fire_splash = pygame.mixer.Sound('sounds/wavs/Fire_splash.wav')
             self.walk_progression = 0
             self.extinguish_progress += 1
             if self.extinguish_progress == 100:
                 self.building_being_extinguished.is_on_fire = False
-
+                fire_splash.play()
                 self.extinguish_progress = 0
                 self.state = State.PATROL
                 self.building_being_extinguished = None
