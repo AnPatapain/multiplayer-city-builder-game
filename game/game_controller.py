@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from class_types.buildind_types import BuildingTypes
 from buildable.buildable_datas import buildable_cost
 
+
 if TYPE_CHECKING:
     from walkers.walker import Walker
     from map_element.tile import Tile
@@ -19,6 +20,7 @@ class GameController:
         self.max_citizen = 0
         self.walkers: list['Walker'] = []
         self.actual_foods = 0
+        self.global_desirability = 0
 
         self.spawn_point: 'Tile' = None
         self.leave_point: 'Tile' = None
@@ -115,6 +117,9 @@ class GameController:
 
             case 3:
                 self.__calculate_actual_foods()
+            case 4:
+                self.calculate_desirabilty()
+
 
         for row in self.get_map():
             for tile in row:
@@ -207,6 +212,16 @@ class GameController:
                             else:
                                 house.spawn_migrant(4)
                                 migrant_ammount -= 4
+
+
+    def calculate_desirabilty(self):
+        self.global_desirability = 0
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building:
+                    self.global_desirability += building.desirability
+
 
     def save_load(self):
         self.save_loading = True

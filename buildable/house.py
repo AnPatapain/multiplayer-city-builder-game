@@ -16,6 +16,7 @@ class House(Buildable, ABC):
 
         self.has_water = False
         self.tax = tax
+        self.happiness = 60
         self.desirability = desirability
         self.prosperity = prosperity
 
@@ -65,6 +66,14 @@ class House(Buildable, ABC):
         self.downgrade_progress = 0
         if self.is_upgradable():
             self.upgrade()
+
+    def update_happiness(self):
+        # it happens once every two weeks
+        if GameController.get_actual_citizen() < 200:
+            self.happiness = 60
+        if 200 <= GameController.get_actual_citizen() < 300:
+            self.happiness = 50
+
 
     @abstractmethod
     def is_upgradable(self) -> bool:

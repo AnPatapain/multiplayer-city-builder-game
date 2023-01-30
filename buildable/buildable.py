@@ -15,14 +15,14 @@ if TYPE_CHECKING:
 
 
 class Buildable(ABC):
-    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', fire_risk: int, destruction_risk: int):
+    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', fire_risk: int, destruction_risk: int, desirability:int =0):
         self.build_type = build_type
 
         self.associated_walker: Optional['Walker'] = None
 
         self.x = x
         self.y = y
-
+        self.desirability = desirability
         self.risk = Risk(fire_risk, destruction_risk)
         self.count = 0
 
@@ -42,6 +42,9 @@ class Buildable(ABC):
     def get_current_tile(self)-> 'Tile':
         grid = GameController.get_instance().get_map()
         return grid[self.x][self.y]
+
+    def get_desirability(self):
+        return self.desirability
 
     def is_destroyable(self):
         return True
@@ -74,6 +77,9 @@ class Buildable(ABC):
         pass
 
     def update_day(self):
+        pass
+
+    def update_desirability(self):
         pass
 
     def upgrade(self):
