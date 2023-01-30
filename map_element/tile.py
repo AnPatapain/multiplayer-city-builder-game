@@ -124,6 +124,17 @@ class Tile:
 
         return True
 
+    def is_buildable_for_farm(self, build_size: tuple[int, int]):
+        grid = GameController.get_instance().get_map()
+
+        for x in range(build_size[0]):
+            for y in range(build_size[1]):
+                tile = grid[self.x - x][self.y + y]
+                if tile.type is TileTypes.WHEAT:
+                    return True
+
+        return False
+
     def is_destroyable(self):
         real_tile = self
         # Ensure we check to the left of the building
