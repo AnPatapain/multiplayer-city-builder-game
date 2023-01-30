@@ -1,5 +1,6 @@
 import pygame as pg
 
+import backup_game
 from components import button
 from events.event_manager import EventManager
 from game.utils import draw_text
@@ -65,10 +66,13 @@ class Menu:
         self.screen.blit(self.graphics["splash"], (0, 0))
         pg.display.flip()
 
+        pg.mixer.music.load('sounds/wavs/ROME4.WAV')
+        pg.mixer.music.set_volume(0.6)
+        pg.mixer.music.play(0, 0, 2000)
+
 
     def run(self):
         EventManager.handle_events()
-
         if self.is_splashscreen_skipped():
             self.affichage()
 
@@ -81,7 +85,6 @@ class Menu:
         rect_pos = ((self.screen.get_size()[0]/2) - (rect_size[0]/2), 180)
         rect = pg.Rect(rect_pos, rect_size)
         pg.draw.rect(self.screen, (60, 40, 25), rect)
-        self.sound_manager.play('menu_demarrer')
 
         logo_start = (self.screen.get_size()[0]/2) - (self.graphics["logo"].get_size()[0]/2)
 
@@ -93,11 +96,13 @@ class Menu:
             self.button__exit.display(self.screen)
         if self.is_load_menu() and not self.main_menu:
             draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
+            print(backup_game.list_fichiers)
             self.save1.display(self.screen)
             self.save2.display(self.screen)
             self.save3.display(self.screen)
             self.save4.display(self.screen)
             self.come_back_to_main_menu.display(self.screen)
+            self.event_load_menu()
 
 
 
@@ -125,6 +130,7 @@ class Menu:
 
     def set_inactive(self):
         self.active = False
+        pg.mixer.music.stop()
 
     def skip_splashscreen(self):
         EventManager.clear_any_input()
@@ -137,6 +143,10 @@ class Menu:
     def event_load_menu(self):
         EventManager.clear_any_input()
         self.main_menu = False
+        EventManager.remove_component(self.button__start_new_career)
+        EventManager.remove_component(self.button__load_saved_game)
+        EventManager.remove_component(self.button__options)
+        EventManager.remove_component(self.button__exit)
         EventManager.register_component(self.save1)
         EventManager.register_component(self.save2)
         EventManager.register_component(self.save3)
@@ -167,3 +177,4 @@ class Menu:
     def set_main_menu(self):
         self.main_menu = True
         self.loading_menu = False
+        self.skip_splashscreen()

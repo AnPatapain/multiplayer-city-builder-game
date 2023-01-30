@@ -73,6 +73,7 @@ class Panel:
                                    image_selected=Textures.get_texture(SwitchViewButtonTypes.BUTTON6_SELECTED),
                                    disable_unselect=True, selectable=True, text_pop_up="Destroy")
         self.destroy_tile.on_click(lambda: self.set_selected_tile(BuildingTypes.PELLE))  # image qui est sur le curseur
+        self.destroy_tile.on_click2(lambda: pg.mouse.set_cursor(pg.cursors.Cursor((0, 31), pg.image.load("assets/C3_sprites/system/Shovel.png"))))
 
         self.build__house = Button((self.width - 149, 277 + TOPBAR_HEIGHT), button_size,
                                    image=Textures.get_texture(SwitchViewButtonTypes.BUTTON5),
@@ -230,6 +231,7 @@ class Panel:
         self.selected_tile = None
         self.panel_rects = [self.ressource_panel_rect, self.building_panel_rect]
 
+
     def draw(self, screen):
         screen.blit(self.ressource_panel, (0, 0))
         screen.blit(self.building_panel, (self.width - 162, TOPBAR_HEIGHT))
@@ -263,6 +265,9 @@ class Panel:
             for sous_menu in [self.file_menu, self.commerce_menu, self.religion_menu]:
                 if sous_menu.get_isActive():
                     sous_menu.display()
+
+        if not self.destroy_tile.is_selected():
+            pg.mouse.set_cursor(pg.cursors.Cursor((0, 0), pg.image.load("assets/C3_sprites/system/Arrow.png")))
 
 
     def update(self):

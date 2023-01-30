@@ -3,6 +3,7 @@ import pygame as pg
 from pygame import Surface, Rect, Color
 from components.component import Component
 from game import utils
+from sounds.sounds import SoundManager
 
 TEXT_COLOR = Color(27, 27, 27)
 
@@ -47,6 +48,7 @@ class Button(Component):
         self.text_pop_up = text_pop_up
         self.surface_text_pop_up = pg.font.SysFont('default_font', 22).render(self.text_pop_up, False, (0,0,0), (255,255,255))
         self.sous_menu_button = sous_menu_button
+        self.sound_manager = SoundManager()
 
 
     def is_hover(self, pos):
@@ -55,8 +57,9 @@ class Button(Component):
     def hover(self):
         if not self.is_hovered() and not self.is_disabled():
             self.bg_color = HOVER_COLOR
-            if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
-                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
+            self.sound_manager.play('bouton_hover')
+            #if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_HAND:
+                #pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
             self.hovered = True
 
 
@@ -64,8 +67,8 @@ class Button(Component):
     def not_hover(self):
         if self.is_hovered() and not self.is_disabled():
             self.bg_color = BASE_COLOR
-            if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
-                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
+            #if pg.mouse.get_cursor() != pg.SYSTEM_CURSOR_ARROW:
+                #pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
             self.hovered = False
 
     def set_margin(self, margin: int):

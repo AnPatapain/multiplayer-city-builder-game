@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import Optional, TYPE_CHECKING
 
+import pygame
+
 from buildable.buildable_datas import buildable_size
 from events.risk import Risk
 from game.game_controller import GameController
@@ -103,6 +105,13 @@ class Buildable(ABC):
         for tile in self.get_all_building_tiles():
             tile.set_building(Ruin(tile.x, tile.y))
             tile.get_building().is_on_fire = on_fire
+
+        if on_fire:
+            feu = pygame.mixer.Sound('sounds/wavs/burning_ruin.wav')
+            feu.play()
+        else:
+            ecoulement = pygame.mixer.Sound('sounds/wavs/EXPLOD1.WAV')
+            ecoulement.play()
 
     def get_risk(self) -> Risk:
         return self.risk

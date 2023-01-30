@@ -15,6 +15,8 @@ def main():
     screen = pg.display.set_mode((1920, 1080), pg.FULLSCREEN)
     pg.display.set_caption("Taboule Raza")
     pg.display.set_icon(pg.image.load('assets/menu_sprites/game_icon.png'))
+    curseur = pg.cursors.Cursor((0, 0), pg.image.load("assets/C3_sprites/system/Arrow.png"))
+    pg.mouse.set_cursor(curseur)
     pg.event.set_grab(True)
     menu = Menu(screen)
     Textures.init(screen)
