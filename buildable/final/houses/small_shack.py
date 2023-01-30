@@ -12,8 +12,7 @@ class SmallShack(House):
         return False
 
     def conditions_fulfilled(self) -> bool:
-        #TODO : Food
-        return True
+        return self.get_current_tile().get_water_access()
 
     def upgrade(self):
         from buildable.final.houses.large_shack import LargeShack
