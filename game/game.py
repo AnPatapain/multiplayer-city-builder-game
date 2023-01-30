@@ -112,6 +112,10 @@ class Game:
         draw_text('{} '.format(self.game_controller.get_month(month_number)), self.screen, (self.width - 590, 10), color=pg.Color(255, 255, 0), size=42)
         draw_text('{} BC'.format(self.game_controller.get_actual_year()), self.screen, (self.width - 500, 10), color=pg.Color(255, 255, 0), size=42)
         draw_text('Speed {}%'.format(int(100*self.game_controller.get_actual_speed())), self.screen, (self.width - 150, 510), color=pg.Color(60, 40, 25), size=30)
+        draw_text('Des. {}'.format(int(self.game_controller.global_desirability)), self.screen, (self.width - 150, 560), color=pg.Color(60, 40, 25), size=30)
+        draw_text('Food {}'.format(int(self.game_controller.actual_foods)), self.screen, (self.width - 150, 610), color=pg.Color(60, 40, 25), size=30)
+
+
 
         self.pause_game.display(self.screen)
         pg.display.flip()
