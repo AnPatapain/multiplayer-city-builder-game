@@ -61,7 +61,7 @@ class World:
 
         # Shortcuts
         EventManager.register_key_listener(pg.K_h, lambda: self.panel.set_selected_tile(BuildingTypes.VACANT_HOUSE))
-        EventManager.register_key_listener(pg.K_d, lambda: self.panel.set_selected_tile(BuildingTypes.PELLE))
+        EventManager.register_key_listener(pg.K_d, lambda: self.panel.set_selected_tile(BuildingTypes.PELLE) or pg.mouse.set_cursor(pg.cursors.Cursor((0, 31), pg.image.load("assets/C3_sprites/system/Shovel.png"))))
         EventManager.register_key_listener(pg.K_p, lambda: self.panel.set_selected_tile(BuildingTypes.PREFECTURE))
         EventManager.register_key_listener(pg.K_r, lambda: self.panel.set_selected_tile(RoadTypes.TL_TO_BR))
         EventManager.register_key_listener(pg.K_w, lambda: self.panel.set_selected_tile(BuildingTypes.WELL))
