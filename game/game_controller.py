@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from class_types.buildind_types import BuildingTypes
 from buildable.buildable_datas import buildable_cost
 
-from network_system_part.read_write import Read_Write_py_c
+from network_system_part.read_write import NetworkInterface
 # from game.builder import Builder
 
 if TYPE_CHECKING:
@@ -239,12 +239,15 @@ class GameController:
         '''
         Testing purpose.
         '''
+        # return
         from game.builder import Builder
         builder = Builder()
-        read_write_py_c = Read_Write_py_c.get_instance()
-        res = read_write_py_c.read_message()
+        networkInterface = NetworkInterface.get_instance()
+        # print(networkInterface)
+        res = networkInterface.read_message()
+        
         if res:
-            coor = read_write_py_c.get_coordinates()
+            coor = networkInterface.get_coordinates()
             if coor:
                 print(coor)
                 builder.build_from_start_to_end(BuildingTypes.VACANT_HOUSE, tuple(coor), tuple(coor))
