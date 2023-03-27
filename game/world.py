@@ -29,21 +29,19 @@ from map_element.tile import Tile
 from sounds.sounds import SoundManager
 
 from game.builder import Builder
-from network_system_part.read_write import NetworkInterface
-
+from network_system.system_layer.read_write import SystemInterface
 import backup_game
 
 class World:
 
     def __init__(self, width, height, panel):
         self.game_controller = GameController.get_instance()
-        self.read_write_py_c = NetworkInterface.get_instance()
         self.width = width
         self.height = height
 
         self.builder = Builder()
         self.overlay = Overlay.get_instance()
-
+        self.read_write_py_c = SystemInterface.get_instance()
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
 

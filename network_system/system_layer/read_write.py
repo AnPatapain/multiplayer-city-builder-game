@@ -9,7 +9,7 @@ COOR_MESSAGE_TYPE = 1
 FROM_PY_TO_C = 2
 FROM_C_TO_PY = 3
 
-class NetworkInterface:
+class SystemInterface:
 
     instance = None
 
@@ -54,9 +54,9 @@ class NetworkInterface:
 
     @staticmethod
     def get_instance():
-        if NetworkInterface.instance is None:
-            NetworkInterface.instance = NetworkInterface()
-        return NetworkInterface.instance
+        if SystemInterface.instance is None:
+            SystemInterface.instance = SystemInterface()
+        return SystemInterface.instance
 
 
 #..............................................................................#

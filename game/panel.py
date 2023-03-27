@@ -13,7 +13,7 @@ from game.textures import Textures
 from game.utils import draw_text
 from map_element.tile import Tile
 from game.overlay import Overlay
-from network_system_part.read_write import NetworkInterface
+from network_system.system_layer.read_write import SystemInterface
 
 TOPBAR_HEIGHT = 46
 PANEL_WIDTH = 162
@@ -167,7 +167,7 @@ class Panel:
 
         #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
         # Connect Menu
-        network_manager = NetworkInterface.get_instance()
+        network_manager = SystemInterface.get_instance()
         def __get_button_text():
             if network_manager.get_is_online():
                 return "Connected"
