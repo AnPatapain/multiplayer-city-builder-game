@@ -29,7 +29,7 @@ from map_element.tile import Tile
 from sounds.sounds import SoundManager
 
 from game.builder import Builder
-from network_system_part.read_write import Read_Write_py_c
+from network_system_part.read_write import NetworkInterface
 
 import backup_game
 
@@ -37,7 +37,7 @@ class World:
 
     def __init__(self, width, height, panel):
         self.game_controller = GameController.get_instance()
-        self.read_write_py_c = Read_Write_py_c.get_instance()
+        self.read_write_py_c = NetworkInterface.get_instance()
         self.width = width
         self.height = height
 

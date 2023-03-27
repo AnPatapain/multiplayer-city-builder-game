@@ -9,7 +9,7 @@ COOR_MESSAGE_TYPE = 1
 FROM_PY_TO_C = 2
 FROM_C_TO_PY = 3
 
-class Read_Write_py_c:
+class NetworkInterface:
 
     instance = None
 
@@ -53,6 +53,21 @@ class Read_Write_py_c:
 
     @staticmethod
     def get_instance():
-        if Read_Write_py_c.instance is None:
-            Read_Write_py_c.instance = Read_Write_py_c()
-        return Read_Write_py_c.instance
+        if NetworkInterface.instance is None:
+            NetworkInterface.instance = NetworkInterface()
+        return NetworkInterface.instance
+
+
+#..............................................................................#
+
+    def __init__(self, is_online=False):
+        self.is_online = is_online
+
+    def get_is_online(self):
+        return self.is_online
+
+    def set_is_online(self, status: bool):
+        self.is_online = status
+        
+#..............................................................................#
+ 
