@@ -29,6 +29,7 @@ from map_element.tile import Tile
 from sounds.sounds import SoundManager
 
 from game.builder import Builder
+from network_system_part.read_write import NetworkInterface
 
 import backup_game
 
@@ -36,10 +37,11 @@ class World:
 
     def __init__(self, width, height, panel):
         self.game_controller = GameController.get_instance()
+        self.read_write_py_c = NetworkInterface.get_instance()
         self.width = width
         self.height = height
 
-        self.builder = Builder(panel)
+        self.builder = Builder()
         self.overlay = Overlay.get_instance()
 
 
@@ -128,6 +130,10 @@ class World:
                 self.builder.set_in_build_action(False)
                 if self.in_map(mouse_grid_pos):
                     self.builder.set_end_point(mouse_grid_pos)
+                    
+                    # Send message to c process
+                    tar = f"{self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]}\n"
+                    self.read_write_py_c.send_message(tar)
                 else:
                     self.builder.set_end_point(None)
                     self.builder.set_start_point(None)
