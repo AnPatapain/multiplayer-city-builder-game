@@ -14,6 +14,8 @@ from .map_controller import MapController
 from .panel import Panel
 from .game_controller import GameController
 from threading import Thread, Event
+from network_system_part.read_write import NetworkInterface
+import sysv_ipc
 
 def my_thread(func, event: Event):
     fps_moyen = [0]
@@ -34,8 +36,9 @@ class Game:
         self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
 
+        self.read_write_py_c = NetworkInterface.get_instance()
         # sound manager
-        self.sound_manager = SoundManager()
+        # self.sound_manager = SoundManager()
 
         # panel has two sub_panel: ressource_panel for displaying Dn, Populations, etc and building_panel
         # for displaying available building in game
@@ -59,6 +62,7 @@ class Game:
         # Calls the event_handler of the World
         EventManager.add_hooked_function(self.world.event_handler)
         EventManager.register_key_listener(pg.K_SPACE, self.toogle_pause)
+
         self.draw_thread.start()
 
     # Game Loop
