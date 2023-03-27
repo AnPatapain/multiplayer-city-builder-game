@@ -41,7 +41,7 @@ class World:
         self.width = width
         self.height = height
 
-        self.builder = Builder(panel)
+        self.builder = Builder()
         self.overlay = Overlay.get_instance()
 
 
@@ -130,7 +130,8 @@ class World:
                 self.builder.set_in_build_action(False)
                 if self.in_map(mouse_grid_pos):
                     self.builder.set_end_point(mouse_grid_pos)
-                    # print(self.builder.get_start_point(), self.builder.get_end_point())
+                    
+                    # Send message to c process
                     tar = f"{self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]}\n"
                     self.read_write_py_c.send_message(tar)
                 else:

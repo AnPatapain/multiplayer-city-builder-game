@@ -1,5 +1,6 @@
 import sysv_ipc
 import sys
+import re
 
 # Constants
 KEY = 192002
@@ -39,6 +40,16 @@ class Read_Write_py_c:
         return tuple(temp_list)
     
     def get_message(self): return self.message[0]
+
+    def get_coordinates(self):
+        numbers = []
+        pattern = r'\d+'
+        for word in self.message[0].split():
+            matches = re.findall(pattern, word)
+            # if word.isdigit():
+            if matches:   
+                numbers.append(int(float(word)))
+        return numbers
 
     @staticmethod
     def get_instance():

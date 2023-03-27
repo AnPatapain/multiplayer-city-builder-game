@@ -71,10 +71,6 @@ class Game:
         # Main control
         try:
             while self.is_running and not self.thread_event.is_set():
-                res = self.read_write_py_c.read_message()
-                if res:
-                    print( self.read_write_py_c.get_message() )
-        
                 # We need to recalculate it every time, since it can change
                 targeted_ticks_per_seconds = self.game_controller.get_current_speed() * 50
                 if not self.paused:

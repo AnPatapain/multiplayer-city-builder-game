@@ -13,7 +13,7 @@ def main():
 
     pg.init()
     # screen = pg.display.set_mode((1920, 1080), pg.FULLSCREEN)
-    screen = pg.display.set_mode((1520, 780))
+    screen = pg.display.set_mode((1220, 680))
     pg.display.set_caption("Taboule Raza")
     pg.display.set_icon(pg.image.load('assets/menu_sprites/game_icon.png'))
     curseur = pg.cursors.Cursor((0, 0), pg.image.load("assets/C3_sprites/system/Arrow.png"))
