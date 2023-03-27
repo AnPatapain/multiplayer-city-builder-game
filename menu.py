@@ -2,6 +2,7 @@ import pygame as pg
 
 import backup_game
 from components import button
+from components.text_input import TextInput
 from events.event_manager import EventManager
 from game.utils import draw_text
 from sounds.sounds import SoundManager
@@ -16,7 +17,7 @@ class Menu:
         self.save_loading = False
 
         self.screen = screen
-        self. graphics = self.load_images()
+        self.graphics = self.load_images()
         self.sound_manager = SoundManager()
 
         # (Width, Height)
@@ -71,6 +72,8 @@ class Menu:
         pg.mixer.music.play(0, 0, 2000)
 
 
+        # self.textinput = TextInput((0, 0), (50, 50), placeholder="idk really")
+
     def run(self):
         EventManager.handle_events()
         if self.is_splashscreen_skipped():
@@ -94,6 +97,7 @@ class Menu:
             self.button__load_saved_game.display(self.screen)
             self.button__options.display(self.screen)
             self.button__exit.display(self.screen)
+            self.textinput.display(self.screen)
         if self.is_load_menu() and not self.main_menu:
             draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
             print(backup_game.list_fichiers)
@@ -139,6 +143,7 @@ class Menu:
         EventManager.register_component(self.button__load_saved_game)
         EventManager.register_component(self.button__options)
         EventManager.register_component(self.button__exit)
+        EventManager.register_component(self.textinput)
 
     def event_load_menu(self):
         EventManager.clear_any_input()
