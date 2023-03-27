@@ -1,13 +1,14 @@
 from enum import Enum
 
+# IntEnum: 300 - 399 range
 
 class WalkerTypes(Enum):
-    MIGRANT = 1
-    PREFET = 2
-    ENGINEER = 3
-    IMMIGRANT = 4
-    GRANARY_WORKER = 5
-    FARM_WORKER = 6
-    TAX_COLLECTOR = 7
+    MIGRANT = 301
+    PREFET = 302
+    ENGINEER = 303
+    IMMIGRANT = 304
+    GRANARY_WORKER = 305
+    FARM_WORKER = 306
+    TAX_COLLECTOR = 307
 
-    PREFET_EXTINGUISHING_FIRE = 8
+    PREFET_EXTINGUISHING_FIRE = 308
