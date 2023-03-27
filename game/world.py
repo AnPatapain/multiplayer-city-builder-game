@@ -132,7 +132,7 @@ class World:
                     self.builder.set_end_point(mouse_grid_pos)
                     
                     # Send message to c process
-                    tar = f"{self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]}\n"
+                    tar = f"start: {self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]} end: {self.builder.get_end_point()[0]} {self.builder.get_end_point()[1]}\n"
                     self.read_write_py_c.send_message(tar)
                 else:
                     self.builder.set_end_point(None)

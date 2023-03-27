@@ -35,7 +35,6 @@ class Read_Write_py_c:
         temp_list[0] = self.message[0].decode(sys.getdefaultencoding(), errors='ignore')
         temp_list[0] = temp_list[0].split('\n')[0]
         temp_list[0] = temp_list[0].rstrip('\0')
-        # print(temp_list[0])
         temp_list[1] = self.message[1]
         return tuple(temp_list)
     
