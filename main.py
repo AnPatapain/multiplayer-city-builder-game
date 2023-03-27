@@ -1,5 +1,4 @@
 import pygame as pg
-
 import backup_game
 from events.event_manager import EventManager
 from game.game import Game
@@ -7,12 +6,14 @@ from menu import Menu
 from game.textures import Textures
 
 
+
 def main():
     is_game_run = True
     is_playing = True
 
     pg.init()
-    screen = pg.display.set_mode((1920, 1080), pg.FULLSCREEN)
+    # screen = pg.display.set_mode((1920, 1080), pg.FULLSCREEN)
+    screen = pg.display.set_mode((1220, 680))
     pg.display.set_caption("Taboule Raza")
     pg.display.set_icon(pg.image.load('assets/menu_sprites/game_icon.png'))
     curseur = pg.cursors.Cursor((0, 0), pg.image.load("assets/C3_sprites/system/Arrow.png"))
@@ -35,7 +36,6 @@ def main():
     while is_game_run:
 
         while is_playing:
-
             game.run()
 
 
