@@ -243,7 +243,6 @@ class GameController:
         builder = Builder()
         read_write_py_c = Read_Write_py_c.get_instance()
         res = read_write_py_c.read_message()
-        
         if res:
             coor = read_write_py_c.get_coordinates()
             if coor:
