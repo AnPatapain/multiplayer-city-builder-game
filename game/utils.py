@@ -4,12 +4,20 @@ import pygame as pg
 import random as rd
 import string as st
 
+import pygame.freetype
+
 if TYPE_CHECKING:
     from pygame.surface import Surface
     from pygame import Color
 
 TEXT_COLOR = pg.Color(255, 255, 255)
 FONT_SIZE = 20
+
+pygame.freetype.init()
+font = pygame.freetype.Font('assets/fonts/JetBrainsMono-Regular.ttf', FONT_SIZE)
+# Match font.Font behavior, or else the size of the surface will be just enough to fit the text,
+# and the text will not display the same with or without tall letter (x vs L for example)
+font.pad = True
 
 def draw_text(
         text: str,
@@ -19,8 +27,8 @@ def draw_text(
         size: int = FONT_SIZE,
         center_on_width: int = None,
         center_on_height: int = None):
-    font = pg.font.Font('assets/fonts/JetBrainsMono-Regular.ttf', size)
-    text_surface = font.render(text, True, color, None)  # -> Surface
+
+    text_surface = font.render(text, fgcolor=color, size=size)[0]  # -> Surface
 
     if center_on_width:
         # Calculate the size difference between the size to center on and the size needed to render the text
@@ -33,14 +41,8 @@ def draw_text(
     if center_on_height:
         # Calculate the size difference between the size to center on and the size needed to render the text
         # Divide then by 2 to have the margin needed on each size (we will only use margin of the left)
-        print("initial top", pos)
-        print("center on height", center_on_height)
-        print("text height", text_surface.get_height())
         top_margin = (center_on_height - text_surface.get_height()) / 2
-        print("calculated top margin", top_margin)
         pos = (pos[0], pos[1] + top_margin)
-        print("calculated top", pos)
-        print("==========================")
 
     text_rect = text_surface.get_rect(topleft=pos)  # -> Rect
     screen.blit(text_surface, text_rect)
