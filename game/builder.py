@@ -31,11 +31,9 @@ class TempTile(TypedDict):
     isDestroyable: bool
 
 class Builder:
-    def __init__(self, panel) -> None:
+    def __init__(self) -> None:
         self.game_controller = GameController.get_instance()
 
-        # Pour construire consécutivement
-        self.panel = panel
         self.temp_tile_info: Optional[TempTile] = None
         self.start_point: Optional[tuple[int, int]] = None
         self.end_point: Optional[tuple[int, int]] = None

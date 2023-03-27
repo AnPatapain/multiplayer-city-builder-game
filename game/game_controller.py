@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from class_types.buildind_types import BuildingTypes
 from buildable.buildable_datas import buildable_cost
 
+from network_system_part.read_write import Read_Write_py_c
+# from game.builder import Builder
 
 if TYPE_CHECKING:
     from walkers.walker import Walker
@@ -91,6 +93,7 @@ class GameController:
 
     def update(self):
         self.increase_tick()
+        self.auto_build_house()
 
     def map_has_senate(self):
         for row in self.grid:
@@ -231,6 +234,22 @@ class GameController:
 
     def is_load_save(self) -> bool:
         return self.save_loading
+    
+    def auto_build_house(self):
+        '''
+        Testing purpose.
+        '''
+        from game.builder import Builder
+        builder = Builder()
+        read_write_py_c = Read_Write_py_c.get_instance()
+        res = read_write_py_c.read_message()
+        
+        if res:
+            coor = read_write_py_c.get_coordinates()
+            if coor:
+                print(coor)
+                builder.build_from_start_to_end(BuildingTypes.VACANT_HOUSE, tuple(coor), tuple(coor))
+
 
     @staticmethod
     def get_instance():
