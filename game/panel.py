@@ -161,12 +161,28 @@ class Panel:
         self.file.on_click2(lambda: self.set_sous_menu(True))
 
 
+
+
+
+
+        #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
+        # Connect Menu
+        self.connect = Button((550, 0), (100, 46), text="Connect", center_text=False, text_size=30)
+        self.connect.on_click(lambda:print("bjr"))
+
+         
+
+
+        #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
+
+
         self.button_list = [
             self.destroy_tile, self.build__house, self.build__prefecture, self.build__road, self.build__senate,
             self.build__well, self.build__hospital, self.build__school, self.build__temple, self.build__commerce,
             self.build__theatre, self.build__engineer_post, self.change_overlay, self.increase_speed,
             self.decrease_speed,
-            self.file
+            self.file,
+            self.connect
         ]
 
         for button in self.button_list:
@@ -206,6 +222,11 @@ class Panel:
 
         self.file_menu = Menu_Deroulant(self.file, self.file_sous_menu_list, self.screen)
         EventManager.register_menu_deroulant(self.file_menu)
+
+
+
+
+
 
         # Religion Menu
         self.ceres = Button((self.width - 370, 358), (200, 26), text="Ceres", center_text=False, text_size=26)
@@ -262,7 +283,7 @@ class Panel:
             last_button_to_display.display(screen)
 
         if self.sous_menu:
-            for sous_menu in [self.file_menu, self.commerce_menu, self.religion_menu]:
+            for sous_menu in [self.file_menu,self.commerce_menu, self.religion_menu]:
                 if sous_menu.get_isActive():
                     sous_menu.display()
 
