@@ -17,12 +17,14 @@ class NetworkInterface:
         self.message_queue = sysv_ipc.MessageQueue(KEY, sysv_ipc.IPC_CREAT)
         self.message = None
         print(self.message_queue)
+        self.is_online = False
 
     def send_message(self, message):
         self.message_queue.send(message.encode(), type=FROM_PY_TO_C)
 
     def read_message(self):
         try:
+            # print(self.message_queue)
             self.message = self.message_queue.receive(type=FROM_C_TO_PY, block=False)
         except sysv_ipc.BusyError:
             return False
@@ -60,8 +62,8 @@ class NetworkInterface:
 
 #..............................................................................#
 
-    def __init__(self, is_online=False):
-        self.is_online = is_online
+    # def __init__(self, is_online=False):
+    #     self.is_online = is_online
 
     def get_is_online(self):
         return self.is_online

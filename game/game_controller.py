@@ -242,11 +242,12 @@ class GameController:
         # return
         from game.builder import Builder
         builder = Builder()
-        read_write_py_c = NetworkInterface.get_instance()
-        res = read_write_py_c.read_message()
+        networkInterface = NetworkInterface.get_instance()
+        # print(networkInterface)
+        res = networkInterface.read_message()
         
         if res:
-            coor = read_write_py_c.get_coordinates()
+            coor = networkInterface.get_coordinates()
             if coor:
                 print(coor)
                 builder.build_from_start_to_end(BuildingTypes.VACANT_HOUSE, tuple(coor), tuple(coor))

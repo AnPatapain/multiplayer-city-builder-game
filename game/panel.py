@@ -175,7 +175,7 @@ class Panel:
             else:
                 return "Not connected"
         self.connect = Button((550, 0), (100, 46), text_fn=__get_button_text, center_text=False, text_size=30)
-        self.connect.on_click(lambda:print("bjr"))
+        self.connect.on_click(lambda:network_manager.set_is_online(True))
 
          
 
