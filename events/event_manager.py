@@ -64,13 +64,15 @@ class EventManager:
                     if isinstance(component, TextInput) and component.is_focused():
                         match event.key:
                             case pg.K_BACKSPACE:
-                                component.delete_character()
+                                component.delete_character_left()
+                            case pg.K_DELETE:
+                                component.delete_character_right()
                             case pg.K_LEFT:
                                 component.go_left()
                             case pg.K_RIGHT:
                                 component.go_right()
                             case pg.K_ESCAPE:
-                                component.set_focused(False)
+                                component.unfocus()
                         continue
 
                 for key_listener in EventManager.key_listeners:
@@ -114,6 +116,11 @@ class EventManager:
                                 if not component.is_unselect_disabled():
                                     component.set_selected(False)
                                 component.set_being_pressed(False)
+                        elif isinstance(component, TextInput):
+                            if component.is_hover(pos):
+                                component.focus()
+                            else:
+                                component.unfocus()
                         else:
                             if component.is_hover(pos):
                                 component.click()

@@ -55,8 +55,7 @@ class Panel:
         #################################### BUTTONS ####################################################
 
         # Overlay button
-        self.change_overlay = Button((self.width - 158, 49), (117, 25), text_fn=Overlay.get_instance().get_name,
-                                     )
+        self.change_overlay = Button((self.width - 158, 49), (117, 25), text_fn=Overlay.get_instance().get_name, center_text=True, text_size=18)
         self.change_overlay.on_click(lambda: Overlay.get_instance().set_overlay_types())
 
         button_size = (39, 26)
@@ -167,7 +166,7 @@ class Panel:
 
         #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
         # Connect Menu
-        self.connect = Button((550, 0), (100, 46), text="Connect", center_text=False)
+        self.connect = Button((550, 0), (100, 46), text="Connect", center_text=True)
         self.connect.on_click(lambda:print("bjr"))
 
          

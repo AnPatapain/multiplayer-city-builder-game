@@ -1,13 +1,24 @@
+from typing import TYPE_CHECKING
+
 import pygame as pg
 import random as rd
 import string as st
-from pygame.surface import Surface
+
+if TYPE_CHECKING:
+    from pygame.surface import Surface
+    from pygame import Color
 
 TEXT_COLOR = pg.Color(255, 255, 255)
 FONT_SIZE = 20
 
-def draw_text(text: str, screen: Surface, pos: tuple[int, int], color: pg.Color = TEXT_COLOR, size: int = FONT_SIZE,
-              center_on_width: int = None,center_on_height: int = None):
+def draw_text(
+        text: str,
+        screen: 'Surface',
+        pos: tuple[int, int],
+        color: 'Color' = TEXT_COLOR,
+        size: int = FONT_SIZE,
+        center_on_width: int = None,
+        center_on_height: int = None):
     font = pg.font.Font('assets/fonts/JetBrainsMono-Regular.ttf', size)
     text_surface = font.render(text, True, color, None)  # -> Surface
 
@@ -22,10 +33,14 @@ def draw_text(text: str, screen: Surface, pos: tuple[int, int], color: pg.Color 
     if center_on_height:
         # Calculate the size difference between the size to center on and the size needed to render the text
         # Divide then by 2 to have the margin needed on each size (we will only use margin of the left)
+        print("initial top", pos)
+        print("center on height", center_on_height)
+        print("text height", text_surface.get_height())
         top_margin = (center_on_height - text_surface.get_height()) / 2
-        if top_margin > 0:
-            # We cant directly do pos[0} += left_margin, so we recreate entirely the tuple.
-            pos = (pos[0], pos[1] - top_margin)
+        print("calculated top margin", top_margin)
+        pos = (pos[0], pos[1] + top_margin)
+        print("calculated top", pos)
+        print("==========================")
 
     text_rect = text_surface.get_rect(topleft=pos)  # -> Rect
     screen.blit(text_surface, text_rect)
