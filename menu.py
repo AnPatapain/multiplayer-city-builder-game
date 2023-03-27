@@ -97,7 +97,7 @@ class Menu:
             self.button__load_saved_game.display(self.screen)
             self.button__options.display(self.screen)
             self.button__exit.display(self.screen)
-            self.textinput.display(self.screen)
+            # self.textinput.display(self.screen)
         if self.is_load_menu() and not self.main_menu:
             draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
             print(backup_game.list_fichiers)
@@ -143,7 +143,7 @@ class Menu:
         EventManager.register_component(self.button__load_saved_game)
         EventManager.register_component(self.button__options)
         EventManager.register_component(self.button__exit)
-        EventManager.register_component(self.textinput)
+        # EventManager.register_component(self.textinput)
 
     def event_load_menu(self):
         EventManager.clear_any_input()
