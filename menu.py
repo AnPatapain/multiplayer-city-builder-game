@@ -2,6 +2,7 @@ import pygame as pg
 
 import backup_game
 from components import button
+from components.text_input import TextInput
 from events.event_manager import EventManager
 from game.utils import draw_text
 from sounds.sounds import SoundManager
@@ -16,7 +17,7 @@ class Menu:
         self.save_loading = False
 
         self.screen = screen
-        self. graphics = self.load_images()
+        self.graphics = self.load_images()
         self.sound_manager = SoundManager()
 
         # (Width, Height)
@@ -66,10 +67,12 @@ class Menu:
         self.screen.blit(self.graphics["splash"], (0, 0))
         pg.display.flip()
 
-        pg.mixer.music.load('sounds/wavs/ROME4.WAV')
-        pg.mixer.music.set_volume(0.6)
-        pg.mixer.music.play(0, 0, 2000)
+        # pg.mixer.music.load('sounds/wavs/ROME4.WAV')
+        # pg.mixer.music.set_volume(0.6)
+        # pg.mixer.music.play(0, 0, 2000)
 
+
+        self.textinput = TextInput((0, 0), (300, 30), placeholder="idk really")
 
     def run(self):
         EventManager.handle_events()
@@ -94,8 +97,9 @@ class Menu:
             self.button__load_saved_game.display(self.screen)
             self.button__options.display(self.screen)
             self.button__exit.display(self.screen)
+            self.textinput.display(self.screen)
         if self.is_load_menu() and not self.main_menu:
-            draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
+            draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200))
             print(backup_game.list_fichiers)
             self.save1.display(self.screen)
             self.save2.display(self.screen)
@@ -139,6 +143,7 @@ class Menu:
         EventManager.register_component(self.button__load_saved_game)
         EventManager.register_component(self.button__options)
         EventManager.register_component(self.button__exit)
+        EventManager.register_component(self.textinput)
 
     def event_load_menu(self):
         EventManager.clear_any_input()

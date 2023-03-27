@@ -17,7 +17,7 @@ class Button(Component):
             self,
             pos,
             size,
-            text_size : int = 38,
+            text_size : int = 24,
             text: str = "",
             text_fn: () = None,
             image: Surface = None,
@@ -123,7 +123,7 @@ class Button(Component):
 
         pos = (self.bg.x + self.margin, self.bg.y + self.margin)
         if self.text_centered:
-            pos = (self.bg.x, self.bg.y + self.margin)
+            pos = (self.bg.x, self.bg.y)
             center_width = self.size[0]
             center_height = self.size[1]
 

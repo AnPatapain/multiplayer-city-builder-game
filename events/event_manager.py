@@ -2,6 +2,7 @@ import pygame as pg
 
 from components.button import Button
 from components.component import Component
+from components.text_input import TextInput
 from events.key_listener import KeyListener
 
 
@@ -51,8 +52,29 @@ class EventManager:
             for hooked_function in EventManager.hooked_functions:
                 hooked_function[0](event, *hooked_function[1])
 
+            if event.type == pg.TEXTINPUT:
+                for component in EventManager.components:
+                    if isinstance(component, TextInput) and component.is_focused():
+                        component.add_character(event.text)
+                        continue
+
             if event.type == pg.KEYDOWN:
                 EventManager.any_input()
+                for component in EventManager.components:
+                    if isinstance(component, TextInput) and component.is_focused():
+                        match event.key:
+                            case pg.K_BACKSPACE:
+                                component.delete_character_left()
+                            case pg.K_DELETE:
+                                component.delete_character_right()
+                            case pg.K_LEFT:
+                                component.go_left()
+                            case pg.K_RIGHT:
+                                component.go_right()
+                            case pg.K_ESCAPE:
+                                component.unfocus()
+                        continue
+
                 for key_listener in EventManager.key_listeners:
                     if key_listener.key == event.key:
                         key_listener.set_being_pressed(True)
@@ -94,6 +116,11 @@ class EventManager:
                                 if not component.is_unselect_disabled():
                                     component.set_selected(False)
                                 component.set_being_pressed(False)
+                        elif isinstance(component, TextInput):
+                            if component.is_hover(pos):
+                                component.focus()
+                            else:
+                                component.unfocus()
                         else:
                             if component.is_hover(pos):
                                 component.click()
