@@ -56,7 +56,7 @@ class Panel:
 
         # Overlay button
         self.change_overlay = Button((self.width - 158, 49), (117, 25), text_fn=Overlay.get_instance().get_name,
-                                     center_text=True, text_size=30)
+                                     )
         self.change_overlay.on_click(lambda: Overlay.get_instance().set_overlay_types())
 
         button_size = (39, 26)
@@ -167,7 +167,7 @@ class Panel:
 
         #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
         # Connect Menu
-        self.connect = Button((550, 0), (100, 46), text="Connect", center_text=False, text_size=30)
+        self.connect = Button((550, 0), (100, 46), text="Connect", center_text=False)
         self.connect.on_click(lambda:print("bjr"))
 
          
@@ -268,8 +268,6 @@ class Panel:
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON17), (self.width - 150, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON18), (self.width - 100, 420 + 46))
         screen.blit(Textures.get_texture(SwitchViewButtonTypes.BUTTON19), (self.width - 49, 420 + 46))
-
-        draw_text("Options         Help         Advisors", screen, color=pg.Color(50, 30, 0), size=38, pos=(120, 10))
 
         last_button_to_display = None
 

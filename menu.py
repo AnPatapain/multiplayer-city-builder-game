@@ -99,7 +99,7 @@ class Menu:
             self.button__exit.display(self.screen)
             # self.textinput.display(self.screen)
         if self.is_load_menu() and not self.main_menu:
-            draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200), size=69)
+            draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200))
             print(backup_game.list_fichiers)
             self.save1.display(self.screen)
             self.save2.display(self.screen)

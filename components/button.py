@@ -17,7 +17,7 @@ class Button(Component):
             self,
             pos,
             size,
-            text_size : int = 38,
+            text_size : int = 24,
             text: str = "",
             text_fn: () = None,
             image: Surface = None,
