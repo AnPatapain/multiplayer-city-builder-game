@@ -50,19 +50,19 @@ class Menu:
                                                       image_hover=pg.image.load('assets/menu_sprites/exit_hover.png').convert())
         self.button__exit.on_click(exit)
 
-        self.save1 = button.Button((button_start, 300), button_size, text="Save1")
+        self.save1 = button.Button((button_start, 300), button_size, text="Save1", center_text=True)
         self.save1.on_click(self.set_inactive)
 
-        self.save2 = button.Button((button_start, 350), button_size, text="Save2")
+        self.save2 = button.Button((button_start, 350), button_size, text="Save2", center_text=True)
         #self.save2.on_click(self.load_save)
 
-        self.save3 = button.Button((button_start, 400), button_size, text="Save3")
+        self.save3 = button.Button((button_start, 400), button_size, text="Save3", center_text=True)
         #self.save3.set_disabled(True)
 
-        self.save4 = button.Button((button_start, 450), button_size, text="Save4")
+        self.save4 = button.Button((button_start, 450), button_size, text="Save4", center_text=True)
         #self.save4.on_click(exit)
 
-        self.come_back_to_main_menu = button.Button((button_start, 500), (50,45), text="<")
+        self.come_back_to_main_menu = button.Button((button_start, 500), (50,45), text="<", center_text=True)
         self.come_back_to_main_menu.on_click(self.go_to_main_menu)
 
 
@@ -148,6 +148,7 @@ class Menu:
         pg.mixer.music.stop()
 
     def event_main_menu(self):
+        EventManager.reset()
         EventManager.register_component(self.button__start_new_career)
         EventManager.register_component(self.button__load_saved_game)
         EventManager.register_component(self.button__options)
@@ -155,10 +156,7 @@ class Menu:
         EventManager.register_component(self.textinput)
 
     def event_load_menu(self):
-        EventManager.remove_component(self.button__start_new_career)
-        EventManager.remove_component(self.button__load_saved_game)
-        EventManager.remove_component(self.button__options)
-        EventManager.remove_component(self.button__exit)
+        EventManager.reset()
         EventManager.register_component(self.save1)
         EventManager.register_component(self.save2)
         EventManager.register_component(self.save3)
@@ -169,11 +167,9 @@ class Menu:
         self.set_inactive()
 
     def go_to_loading_game_menu(self):
-        EventManager.clear_any_input()
         self.event_load_menu()
         self.current_menu = CurrentMenu.LOAD_SAVE_MENU
 
     def go_to_main_menu(self):
-        EventManager.clear_any_input()
         self.event_main_menu()
         self.current_menu = CurrentMenu.MAIN_MENU
