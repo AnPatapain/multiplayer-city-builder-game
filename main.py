@@ -30,8 +30,9 @@ def main():
     game = Game(screen)
 
     # Save load, need to be here to load save after init game
-    if menu.get_save_loading():
-        backup_game.load_game("save.bin")
+    # Not implemented yet
+    # if menu.get_save_loading():
+    #     backup_game.load_game("save.bin")
 
     while is_game_run:
 
