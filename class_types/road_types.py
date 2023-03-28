@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-
+# IntEnum: 0 - 100 range
 class RoadTypes(IntEnum):
     ALONE = 1
 
