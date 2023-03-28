@@ -33,14 +33,14 @@ def draw_text(
     if center_on_height:
         # Calculate the size difference between the size to center on and the size needed to render the text
         # Divide then by 2 to have the margin needed on each size (we will only use margin of the left)
-        print("initial top", pos)
-        print("center on height", center_on_height)
-        print("text height", text_surface.get_height())
+        # print("initial top", pos)
+        # print("center on height", center_on_height)
+        # print("text height", text_surface.get_height())
         top_margin = (center_on_height - text_surface.get_height()) / 2
-        print("calculated top margin", top_margin)
+        # print("calculated top margin", top_margin)
         pos = (pos[0], pos[1] + top_margin)
-        print("calculated top", pos)
-        print("==========================")
+        # print("calculated top", pos)
+        # print("==========================")
 
     text_rect = text_surface.get_rect(topleft=pos)  # -> Rect
     screen.blit(text_surface, text_rect)

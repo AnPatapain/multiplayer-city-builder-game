@@ -6,16 +6,15 @@
 #include <string.h>
 #include <pthread.h>
 
-#define BUFFER_SIZE 1024
-#define COOR_MESSAGE_TYPE 1
-#define FROM_PY_TO_C 2
-#define FROM_C_TO_PY 3
+#include "Message.h"
+
 #define KEY 192002
 
 typedef struct message {
     long message_type;
     char message_body[BUFFER_SIZE];
 }message;
+
 
 void send_msg_to_python_process(char* buffer);
 char *read_msg_from_python_process();
@@ -38,12 +37,10 @@ void *send_test(void *args) {
 }
 
 int main() {
-    // send_test();
-    // receive_test();
     pthread_t send_thread;
     pthread_t read_thread;
-    pthread_create(&send_thread, NULL, receive_test, NULL);
-    pthread_create(&read_thread, NULL, send_test, NULL);
+    pthread_create(&send_thread, NULL, send_test, NULL);
+    pthread_create(&read_thread, NULL, receive_test, NULL);
 
     pthread_join(send_thread, NULL);
     pthread_join(read_thread, NULL);
@@ -52,19 +49,28 @@ int main() {
 }
 
 void send_msg_to_python_process(char* buffer) {
-    //Open the message queue to communicate to process python. The message_queue has its integer identifier
     int message_queueID = msgget(KEY, 0666 | IPC_CREAT);
-    // printf("\nmessage queue id: %d\n", message_queueID);
+    
+    struct Message message;
+    message.message_type = FROM_C_TO_PY;
 
-    message msg;
-    msg.message_type = FROM_C_TO_PY;
+    message.msg_body.object_type.typeObject = 1;
+    message.msg_body.object_type.metaData = 2;
+    message.msg_body.object_size = 10;
+    message.msg_body.id_object = 1;
+    message.msg_body.id_player = 2;
+
     buffer[strlen(buffer)] = '\n';
-    strncpy(msg.message_body, buffer, BUFFER_SIZE);
+    strncpy(message.msg_body.data, buffer, BUFFER_SIZE);
+    printf("\n%s\n", (char*)(message.msg_body.data));
 
-    // printf("\n%s - sent to python\n", msg.message_body);
-    if(msgsnd(message_queueID, &msg, sizeof(msg), 0) == -1) {
-        perror("send msg failed to python process");
+    if (msgsnd(message_queueID, &message, sizeof(struct Msg_body), 0) == -1) {
+        perror("msgsnd");
+        exit(1);
     }
+
+    printf("Message sent!\n");
+
 }
 
 char *read_msg_from_python_process() {

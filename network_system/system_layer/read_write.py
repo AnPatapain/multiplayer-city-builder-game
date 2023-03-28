@@ -1,6 +1,7 @@
 import sysv_ipc
 import sys
 import re
+import struct
 
 # Constants
 KEY = 192002
@@ -24,28 +25,47 @@ class SystemInterface:
 
     def read_message(self):
         try:
-            # print(self.message_queue)
             self.message = self.message_queue.receive(type=FROM_C_TO_PY, block=False)
         except sysv_ipc.BusyError:
             return False
         else:
-            self.message = self.decode_and_clean_message()
+            self.message = list(self.message)
+            self.message[0] = self.message[0][0:1037]
+            # unpacked_data = struct.unpack("=BHLLH1024s", self.message[0])
+            # print(unpacked_data[5].decode(sys.getdefaultencoding(), errors='ignore'))
+            self.message[0] = self.decode_and_clean_message()
             return True
 
     def decode_and_clean_message(self):
-        temp_list = list(self.message)
-        temp_list[0] = self.message[0].decode(sys.getdefaultencoding(), errors='ignore')
-        temp_list[0] = temp_list[0].split('\n')[0]
-        temp_list[0] = temp_list[0].rstrip('\0')
-        temp_list[1] = self.message[1]
-        return tuple(temp_list)
+        # Unpack the message from bytes to Python objects
+        unpacked_data = struct.unpack("=HHLLH1023s", self.message[0])
     
-    def get_message(self): return self.message[0]
+        temp_dict = {}
+        temp_dict["object_type"] = {
+            "typeObject": unpacked_data[0],
+            "metaData": unpacked_data[1]
+        }
+        temp_dict["object_size"] = unpacked_data[2]
+        temp_dict["id_object"] = unpacked_data[3]
+        temp_dict["id_player"] = unpacked_data[4]
+        temp_dict["data"] = unpacked_data[5].decode(sys.getdefaultencoding(), errors='ignore')
+        temp_dict["data"] = temp_dict["data"].split('\n')[0]
+        temp_dict["data"] = temp_dict["data"].rstrip('\0')
+
+        print(temp_dict["object_type"])
+        print(temp_dict["object_size"])
+        print(temp_dict["id_object"])
+        print(temp_dict["id_player"])
+        print(temp_dict["data"])
+
+        return temp_dict
+    
+    def get_message(self): return self.message[0]['data']
 
     def get_coordinates(self):
         numbers = []
         pattern = r'\d+'
-        for word in self.message[0].split():
+        for word in self.message[0]['data'].split():
             matches = re.findall(pattern, word)
             # if word.isdigit():
             if matches:   
