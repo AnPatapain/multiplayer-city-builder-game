@@ -239,7 +239,7 @@ class GameController:
         '''
         Testing purpose.
         '''
-        return
+        # return
         from game.builder import Builder
         builder = Builder()
         systemInterface = SystemInterface.get_instance()

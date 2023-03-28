@@ -9,7 +9,7 @@
 
 
 struct Object_type {
-    uint8_t typeObject;
+    uint16_t typeObject;
     uint16_t metaData;
 };
 
