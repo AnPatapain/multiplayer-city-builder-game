@@ -14,8 +14,8 @@ from .map_controller import MapController
 from .panel import Panel
 from .game_controller import GameController
 from threading import Thread, Event
-from network_system_part.read_write import NetworkInterface
-import sysv_ipc
+
+from network_system.system_layer.read_write import SystemInterface
 
 def my_thread(func, event: Event):
     fps_moyen = [0]
@@ -36,7 +36,6 @@ class Game:
         self.game_controller = GameController.get_instance()
         self.width, self.height = self.screen.get_size()
 
-        self.read_write_py_c = NetworkInterface.get_instance()
         # sound manager
         # self.sound_manager = SoundManager()
 
