@@ -1,6 +1,8 @@
 from enum import Enum
 
+# IntEnum: 200 - 299 range
+
 class TileTypes(Enum):
-    GRASS = 1
-    WATER = 2
-    WHEAT = 3
+    GRASS = 201
+    WATER = 202
+    WHEAT = 203
