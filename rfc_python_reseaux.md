@@ -59,7 +59,7 @@ Demande à un autre client s'il peut reprendre, en partie ou totalement, la gest
 #### `31: DELEGATE_OK`
 Réponse au `DELEGATE_ASK` l'utilisateur à ses données. 
 #### `50: ASK_IP_LIST`
-Demande la liste des IP connue à un utilisateur. Le payload est inutile et le champ `data_size` doit être défini à `0`. Le champ ip doit
+Demande la liste des IP connue à un utilisateur. Le payload est inutile et le champ `data_size` doit être défini à `0`.
 #### `51: RESP_IP_LIST`
 Réponse à la demande `ASK_IP_LIST`. Le champ `data_size` contient le nombre d'adresses IP connue et le payload contient la liste des adresses ips et des `player_id`.
 #### `52: BAD_IDENT`
