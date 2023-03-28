@@ -30,6 +30,7 @@ class SystemInterface:
             return False
         else:
             self.message = list(self.message)
+            print(self.message)
             self.message[0] = self.message[0][0:1037]
             # unpacked_data = struct.unpack("=BHLLH1024s", self.message[0])
             # print(unpacked_data[5].decode(sys.getdefaultencoding(), errors='ignore'))
