@@ -1,8 +1,9 @@
-from enum import Enum
+from enum import IntEnum
 
+# IntEnum: 100 - 199 range
 
-class OrientationTypes(Enum):
-    TOP_LEFT = 1
-    TOP_RIGHT = 2
-    BOTTOM_RIGHT = 3
-    BOTTOM_LEFT = 4
+class OrientationTypes(IntEnum):
+    TOP_LEFT = 101
+    TOP_RIGHT = 102
+    BOTTOM_RIGHT = 103
+    BOTTOM_LEFT = 104
