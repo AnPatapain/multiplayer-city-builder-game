@@ -6,3 +6,5 @@ __pycache__/
 .idea/
 temp.py
 saved_games/
+.vscode/
+cmake-build-debug/

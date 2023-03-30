@@ -20,6 +20,8 @@
 
 Ce protocole sert a communiquer entre les client à travers le réseau. Il  doit être reçu et envoyé par les processus C a travers des sockets TCP.
 
+Port **5252**
+
 ### Initialisation de la connexion
 Un client souhaite se connecter au jeu:
 
