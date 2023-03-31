@@ -4,35 +4,106 @@
 #include <string.h>
 #include <sys/socket.h>
 
-game_packet* new_game_packet(uint8_t type){
+char *buffer;
+unsigned int buffer_size = 0;
+
+const uint32_t header_size = sizeof(game_packet) - sizeof(char*);
+
+int actual_event = 0;
+int player_id = 0;
+
+int new_payer_id(){
+    player_id = rand() % 65535;
+    return player_id;
+}
+
+void resize_buffer(uint new_size){
+    if (buffer_size){
+        free(buffer);
+    }
+    buffer = calloc(1,new_size);
+    buffer_size = new_size;
+}
+
+game_packet* new_game_packet(){
     game_packet *new_packet = calloc(sizeof(game_packet), 1);
     if (new_packet == NULL) {
         return NULL;
     }
-    new_packet->type = type;
     new_packet->reserved = 255;
     return new_packet;
 }
 
-int send_game_packet(game_packet *packet, int size_payload, int socket){
-    int send_size = sizeof(game_packet) - sizeof(char*);
+void init(game_packet *packet, uint8_t type, uint32_t size_payload){
+    packet->type = type;
+    actual_event += 1;
+    packet->id_event = actual_event;
+    packet->id_event = size_payload;
+    packet->player_id = player_id;
+}
+
+int throw_new_packet(uint8_t type,int socket){
+    game_packet *message = new_game_packet();
+    init(message,type,0);
+    if (send(socket,message,header_size,0) <= 0){
+        return -1;
+    };
+    free(message);
+    return 0;
+}
+
+int has_payload(game_packet* packet){
+    switch (packet->type) {
+        case GPP_GAME_STATUS:
+            return 1;
+        case GPP_ALTER_GAME:
+            return 1;
+        case GPP_DELEGATE_ASK:
+            return 1;
+        case GPP_RESP_IP_LIST:
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+int send_game_packet(game_packet *send_packet, int socket){
+    uint32_t send_size = header_size;
     int as_payload = 0;
 
-    if (size_payload != 0 && packet->payload != NULL){
-        send_size += size_payload;
+    if (send_packet->data_size > 0 && send_packet->payload != NULL && has_payload(send_packet)){
+        send_size += send_packet->data_size;
         as_payload = 1;
     }
 
-    char *send_bytes = calloc(1,send_size);
-    if (memcpy(send_bytes,packet, sizeof(game_packet) - sizeof(char*)) == NULL) {
+    if (send_packet->data_size > buffer_size){
+        resize_buffer(send_packet->data_size);
+    }
+
+    memset(buffer,'\0',buffer_size);
+    if (memcpy(buffer,send_packet, sizeof(game_packet) - sizeof(char*)) == NULL) {
         return -1;
     }
 
     if (as_payload){
-        if (memcpy(send_bytes, packet->payload, size_payload) == NULL){
+        if (memcpy(buffer, send_packet->payload, send_packet->data_size) == NULL){
             return -1;
         }
     }
 
-    return send(socket,send_bytes,send_size,0);
+    return send(socket,buffer,send_size,0);
+}
+
+int receive_game_packet(game_packet *recv_packet, int socket){
+
+    int recep = recv(socket,recv_packet,header_size,0);
+    if (recep < header_size && recep){
+        return -1;
+    }
+
+    if (recv_packet->data_size > 0 && has_payload(recv_packet)){
+        char *payload = calloc(recv_packet->data_size,1);
+        recep += recv(socket,payload,recv_packet->data_size,0);
+    }
+    return recep;
 }

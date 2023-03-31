@@ -16,4 +16,12 @@
 #include "game_packet_protocol.h"
 #include "client_list.h"
 
+/**
+ * Timeout for the connection in seconds
+ */
+#define TIMEOUT 10
+
+int init_server(char *ip_address);
+int req_connection(client_game *client,game_packet *packet);
+
 #endif //GAME_SERVER

@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "game_packet_protocol.h"
+
 typedef enum {FALSE = 0, TRUE = 1} bool;
 
 struct client_game
@@ -19,7 +21,11 @@ struct client_game
 
 typedef struct client_game client_game;
 
+
+client_game *first_client();
+bool id_exist(client_game *client_to_check,uint16_t id);
 int cgl_append(client_game* new_client);
+game_ip *get_all_ips(int *nb_client);
 
 /**
  * @param: fd_server: fd to set al client
