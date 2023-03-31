@@ -73,9 +73,13 @@ class Menu:
 
         self.textinput = TextInput((0, 0), (300, 30), placeholder="idk really")
 
-    def run(self):
-        EventManager.handle_events()
-        self.affichage()
+    def run(self, already_launched_once: bool):
+        if already_launched_once:
+            self.go_to_main_menu()
+        while self.is_active():
+            EventManager.handle_events()
+            self.affichage()
+        return
 
 
     def affichage(self):
@@ -154,6 +158,7 @@ class Menu:
         EventManager.register_component(self.button__options)
         EventManager.register_component(self.button__exit)
         EventManager.register_component(self.textinput)
+        EventManager.register_key_listener(pg.K_ESCAPE, exit)
 
     def event_load_menu(self):
         EventManager.reset()
@@ -162,6 +167,7 @@ class Menu:
         EventManager.register_component(self.save3)
         EventManager.register_component(self.save4)
         EventManager.register_component(self.come_back_to_main_menu)
+        EventManager.register_key_listener(pg.K_ESCAPE, self.go_to_main_menu)
 
     def load_save(self):
         self.set_inactive()

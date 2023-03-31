@@ -8,9 +8,6 @@ from game.textures import Textures
 
 
 def main():
-    is_game_run = True
-    is_playing = True
-
     pg.init()
     screen = pg.display.set_mode((1920, 1080), pg.FULLSCREEN)
     #screen = pg.display.set_mode((1220, 680))
@@ -19,25 +16,35 @@ def main():
     curseur = pg.cursors.Cursor((0, 0), pg.image.load("assets/C3_sprites/system/Arrow.png"))
     pg.mouse.set_cursor(curseur)
     pg.event.set_grab(True)
-    menu = Menu(screen)
+
     Textures.init(screen)
-
-    while menu.is_active():
-        menu.run()
-
-    # Clear buttons from the menu
-    EventManager.reset()
-    game = Game(screen)
 
     # Save load, need to be here to load save after init game
     # Not implemented yet
     # if menu.get_save_loading():
     #     backup_game.load_game("save.bin")
 
-    while is_game_run:
+    already_launched_once = False
 
-        while is_playing:
-            game.run()
+    while True:
+        menu = Menu(screen)
+        menu.run(already_launched_once)
+        del menu
+
+        already_launched_once = True
+
+
+        # Clear buttons from the menu
+        EventManager.reset()
+        pg.mixer.music.stop()
+
+
+        game = Game(screen)
+        game.run()
+        del game
+
+        EventManager.reset()
+        pg.mixer.music.stop()
 
 
 if __name__ == "__main__":

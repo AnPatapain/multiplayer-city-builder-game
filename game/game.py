@@ -91,7 +91,6 @@ class Game:
 
         self.thread_event.set()
         self.draw_thread.join()
-        exit()
 
 
     def toogle_pause(self):
