@@ -173,8 +173,19 @@ class Panel:
                 return "Connected"
             else:
                 return "Not connected"
+            
+
+        def __connect_button_toogle():
+            if network_manager.get_is_online():
+                network_manager.stop_subprocess()
+                 
+            else:
+                network_manager.run_subprocess()
+            
+
+
         self.connect = Button((550, 0), (100, 46), text_fn=__get_button_text, center_text=False, text_size=30)
-        self.connect.on_click(lambda:network_manager.set_is_online(True))
+        self.connect.on_click(__connect_button_toogle)
 
          
 

@@ -10,11 +10,6 @@
 
 #define KEY 192002
 
-typedef struct message {
-    long message_type;
-    char message_body[BUFFER_SIZE];
-}message;
-
 
 void send_msg_to_python_process(char* buffer);
 char *read_msg_from_python_process();
@@ -23,7 +18,7 @@ int remove_enter_in_buffer(char* buffer);
 void *receive_test(void *args) {
     while(1) {
         char* buffer = read_msg_from_python_process();
-        printf("\nbuffer from py: %s\n", buffer);
+        printf("\nbuffer received from py: %s\n", buffer);
     }
 }
 
@@ -37,6 +32,7 @@ void *send_test(void *args) {
 }
 
 int main() {
+
     pthread_t send_thread;
     pthread_t read_thread;
     pthread_create(&send_thread, NULL, send_test, NULL);
@@ -78,18 +74,18 @@ char *read_msg_from_python_process() {
     int message_queueID = msgget(KEY, 0666 | IPC_CREAT);
     // printf("\nmessage queue id: %d\n", message_queueID);
 
-    message msg;
+    struct Message msg;
 
     // Receive the coor message type
     msg.message_type = FROM_PY_TO_C; 
 
-    if(msgrcv(message_queueID, &msg, sizeof(msg), msg.message_type, 0) == -1) {
+    if(msgrcv(message_queueID, &msg, sizeof(struct Msg_body), FROM_PY_TO_C, 0) == -1) {
         perror("read msg failed from python process");
     }
     
     char* buffer = (char*)calloc(BUFFER_SIZE, 1);
 
-    strncpy(buffer, msg.message_body, sizeof(msg.message_body));
+    strncpy(buffer, msg.msg_body.data, sizeof(msg.msg_body.data));
     remove_enter_in_buffer(buffer);
     // printf("\nlen: %ld, msg from python: %s\n",strlen(buffer), buffer);
     return buffer;

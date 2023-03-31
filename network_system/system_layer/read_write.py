@@ -2,6 +2,8 @@ import sysv_ipc
 import sys
 import re
 import struct
+import subprocess
+
 
 # Constants
 KEY = 192002
@@ -19,9 +21,17 @@ class SystemInterface:
         self.message = None
         print(self.message_queue)
         self.is_online = False
+        self.pid = None
 
-    def send_message(self, message):
-        self.message_queue.send(message.encode(), type=FROM_PY_TO_C)
+    def send_message(self, type_object, meta_data, object_size, id_object, id_player, data):
+        sending_message = struct.pack('=H H L L H 1024s', 
+                                      type_object, meta_data, 
+                                      object_size, 
+                                      id_object, 
+                                      id_player, 
+                                      data.encode())
+        
+        self.message_queue.send(sending_message, type=FROM_PY_TO_C)
 
     def read_message(self):
         try:
@@ -31,6 +41,7 @@ class SystemInterface:
         else:
             self.message = list(self.message)
             self.message[0] = self.message[0][0:1037]
+            print(self.message)
             # unpacked_data = struct.unpack("=BHLLH1024s", self.message[0])
             # print(unpacked_data[5].decode(sys.getdefaultencoding(), errors='ignore'))
             self.message[0] = self.decode_and_clean_message()
@@ -91,4 +102,22 @@ class SystemInterface:
         self.is_online = status
         
 #..............................................................................#
- 
+    def run_subprocess(self) :
+        
+        # RUN PROCESS
+        c_file = ["./network_system/system_layer/peer"]
+        self.pid = subprocess.Popen(c_file)
+        # output, error = self.pid.communicate()
+
+        self.set_is_online(True)
+
+        # return output.decode("utf-8")
+
+    #methode pour stoper le process
+
+    def stop_subprocess(self):
+
+        self.pid.terminate()
+
+        self.set_is_online(False)
+#..............................................................................#
