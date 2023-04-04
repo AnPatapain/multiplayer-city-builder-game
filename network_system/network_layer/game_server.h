@@ -21,7 +21,7 @@
  */
 #define TIMEOUT 10
 
-int init_server(char *ip_address);
-int req_connection(client_game *client,game_packet *packet);
+int init_server(const char *ip_address);
+int req_connection(client_game *client, const game_packet *packet);
 
 #endif //GAME_SERVER

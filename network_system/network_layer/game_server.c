@@ -19,7 +19,7 @@ client_game* add_client(int socket_client){
     return new_client;
 }
 
-int new_connection(client_game *client,game_packet *packet){
+int new_connection(client_game *client, const game_packet *packet){
     if (id_exist(client, packet->player_id)){
         if (throw_new_packet(GPP_BAD_IDENT,client->socket_client) < 0){
             return -1;
@@ -29,7 +29,7 @@ int new_connection(client_game *client,game_packet *packet){
     return req_connection(client,packet);
 }
 
-int req_connection(client_game *client,game_packet *packet){
+int req_connection(client_game *client, const game_packet *packet){
     client->player_id = packet->player_id;
     if (throw_new_packet(GPP_CONNECT_OK,client->socket_client) < 0){
         return -1;
@@ -37,13 +37,13 @@ int req_connection(client_game *client,game_packet *packet){
     return 0;
 }
 
-int get_ip_list(client_game *client, game_packet *packet){
+int get_ip_list(client_game *client, const game_packet *packet){
     game_packet *ip_list_packet = new_game_packet();
     int number_ip;
     game_ip *ips = get_all_ips(&number_ip);
-    int size_payload = number_ip * sizeof(uint32_t);
+    int size_payload = (int) number_ip * (int) sizeof(uint32_t);
 
-    init(ip_list_packet,GPP_RESP_IP_LIST,size_payload);
+    init_packet(ip_list_packet, GPP_RESP_IP_LIST, size_payload);
     ip_list_packet->payload = (char *) ips;
 
     if (send_game_packet(packet,client->socket_client) <= 0){
@@ -65,30 +65,30 @@ int type_check(client_game *client,game_packet *packet){
             return 0;
         case GPP_ASK_GAME_STATUS:
             //TODO: Request python for all game
-            break;
+            return 0;
         case GPP_GAME_STATUS:
             //TODO: Send data to python
-            break;
+            return 0;
         case GPP_ALTER_GAME:
             //TODO: Send data to python
-            break;
+            return 0;
         case GPP_DELEGATE_ASK:
             //TODO: Notify python to take own of this data
-            break;
+            return 0;
         case GPP_DELEGATE_OK:
             //TODO: Python take data
-            break;
+            return 0;
         case GPP_ASK_IP_LIST:
             return get_ip_list(client,packet);
         case GPP_RESP_IP_LIST:
             //TODO: Mange reception of game IP list
-            break;
+            return 0;
         case GPP_BAD_IDENT:
             //TODO: (implement bad request + log)?
-            break;
+            return 0;
         default:
             //TODO: (implement bad request + log)?
-            break;
+            return 0;
     }
 }
 
@@ -101,8 +101,11 @@ int check_all_client(fd_set *fds){
             if (receive_game_packet(recv_packet,client->socket_client) == 0){
                 //TODO: disconnect
             }
-            //TODO: type check
+            if (type_check(client,recv_packet) == -1){
+                printf("Error check client %i\n",client->player_id);
+            }
         }
+        client = client->next;
     }
     free(recv_packet);
     return 0;
@@ -111,13 +114,15 @@ int check_all_client(fd_set *fds){
 int game_server(int socket) {
     fd_set fd_listen_sock;
     int number_fd;
-    int max_fd = socket;
     
     while (1){
         FD_ZERO(&fd_listen_sock);
         FD_SET(socket,&fd_listen_sock);
         
-        number_fd = select(cgl_set_all_client(&fd_listen_sock) +1, &fd_listen_sock,NULL,NULL,NULL);
+        number_fd = select(
+                cgl_set_all_client(&fd_listen_sock) +1,
+                &fd_listen_sock,NULL,NULL,NULL
+                );
 
         if (number_fd < 0){
             perror("select :");
@@ -130,20 +135,21 @@ int game_server(int socket) {
             }
             printf("LOG: new client_game accept\n");
         }
-
-
+        check_all_client(&fd_listen_sock);
     }
 }
 
-int init_connection_existant_game(char *ip_address){
+int init_connection_existant_game(const char *ip_address){
 
     // Create new socket
     struct sockaddr_in sock_adresse = {0};
     sock_adresse.sin_port = htons(PORT);
 
     if (inet_aton(ip_address,&(sock_adresse.sin_addr)) == 0){
-        printf("Erreur : inet_aton\n");
+        printf("Erreur : inet_aton %s \n",ip_address);
+        return -1;
     }
+    sock_adresse.sin_family = AF_INET;
 
     int new_socket = socket(AF_INET, SOCK_STREAM, 6);
     if (new_socket < 0){
@@ -165,23 +171,24 @@ int init_connection_existant_game(char *ip_address){
     new_connection -> as_init = FALSE;
 
     game_packet *connection = new_game_packet();
-    init(connection,GPP_CONNECT_NEW,0);
-
     if (connection == NULL){
         return -1;
     }
     connection->payload = NULL;
 
     // Start protocol connection
-    if (send_game_packet(connection,new_socket) < 1){
-        printf("send game packet protocol failed");
-        return -1;
-    }
-
     struct timeval timeout = {0};
     fd_set fd_set_connect;
 
     do {
+
+        new_payer_id();
+        init_packet(connection, GPP_CONNECT_NEW, 0);
+        if (send_game_packet(connection,new_socket) < 1){
+            printf("send game packet protocol failed\n");
+            return -1;
+        }
+        printf("le do\n");
         timeout.tv_sec = TIMEOUT;
 
         FD_ZERO(&fd_set_connect);
@@ -189,7 +196,7 @@ int init_connection_existant_game(char *ip_address){
         select(new_socket + 1, &fd_set_connect, NULL, NULL, &timeout);
 
         if (!FD_ISSET(new_socket, &fd_set_connect)) {
-            printf("Error can't connect to game");
+            printf("Error can't connect to game\n");
             close(new_socket);
             return 1;
         }
@@ -201,7 +208,7 @@ int init_connection_existant_game(char *ip_address){
     }while (connection->type == GPP_BAD_IDENT);
 
     if (connection->type != GPP_CONNECT_OK){
-        printf("Error bad connection type");
+        printf("Error bad connection type\n");
         close(new_socket);
         return -1;
     }
@@ -209,41 +216,42 @@ int init_connection_existant_game(char *ip_address){
     // Add client to list
     client_game *new_client = add_client(new_socket);
     new_client->player_id = connection->player_id;
-    printf("Event: %i: Connected to client %i",connection->id_event,new_client->player_id);
+    printf("Event: %i: Connected to client %i\n",connection->id_event,new_client->player_id);
 
     // Ask for ip
-    init(connection,GPP_ASK_IP_LIST,0);
+    init_packet(connection, GPP_ASK_IP_LIST, 0);
     if (send_game_packet(connection,new_client->socket_client) < 1){
-        printf("send game packet protocol failed");
+        printf("send game packet protocol failed\n");
         return -1;
     }
     return 0;
 }
 
 
-int init_server(char *ip_address){
+int init_server(const char *ip_address){
 
-    struct sockaddr_in sockAdresse = {0};
-    sockAdresse.sin_addr.s_addr = htonl(INADDR_ANY);
-    sockAdresse.sin_port = htons(PORT);
-    sockAdresse.sin_family = AF_INET;
 
-    int myServSock = socket(AF_INET,SOCK_STREAM,6);
-    if (myServSock < 0){
+    struct sockaddr_in listen_socket_addr = {0};
+    listen_socket_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    listen_socket_addr.sin_port = htons(PORT);
+    listen_socket_addr.sin_family = AF_INET;
+
+    int listen_socket = socket(AF_INET, SOCK_STREAM, 6);
+    if (listen_socket < 0){
         perror("socket");
-        close(myServSock);
+        close(listen_socket);
         return 1;
     }
 
-    if (bind(myServSock,(struct sockaddr *) &sockAdresse,sizeof(sockAdresse)) == -1){
+    if (bind(listen_socket, (struct sockaddr *) &listen_socket_addr, sizeof(listen_socket_addr)) == -1){
         perror("bind");
-        close(myServSock);
+        close(listen_socket);
         return 1;
     }
 
-    if (listen(myServSock,5) < 0){
+    if (listen(listen_socket, 5) < 0){
         perror("listen");
-        close(myServSock);
+        close(listen_socket);
         return 1;
     }
     
@@ -252,20 +260,31 @@ int init_server(char *ip_address){
         int ret = init_connection_existant_game(ip_address);
         //TODO: need difference if is os_error or timeout
         if ( ret != 0){
-            close(myServSock);
+            close(listen_socket);
             return 1;
         }
     }
-    game_server(myServSock);
+    game_server(listen_socket);
 
-    if (close(myServSock) == -1){
+    game_server(listen_socket);
+
+    if (close(listen_socket) == -1){
         perror("close socket:");
     }
     return 0;
+
 }
 
 int main(int argc, char const *argv[])
 {
+    const char *ip = NULL;
+    if (argc > 1){
+        ip = argv[1];
+    }
+
+    init_server(ip);
+
+
 
     return 0;
 }
