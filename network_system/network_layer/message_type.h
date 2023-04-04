@@ -15,6 +15,12 @@
 #define GPP_CONNECT_OK 3
 
 /**
+ * Nouveau packet: Après l'acceptation d'un socket client le joueur envoye un packet pour affirmer au client nouvelement connecté
+ * qu'il peut commencer a envoyer des informations.
+ **/
+#define GPP_CONNECT_START 4
+
+/**
  * Demande à un client l'états de l'ensemble des objets lui appartenant. Le payload est inutile et le champ `data_size` doit être défini à `0`.
  * */
 #define GPP_ASK_GAME_STATUS 11
