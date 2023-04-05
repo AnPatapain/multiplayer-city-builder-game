@@ -100,7 +100,7 @@ int send_game_packet(const game_packet *send_packet, int socket){
     }
 
     if (as_payload){
-        if (memcpy(buffer, send_packet->payload, send_packet->data_size) == NULL){
+        if (memcpy(buffer + header_size, send_packet->payload, send_packet->data_size) == NULL){
             return -1;
         }
     }
