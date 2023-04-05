@@ -131,7 +131,8 @@ class World:
                     
                     # Send message to c process
                     tar = f"start: {self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]} end: {self.builder.get_end_point()[0]} {self.builder.get_end_point()[1]}\n"
-                    self.read_write_py_c.send_message(tar)
+                    # print(BuildingTypes.VACANT_HOUSE)
+                    self.read_write_py_c.send_message(1, 2, 10, 1, 2, tar)
                 else:
                     self.builder.set_end_point(None)
                     self.builder.set_start_point(None)
