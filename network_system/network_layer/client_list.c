@@ -63,11 +63,15 @@ int cgl_append(client_game* new_client){
     return 0;
 }
 
-game_ip *get_all_ips(int *nb_client){
+game_ip *get_all_ips(int *nb_client, const client_game *req_client) {
     game_ip *ips = calloc(number_client, sizeof(uint32_t));
     client_game *client = list_client;
     int i = 0;
     while (client != NULL){
+        if (client == req_client){
+            client = client->next;
+            continue;
+        }
         ips[i] = client->sockaddr_client.sin_addr.s_addr;
         i++;
         client = client->next;

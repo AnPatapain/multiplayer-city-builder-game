@@ -62,10 +62,10 @@ int req_connection(client_game *client, const game_packet *packet){
     return 0;
 }
 
-int get_ip_list(client_game *client, const game_packet *packet){
+int get_ip_list(client_game *client){
     game_packet *ip_list_packet = new_game_packet();
     int number_ip;
-    game_ip *ips = get_all_ips(&number_ip);
+    game_ip *ips = get_all_ips(&number_ip, client);
     int size_payload = (int) number_ip * (int) sizeof(uint32_t);
 
     init_packet(ip_list_packet, GPP_RESP_IP_LIST, size_payload);
@@ -115,7 +115,7 @@ int type_check(client_game *client,game_packet *packet){
             //TODO: Python take data
             return 0;
         case GPP_ASK_IP_LIST:
-            return get_ip_list(client,packet);
+            return get_ip_list(client);
         case GPP_RESP_IP_LIST:
             show_list_ip(packet);
             return 0;
@@ -250,6 +250,7 @@ int init_connection_existant_game(const char *ip_address){
     // Add client to list
     client_game *new_client = add_client(new_socket);
     new_client->player_id = connection->player_id;
+    new_client->sockaddr_client = sock_adresse;
     printf("Event: %i: Connected to client %i\n",connection->id_event,new_client->player_id);
 
     // Ask for ip
