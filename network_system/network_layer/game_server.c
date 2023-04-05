@@ -78,6 +78,14 @@ int get_ip_list(client_game *client, const game_packet *packet){
     return 0;
 }
 
+void show_list_ip(const game_packet *packet){
+    game_ip *ips = (game_ip*) packet->payload;
+    int number_ips = (int) packet->data_size / (int) sizeof(uint32_t);
+    for (int i = 0; i < number_ips; i++){
+        printf("address found : %i\n",ips[i]);
+    }
+}
+
 int type_check(client_game *client,game_packet *packet){
     switch (packet->type) {
         case GPP_CONNECT_NEW:
@@ -105,7 +113,7 @@ int type_check(client_game *client,game_packet *packet){
         case GPP_ASK_IP_LIST:
             return get_ip_list(client,packet);
         case GPP_RESP_IP_LIST:
-            //TODO: Mange reception of game IP list
+            show_list_ip(packet);
             return 0;
         case GPP_BAD_IDENT:
             //TODO: (implement bad request + log)?
@@ -186,12 +194,6 @@ int init_connection_existant_game(const char *ip_address){
         close(new_socket);
         return -1;
     }
-
-    client_game* new_connection = add_client(new_socket);
-    if ( new_connection == NULL){
-        return -1;
-    }
-    new_connection -> as_initial = FALSE;
 
     game_packet *connection = new_game_packet();
     if (connection == NULL){

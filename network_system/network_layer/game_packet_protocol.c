@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <time.h>
+#include <errno.h>
 
 char *buffer;
 unsigned int buffer_size = 0;
@@ -108,6 +109,17 @@ int send_game_packet(const game_packet *send_packet, int socket){
     return (int) send(socket,buffer,send_size,0);
 }
 
+void flush_socket(int socket){
+    int recept;
+    char buf[1024];
+    do{
+        recept = recv(socket,buf,1024,MSG_DONTWAIT);
+        if (recept == -1 && errno == EAGAIN){
+            return;
+        }
+    }while(recept >= 0);
+}
+
 int receive_game_packet(game_packet *recv_packet, int socket){
 
     int recep = (int) recv(socket,recv_packet,header_size,0);
@@ -119,5 +131,6 @@ int receive_game_packet(game_packet *recv_packet, int socket){
         char *payload = calloc(recv_packet->data_size,1);
         recep += (int) recv(socket,payload,recv_packet->data_size,0);
     }
+    flush_socket(socket);
     return recep;
 }
