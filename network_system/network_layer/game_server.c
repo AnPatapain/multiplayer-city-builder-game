@@ -211,7 +211,6 @@ int init_connection_existant_game(const char *ip_address){
 
     do {
 
-        printf("le do\n");
         timeout.tv_sec = TIMEOUT;
 
         FD_ZERO(&fd_set_connect);

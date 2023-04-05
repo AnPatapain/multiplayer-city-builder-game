@@ -105,7 +105,6 @@ int send_game_packet(const game_packet *send_packet, int socket){
             return -1;
         }
     }
-    printf("la\n");
     return (int) send(socket,buffer,send_size,0);
 }
 
