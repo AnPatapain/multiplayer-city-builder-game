@@ -23,5 +23,6 @@
 
 int init_server(const char *ip_address);
 int req_connection(client_game *client, const game_packet *packet);
+int connection_existant_game(game_ip ip_address, bool is_new_player);
 
 #endif //GAME_SERVER

@@ -90,6 +90,19 @@ void show_list_ip(const game_packet *packet){
     }
 }
 
+int connect_to_all_ip(const game_packet *resp_ips){
+    game_ip *ips = (game_ip*) resp_ips->payload;
+    int number_ips = (int) resp_ips->data_size / (int) sizeof(uint32_t);
+    struct sockaddr_in sock_adresse = {0};
+    sock_adresse.sin_port = htons(PORT);
+    int new_socket;
+    for (int i = 0; i < number_ips; i++){
+        if (connection_existant_game(ips[i],FALSE) != 0){
+            return -1;
+        }
+    }
+}
+
 int type_check(client_game *client,game_packet *packet){
     switch (packet->type) {
         case GPP_CONNECT_NEW:
@@ -98,7 +111,6 @@ int type_check(client_game *client,game_packet *packet){
             return req_connection(client,packet);
         case GPP_CONNECT_OK:
             client->player_id = packet->player_id;
-            //TODO: contact all ips
             return 0;
         case GPP_ASK_GAME_STATUS:
             //TODO: Request python for all game
@@ -119,7 +131,7 @@ int type_check(client_game *client,game_packet *packet){
             return get_ip_list(client);
         case GPP_RESP_IP_LIST:
             show_list_ip(packet);
-            return 0;
+            return connect_to_all_ip(packet);
         case GPP_BAD_IDENT:
             //TODO: (implement bad request + log)?
             return 0;
@@ -175,16 +187,12 @@ int game_server(int socket) {
     }
 }
 
-int init_connection_existant_game(const char *ip_address){
+int connection_existant_game(game_ip ip_address, bool is_new_player){
 
     // Create new socket
     struct sockaddr_in sock_adresse = {0};
     sock_adresse.sin_port = htons(PORT);
-
-    if (inet_aton(ip_address,&(sock_adresse.sin_addr)) == 0){
-        printf("Erreur : inet_aton %s \n",ip_address);
-        return -1;
-    }
+    sock_adresse.sin_addr.s_addr = ip_address;
     sock_adresse.sin_family = AF_INET;
 
     int new_socket = socket(AF_INET, SOCK_STREAM, 6);
@@ -219,7 +227,11 @@ int init_connection_existant_game(const char *ip_address){
         select(new_socket + 1, &fd_set_connect, NULL, NULL, &timeout);
 
         if (!FD_ISSET(new_socket, &fd_set_connect)) {
-            printf("Error can't connect to game\n");
+            if (is_new_player)
+                printf("Error can't connect to game\n");
+            else{
+                printf("Error connection at %s", inet_ntoa(sock_adresse.sin_addr));
+            }
             close(new_socket);
             return 1;
         }
@@ -229,9 +241,13 @@ int init_connection_existant_game(const char *ip_address){
         }
         print_packet(connection);
         if (connection->type == GPP_CONNECT_START){
-            new_payer_id();
-            init_packet(connection, GPP_CONNECT_NEW, 0);
-            if (send_game_packet(connection,new_socket) < 1){
+            if (is_new_player) {
+                new_payer_id();
+                init_packet(connection, GPP_CONNECT_NEW, 0);
+            } else{
+                init_packet(connection, GPP_CONNECT_REQ, 0);
+            }
+            if (send_game_packet(connection, new_socket) < 1) {
                 printf("send game packet protocol failed\n");
                 return -1;
             }
@@ -254,10 +270,12 @@ int init_connection_existant_game(const char *ip_address){
     printf("Event: %i: Connected to client %i\n",connection->id_event,new_client->player_id);
 
     // Ask for ip
-    init_packet(connection, GPP_ASK_IP_LIST, 0);
-    if (send_game_packet(connection,new_client->socket_client) < 1){
-        printf("send game packet protocol failed\n");
-        return -1;
+    if (is_new_player) {
+        init_packet(connection, GPP_ASK_IP_LIST, 0);
+        if (send_game_packet(connection, new_client->socket_client) < 1) {
+            printf("send game packet protocol failed\n");
+            return -1;
+        }
     }
     return 0;
 }
@@ -266,7 +284,12 @@ int init_connection_existant_game(const char *ip_address){
 int init_server(const char *ip_address){
 
     if (ip_address != NULL){
-        int ret = init_connection_existant_game(ip_address);
+        struct sockaddr_in new_sock;
+        if (inet_aton(ip_address,&(new_sock.sin_addr)) == 0){
+            printf("Erreur : inet_aton %s \n",ip_address);
+            return -1;
+        }
+        int ret = connection_existant_game(new_sock.sin_addr.s_addr,TRUE);
         //TODO: need difference if is os_error or timeout
         if ( ret != 0){
             return 1;
