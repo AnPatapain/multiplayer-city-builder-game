@@ -23,13 +23,18 @@ class SystemInterface:
         self.is_online = False
         self.pid = None
 
-    def send_message(self, type_object, meta_data, object_size, id_object, id_player, data):
+    def send_message(self, type_object, meta_data, object_size, id_object, id_player, data, encode=True):
+        
+        if encode:
+            data = data.encode()
+            print(data)
+
         sending_message = struct.pack('=H H L L H 1024s', 
                                       type_object, meta_data, 
                                       object_size, 
                                       id_object, 
                                       id_player, 
-                                      data.encode())
+                                      data)
         
         self.message_queue.send(sending_message, type=FROM_PY_TO_C)
 
