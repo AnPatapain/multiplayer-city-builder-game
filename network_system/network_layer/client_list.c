@@ -60,6 +60,7 @@ int cgl_append(client_game* new_client){
         list_client = new_client;
     }
     number_client++;
+    new_client->next=NULL;
     return 0;
 }
 

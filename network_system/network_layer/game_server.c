@@ -98,6 +98,7 @@ int type_check(client_game *client,game_packet *packet){
             return req_connection(client,packet);
         case GPP_CONNECT_OK:
             client->player_id = packet->player_id;
+            //TODO: contact all ips
             return 0;
         case GPP_ASK_GAME_STATUS:
             //TODO: Request python for all game
