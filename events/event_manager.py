@@ -53,27 +53,37 @@ class EventManager:
                 hooked_function[0](event, *hooked_function[1])
 
             if event.type == pg.TEXTINPUT:
+                key_pressed = False
                 for component in EventManager.components:
                     if isinstance(component, TextInput) and component.is_focused():
                         component.add_character(event.text)
-                        continue
+                        key_pressed = True
+                if key_pressed:
+                    continue
 
             if event.type == pg.KEYDOWN:
                 EventManager.any_input()
+                key_pressed = False
                 for component in EventManager.components:
                     if isinstance(component, TextInput) and component.is_focused():
                         match event.key:
                             case pg.K_BACKSPACE:
                                 component.delete_character_left()
+                                key_pressed = True
                             case pg.K_DELETE:
                                 component.delete_character_right()
+                                key_pressed = True
                             case pg.K_LEFT:
                                 component.go_left()
+                                key_pressed = True
                             case pg.K_RIGHT:
                                 component.go_right()
+                                key_pressed = True
                             case pg.K_ESCAPE:
                                 component.unfocus()
-                        continue
+                                key_pressed = True
+                if key_pressed:
+                    continue
 
                 for key_listener in EventManager.key_listeners:
                     if key_listener.key == event.key:
