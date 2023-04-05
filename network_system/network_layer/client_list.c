@@ -68,7 +68,7 @@ game_ip *get_all_ips(int *nb_client){
     client_game *client = list_client;
     int i = 0;
     while (client != NULL){
-        ips[i] = ((struct sockaddr_in*) &client->sockaddr_client)->sin_addr.s_addr;
+        ips[i] = client->sockaddr_client.sin_addr.s_addr;
         i++;
         client = client->next;
     }

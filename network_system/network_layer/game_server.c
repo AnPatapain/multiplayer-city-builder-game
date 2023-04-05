@@ -10,7 +10,8 @@ client_game* accept_new_client(int socket_listen){
     }
     new_client->player_id = 0;
     printf("accept new client\n");
-    if ((new_client->socket_client = accept(socket_listen,&(new_client->sockaddr_client),&(new_client->socket_size))) <= 0){
+    uint len = sizeof(struct sockaddr_in);
+    if ((new_client->socket_client = accept(socket_listen,(struct sockaddr*) &(new_client->sockaddr_client),&len)) <= 0){
         perror("accept");
         return NULL;
     }
@@ -81,8 +82,11 @@ int get_ip_list(client_game *client, const game_packet *packet){
 void show_list_ip(const game_packet *packet){
     game_ip *ips = (game_ip*) packet->payload;
     int number_ips = (int) packet->data_size / (int) sizeof(uint32_t);
+    struct in_addr address  = {0};
+    printf("number ips: %i\n", number_ips);
     for (int i = 0; i < number_ips; i++){
-        printf("address found : %i\n",ips[i]);
+        address.s_addr = ips[i];
+        printf("address found : %s\n", inet_ntoa(address));
     }
 }
 

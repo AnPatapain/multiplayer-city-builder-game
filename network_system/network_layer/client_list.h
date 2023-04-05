@@ -2,6 +2,8 @@
 #define CLIENT_LIST
 
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -13,8 +15,7 @@ struct client_game
 {
     int socket_client;
     uint16_t player_id;
-    struct sockaddr sockaddr_client;
-    u_int socket_size;
+    struct sockaddr_in sockaddr_client;
     bool as_initial;
     struct client_game* next;
 };

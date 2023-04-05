@@ -128,8 +128,9 @@ int receive_game_packet(game_packet *recv_packet, int socket){
     }
 
     if (recv_packet->data_size > 0 && has_payload(recv_packet)){
-        char *payload = calloc(recv_packet->data_size,1);
-        recep += (int) recv(socket,payload,recv_packet->data_size,0);
+        recv_packet->payload = calloc(recv_packet->data_size,1);
+        recep += (int) recv(socket,recv_packet->payload,recv_packet->data_size,0);
+
     }
     flush_socket(socket);
     return recep;
