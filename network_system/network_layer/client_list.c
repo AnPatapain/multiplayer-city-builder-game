@@ -41,7 +41,7 @@ client_game *last_client(){
         return NULL;
     }
     client_game *last = list_client;
-    while (list_client->next != NULL) {
+    while (last->next != NULL) {
         last = last->next;
     }
     return last;
