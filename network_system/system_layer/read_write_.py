@@ -121,6 +121,75 @@ class SystemInterface:
 
         self.set_is_online(False)
 #..............................................................................#
+    def send_disconnect(self):
+        pass
+
+    def recieve_disconnect(self, datas):
+        pass
+
+
+
+    def send_connect(self, ip):
+        pass
+
+    def recieve_connect(self, datas):
+        pass
+
+
+
+    def send_game_save(self):
+        pass
+
+    def recieve_game_save(self, datas):
+        pass
+
+
+
+    def send_delete_buildings(self, start, end):
+        pass
+
+    def recieve_delete_buildings(self, datas):
+        pass
+
+
+
+    def send_build(self, start, end, building, building_id):
+        pass
+
+    def recieve_build(self, datas):
+        pass
+
+
+
+    def send_risk_update(self, risk_type, building_id):
+        pass
+
+    def recieve_risk_update(self, datas):
+        pass
+
+
+
+    def send_walker_direction_update(self, new_direction, walker_id):
+        pass
+
+    def recieve_walker_direction_update(self, datas):
+        pass
+
+
+
+    def send_spawn_walker(self, pos, walker_type, walker_id):
+        pass
+
+    def recieve_spawn_walker(self, datas):
+        pass
+
+
+
+    def send_delete_walker(self, walker_id):
+        pass
+
+    def recieve_delete_walker(self, datas):
+        pass
 
 
 def main():
