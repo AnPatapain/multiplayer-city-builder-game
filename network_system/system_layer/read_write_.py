@@ -1,90 +1,130 @@
 import os
-import struct
-import ctypes
 import socket
-
-BUFFER_SIZE = 1024
-COOR_MESSAGE_TYPE = 1
-FROM_PY_TO_C = 2
-FROM_C_TO_PY = 3
-
-class Object_type(ctypes.Structure):
-    _fields_ = [
-        ('typeObject', ctypes.c_uint16),
-        ('metaData', ctypes.c_uint16),
-    ]
-
-class Msg_body(ctypes.Structure):
-    _fields_ = [
-        ('object_type', Object_type),
-        ('object_size', ctypes.c_uint32),
-        ('id_object', ctypes.c_uint32),
-        ('id_player', ctypes.c_uint16),
-        ('data', ctypes.c_char * BUFFER_SIZE),
-    ]
-
-class Message(ctypes.Structure):
-    _fields_ = [
-        ('message_type', ctypes.c_long),
-        ('msg_body', Msg_body),
-    ]
+import sys
+import re
+import struct
+import subprocess
 
 
-def message_to_send(type_object, meta_data, id_object, id_player, data, encode=True):
-    if encode:
-        data = data.encode()
-        print(data)
+class SystemInterface:
+    instance = None
+    def __init__(self):
+        self.message_read = None
+        self.message_write = None
+        self.connection = None
+        self.sock = None
+        self.init_server()
 
-    object_size = len(data)
+    def init_server(self):
+        server_address = "/tmp/socket"
+        if os.path.exists(server_address):
+            os.remove(server_address)
 
-    format_send_types = f"=H H L L H H {object_size}s"
-    sending_message = struct.pack(format_send_types,
-                                  type_object, meta_data,
-                                  object_size,
-                                  id_object,
-                                  id_player,
-                                  65535,
-                                  data)
+        # Create a Unix domain socket
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
-    return sending_message
+        # Bind the socket to the server address
+        self.sock.bind(server_address)
 
-server_address = "/tmp/socket"
-if os.path.exists(server_address):
-    os.remove(server_address)
+        # Listen for incoming connections
+        self.sock.listen(1)
+
+        # Wait for a connection
+        print(f"Waiting for a connection on {server_address}")
+        connection, client_address = self.sock.accept()
+        self.connection = connection
+
+        print(f"Accepted a connection from {client_address}")
+
+    def send_message(self, type_object, meta_data, id_object, id_player, data, encode=True):
+        if encode:
+            data = data.encode()
+
+        object_size = len(data)
+
+        format_send_types = f"=H H L L H H {object_size}s"
+        sending_message = struct.pack(format_send_types,
+                                      type_object, meta_data,
+                                      object_size,
+                                      id_object,
+                                      id_player,
+                                      65535,
+                                      data)
+
+        return self.connection.sendall(sending_message)
+
+    def read_message(self):
+        header_size = 16
+        binary_received_message = self.connection.recv(header_size)
+        print(binary_received_message)
+        self.message_read = self.unpack_message(binary_received_message)
+        print(self.message_read)
+
+    def unpack_message(self, binary_received_message):
+        header = struct.unpack("=H H L L H H", binary_received_message)
+        temp_dict = {
+            "object_type": {
+                "typeObject": header[0],
+                "metaData": header[1]
+            },
+            "object_size": header[2],
+            "id_object": header[3],
+            "id_player": header[4]
+        }
+        return temp_dict
+
+    def close_socket(self):
+        self.connection.close()
+        self.sock.close()
+
+    def get_coordinates(self):
+        numbers = []
+        pattern = r'\d+'
+        for word in self.message_read['data'].split():
+            matches = re.findall(pattern, word)
+            # if word.isdigit():
+            if matches:
+                numbers.append(int(float(word)))
+        return numbers
+
+    @staticmethod
+    def get_instance():
+        if SystemInterface.instance is None:
+            SystemInterface.instance = SystemInterface()
+        return SystemInterface.instance
+
+    #..............................................................................#
+
+    def get_is_online(self):
+        return self.is_online
+
+    def set_is_online(self, status: bool):
+        self.is_online = status
+
+    #..............................................................................#
+    def run_subprocess(self) :
+
+        # RUN PROCESS
+        c_file = ["./network_system/system_layer/peer"]
+        self.pid = subprocess.Popen(c_file)
+        # output, error = self.pid.communicate()
+
+        self.set_is_online(True)
+
+        # return output.decode("utf-8")
+
+    #methode pour stoper le process
+
+    def stop_subprocess(self):
+
+        self.pid.terminate()
+
+        self.set_is_online(False)
+#..............................................................................#
 
 
-# Create a Unix domain socket
-sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-
-# Bind the socket to the server address
-sock.bind(server_address)
-
-# Listen for incoming connections
-sock.listen(1)
-
-# Wait for a connection
-print(f"Waiting for a connection on {server_address}")
-connection, client_address = sock.accept()
-print(f"Accepted a connection from {client_address}")
-
-# Send a response to the client
-# message = "hello c".encode()
-message_ = message_to_send(type_object=1, meta_data=2, id_object=3, id_player=4, data="Hello C")
-print(message_)
-connection.sendall(message_)
-header = struct.unpack("=H H L L H H", connection.recv(16))
-temp_dict = {}
-temp_dict["object_type"] = {
-    "typeObject": header[0],
-    "metaData": header[1]
-}
-temp_dict["object_size"] = header[2]
-temp_dict["id_object"] = header[3]
-temp_dict["id_player"] = header[4]
-print(connection.recv(temp_dict["object_size"]))
-
-
-# Close the connection and socket
-connection.close()
-sock.close()
-
+def main():
+    sysemAgent = SystemInterface.get_instance()
+    sysemAgent.send_message(type_object=1, meta_data=2, id_object=3, id_player=4, data="Bonjour C je suis Python")
+    sysemAgent.read_message()
+main()
