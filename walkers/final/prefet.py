@@ -11,6 +11,7 @@ from class_types.orientation_types import OrientationTypes
 from class_types.walker_types import WalkerTypes
 from game.textures import Textures
 from walkers.walker import Walker
+from game.id import ID_GEN
 
 class State(Enum):
     PATROL = 1
@@ -20,11 +21,13 @@ class State(Enum):
 
 
 class Prefet(Walker):
-    def __init__(self, associated_building: Buildable):
-        super().__init__(WalkerTypes.PREFET, associated_building, max_walk_distance=30, roads_only=True)
+    def __init__(self, associated_building: Buildable, player_id:int=0, id:int=0 ):
+        super().__init__(WalkerTypes.PREFET, associated_building, max_walk_distance=30, roads_only=True, )
         self.state = State.PATROL
         self.building_being_extinguished: Optional['Buildable'] = None
         self.extinguish_progress = 0
+        id_create = ID_GEN()
+        self.id = id_create.id_gen()
 
     def update(self):
         super().update()

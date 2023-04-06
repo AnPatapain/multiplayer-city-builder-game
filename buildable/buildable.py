@@ -3,6 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 import pygame
 
+from game.id import ID_GEN
 from buildable.buildable_datas import buildable_size
 from events.risk import Risk
 from game.game_controller import GameController
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class Buildable(ABC):
-    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', fire_risk: int, destruction_risk: int, desirability:int =0):
+    def __init__(self, x: int, y: int, build_type: 'BuildingTypes', fire_risk: int, destruction_risk: int, desirability:int =0, player_id: int = 0, id: int =0):
         self.build_type = build_type
 
         self.associated_walker: Optional['Walker'] = None
@@ -25,7 +26,10 @@ class Buildable(ABC):
         self.desirability = desirability
         self.risk = Risk(fire_risk, destruction_risk)
         self.count = 0
+        self.player_id = player_id
 
+        id_create = ID_GEN()
+        self.id = id_create.id_gen()
         self.is_on_fire = False
 
     def get_all_building_tiles(self) -> list['Tile']:

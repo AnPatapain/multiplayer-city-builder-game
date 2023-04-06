@@ -1,7 +1,7 @@
 import random
 from abc import ABC
 from typing import TYPE_CHECKING, Optional
-
+from game.id import ID_GEN
 from class_types.orientation_types import OrientationTypes
 from game.game_controller import GameController
 from game.textures import Textures
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class Walker(ABC):
     def __init__(self, walker_type, associated_building: 'Buildable', roads_only: bool = False,
-                 max_walk_distance: int = -1):
+                 max_walk_distance: int = -1, player_id :int=0, id : int= 0):
         self.walker_type: 'WalkerTypes' = walker_type
         self.associated_building: 'Buildable' = associated_building
 
@@ -34,6 +34,9 @@ class Walker(ABC):
         self.max_walk_distance = max_walk_distance
         # goes from -14 to 14, to take 28 tick to navigate through a tile (also used for the offset
         self.walk_progression = -14
+
+        id_create = ID_GEN()
+        self.id = id_create.id_gen()
 
     def get_texture(self):
         if self.walk_progression < 0:

@@ -12,7 +12,7 @@ class   ID_GEN:
                 return id
                 
 
-#id_create=ID_GEN()
+id_create=ID_GEN()
 #for i in range(10):
  #   unique_id = id_create.id_gen()
   #  print(unique_id)
