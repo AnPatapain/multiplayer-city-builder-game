@@ -25,9 +25,7 @@ struct game_packet
 typedef struct game_packet game_packet;
 typedef uint32_t game_ip;
 
-#ifdef GPP_DEBUG
 void print_packet(const game_packet *packet);
-#endif
 
 game_packet* new_game_packet();
 int new_payer_id();

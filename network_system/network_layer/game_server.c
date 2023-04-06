@@ -101,6 +101,8 @@ int connect_to_all_ip(const game_packet *resp_ips){
             return -1;
         }
     }
+    
+    return 0;
 }
 
 int type_check(client_game *client,game_packet *packet){

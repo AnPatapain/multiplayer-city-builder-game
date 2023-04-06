@@ -15,11 +15,13 @@ int actual_event = 0;
 int player_id = 0;
 
 void print_packet(const game_packet *packet){
+#ifdef DEBUG
     printf("======== Packet %i ========\n", packet->id_event);
     printf("packet type: %i\n", packet->type);
     printf("Player_id: %i\n", packet->player_id);
     printf("Data Size: %i\n", packet->data_size);
     printf("====== End Packet %i ======\n", packet->id_event);
+#endif
 }
 
 int new_payer_id(){
