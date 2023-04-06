@@ -121,16 +121,37 @@ void flush_socket(int socket){
     }while(recept >= 1024);
 }
 
+int is_valid(game_packet *packet){
+    return (
+            (GPP_CONNECT_NEW == packet->type
+            || GPP_CONNECT_REQ == packet->type
+            || GPP_CONNECT_OK == packet->type
+            || GPP_ASK_GAME_STATUS == packet->type
+            || GPP_GAME_STATUS == packet->type
+            || GPP_ALTER_GAME == packet->type
+            || GPP_DELEGATE_ASK == packet->type
+            || GPP_DELEGATE_OK == packet->type
+            || GPP_ASK_IP_LIST == packet->type
+            || GPP_RESP_IP_LIST == packet->type
+            || GPP_BAD_IDENT == packet->type)
+            && packet->reserved == 255
+    );
+
+}
+
 int receive_game_packet(game_packet *recv_packet, int socket){
 
     int recep = (int) recv(socket,recv_packet,header_size,0);
-    if (recep < header_size && recep){
+    if (recep == 0){
+        return 0;
+    }
+    if (recep < header_size || !is_valid(recv_packet)){
         return -1;
     }
 
     if (recv_packet->data_size > 0 && has_payload(recv_packet)){
         recv_packet->payload = calloc(recv_packet->data_size,1);
-        recep += (int) recv(socket,recv_packet->payload,recv_packet->data_size,0);
+        recep += (int) recv(socket,recv_packet->payload,recv_packet->data_size,MSG_WAITALL);
 
     }
     flush_socket(socket);

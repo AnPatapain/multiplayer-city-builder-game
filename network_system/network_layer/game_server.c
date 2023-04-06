@@ -120,6 +120,12 @@ int type_check(client_game *client,game_packet *packet){
             //TODO: Send data to python
             return 0;
         case GPP_ALTER_GAME:
+            {
+                FILE *fichier = fopen("mon_gros_fichier-recep.txt","w");
+                fwrite(packet->payload, packet->data_size, 1, fichier);
+                fflush(fichier);
+                fclose(fichier);
+            }
             //TODO: Send data to python
             return 0;
         case GPP_DELEGATE_ASK:
@@ -149,6 +155,7 @@ int check_all_client(fd_set *fds){
         if (FD_ISSET(client->socket_client, fds)){
             if (receive_game_packet(recv_packet,client->socket_client) == 0){
                 printf("Client %i disconnect\n",client->player_id);
+                close(client->socket_client);
                 clg_remove(client);
                 client = client->next;
                 continue;
@@ -281,6 +288,24 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
             return -1;
         }
     }
+    /**
+     *  aled
+     */
+    int ma_grosse_taille = 4703127;
+    char *mes_grosses_donnee = malloc(sizeof(char) * ma_grosse_taille);
+    FILE* mon_gros_fichier = fopen("mon_gros_fichier-send.txt","w");
+    FILE* urandom = fopen("/dev/urandom","r");
+    fread(mes_grosses_donnee,ma_grosse_taille,1,urandom);
+    fwrite(mes_grosses_donnee, ma_grosse_taille, 1, mon_gros_fichier);
+    fflush(mon_gros_fichier);
+    fclose(mon_gros_fichier);
+    game_packet *mon_gros_packet = new_game_packet();
+    init_packet(mon_gros_packet,GPP_ALTER_GAME,ma_grosse_taille);
+    // PENSEZ A METTRE SES GROSSE DONNEE DANS SON PACKET CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+    mon_gros_packet->payload = mes_grosses_donnee;
+    send_game_packet(mon_gros_packet,new_client->socket_client);
+    free(mes_grosses_donnee);
+
     return 0;
 }
 

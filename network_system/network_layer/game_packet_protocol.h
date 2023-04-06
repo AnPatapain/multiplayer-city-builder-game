@@ -1,12 +1,12 @@
 #ifndef GAME_PACKET_PROTOCOL
 #define GAME_PACKET_PROTOCOL
-#define GPP_DEBUG
+#define DEBUG
 
 #include <stdint.h>
 
 #include "message_type.h"
 
-#ifdef GPP_DEBUG
+#ifdef DEBUG
 #include <stdio.h>
 #endif
 
