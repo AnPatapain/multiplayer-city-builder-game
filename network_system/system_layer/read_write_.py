@@ -4,6 +4,9 @@ import sys
 import re
 import struct
 import subprocess
+from typing import TypedDict
+
+from class_types.buildind_types import BuildingTypes
 
 
 class SystemInterface:
@@ -153,10 +156,33 @@ class SystemInterface:
 
 
 
-    def send_build(self, start, end, building, building_id):
+    """
+    Build message format:
+    {
+        "buildings": [
+            {
+                "x": x,
+                "y": y,
+                "id": id,
+            },
+            ... repeat and repeat for each building
+        ]
+        "building_type": building_type from the enum,
+    }
+        """
+    class __Building(TypedDict):
+        x: int
+        y: int
+        id: str
+
+    class __BuildMessage(TypedDict):
+        buildings: list[dict] # Error when putting a __Building
+        building_type: BuildingTypes
+
+    def send_build(self, buildings: list[__Building], building_type: BuildingTypes):
         pass
 
-    def recieve_build(self, datas):
+    def recieve_build(self, datas: __BuildMessage):
         pass
 
 
