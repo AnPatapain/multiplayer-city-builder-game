@@ -39,19 +39,17 @@ class SystemInterface:
 
         print(f"Accepted a connection from {client_address}")
 
-    def send_message(self, type_object, meta_data, id_object, id_player, data, encode=True):
+    def send_message(self, command, id_object, id_player, data, encode=True):
         if encode:
             data = data.encode()
 
         object_size = len(data)
 
-        format_send_types = f"=H H L L H H {object_size}s"
+        format_send_types = f"=H H L L {object_size}s"
         sending_message = struct.pack(format_send_types,
-                                      type_object, meta_data,
+                                      id_player, command,
                                       object_size,
                                       id_object,
-                                      id_player,
-                                      65535,
                                       data)
 
         return self.connection.sendall(sending_message)
