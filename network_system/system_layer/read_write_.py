@@ -72,6 +72,17 @@ print(f"Accepted a connection from {client_address}")
 message_ = message_to_send(type_object=1, meta_data=2, id_object=3, id_player=4, data="Hello C")
 print(message_)
 connection.sendall(message_)
+header = struct.unpack("=H H L L H H", connection.recv(16))
+temp_dict = {}
+temp_dict["object_type"] = {
+    "typeObject": header[0],
+    "metaData": header[1]
+}
+temp_dict["object_size"] = header[2]
+temp_dict["id_object"] = header[3]
+temp_dict["id_player"] = header[4]
+print(connection.recv(temp_dict["object_size"]))
+
 
 # Close the connection and socket
 connection.close()
