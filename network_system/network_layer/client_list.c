@@ -64,6 +64,22 @@ int cgl_append(client_game* new_client){
     return 0;
 }
 
+int clg_remove(client_game* client_to_delete){
+    if (client_to_delete == NULL){
+        return -1;
+    }
+    client_game *previous = list_client;
+    while (previous->next != NULL) {
+        if (previous->next == client_to_delete){
+            previous->next = client_to_delete->next;
+            free(client_to_delete);
+            return 0;
+        }
+        previous = previous->next;
+    }
+    return -1;
+}
+
 game_ip *get_all_ips(int *nb_client, const client_game *req_client) {
     game_ip *ips = calloc(number_client, sizeof(uint32_t));
     client_game *client = list_client;

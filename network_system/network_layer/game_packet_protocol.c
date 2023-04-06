@@ -118,7 +118,7 @@ void flush_socket(int socket){
         if (recept == -1 && errno == EAGAIN){
             return;
         }
-    }while(recept >= 0);
+    }while(recept >= 1024);
 }
 
 int receive_game_packet(game_packet *recv_packet, int socket){

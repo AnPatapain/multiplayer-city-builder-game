@@ -50,6 +50,9 @@ Demande une connexion à un jeu en cours. Le payload est inutile et le champ `da
 Demande une connexion à un client du jeu
 #### `3: CONNECT_OK`
 Réponse à `CONNECT_REQ`, le nouveau client à été enregistré.
+#### `4: GPP_CONNECT_START`
+Nouveau packet: Après l'acceptation d'un socket client le joueur envoye un packet pour affirmer au client nouvelement connecté
+qu'il peut commencer a envoyer des informations.
 #### `11: ASK_GAME_STATUS`
 Demande à un client l'état de l'ensemble des objets lui appartenant. Le payload est inutile et le champ `data_size` doit être défini à `0`.
 #### `12: GAME_STATUS`

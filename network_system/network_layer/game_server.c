@@ -101,7 +101,6 @@ int connect_to_all_ip(const game_packet *resp_ips){
             return -1;
         }
     }
-    
     return 0;
 }
 
@@ -135,10 +134,10 @@ int type_check(client_game *client,game_packet *packet){
             show_list_ip(packet);
             return connect_to_all_ip(packet);
         case GPP_BAD_IDENT:
-            //TODO: (implement bad request + log)?
-            return 0;
+            printf("Error bad indent\n");
+            return -1;
         default:
-            //TODO: (implement bad request + log)?
+            printf("Error bad packet\n");
             return 0;
     }
 }
@@ -149,7 +148,10 @@ int check_all_client(fd_set *fds){
     while (client != NULL){
         if (FD_ISSET(client->socket_client, fds)){
             if (receive_game_packet(recv_packet,client->socket_client) == 0){
-                //TODO: disconnect
+                printf("Client %i disconnect\n",client->player_id);
+                clg_remove(client);
+                client = client->next;
+                continue;
             }
             print_packet(recv_packet);
             if (type_check(client,recv_packet) == -1){
@@ -292,7 +294,7 @@ int init_server(const char *ip_address){
             return -1;
         }
         int ret = connection_existant_game(new_sock.sin_addr.s_addr,TRUE);
-        //TODO: need difference if is os_error or timeout
+        //TODO: need difference if is os_error or timeout (notify python)
         if ( ret != 0){
             return 1;
         }
