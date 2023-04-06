@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #define C_COMMAND 65535
 
@@ -15,6 +19,7 @@ struct Object_packet {
     uint32_t object_size;
     uint32_t id_object;
     uint16_t id_player;
+    uint16_t reserved;
     char *data;
 };
 typedef struct Object_packet Object_packet;

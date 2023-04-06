@@ -1,10 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/un.h>
 #include "Message.h"
 
+const uint32_t header_size = sizeof(Object_packet) - sizeof(char*);
+//const uint32_t header_size = 14;
 
 int main() {
     int sockfd;
@@ -27,23 +24,19 @@ int main() {
         perror("connect");
         return 1;
     }
-    
-    // Send data to the server
-    char *message = "Hello, Python!";
-    if (send(sockfd, message, strlen(message), 0) < 0) {
-        perror("send");
-        return 1;
+
+    // char* buffer = (char*)calloc(1024, 1);
+    Object_packet objectPacket;
+    if(recv(sockfd, &objectPacket, header_size, 0) == -1) {
+        perror("error");
     }
 
-    // Receive response from the server
-    char buffer[256];
-    int n = recv(sockfd, buffer, sizeof(buffer), 0);
-    if (n < 0) {
-        perror("read");
-        return 1;
+    printf("%i / %i\n",header_size,objectPacket.object_size);
+    if ( objectPacket.object_size > 0 ){
+        objectPacket.data = calloc(objectPacket.object_size,1);
+        recv(sockfd,objectPacket.data,objectPacket.object_size,MSG_WAITALL);
     }
-    printf("%s\n", buffer);
-    
+    printf("\n%s\n", objectPacket.data);
     // Close the socket
     close(sockfd);
 
