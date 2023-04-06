@@ -110,13 +110,8 @@ Identifiant de l'évènement, peut être incrémentale.
 Transférer des objects de du C vers l'instance Python du jeu.
 
 ## Header structure
-### Type Object & subtype
-deux entiers non-signé de 8 bits (u_int & u_int).
-Permet de définir de quel type est l'object concerné par ce paquet.
-
-### metadata
-Entier non signé de 16 bits (u_int & u_int).
-Précise le type de donnée contenue dans data_object
+### command
+Precise le type de packet. Si la commande est pour le C le packet sera intercepté
 
 ### object_size
 Entier non-signé de 32bits (uint_32).
