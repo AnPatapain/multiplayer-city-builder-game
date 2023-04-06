@@ -68,7 +68,7 @@ int get_ip_list(client_game *client){
     game_ip *ips = get_all_ips(&number_ip, client);
     int size_payload = (int) number_ip * (int) sizeof(uint32_t);
 
-    init_packet(ip_list_packet, GPP_RESP_IP_LIST, size_payload);
+    init_game_packet(ip_list_packet, GPP_RESP_IP_LIST, size_payload);
     ip_list_packet->payload = (char *) ips;
 
     if (send_game_packet(ip_list_packet,client->socket_client) <= 0){
@@ -102,6 +102,10 @@ int connect_to_all_ip(const game_packet *resp_ips){
         }
     }
     return 0;
+}
+
+int send_all_client(Object_packet *object, client_game *client){
+
 }
 
 int type_check(client_game *client,game_packet *packet){
@@ -160,7 +164,7 @@ int check_all_client(fd_set *fds){
                 client = client->next;
                 continue;
             }
-            print_packet(recv_packet);
+            print_game_packet(recv_packet);
             if (type_check(client,recv_packet) == -1){
                 printf("Error check client %i\n",client->player_id);
             }
@@ -203,7 +207,15 @@ int game_server(int socket_listen, int socket_system) {
             printf("LOG: new client_game accept\n");
         }
         if (FD_ISSET(socket_system, &fd_listen_sock)){
-            //TODO : packet python recep
+            Object_packet *python_packet = calloc(sizeof(Object_packet), 1);
+            receive_object_packet(python_packet, socket_system);
+
+            print_object_packet(python_packet);
+            if (is_for_C(python_packet)){
+                //TODO: C'est ecrit au dessus
+            } else{
+                //TODO: Send all client
+            }
         }
         check_all_client(&fd_listen_sock);
     }
@@ -261,13 +273,13 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
         if (receive_game_packet(connection, new_socket) == 0) {
             return 1;
         }
-        print_packet(connection);
+        print_game_packet(connection);
         if (connection->type == GPP_CONNECT_START){
             if (is_new_player) {
                 new_payer_id();
-                init_packet(connection, GPP_CONNECT_NEW, 0);
+                init_game_packet(connection, GPP_CONNECT_NEW, 0);
             } else{
-                init_packet(connection, GPP_CONNECT_REQ, 0);
+                init_game_packet(connection, GPP_CONNECT_REQ, 0);
             }
             if (send_game_packet(connection, new_socket) < 1) {
                 printf("send game packet protocol failed\n");
@@ -293,7 +305,7 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
 
     // Ask for ip
     if (is_new_player) {
-        init_packet(connection, GPP_ASK_IP_LIST, 0);
+        init_game_packet(connection, GPP_ASK_IP_LIST, 0);
         if (send_game_packet(connection, new_client->socket_client) < 1) {
             printf("send game packet protocol failed\n");
             return -1;
@@ -311,7 +323,7 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
     fflush(mon_gros_fichier);
     fclose(mon_gros_fichier);
     game_packet *mon_gros_packet = new_game_packet();
-    init_packet(mon_gros_packet,GPP_ALTER_GAME,ma_grosse_taille);
+    init_game_packet(mon_gros_packet, GPP_ALTER_GAME, ma_grosse_taille);
     // PENSEZ A METTRE SES GROSSE DONNEE DANS SON PACKET CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
     mon_gros_packet->payload = mes_grosses_donnee;
     send_game_packet(mon_gros_packet,new_client->socket_client);
@@ -397,5 +409,30 @@ int main(int argc, char const *argv[])
         ip = argv[1];
     }
 
-    return init_server(ip);
+    char *str = "Mon gros payload";
+    char *str2 = "Mon moins grand payload";
+    Object_packet *obj1 = calloc(sizeof(Object_packet),2);
+    init_object_packet(obj1,250,strlen(str) + 1);
+    init_object_packet(obj1 + 1, 3, strlen(str2) + 1);
+
+    obj1[0].data = str;
+    obj1[1].data = str2;
+
+    printf("test: %s\n",obj1[0].data);
+    printf("test2: %s\n",obj1[1].data);
+    print_object_packet(obj1);
+    print_object_packet(obj1 + 1);
+
+    game_packet *gp1 = encapsulate_object_packets(obj1, 2, GPP_ALTER_GAME);
+    print_game_packet(gp1);
+
+    int nb = 0;
+    Object_packet *obj_res = uncap_object_packets(&nb,gp1);
+    print_object_packet(obj_res);
+    print_object_packet(obj_res + 1);
+    printf("test recu: %s\n",obj_res[0].data);
+    printf("test recu: %s\n",obj_res[1].data);
+
+
+    return 0; //init_server(ip);
 }

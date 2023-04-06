@@ -16,6 +16,7 @@
 
 #include "game_packet_protocol.h"
 #include "client_list.h"
+#include "../system_layer/Message.h"
 
 /**
  * Timeout for the connection in seconds

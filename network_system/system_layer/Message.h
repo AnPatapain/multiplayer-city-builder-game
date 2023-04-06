@@ -1,3 +1,6 @@
+#ifndef GOP_H
+#define GOP_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -8,19 +11,22 @@
 
 #define C_COMMAND 65535
 
-struct Object_type {
-    uint16_t typeObject;
-    uint16_t metaData;
-};
-
 
 struct Object_packet {
-    struct Object_type object_type;
+    uint16_t id_player;
+    uint16_t command;
     uint32_t object_size;
     uint32_t id_object;
-    uint16_t id_player;
-    uint16_t reserved;
     char *data;
 };
 typedef struct Object_packet Object_packet;
 
+Object_packet* new_object_packet();
+void init_object_packet(Object_packet *packet, uint16_t command, uint32_t size_data);
+int is_for_C(Object_packet *packet);
+void print_object_packet(const Object_packet *packet);
+int send_object_packet(Object_packet *send_packet, int system_socket);
+int receive_object_packet(Object_packet *recv_packet, int system_socket);
+uint32_t get_object_size();
+
+#endif // GOP_H
