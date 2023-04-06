@@ -171,16 +171,24 @@ int check_all_client(fd_set *fds){
     return 0;
 }
 
-int game_server(int socket) {
+int game_server(int socket_listen, int socket_system) {
     fd_set fd_listen_sock;
     int number_fd;
-    int max = socket;
+    int max = 0;
     
     while (1){
         FD_ZERO(&fd_listen_sock);
-        FD_SET(socket, &fd_listen_sock);
+        FD_SET(socket_listen, &fd_listen_sock);
+        FD_SET(socket_system, &fd_listen_sock);
 
         cgl_set_all_client(&fd_listen_sock, &max);
+        if (max < socket_system){
+            max = socket_system;
+        }
+        if (max < socket_listen){
+            max = socket_listen;
+        }
+
         number_fd = select(max +1, &fd_listen_sock, NULL, NULL, NULL);
 
         if (number_fd < 0){
@@ -188,11 +196,14 @@ int game_server(int socket) {
             return -1;
         }
 
-        if (FD_ISSET(socket,&fd_listen_sock)){
-            if (accept_new_client(socket) == NULL){
+        if (FD_ISSET(socket_listen, &fd_listen_sock)){
+            if (accept_new_client(socket_listen) == NULL){
                 return -1;
             }
             printf("LOG: new client_game accept\n");
+        }
+        if (FD_ISSET(socket_system, &fd_listen_sock)){
+            //TODO : packet python recep
         }
         check_all_client(&fd_listen_sock);
     }
@@ -309,6 +320,19 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
     return 0;
 }
 
+int init_system_socket(){
+    int socket_system = socket(AF_LOCAL,SOCK_STREAM,0);
+    struct sockaddr_un sock_addr_system = {0};
+
+    memcpy(sock_addr_system.sun_path, SYSSOCK,sizeof(SYSSOCK) -1);
+    sock_addr_system.sun_family = AF_LOCAL;
+
+    if (connect(socket_system,(struct sockaddr*) &sock_addr_system, sizeof(sock_addr_system)) == -1){
+        perror("connect system");
+        return -1;
+    }
+    return socket_system;
+}
 
 int init_server(const char *ip_address){
 
@@ -352,8 +376,12 @@ int init_server(const char *ip_address){
     }
     
     printf("Server start : \n");
-
-    game_server(listen_socket);
+    int system_sock = init_system_socket();
+    if (system_sock == -1){
+        close(listen_socket);
+        return 1;
+    }
+    game_server(listen_socket, system_sock);
 
     if (close(listen_socket) == -1){
         perror("close socket:");
@@ -369,9 +397,5 @@ int main(int argc, char const *argv[])
         ip = argv[1];
     }
 
-    init_server(ip);
-
-
-
-    return 0;
+    return init_server(ip);
 }

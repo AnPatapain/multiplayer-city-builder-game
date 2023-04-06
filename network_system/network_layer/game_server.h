@@ -8,6 +8,7 @@
 #include <sys/select.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/un.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -20,6 +21,8 @@
  * Timeout for the connection in seconds
  */
 #define TIMEOUT 10
+
+#define SYSSOCK "/tmp/socket"
 
 int init_server(const char *ip_address);
 int req_connection(client_game *client, const game_packet *packet);
