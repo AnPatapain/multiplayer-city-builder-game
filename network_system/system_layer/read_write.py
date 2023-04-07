@@ -59,6 +59,11 @@ class SystemInterface:
 
         # Wait for a connection
         print(f"Waiting for a connection on {server_address}")
+
+        # Run subprocess here to wait connection before lauch it
+        c_file = ["./network_system/network_layer/test"]
+        self.pid = subprocess.Popen(c_file)
+
         connection, client_address = self.sock.accept()
         self.connection = connection
 
@@ -164,12 +169,6 @@ class SystemInterface:
 
     #..............................................................................#
     def run_subprocess(self) :
-
-        # RUN PROCESS
-        c_file = ["./network_system/network_layer/test"]
-        self.pid = subprocess.Popen(c_file)
-        # output, error = self.pid.communicate()
-
         self.init_server()
 
         self.set_is_online(True)
