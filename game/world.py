@@ -128,11 +128,7 @@ class World:
                 self.builder.set_in_build_action(False)
                 if self.in_map(mouse_grid_pos):
                     self.builder.set_end_point(mouse_grid_pos)
-                    
-                    # Send message to c process
-                    tar = f"start: {self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]} end: {self.builder.get_end_point()[0]} {self.builder.get_end_point()[1]}"
-                    # print(BuildingTypes.VACANT_HOUSE)
-                    self.read_write_py_c.send_message(id_player=1, command=2, id_object=3, data=tar)
+
                 else:
                     self.builder.set_end_point(None)
                     self.builder.set_start_point(None)

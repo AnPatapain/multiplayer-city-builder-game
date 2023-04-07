@@ -211,7 +211,7 @@ class SystemInterface:
         self.send_message(
             id_player=GameController.get_instance().total_day,
             command=NetworkCommandsTypes.BUILD,
-            id_object=None,
+            id_object=12,
             data=json.dumps(msg)
         )
 
