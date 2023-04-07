@@ -16,7 +16,8 @@ class TextInput(Component):
             self,
             pos: tuple[int, int],
             size: tuple[int, int],
-            placeholder: str
+            placeholder: str,
+            focused: bool = True
     ):
         super().__init__(pos, size)
         self.current_value = ""
@@ -25,7 +26,7 @@ class TextInput(Component):
         self.bg = Rect(self.position, self.size)
         self.placeholder = placeholder
         self.cursor_position = 0
-        self.focused = True
+        self.focused = focused
 
     def focus(self):
         self.focused = True
@@ -41,10 +42,13 @@ class TextInput(Component):
         return self.focused
 
     def is_hover(self, pos):
-        return (self.position[0] <= pos[0] <= self.position[0] + self.size[0]) or \
-            (self.position[1] <= pos[1] <= self.position[1] + self.size[1])
+        return (self.position[0] <= pos[0] <= (self.position[0] + self.size[0])) and \
+            (self.position[1] <= pos[1] <= (self.position[1] + self.size[1]))
 
     def not_hover(self):
+        pass
+
+    def hover(self):
         pass
 
     def click(self):
