@@ -1,4 +1,4 @@
-#include "Message.h"
+#include "game_object_protocol.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>

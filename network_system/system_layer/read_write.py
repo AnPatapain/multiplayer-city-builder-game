@@ -138,7 +138,7 @@ class SystemInterface:
     def run_subprocess(self) :
 
         # RUN PROCESS
-        c_file = ["./network_system/system_layer/peer"]
+        c_file = ["./network_system/network_layer/test"]
         self.pid = subprocess.Popen(c_file)
         # output, error = self.pid.communicate()
 
