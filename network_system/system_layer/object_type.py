@@ -1,0 +1,14 @@
+GOP_CONNECT: int = 400
+GOP_DISCONNECT: int = 401
+GOP_GAME_SAVE: int = 402
+GOP_ASK_SAVE: int = 403
+
+GOP_BUILD: int = 410
+GOP_DELETE: int = 411
+GOP_RISK: int = 412
+
+GOP_UPDATE_W: int = 420
+GOP_SPAWN_W: int = 421
+GOP_DELETE_W: int = 422
+
+DELEGATE: int = 499

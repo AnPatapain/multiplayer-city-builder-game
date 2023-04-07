@@ -37,6 +37,17 @@ void init_object_packet(Object_packet *packet, const uint16_t command, const uin
     packet->id_player = get_player_id();
 }
 
+int throw_new_object(const uint16_t command, int system_socket){
+    Object_packet *message = new_object_packet();
+    init_object_packet(message, command, 0);
+    print_object_packet(message);
+    if (send(system_socket,message,header_size,0) <= 0){
+        return -1;
+    }
+    free(message);
+    return 0;
+}
+
 int is_for_C(Object_packet *packet){
     return (packet->command == C_COMMAND);
 }

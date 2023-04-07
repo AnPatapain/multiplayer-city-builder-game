@@ -9,6 +9,8 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+#include "object_type.h"
+
 #define C_COMMAND 65535
 
 
@@ -23,6 +25,7 @@ typedef struct Object_packet Object_packet;
 
 Object_packet* new_object_packet();
 void init_object_packet(Object_packet *packet, uint16_t command, uint32_t size_data);
+int throw_new_object(uint16_t command, int system_socket);
 int is_for_C(Object_packet *packet);
 void print_object_packet(const Object_packet *packet);
 int send_object_packet(Object_packet *send_packet, int system_socket);

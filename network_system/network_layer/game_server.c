@@ -387,6 +387,10 @@ int init_system_socket(){
         perror("connect system");
         return -1;
     }
+
+    if (throw_new_object(GOP_CONNECT, socket_system) == -1){
+        return -1;
+    }
     return socket_system;
 }
 
@@ -432,12 +436,12 @@ int init_server(const char *ip_address){
     }
     
     printf("Server start : \n");
-    int system_sock = init_system_socket();
+    /*int system_sock = init_system_socket();
     if (system_sock == -1){
         close(listen_socket);
         return 1;
-    }
-    game_server(listen_socket, system_sock);
+    }*/
+    game_server(listen_socket, 1);
 
     if (close(listen_socket) == -1){
         perror("close socket:");

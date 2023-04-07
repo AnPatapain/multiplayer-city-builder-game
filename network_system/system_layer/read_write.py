@@ -2,7 +2,6 @@ import errno
 import json
 import os
 import socket
-import sys
 import re
 import struct
 import subprocess
@@ -11,6 +10,7 @@ from typing import TypedDict, Optional
 from class_types.buildind_types import BuildingTypes
 from class_types.network_commands_types import NetworkCommandsTypes
 from class_types.road_types import RoadTypes
+from network_system.system_layer.object_type import *
 
 
 # from class_types.buildind_types import BuildingTypes
@@ -67,9 +67,20 @@ class SystemInterface:
         connection, client_address = self.sock.accept()
         self.connection = connection
 
+        message = self.read_message(block=True)
+        if not message:
+            print("error receive C connection")
+            return
+
+        if message["header"]["command"] != 400:
+            print("bad receive packet")
+            return
+
+        self.player_id = message["header"]["player_id"]
+
         print(f"Accepted a connection from {client_address}")
 
-    def send_message(self, id_player, command, id_object, data, encode=True):
+    def send_message(self, command, id_object, data, encode=True):
         if not self.connection:
             return
 
@@ -80,19 +91,21 @@ class SystemInterface:
 
         format_send_types = f"=H H L L {object_size}s"
         sending_message = struct.pack(format_send_types,
-                                      id_player, command,
+                                      self.player_id, command,
                                       object_size,
                                       id_object,
                                       data)
 
         return self.connection.sendall(sending_message)
 
-    def read_message(self) -> Optional[Message]:
+    def read_message(self,block: bool = False) -> Optional[Message]:
         if self.connection is None:
             return None
 
         header_size = 12
-        self.connection.setblocking(0)
+        if not block:
+            self.connection.setblocking(0)
+
         try:
             binary_received_header = self.connection.recv(header_size)
             if binary_received_header is None:
@@ -111,7 +124,8 @@ class SystemInterface:
         if header["object_size"]:
             binary_received_data = self.connection.recv(header["object_size"])
             data = self.unpack_data(binary_received_data, header["object_size"])
-
+        else:
+            data = None
 
 
         self.message_read: Message = {
@@ -200,9 +214,18 @@ class SystemInterface:
 
 
     def send_game_save(self):
-        pass
+        import pickle
+        from game.game_controller import GameController
+        read_write_py_c = SystemInterface.get_instance()
+        serialize_data = pickle.dumps(GameController.get_instance().__dict__)
+        read_write_py_c.send_message(command=GOP_GAME_SAVE, id_object=1, data=serialize_data, encode=False)
 
     def recieve_game_save(self, datas):
+        import pickle
+        from game.game_controller import GameController
+        read_write_py_c = SystemInterface.get_instance()
+        GameController.get_instance().__dict__ = pickle.load(datas)
+        GameController.get_instance().save_load()
         pass
 
 
@@ -223,7 +246,6 @@ class SystemInterface:
         "building_type": building_type from the enum,
     } """
     def send_build(self, start: list[int, int], end: list[int, int], building_type: BuildingTypes | RoadTypes):
-        from game.game_controller import GameController
 
         msg: BuildingMsg = {
             "start": start,
@@ -231,13 +253,7 @@ class SystemInterface:
             "building_type": building_type
         }
 
-        self.send_message(
-            id_player=GameController.get_instance().total_day,
-            command=NetworkCommandsTypes.BUILD,
-            id_object=12,
-            data=json.dumps(msg)
-        )
-
+        self.send_message(command=NetworkCommandsTypes.BUILD, id_object=12, data=json.dumps(msg))
     def recieve_build(self, datas):
         pass
 

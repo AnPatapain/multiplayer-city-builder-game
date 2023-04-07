@@ -9,6 +9,7 @@ from events.key_listener import KeyListener
 from game.builder import Builder
 from network_system.system_layer.read_write import SystemInterface
 
+from network_system.system_layer.object_type import *
 
 class EventManager:
     # Components are IU elements like button, that have different states and actions depending on the input
@@ -41,11 +42,14 @@ class EventManager:
 
         res = si.read_message()
         if res:
-            if res["header"]["command"] == 410:
+            if res["header"]["command"] == GOP_BUILD:
                 d = res["data"][0]
                 d = json.loads(d)
                 b = Builder()
                 b.build_from_start_to_end(d["building_type"], d["start"], d["end"], from_network=True)
+
+            if res["header"]["command"] == GOP_ASK_SAVE:
+                si.send_game_save()
 
         pos = pg.mouse.get_pos()
 
