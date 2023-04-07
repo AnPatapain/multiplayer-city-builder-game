@@ -6,7 +6,7 @@ from class_types.walker_types import WalkerTypes
 from game.game_controller import GameController
 from walkers.walker import Walker
 from enum import Enum
-from game.id import ID_GEN
+
 
 if TYPE_CHECKING:
     from buildable.final.structures.WheatFarm import WheatFarm
@@ -18,14 +18,13 @@ class Actions(Enum):
 
 
 class Farm_worker(Walker):
-    def __init__(self, associated_building: 'WheatFarm',player_id:int=0, id:int=0):
+    def __init__(self, associated_building: 'WheatFarm'):
         super().__init__(WalkerTypes.FARM_WORKER, associated_building, roads_only=True)
         self.associated_building: 'WheatFarm' = associated_building
         self.game_controller = GameController.get_instance()
         self.current_action = Actions.IDLE
         self.wheat_in_hand = 0
-        id_create = ID_GEN()
-        self.id = id_create.id_gen()
+
 
 
     def find_granary(self) -> Granary:

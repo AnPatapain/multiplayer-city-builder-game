@@ -1,7 +1,6 @@
 from buildable.structure import Structure
 from class_types.walker_types import WalkerTypes
 from walkers.walker import Walker
-from game.id import ID_GEN
 
 from enum import Enum
 
@@ -12,14 +11,12 @@ class Actions(Enum):
 
 
 class Granary_worker(Walker):
-    def __init__(self, associated_building: Structure,player_id:int=0, id:int=0):
+    def __init__(self, associated_building: Structure):
         super().__init__(WalkerTypes.GRANARY_WORKER, associated_building, roads_only=True)
         self.current_action = Actions.IDLE
         self.wheat_in_hand = 0
         self.current_farm_tiles_list = [] # list of farm tile
         self.is_finish_in_one_farm = False
-        id_create = ID_GEN()
-        self.id = id_create.id_gen()
 
 
     # def receive_wheat_from_farm(self, farm: WheatFarm):   

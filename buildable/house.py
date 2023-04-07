@@ -4,12 +4,12 @@ from buildable.buildable import Buildable
 from class_types.buildind_types import BuildingTypes
 from game.game_controller import GameController
 from walkers.final.immigrant import Immigrant
-from game.id import ID_GEN
+
 
 
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes,
-                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int, player_id :int =0,id :int=0):
+                 tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int):
         super().__init__(x, y, build_type, fire_risk, destruction_risk)
 
         self.max_citizen = max_citizen
@@ -20,9 +20,7 @@ class House(Buildable, ABC):
         self.happiness = 60
         self.desirability = desirability
         self.prosperity = prosperity
-        self.player_id=player_id
-        id_create = ID_GEN()
-        self.id = id_create.id_gen()
+
         # Max 5
         self.downgrade_progress: int = 0
 

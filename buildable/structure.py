@@ -1,6 +1,5 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Optional
-from game.id import ID_GEN
 from buildable.buildable import Buildable
 
 if TYPE_CHECKING:
@@ -10,11 +9,10 @@ if TYPE_CHECKING:
 
 class Structure(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: 'BuildingTypes',
-                 max_employee: int, fire_risk: int, destruction_risk: int, id: int = 0):
+                 max_employee: int, fire_risk: int, destruction_risk: int):
         super().__init__(x, y, build_type, fire_risk, destruction_risk)
-        id_create = ID_GEN()
-        self.id = id_create.id_gen()
         self.max_employee = max_employee
+
 
     def find_adjacent_road(self) -> Optional['Tile']:
         candidates = self.get_adjacent_tiles()

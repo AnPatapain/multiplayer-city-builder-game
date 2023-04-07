@@ -37,6 +37,7 @@ class Walker(ABC):
 
         id_create = ID_GEN()
         self.id = id_create.id_gen()
+        self.player_id=player_id
 
     def get_texture(self):
         if self.walk_progression < 0:
