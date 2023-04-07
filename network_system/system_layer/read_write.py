@@ -1,3 +1,4 @@
+import json
 import os
 import socket
 import sys
@@ -6,7 +7,20 @@ import struct
 import subprocess
 from typing import TypedDict
 
+from class_types.buildind_types import BuildingTypes
+from class_types.network_commands_types import NetworkCommandsTypes
+
+
 # from class_types.buildind_types import BuildingTypes
+
+
+
+class BuildingMsg(TypedDict):
+    start: list[int, int]
+    end: list[int, int]
+    building_type: BuildingTypes
+
+
 
 class SystemInterface:
     instance = None
@@ -16,7 +30,8 @@ class SystemInterface:
         self.message_write = None
         self.connection = None
         self.sock = None
-        self.init_server()
+
+        self.is_online = False
 
     def init_server(self):
         server_address = "/tmp/socket"
@@ -62,7 +77,11 @@ class SystemInterface:
         binary_received_data = self.connection.recv(header["object_size"])
         data = self.unpack_data(binary_received_data, header["object_size"])
 
-        self.message_read = {
+        class Message(TypedDict):
+            header: any
+            data: any
+
+        self.message_read: Message = {
             "header": header,
             "data": data
         }
@@ -123,6 +142,8 @@ class SystemInterface:
         self.pid = subprocess.Popen(c_file)
         # output, error = self.pid.communicate()
 
+        self.init_server()
+
         self.set_is_online(True)
 
         # return output.decode("utf-8")
@@ -170,34 +191,31 @@ class SystemInterface:
     """
     Build message format:
     {
-        "buildings": [
-            {
-                "x": x,
-                "y": y,
-                "id": id,
-            },
-            ... repeat and repeat for each building
-        ]
+        "start": [x, y],
+        "end": [x, y],
         "building_type": building_type from the enum,
-    }
-        """
-    # class __Building(TypedDict):
-    #     x: int
-    #     y: int
-    #     id: str
-    #
-    # class __BuildMessage(TypedDict):
-    #     buildings: list[dict] # Error when putting a __Building
-    #     building_type: BuildingTypes
-    #
-    # def send_build(self, buildings: list[__Building], building_type: BuildingTypes):
-    #     pass
-    #
-    # def recieve_build(self, datas: __BuildMessage):
-    #     pass
-    #
-    #
-    #
+    } """
+    def send_build(self, start: list[int, int], end: list[int, int], building_type: BuildingTypes):
+        from game.game_controller import GameController
+
+        msg: BuildingMsg = {
+            "start": start,
+            "end": end,
+            "building_type": building_type
+        }
+
+        self.send_message(
+            id_player=GameController.get_instance().total_day,
+            command=NetworkCommandsTypes.BUILD,
+            id_object=None,
+            data=json.dumps(msg)
+        )
+
+    def recieve_build(self, datas):
+        pass
+
+
+
     # def send_risk_update(self, risk_type, building_id):
     #     pass
     #
