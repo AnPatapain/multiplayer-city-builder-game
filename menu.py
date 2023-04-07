@@ -40,10 +40,6 @@ class Menu:
                                                       image_hover=pg.image.load('assets/menu_sprites/load_saved_game_mouse_on.png').convert())
         self.button__load_saved_game.on_click(self.go_to_loading_game_menu)
 
-        self.button__options = button.Button((button_start, 450), button_size,
-                                                      image=pg.image.load('assets/menu_sprites/options.png').convert(),
-                                                      image_hover=pg.image.load('assets/menu_sprites/options_mouse_on.png').convert())
-        #self.button__options.set_disabled(True)
 
         self.button__exit = button.Button((button_start, 500), button_size,
                                                       image=pg.image.load('assets/menu_sprites/exit.png').convert(),
@@ -65,13 +61,21 @@ class Menu:
         self.come_back_to_main_menu = button.Button((button_start, 500), (50,45), text="<", center_text=True)
         self.come_back_to_main_menu.on_click(self.go_to_main_menu)
 
+        self.button__multiplayer = button.Button((button_start, 450), button_size, text="Multiplayer",center_text=True)
+        self.button__multiplayer.on_click(self.go_to_online_menu)
+
+        self.button__connect = button.Button((button_start, 400), button_size, text="Connect",center_text=True)
+        self.button__connect.on_click(self.connect_to_server)
+
+        self.input_ip = TextInput((button_start,300 ), (320, 30), placeholder="Enter the ip address.")
+        self.input_user = TextInput((button_start, 350), (320, 30), placeholder="Enter your username.", focused=False)
 
         # pg.mixer.music.load('sounds/wavs/ROME4.WAV')
         # pg.mixer.music.set_volume(0.6)
         # pg.mixer.music.play(0, 0, 2000)
 
 
-        self.textinput = TextInput((0, 0), (300, 30), placeholder="idk really")
+
 
     def run(self, already_launched_once: bool):
         if already_launched_once:
@@ -98,7 +102,8 @@ class Menu:
                 self.show_main_menu()
             case CurrentMenu.LOAD_SAVE_MENU:
                 self.show_save_menu()
-            # case CurrentMenu.JOIN_NETWORK_GAME_MENU:
+            case CurrentMenu.JOIN_NETWORK_GAME_MENU:
+                self.show_online_menu()
         pg.display.flip()
 
 
@@ -111,9 +116,8 @@ class Menu:
         self.screen.blit(self.graphics["logo"], (logo_start, 200))
         self.button__start_new_career.display(self.screen)
         self.button__load_saved_game.display(self.screen)
-        self.button__options.display(self.screen)
+        self.button__multiplayer.display(self.screen)
         self.button__exit.display(self.screen)
-        self.textinput.display(self.screen)
 
 
     def show_save_menu(self):
@@ -125,6 +129,14 @@ class Menu:
         self.save3.display(self.screen)
         self.save4.display(self.screen)
         self.come_back_to_main_menu.display(self.screen)
+
+    def show_online_menu(self):
+            draw_text("Play Online with other players!", self.screen, (460, 200), color=(255, 255, 200))
+            self.button__connect.display(self.screen)
+            self.input_ip.display(self.screen)
+            self.input_user.display(self.screen)
+            self.come_back_to_main_menu.display(self.screen)
+
 
 
     def load_images(self):
@@ -155,9 +167,8 @@ class Menu:
         EventManager.reset()
         EventManager.register_component(self.button__start_new_career)
         EventManager.register_component(self.button__load_saved_game)
-        EventManager.register_component(self.button__options)
+        EventManager.register_component(self.button__multiplayer)
         EventManager.register_component(self.button__exit)
-        EventManager.register_component(self.textinput)
         EventManager.register_key_listener(pg.K_ESCAPE, exit)
 
     def event_load_menu(self):
@@ -169,6 +180,18 @@ class Menu:
         EventManager.register_component(self.come_back_to_main_menu)
         EventManager.register_key_listener(pg.K_ESCAPE, self.go_to_main_menu)
 
+    def event_online_menu(self):
+        EventManager.reset()
+        EventManager.register_component(self.input_ip)
+        EventManager.register_component(self.input_user)
+        EventManager.register_component(self.button__connect)
+        EventManager.register_component(self.come_back_to_main_menu)
+        EventManager.register_key_listener(pg.K_ESCAPE, self.go_to_main_menu)
+
+
+
+
+
     def load_save(self):
         self.set_inactive()
 
@@ -176,6 +199,21 @@ class Menu:
         self.event_load_menu()
         self.current_menu = CurrentMenu.LOAD_SAVE_MENU
 
+    def go_to_online_menu(self):
+        self.event_online_menu()
+        self.current_menu = CurrentMenu.JOIN_NETWORK_GAME_MENU
+
     def go_to_main_menu(self):
         self.event_main_menu()
         self.current_menu = CurrentMenu.MAIN_MENU
+
+    def connect_to_server(self):
+        username = self.input_user.get_text()
+        ip = self.input_ip.get_text()
+        ############################
+        ############################
+        ############################
+        ############################
+
+
+

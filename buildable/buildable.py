@@ -79,6 +79,9 @@ class Buildable(ABC):
     def update_day(self):
         pass
 
+    def update_month(self):
+        pass
+
     def update_desirability(self):
         pass
 
