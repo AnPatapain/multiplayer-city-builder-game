@@ -27,15 +27,12 @@ class TaxCollector(Walker):
         for tile in tiles:
             if tile.get_building():
                 building = tile.get_building()
-                print("this is a building")
                 if isinstance(building, House) and building.get_has_taxes():
-                    print("this is a house")
                     building.set_has_taxes(False)
                     self.tax += building.tax
 
 
     def destination_reached(self):
-        print(self.tax)
         GC = GameController.get_instance()
         GC.denier += self.tax
         super().destination_reached()
