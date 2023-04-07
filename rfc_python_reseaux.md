@@ -53,16 +53,8 @@ Réponse à `CONNECT_REQ`, le nouveau client à été enregistré.
 #### `4: GPP_CONNECT_START`
 Nouveau packet: Après l'acceptation d'un socket client le joueur envoye un packet pour affirmer au client nouvelement connecté
 qu'il peut commencer a envoyer des informations.
-#### `11: ASK_GAME_STATUS`
-Demande à un client l'état de l'ensemble des objets lui appartenant. Le payload est inutile et le champ `data_size` doit être défini à `0`.
-#### `12: GAME_STATUS`
-Réponse à `ASK_GAME_STATUS`. L'ensemble des objets sont dans le payload sous format OTP.
 #### `20: ALTER_GAME`
 La plus commune des requêtes; un client envoie de nouvelles données pour des entités définies dans le payload (format OTP).
-#### `30: DELEGATE_ASK`
-Demande à un autre client s'il peut reprendre, en partie ou totalement, la gestion de ses données. Le payload doit contenir l'ensemble des objets à transmettre au format OTP.
-#### `31: DELEGATE_OK`
-Réponse au `DELEGATE_ASK` l'utilisateur à ses données. 
 #### `50: ASK_IP_LIST`
 Demande la liste des IP connue à un utilisateur. Le payload est inutile et le champ `data_size` doit être défini à `0`.
 #### `51: RESP_IP_LIST`
@@ -140,3 +132,20 @@ Le player_id est un identifiant de 16bits (2 octets). Cet identifiant doit être
   n|---------------------------------------------------------|
 ```
 
+| Command name    | Code |
+|-----------------|------|
+| Connect         | 1    |
+| Disconnect      | 2    |
+| Game save       | 3    |
+|                 |      |
+| Build           | 10   |
+| Delete building | 11   |
+| Risk update     | 12   |
+|                 |      |
+| Update walker   | 20   |
+| Spawn walker    | 21   |
+| Delete walker   | 22   |
+|                 |      |
+| Delegate?       | 666  |
+
+ 
