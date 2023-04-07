@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from walkers.walker import Walker
     from map_element.tile import Tile
     from buildable.buildable import Buildable
+   
 
 
 class GameController:
@@ -144,11 +145,30 @@ class GameController:
 
         self.current_day += 1
 
+        #1 fois par mois on remet tous a true
+    def reset_tax(self):
+        from buildable.house import House
+        for row in self.grid:
+            for tile in row:
+                if tile.get_building():
+                    building = tile.get_building()
+                    if isinstance(building, House):
+                        building.set_has_taxes(True)
+
+
+
     def increase_month(self):
         if self.current_month == 11:
             self.increase_year()
             self.current_month = -1
         self.current_month += 1
+        self.reset_tax()
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building and tile.get_show_tile():
+                    building.update_month()
+        
 
 
     def increase_year(self):
