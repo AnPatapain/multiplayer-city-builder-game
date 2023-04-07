@@ -22,6 +22,8 @@ import game.utils as utils
 from game.setting import GRID_SIZE
 from map_element.tile import Tile
 from class_types.road_types import RoadTypes
+from network_system.system_layer.read_write import SystemInterface
+
 
 class TempTile(TypedDict):
     name: BuildingTypes | RoadTypes
@@ -103,6 +105,10 @@ class Builder:
 
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
+
+
+        si = SystemInterface.get_instance()
+        si.send_build(start_point, end_point, selected_tile)
 
     def delete_building(self, tile_with_building: 'Buildable'):
         for tile in tile_with_building.get_all_building_tiles():

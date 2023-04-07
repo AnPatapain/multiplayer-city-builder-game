@@ -9,6 +9,7 @@ from typing import TypedDict
 
 from class_types.buildind_types import BuildingTypes
 from class_types.network_commands_types import NetworkCommandsTypes
+from class_types.road_types import RoadTypes
 
 
 # from class_types.buildind_types import BuildingTypes
@@ -18,7 +19,7 @@ from class_types.network_commands_types import NetworkCommandsTypes
 class BuildingMsg(TypedDict):
     start: list[int, int]
     end: list[int, int]
-    building_type: BuildingTypes
+    building_type: BuildingTypes | RoadTypes
 
 
 
@@ -55,6 +56,9 @@ class SystemInterface:
         print(f"Accepted a connection from {client_address}")
 
     def send_message(self, id_player, command, id_object, data, encode=True):
+        if not self.connection:
+            return
+
         if encode:
             data = data.encode()
 
@@ -195,7 +199,7 @@ class SystemInterface:
         "end": [x, y],
         "building_type": building_type from the enum,
     } """
-    def send_build(self, start: list[int, int], end: list[int, int], building_type: BuildingTypes):
+    def send_build(self, start: list[int, int], end: list[int, int], building_type: BuildingTypes | RoadTypes):
         from game.game_controller import GameController
 
         msg: BuildingMsg = {
