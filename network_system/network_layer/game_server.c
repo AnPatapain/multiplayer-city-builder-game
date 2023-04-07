@@ -110,10 +110,11 @@ int send_all_client(Object_packet *object){
     }
     game_packet *packet = encapsulate_object_packets(object,1,GPP_ALTER_GAME);
     client_game *client_to_send = first_client();
-    while (client_to_send->next != NULL){
+    while (client_to_send != NULL){
         if (send_game_packet(packet, client_to_send->socket_client) == -1){
             return -1;
         }
+        client_to_send = client_to_send->next;
     }
     return 0;
 }
@@ -124,6 +125,7 @@ int send_to_python(const game_packet *packet,int system_socket){
     }
     int nb_object = 0;
     Object_packet *objects = uncap_object_packets(&nb_object,packet);
+    print_object_packet(objects);
     for(int i = 0; i < nb_object; i++){
         if (send_object_packet(objects + i, system_socket) == -1){
             printf("error send to python");
@@ -232,7 +234,10 @@ int game_server(int socket_listen, int socket_system) {
         }
         if (FD_ISSET(socket_system, &fd_listen_sock)){
             Object_packet *python_packet = calloc(sizeof(Object_packet), 1);
-            receive_object_packet(python_packet, socket_system);
+            if (receive_object_packet(python_packet, socket_system) == 0){
+                printf("Python Disconnect\n");
+                return -1;
+            }
 
             print_object_packet(python_packet);
             if (is_for_C(python_packet)){

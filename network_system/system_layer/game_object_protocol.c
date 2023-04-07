@@ -9,7 +9,7 @@
 static char *buffer;
 static unsigned int buffer_size = 0;
 
-static const uint32_t header_size = sizeof(Object_packet) - sizeof(char*);
+static const uint32_t header_size = 12;
 
 void print_object_packet(const Object_packet *packet){
 #ifdef DEBUG
@@ -26,6 +26,7 @@ Object_packet* new_object_packet(){
     if (new_packet == NULL) {
         return NULL;
     }
+    //new_packet->reserved = 4294967295;
     return new_packet;
 }
 
@@ -71,7 +72,7 @@ int send_object_packet(Object_packet *send_packet, int system_socket){
     }
 
     memset(buffer,'\0',buffer_size);
-    if (memcpy(buffer,send_packet, sizeof(Object_packet) - sizeof(char*)) == NULL) {
+    if (memcpy(buffer,send_packet, header_size) == NULL) {
         return -1;
     }
 

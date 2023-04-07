@@ -29,7 +29,7 @@ from map_element.tile import Tile
 from sounds.sounds import SoundManager
 
 from game.builder import Builder
-from network_system.system_layer.read_write_ import SystemInterface
+from network_system.system_layer.read_write import SystemInterface
 import backup_game
 
 class World:

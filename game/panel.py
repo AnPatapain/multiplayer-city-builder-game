@@ -12,7 +12,7 @@ from game.mini_map import MiniMap
 from game.textures import Textures
 from map_element.tile import Tile
 from game.overlay import Overlay
-from network_system.system_layer.read_write_ import SystemInterface
+from network_system.system_layer.read_write import SystemInterface
 
 TOPBAR_HEIGHT = 46
 PANEL_WIDTH = 162
