@@ -6,7 +6,7 @@ import struct
 import subprocess
 from typing import TypedDict
 
-from class_types.buildind_types import BuildingTypes
+# from class_types.buildind_types import BuildingTypes
 
 
 class SystemInterface:
@@ -40,7 +40,7 @@ class SystemInterface:
 
         print(f"Accepted a connection from {client_address}")
 
-    def send_message(self, command, id_object, id_player, data, encode=True):
+    def send_message(self, id_player, command, id_object, data, encode=True):
         if encode:
             data = data.encode()
 
@@ -182,56 +182,58 @@ class SystemInterface:
         "building_type": building_type from the enum,
     }
         """
-    class __Building(TypedDict):
-        x: int
-        y: int
-        id: str
-
-    class __BuildMessage(TypedDict):
-        buildings: list[dict] # Error when putting a __Building
-        building_type: BuildingTypes
-
-    def send_build(self, buildings: list[__Building], building_type: BuildingTypes):
-        pass
-
-    def recieve_build(self, datas: __BuildMessage):
-        pass
-
-
-
-    def send_risk_update(self, risk_type, building_id):
-        pass
-
-    def recieve_risk_update(self, datas):
-        pass
-
-
-
-    def send_walker_direction_update(self, new_direction, walker_id):
-        pass
-
-    def recieve_walker_direction_update(self, datas):
-        pass
-
-
-
-    def send_spawn_walker(self, pos, walker_type, walker_id):
-        pass
-
-    def recieve_spawn_walker(self, datas):
-        pass
-
-
-
-    def send_delete_walker(self, walker_id):
-        pass
-
-    def recieve_delete_walker(self, datas):
-        pass
+    # class __Building(TypedDict):
+    #     x: int
+    #     y: int
+    #     id: str
+    #
+    # class __BuildMessage(TypedDict):
+    #     buildings: list[dict] # Error when putting a __Building
+    #     building_type: BuildingTypes
+    #
+    # def send_build(self, buildings: list[__Building], building_type: BuildingTypes):
+    #     pass
+    #
+    # def recieve_build(self, datas: __BuildMessage):
+    #     pass
+    #
+    #
+    #
+    # def send_risk_update(self, risk_type, building_id):
+    #     pass
+    #
+    # def recieve_risk_update(self, datas):
+    #     pass
+    #
+    #
+    #
+    # def send_walker_direction_update(self, new_direction, walker_id):
+    #     pass
+    #
+    # def recieve_walker_direction_update(self, datas):
+    #     pass
+    #
+    #
+    #
+    # def send_spawn_walker(self, pos, walker_type, walker_id):
+    #     pass
+    #
+    # def recieve_spawn_walker(self, datas):
+    #     pass
+    #
+    #
+    #
+    # def send_delete_walker(self, walker_id):
+    #     pass
+    #
+    # def recieve_delete_walker(self, datas):
+    #     pass
 
 
 def main():
-    sysemAgent = SystemInterface.get_instance()
-    sysemAgent.send_message(type_object=1, meta_data=2, id_object=3, id_player=4, data="Bonjour C je suis Python")
-    sysemAgent.read_message()
+    system_agent = SystemInterface.get_instance()
+    system_agent.send_message(id_player=1, command=2, id_object=3, data="Bonjour C je suis Python")
+    # system_agent.read_message()
+
+
 main()

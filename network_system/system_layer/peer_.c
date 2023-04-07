@@ -39,22 +39,21 @@ int main() {
     }
     printf("\n%s\n", objectPacket_read.data);
 
-    Object_packet objectPacket_write;
-    char buffer[] = "Hello Python Je suis C";
-    objectPacket_write.object_type.typeObject = 1;
-    objectPacket_write.object_type.metaData = 2;
-    objectPacket_write.object_size = strlen(buffer);
-    objectPacket_write.id_object = 3;
-    objectPacket_write.id_player = 4;
+//    Object_packet objectPacket_write;
+//    char buffer[] = "Hello Python Je suis C";
+//    objectPacket_write.object_type.typeObject = 1;
+//    objectPacket_write.object_type.metaData = 2;
+//    objectPacket_write.object_size = strlen(buffer);
+//    objectPacket_write.id_object = 3;
+//    objectPacket_write.id_player = 4;
+//
+//    objectPacket_write.data = (char *)calloc(strlen(buffer) + 1, 1);
+//    strncpy(objectPacket_write.data, buffer, strlen(buffer));
+//    printf("\n%s\n", objectPacket_write.data);
+//
+//    send(sockfd, &objectPacket_write, sizeof(objectPacket_write) + strlen(buffer), 0);
 
-    objectPacket_write.data = (char *)calloc(strlen(buffer) + 1, 1);
-    strncpy(objectPacket_write.data, buffer, strlen(buffer));
-    printf("\n%s\n", objectPacket_write.data);
 
-    send(sockfd, &objectPacket_write, sizeof(objectPacket_write) + strlen(buffer), 0);
-
-    // Close the socket
     close(sockfd);
-
     return 0;
 }
