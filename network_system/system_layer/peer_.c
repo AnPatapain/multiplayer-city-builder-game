@@ -1,7 +1,7 @@
 #include "Message.h"
 
-const uint32_t header_size = sizeof(Object_packet) - sizeof(char*);
-//const uint32_t header_size = 14;
+//const uint32_t header_size = sizeof(Object_packet) - sizeof(char*);
+const uint32_t header_size = 12;
 
 int main() {
     int sockfd;

@@ -14,9 +14,6 @@ from .map_controller import MapController
 from .panel import Panel
 from .game_controller import GameController
 from threading import Thread, Event
-
-from network_system.system_layer.read_write import SystemInterface
-
 def my_thread(func, event: Event):
     fps_moyen = [0]
     try:

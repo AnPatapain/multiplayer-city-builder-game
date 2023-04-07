@@ -3,7 +3,6 @@ import lzma
 import pickle
 from os import mkdir,path
 from game.game_controller import GameController
-from network_system.system_layer.read_write import SystemInterface
 
 save_dir = "saved_games/"
 list_fichiers = os.listdir(save_dir)

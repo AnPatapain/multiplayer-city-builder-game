@@ -29,7 +29,7 @@ from map_element.tile import Tile
 from sounds.sounds import SoundManager
 
 from game.builder import Builder
-from network_system.system_layer.read_write import SystemInterface
+from network_system.system_layer.read_write_ import SystemInterface
 import backup_game
 
 class World:
@@ -130,9 +130,9 @@ class World:
                     self.builder.set_end_point(mouse_grid_pos)
                     
                     # Send message to c process
-                    tar = f"start: {self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]} end: {self.builder.get_end_point()[0]} {self.builder.get_end_point()[1]}\n"
+                    tar = f"start: {self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]} end: {self.builder.get_end_point()[0]} {self.builder.get_end_point()[1]}"
                     # print(BuildingTypes.VACANT_HOUSE)
-                    self.read_write_py_c.send_message(1, 2, 10, 1, 2, tar)
+                    self.read_write_py_c.send_message(id_player=1, command=2, id_object=3, data=tar)
                 else:
                     self.builder.set_end_point(None)
                     self.builder.set_start_point(None)

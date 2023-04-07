@@ -8,7 +8,6 @@ from typing import TypedDict
 
 # from class_types.buildind_types import BuildingTypes
 
-
 class SystemInterface:
     instance = None
 
@@ -230,10 +229,10 @@ class SystemInterface:
     #     pass
 
 
-def main():
-    system_agent = SystemInterface.get_instance()
-    system_agent.send_message(id_player=1, command=2, id_object=3, data="Bonjour C je suis Python")
-    # system_agent.read_message()
-
-
-main()
+# def main():
+#     system_agent = SystemInterface.get_instance()
+#     system_agent.send_message(id_player=1, command=2, id_object=3, data="Bonjour C je suis Python")
+#     # system_agent.read_message()
+#
+#
+# main()
