@@ -104,11 +104,36 @@ int connect_to_all_ip(const game_packet *resp_ips){
     return 0;
 }
 
-int send_all_client(Object_packet *object, client_game *client){
-
+int send_all_client(Object_packet *object){
+    if (object == NULL){
+        return -1;
+    }
+    game_packet *packet = encapsulate_object_packets(object,1,GPP_ALTER_GAME);
+    client_game *client_to_send = first_client();
+    while (client_to_send->next != NULL){
+        if (send_game_packet(packet, client_to_send->socket_client) == -1){
+            return -1;
+        }
+    }
+    return 0;
 }
 
-int type_check(client_game *client,game_packet *packet){
+int send_to_python(const game_packet *packet,int system_socket){
+    if (packet == NULL){
+        return -1;
+    }
+    int nb_object = 0;
+    Object_packet *objects = uncap_object_packets(&nb_object,packet);
+    for(int i = 0; i < nb_object; i++){
+        if (send_object_packet(objects + i, system_socket) == -1){
+            printf("error send to python");
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int type_check(client_game *client, game_packet *packet, int system_socket) {
     switch (packet->type) {
         case GPP_CONNECT_NEW:
             return new_connection(client,packet);
@@ -124,14 +149,13 @@ int type_check(client_game *client,game_packet *packet){
             //TODO: Send data to python
             return 0;
         case GPP_ALTER_GAME:
-            {
+            /*{
                 FILE *fichier = fopen("mon_gros_fichier-recep.txt","w");
                 fwrite(packet->payload, packet->data_size, 1, fichier);
                 fflush(fichier);
                 fclose(fichier);
-            }
-            //TODO: Send data to python
-            return 0;
+            }*/
+            return send_to_python(packet,system_socket);
         case GPP_DELEGATE_ASK:
             //TODO: Notify python to take own of this data
             return 0;
@@ -152,7 +176,7 @@ int type_check(client_game *client,game_packet *packet){
     }
 }
 
-int check_all_client(fd_set *fds){
+int check_all_client(fd_set *fds, int socket_system) {
     client_game *client = first_client();
     game_packet *recv_packet = new_game_packet();
     while (client != NULL){
@@ -165,7 +189,7 @@ int check_all_client(fd_set *fds){
                 continue;
             }
             print_game_packet(recv_packet);
-            if (type_check(client,recv_packet) == -1){
+            if (type_check(client, recv_packet, socket_system) == -1){
                 printf("Error check client %i\n",client->player_id);
             }
         }
@@ -214,10 +238,13 @@ int game_server(int socket_listen, int socket_system) {
             if (is_for_C(python_packet)){
                 //TODO: C'est ecrit au dessus
             } else{
-                //TODO: Send all client
+                if (send_all_client(python_packet) == -1){
+                    printf("Error send packet");
+                }
             }
+            free(python_packet);
         }
-        check_all_client(&fd_listen_sock);
+        check_all_client(&fd_listen_sock, socket_system);
     }
 }
 
@@ -313,7 +340,7 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
     }
     /**
      *  aled
-     */
+     *
     int ma_grosse_taille = 4703127;
     char *mes_grosses_donnee = malloc(sizeof(char) * ma_grosse_taille);
     FILE* mon_gros_fichier = fopen("mon_gros_fichier-send.txt","w");
@@ -328,6 +355,7 @@ int connection_existant_game(game_ip ip_address, bool is_new_player){
     mon_gros_packet->payload = mes_grosses_donnee;
     send_game_packet(mon_gros_packet,new_client->socket_client);
     free(mes_grosses_donnee);
+    */
 
     return 0;
 }
@@ -409,7 +437,11 @@ int main(int argc, char const *argv[])
         ip = argv[1];
     }
 
-    char *str = "Mon gros payload";
+    /**
+     * encapsulation test
+     */
+
+    /*char *str = "Mon gros payload";
     char *str2 = "Mon moins grand payload";
     Object_packet *obj1 = calloc(sizeof(Object_packet),2);
     init_object_packet(obj1,250,strlen(str) + 1);
@@ -431,8 +463,8 @@ int main(int argc, char const *argv[])
     print_object_packet(obj_res);
     print_object_packet(obj_res + 1);
     printf("test recu: %s\n",obj_res[0].data);
-    printf("test recu: %s\n",obj_res[1].data);
+    printf("test recu: %s\n",obj_res[1].data);*/
 
 
-    return 0; //init_server(ip);
+    return init_server(ip);
 }
