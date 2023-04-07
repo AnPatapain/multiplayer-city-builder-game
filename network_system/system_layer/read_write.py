@@ -5,7 +5,7 @@ import sys
 import re
 import struct
 import subprocess
-from typing import TypedDict
+from typing import TypedDict, Optional
 
 from class_types.buildind_types import BuildingTypes
 from class_types.network_commands_types import NetworkCommandsTypes
@@ -14,7 +14,15 @@ from class_types.road_types import RoadTypes
 
 # from class_types.buildind_types import BuildingTypes
 
+class Header(TypedDict):
+    player_id: int
+    command: int
+    object_size: int
+    id_object: int
 
+class Message(TypedDict):
+    header: Header
+    data: any
 
 class BuildingMsg(TypedDict):
     start: list[int, int]
@@ -73,17 +81,22 @@ class SystemInterface:
 
         return self.connection.sendall(sending_message)
 
-    def read_message(self):
+    def read_message(self) -> Optional[Message]:
+        if self.connection is None:
+            return None
+
         header_size = 16
         binary_received_header = self.connection.recv(header_size)
+
+        if binary_received_header is None:
+            return None
+
         header = self.unpack_header(binary_received_header)
 
         binary_received_data = self.connection.recv(header["object_size"])
         data = self.unpack_data(binary_received_data, header["object_size"])
 
-        class Message(TypedDict):
-            header: any
-            data: any
+
 
         self.message_read: Message = {
             "header": header,
@@ -91,23 +104,25 @@ class SystemInterface:
         }
 
         print(self.message_read)
+        return self.message_read
+
 
     def unpack_data(self, binary_received_data, data_len):
         format = f"={data_len}s"
         print(format, binary_received_data)
         data = struct.unpack(format, binary_received_data)
         return data
-    def unpack_header(self, binary_received_header):
+
+    def unpack_header(self, binary_received_header) -> Header:
         header = struct.unpack("=H H L L H H", binary_received_header)
+
         temp_dict = {
-            "object_type": {
-                "typeObject": header[0],
-                "metaData": header[1]
-            },
+            "player_id": header[0],
+            "command": header[1],
             "object_size": header[2],
-            "id_object": header[3],
-            "id_player": header[4]
+            "id_object": header[3]
         }
+
         return temp_dict
 
     def close_socket(self):
