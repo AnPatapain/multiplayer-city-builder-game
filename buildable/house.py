@@ -16,6 +16,7 @@ class House(Buildable, ABC):
 
         self.has_water = False
         self.tax = tax
+        self.tax_available = False
         self.happiness = 60
         self.desirability = desirability
         self.prosperity = prosperity
@@ -139,3 +140,9 @@ class House(Buildable, ABC):
         if self.associated_walker:
             self.associated_walker.delete()
         super().to_ruin(on_fire=on_fire)
+
+    def get_has_taxes(self):
+        return self.tax_available
+
+    def set_has_taxes(self, value: bool):
+        self.tax_available = value

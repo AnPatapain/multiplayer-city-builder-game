@@ -3,13 +3,14 @@ from abc import ABC
 from typing import TYPE_CHECKING, Optional
 
 from class_types.orientation_types import OrientationTypes
-from game.game_controller import GameController
 from game.textures import Textures
+from game.game_controller import GameController
 
 if TYPE_CHECKING:
     from buildable.buildable import Buildable
     from class_types.walker_types import WalkerTypes
     from map_element.tile import Tile
+
 
 
 class Walker(ABC):
