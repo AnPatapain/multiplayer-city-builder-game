@@ -134,18 +134,18 @@ Le player_id est un identifiant de 16bits (2 octets). Cet identifiant doit être
 
 | Command name    | Code |
 |-----------------|------|
-| Connect         | 1    |
-| Disconnect      | 2    |
-| Game save       | 3    |
+| Connect         | 400  |
+| Disconnect      | 401  |
+| Game save       | 402  |
 |                 |      |
-| Build           | 10   |
-| Delete building | 11   |
-| Risk update     | 12   |
+| Build           | 410  |
+| Delete building | 411  |
+| Risk update     | 412  |
 |                 |      |
-| Update walker   | 20   |
-| Spawn walker    | 21   |
-| Delete walker   | 22   |
+| Update walker   | 420  |
+| Spawn walker    | 421  |
+| Delete walker   | 422  |
 |                 |      |
-| Delegate?       | 666  |
+| Delegate?       | 499  |
 
  
