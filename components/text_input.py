@@ -84,7 +84,10 @@ class TextInput(Component):
 
     def display(self, screen: 'Surface'):
         pg.draw.rect(screen, (50, 50, 50), self.bg)
-        draw_text(self.current_value, screen, self.position)
+        if len(self.current_value) == 0:
+            draw_text(self.placeholder, screen, self.position, color=(150, 150, 150))
+        else:
+            draw_text(self.current_value, screen, self.position)
 
         # Blinks the cursor every 0.5s
         if self.is_focused() and time.time() % 1 > 0.5:
