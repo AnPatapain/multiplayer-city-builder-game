@@ -1,3 +1,4 @@
+import errno
 import json
 import os
 import socket
@@ -85,16 +86,26 @@ class SystemInterface:
         if self.connection is None:
             return None
 
-        header_size = 16
-        binary_received_header = self.connection.recv(header_size)
-
-        if binary_received_header is None:
+        header_size = 12
+        self.connection.setblocking(0)
+        try:
+            binary_received_header = self.connection.recv(header_size)
+            if binary_received_header is None:
+                return None
+        except socket.error as e:
+            if e.errno != errno.EAGAIN:
+                raise e
+            self.connection.setblocking(1)
             return None
+
+        self.connection.setblocking(1)
+
 
         header = self.unpack_header(binary_received_header)
 
-        binary_received_data = self.connection.recv(header["object_size"])
-        data = self.unpack_data(binary_received_data, header["object_size"])
+        if header["object_size"]:
+            binary_received_data = self.connection.recv(header["object_size"])
+            data = self.unpack_data(binary_received_data, header["object_size"])
 
 
 
@@ -112,10 +123,8 @@ class SystemInterface:
         print(format, binary_received_data)
         data = struct.unpack(format, binary_received_data)
         return data
-
     def unpack_header(self, binary_received_header) -> Header:
-        header = struct.unpack("=H H L L H H", binary_received_header)
-
+        header = struct.unpack("=H H L L", binary_received_header)
         temp_dict = {
             "player_id": header[0],
             "command": header[1],

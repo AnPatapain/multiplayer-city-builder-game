@@ -63,7 +63,7 @@ class Builder:
     
     def get_in_build_action(self): return self.in_build_action
 
-    def build_from_start_to_end(self, selected_tile: BuildingTypes | RoadTypes, start_point: tuple[int, int], end_point: tuple[int, int]):
+    def build_from_start_to_end(self, selected_tile: BuildingTypes | RoadTypes, start_point: tuple[int, int], end_point: tuple[int, int], from_network: bool = False):
         grid = self.game_controller.get_map()
 
         if selected_tile == RoadTypes.TL_TO_BR:
@@ -106,9 +106,11 @@ class Builder:
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
 
-
-        si = SystemInterface.get_instance()
-        si.send_build(start_point, end_point, selected_tile)
+        if not from_network:
+            if selected_tile == BuildingTypes.PELLE:
+                return # Not implemented yet
+            si = SystemInterface.get_instance()
+            si.send_build(start_point, end_point, selected_tile)
 
     def delete_building(self, tile_with_building: 'Buildable'):
         for tile in tile_with_building.get_all_building_tiles():

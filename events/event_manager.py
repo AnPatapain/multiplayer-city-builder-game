@@ -1,3 +1,5 @@
+import json
+
 import pygame as pg
 
 from components.button import Button
@@ -40,9 +42,10 @@ class EventManager:
         res = si.read_message()
         if res:
             if res["header"]["command"] == 410:
-                d = res["data"]
+                d = res["data"][0]
+                d = json.loads(d)
                 b = Builder()
-                b.build_from_start_to_end(d["building_type"], d["start"], d["end"])
+                b.build_from_start_to_end(d["building_type"], d["start"], d["end"], from_network=True)
 
         pos = pg.mouse.get_pos()
 

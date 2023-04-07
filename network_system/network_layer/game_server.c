@@ -126,9 +126,20 @@ int send_to_python(const game_packet *packet,int system_socket){
     int nb_object = 0;
     Object_packet *objects = uncap_object_packets(&nb_object,packet);
     print_object_packet(objects);
+    printf("chaine :\n");
+    write(1,objects->data,objects->object_size);
+    printf("\n");
     for(int i = 0; i < nb_object; i++){
         if (send_object_packet(objects + i, system_socket) == -1){
-            printf("error send to python");
+            /*
+            // Test: send data
+            char *str = "{\"start\": [22, 39], \"end\": [22, 39], \"building_type\": 1001}";
+            Object_packet *obj = new_object_packet();
+            init_object_packet(obj,410, strlen(str));
+            obj->id_object = 12;
+            obj->data = str;
+            send_all_client(obj);*/
+            printf("error send to python\n");
             return -1;
         }
     }
@@ -244,7 +255,7 @@ int game_server(int socket_listen, int socket_system) {
                 //TODO: C'est ecrit au dessus
             } else{
                 if (send_all_client(python_packet) == -1){
-                    printf("Error send packet");
+                    printf("Error send packet\n");
                 }
             }
             free(python_packet);
