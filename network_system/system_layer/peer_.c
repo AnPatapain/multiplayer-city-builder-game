@@ -46,9 +46,12 @@ int main() {
     objectPacket_write.object_size = strlen(buffer);
     objectPacket_write.id_object = 3;
     objectPacket_write.id_player = 4;
+
     objectPacket_write.data = (char *)calloc(strlen(buffer) + 1, 1);
     strncpy(objectPacket_write.data, buffer, strlen(buffer));
-    send(sockfd, &objectPacket_write, sizeof(objectPacket_write), 0);
+    printf("\n%s\n", objectPacket_write.data);
+
+    send(sockfd, &objectPacket_write, sizeof(objectPacket_write) + strlen(buffer), 0);
 
     // Close the socket
     close(sockfd);

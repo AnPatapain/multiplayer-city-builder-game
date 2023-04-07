@@ -11,6 +11,7 @@ from class_types.buildind_types import BuildingTypes
 
 class SystemInterface:
     instance = None
+
     def __init__(self):
         self.message_read = None
         self.message_write = None
@@ -56,13 +57,26 @@ class SystemInterface:
 
     def read_message(self):
         header_size = 16
-        binary_received_message = self.connection.recv(header_size)
-        print(binary_received_message)
-        self.message_read = self.unpack_message(binary_received_message)
+        binary_received_header = self.connection.recv(header_size)
+        header = self.unpack_header(binary_received_header)
+
+        binary_received_data = self.connection.recv(header["object_size"])
+        data = self.unpack_data(binary_received_data, header["object_size"])
+
+        self.message_read = {
+            "header": header,
+            "data": data
+        }
+
         print(self.message_read)
 
-    def unpack_message(self, binary_received_message):
-        header = struct.unpack("=H H L L H H", binary_received_message)
+    def unpack_data(self, binary_received_data, data_len):
+        format = f"={data_len}s"
+        print(format, binary_received_data)
+        data = struct.unpack(format, binary_received_data)
+        return data
+    def unpack_header(self, binary_received_header):
+        header = struct.unpack("=H H L L H H", binary_received_header)
         temp_dict = {
             "object_type": {
                 "typeObject": header[0],
