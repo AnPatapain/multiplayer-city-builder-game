@@ -1,5 +1,6 @@
 import pygame as pg
 
+
 import backup_game
 from components import button
 from components.text_input import TextInput
@@ -15,6 +16,7 @@ class Menu:
         self.splash_screen = True
         self.active = True
         self.save_loading = False
+        self.online_menu = False
 
         self.screen = screen
         self.graphics = self.load_images()
@@ -34,12 +36,12 @@ class Menu:
                                                       image_hover=pg.image.load('assets/menu_sprites/load_saved_game_mouse_on.png').convert())
         self.button__load_saved_game.on_click(self.set_loading_menu)
 
-        self.button__options = button.Button((button_start, 450), button_size,
+        self.button__options = button.Button((button_start, 500), button_size,
                                                       image=pg.image.load('assets/menu_sprites/options.png').convert(),
                                                       image_hover=pg.image.load('assets/menu_sprites/options_mouse_on.png').convert())
         #self.button__options.set_disabled(True)
 
-        self.button__exit = button.Button((button_start, 500), button_size,
+        self.button__exit = button.Button((button_start, 550), button_size,
                                                       image=pg.image.load('assets/menu_sprites/exit.png').convert(),
                                                       image_hover=pg.image.load('assets/menu_sprites/exit_hover.png').convert())
         self.button__exit.on_click(exit)
@@ -59,13 +61,27 @@ class Menu:
         self.come_back_to_main_menu = button.Button((button_start, 500), (50,45), text="<")
         self.come_back_to_main_menu.on_click(self.set_main_menu)
 
+        self.button__multiplayer = button.Button((button_start, 450), button_size, text="Multiplayer")
+        self.button__multiplayer.on_click(self.set_online_menu)
+
+        self.button__connect = button.Button((button_start, 400), button_size, text="Multiplayer")
+        self.button_connect.on_click(self.connect_to_server)
+
+        self.input_ip = TextInput((0, 0), (300, 30), placeholder="Enter the ip address.")
+        self.input_user = TextInput((0, 0), (350, 30), placeholder="Enter your username.")
+
+
 
         if self.is_load_menu() and not self.main_menu:
             EventManager.set_any_input(self.event_load_menu)
+        elif self.is_online_menu() and not self.main_menu:
+            EventManager.set_any_input(self.event_online_menu())
         else:
             EventManager.set_any_input(self.skip_splashscreen)
         self.screen.blit(self.graphics["splash"], (0, 0))
         pg.display.flip()
+
+
 
         # pg.mixer.music.load('sounds/wavs/ROME4.WAV')
         # pg.mixer.music.set_volume(0.6)
@@ -95,9 +111,11 @@ class Menu:
             self.screen.blit(self.graphics["logo"], (logo_start, 200))
             self.button__start_new_career.display(self.screen)
             self.button__load_saved_game.display(self.screen)
+            self.button__multiplayer.display(self.screen)
             self.button__options.display(self.screen)
             self.button__exit.display(self.screen)
             self.textinput.display(self.screen)
+
         if self.is_load_menu() and not self.main_menu:
             draw_text("Load a City", self.screen,(logo_start+70, 200), color=(255, 255, 200))
             print(backup_game.list_fichiers)
@@ -109,8 +127,16 @@ class Menu:
             self.event_load_menu()
 
 
+        if self.is_online_menu() and not self.main_menu:
+            draw_text("Play Online with other players!", self.screen,(logo_start+50, 200), color=(255, 255, 200))
+            self.button__connect.display(self.screen)
+            self.input_ip.display(self.screen)
+            self.input_user.display(self.screen)
+            self.come_back_to_main_menu.display(self.screen)
+            self.event_online_menu()
 
         pg.display.flip()
+
 
     def load_images(self):
         background = pg.image.load('assets/menu_sprites/background_menu.jpg').convert()
@@ -143,6 +169,7 @@ class Menu:
         EventManager.register_component(self.button__load_saved_game)
         EventManager.register_component(self.button__options)
         EventManager.register_component(self.button__exit)
+        EventManager.register_component(self.button__multiplayer)
         EventManager.register_component(self.textinput)
 
     def event_load_menu(self):
@@ -152,6 +179,7 @@ class Menu:
         EventManager.remove_component(self.button__load_saved_game)
         EventManager.remove_component(self.button__options)
         EventManager.remove_component(self.button__exit)
+        EventManager.remove_component(self.button__multiplayer)
         EventManager.register_component(self.save1)
         EventManager.register_component(self.save2)
         EventManager.register_component(self.save3)
@@ -159,8 +187,18 @@ class Menu:
         EventManager.register_component(self.come_back_to_main_menu)
 
 
-
-
+    def event_online_menu(self):
+        EventManager.clear_any_input()
+        self.main_menu = False
+        EventManager.remove_component(self.button__start_new_career)
+        EventManager.remove_component(self.button__load_saved_game)
+        EventManager.remove_component(self.button__options)
+        EventManager.remove_component(self.button__exit)
+        EventManager.remove_component(self.button__multiplayer)
+        EventManager.register_component(self.input_ip)
+        EventManager.register_component(self.input_user)
+        EventManager.register_component(self.button__connect)
+        EventManager.register_component(self.come_back_to_main_menu)
 
     def is_splashscreen_skipped(self):
         return not self.splash_screen
@@ -175,11 +213,33 @@ class Menu:
     def is_load_menu(self):
         return self.loading_menu
 
+    def is_online_menu(self):
+        return self.online_menu
+
     def set_loading_menu(self):
         self.loading_menu = True
         self.main_menu = False
+
+    def set_online_menu(self):
+        self.online_menu = True
+        self.main_menu = False
+
 
     def set_main_menu(self):
         self.main_menu = True
         self.loading_menu = False
         self.skip_splashscreen()
+
+    def connect_to_server(self):
+        username = self.input_user.get_text()
+        ip = self.input_ip.get_text()
+        ############################
+        ############################
+        ############################
+        ############################
+        self.set_main_menu()
+
+
+
+
+
