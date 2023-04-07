@@ -4,6 +4,8 @@ from components.button import Button
 from components.component import Component
 from components.text_input import TextInput
 from events.key_listener import KeyListener
+from game.builder import Builder
+from network_system.system_layer.read_write import SystemInterface
 
 
 class EventManager:
@@ -32,6 +34,15 @@ class EventManager:
         The logic function that has to be called in the game loop for the magic to append
         :return: The EventManager itself
         """
+
+        si = SystemInterface.get_instance()
+
+        res = si.read_message()
+        if res:
+            if res["header"]["command"] == 410:
+                d = res["data"]
+                b = Builder()
+                b.build_from_start_to_end(d["building_type"], d["start"], d["end"])
 
         pos = pg.mouse.get_pos()
 
