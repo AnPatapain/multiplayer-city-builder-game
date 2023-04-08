@@ -124,9 +124,6 @@ int send_to_python(const game_packet *packet,int system_socket){
     int nb_object = 0;
     Object_packet *objects = uncap_object_packets(&nb_object,packet);
     print_object_packet(objects);
-    printf("chaine :\n");
-    write(1,objects->data,objects->object_size);
-    printf("\n");
     for(int i = 0; i < nb_object; i++){
         if (send_object_packet(objects + i, system_socket) == -1){
             /*
@@ -255,10 +252,11 @@ int type_object_check(Object_packet *packet) {
             //TODO: delegate object
             return 0;
         case C_COMMAND:
+            //TODO: Ask some C
             return 0;
         default:
-            printf("bad object\n");
-            return -1;
+            printf("unknown object\n");
+            return send_all_client(packet);
     }
 }
 

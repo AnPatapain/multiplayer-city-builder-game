@@ -136,7 +136,7 @@ class SystemInterface:
         header = self.unpack_header(binary_received_header)
 
         if header["object_size"]:
-            binary_received_data = self.connection.recv(header["object_size"])
+            binary_received_data = self.connection.recv(header["object_size"], socket.MSG_WAITALL)
             data = self.unpack_data(binary_received_data, header["object_size"])
         else:
             data = None
