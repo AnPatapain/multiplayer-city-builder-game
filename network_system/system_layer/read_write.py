@@ -45,28 +45,28 @@ class SystemInterface:
 
         self.is_online = False
 
-    def init_server(self):
+    def init_listen(self):
 
         client_path = "./network_system/client_c"
         if not os.path.exists(client_path):
             print("Error C client not found, please run `make` before play online")
             return
 
-        server_address = "/tmp/socket"
-        if os.path.exists(server_address):
-            os.remove(server_address)
+        socket_address = "/tmp/socket"
+        if os.path.exists(socket_address):
+            os.remove(socket_address)
 
         # Create a Unix domain socket
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
-        # Bind the socket to the server address
-        self.sock.bind(server_address)
+        # Bind the socket
+        self.sock.bind(socket_address)
 
         # Listen for incoming connections
         self.sock.listen(1)
 
         # Wait for a connection
-        print(f"Waiting for a connection on {server_address}")
+        print(f"Waiting for a connection on {socket_address}")
 
         # Run subprocess here to wait connection before lauch it
 
@@ -205,7 +205,7 @@ class SystemInterface:
 
     #..............................................................................#
     def run_subprocess(self) :
-        self.init_server()
+        self.init_listen()
 
         # return output.decode("utf-8")
 

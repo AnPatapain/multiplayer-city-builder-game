@@ -1,4 +1,4 @@
-#include "game_server.h"
+#include "game_listen.h"
 
 
 client_game* accept_new_client(int socket_listen){
@@ -283,7 +283,7 @@ int check_all_client(fd_set *fds, int socket_system) {
     return 0;
 }
 
-int game_server(int socket_listen, int socket_system) {
+int game_listen(int socket_listen, int socket_system) {
     fd_set fd_listen_sock;
     int number_fd;
     int max = 0;
@@ -461,7 +461,7 @@ int init_system_socket(){
     return socket_system;
 }
 
-int init_server(const char *ip_address){
+int init_listen(const char *ip_address){
 
     if (ip_address != NULL){
         struct sockaddr_in new_sock;
@@ -502,13 +502,13 @@ int init_server(const char *ip_address){
         return 1;
     }
     
-    printf("Server start : \n");
+    printf("Listen start : \n");
     int system_sock = init_system_socket();
     if (system_sock == -1){
         close(listen_socket);
         return 1;
     }
-    game_server(listen_socket, system_sock);
+    game_listen(listen_socket, system_sock);
 
     if (close(listen_socket) == -1){
         perror("close socket:");
@@ -553,5 +553,5 @@ int main(int argc, char const *argv[])
     printf("test recu: %s\n",obj_res[1].data);*/
 
 
-    return init_server(ip);
+    return init_listen(ip);
 }

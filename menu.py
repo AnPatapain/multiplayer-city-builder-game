@@ -66,7 +66,7 @@ class Menu:
         self.button__multiplayer.on_click(self.go_to_online_menu)
 
         self.button__connect = button.Button((button_start, 400), button_size, text="Connect",center_text=True)
-        self.button__connect.on_click(self.connect_to_server)
+        self.button__connect.on_click(self.connect_to_c_client)
 
         self.input_ip = TextInput((button_start,300 ), (320, 30), placeholder="Enter the ip address.")
         self.input_user = TextInput((button_start, 350), (320, 30), placeholder="Enter your username.", focused=False)
@@ -209,7 +209,7 @@ class Menu:
         self.event_main_menu()
         self.current_menu = CurrentMenu.MAIN_MENU
 
-    def connect_to_server(self):
+    def connect_to_c_client(self):
         from network_system.system_layer.read_write import SystemInterface
 
         username = self.input_user.get_text()

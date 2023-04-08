@@ -1,5 +1,5 @@
-#ifndef GAME_SERVER
-#define GAME_SERVER
+#ifndef GAME_LISTEN
+#define GAME_LISTEN
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,8 +25,8 @@
 
 #define SYSSOCK "/tmp/socket"
 
-int init_server(const char *ip_address);
+int init_listen(const char *ip_address);
 int req_connection(client_game *client, const game_packet *packet);
 int connection_existant_game(game_ip ip_address, bool is_new_player);
 
-#endif //GAME_SERVER
+#endif //GAME_LISTEN

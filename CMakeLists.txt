@@ -11,7 +11,7 @@ add_executable(taboule_raza
         network_system/network_layer/client_list.h
         network_system/network_layer/game_packet_protocol.h
         network_system/network_layer/game_packet_protocol.c
-        network_system/network_layer/game_server.c
-        network_system/network_layer/game_server.h
+        network_system/network_layer/game_listen.c
+        network_system/network_layer/game_listen.h
         network_system/network_layer/message_type.h
         network_system/system_layer/game_object_protocol.h network_system/system_layer/game_object_protocol.c network_system/system_layer/object_type.h)

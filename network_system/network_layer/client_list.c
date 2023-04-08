@@ -24,14 +24,14 @@ bool id_exist(client_game *client_to_check,uint16_t id){
     return FALSE;
 }
 
-void cgl_set_all_client(fd_set *fd_server, int *max_fd) {
+void cgl_set_all_client(fd_set *fd_listen, int *max_fd) {
     client_game *client = list_client;
     while (client != NULL){
         if (client->socket_client > *max_fd){
             *max_fd = client->socket_client;
         }
 
-        FD_SET(client->socket_client,fd_server);
+        FD_SET(client->socket_client, fd_listen);
         client = client->next;
     }
 }

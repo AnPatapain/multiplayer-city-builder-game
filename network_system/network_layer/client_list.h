@@ -30,9 +30,9 @@ int clg_remove(client_game* client_to_delete);
 game_ip *get_all_ips(int *nb_client, const client_game *req_client);
 
 /**
- * @param: fd_server: fd to set al client
+ * @param: fd_listen: fd to set al client
  * @return: Fd max
 */
-void cgl_set_all_client(fd_set *fd_server, int *max_fd);
+void cgl_set_all_client(fd_set *fd_listen, int *max_fd);
 
 #endif //CLIENT_LIST
