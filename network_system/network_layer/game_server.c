@@ -93,9 +93,7 @@ void show_list_ip(const game_packet *packet){
 int connect_to_all_ip(const game_packet *resp_ips){
     game_ip *ips = (game_ip*) resp_ips->payload;
     int number_ips = (int) resp_ips->data_size / (int) sizeof(uint32_t);
-    struct sockaddr_in sock_adresse = {0};
-    sock_adresse.sin_port = htons(PORT);
-    int new_socket;
+
     for (int i = 0; i < number_ips; i++){
         if (connection_existant_game(ips[i],FALSE) != 0){
             return -1;
@@ -146,6 +144,51 @@ int send_to_python(const game_packet *packet,int system_socket){
     return 0;
 }
 
+int send_ask_save(Object_packet *save_object){
+    if (save_object == NULL){
+        return -1;
+    }
+    client_game *client = first_client();
+    if (client == NULL){
+        return -1;
+    }
+    game_packet *save_packet = encapsulate_object_packets(save_object,1,GPP_ASK_GAME_STATUS);
+    if (save_packet == NULL){
+        return -1;
+    }
+    printf("sending ask\n");
+    return send_game_packet(save_packet,client->socket_client);
+}
+
+int send_save(client_game *client,game_packet *packet, const int system_socket){
+    int nb_packet;
+    Object_packet *save_obj = uncap_object_packets(&nb_packet,packet);
+
+    if (send_object_packet(save_obj,system_socket) == -1){
+        printf("Erreur send Save to python\n");
+        return -1;
+    }
+    struct timeval timeout = {0};
+    fd_set fd_set_connect;
+
+    timeout.tv_sec = TIMEOUT;
+
+    FD_ZERO(&fd_set_connect);
+    FD_SET(system_socket, &fd_set_connect);
+    select(system_socket + 1, &fd_set_connect, NULL, NULL, &timeout);
+
+    if (!FD_ISSET(system_socket, &fd_set_connect)) {
+        printf("Error timeout receive save\n");
+        return 1;
+    }
+    if (receive_object_packet(save_obj,system_socket) == -1){
+        printf("error receive save data\n");
+        return -1;
+    }
+    game_packet *save_data = encapsulate_object_packets(save_obj,1,GPP_GAME_STATUS);
+    return send_game_packet(save_data,client->socket_client);
+}
+
 int type_check(client_game *client, game_packet *packet, int system_socket) {
     switch (packet->type) {
         case GPP_CONNECT_NEW:
@@ -156,18 +199,10 @@ int type_check(client_game *client, game_packet *packet, int system_socket) {
             client->player_id = packet->player_id;
             return 0;
         case GPP_ASK_GAME_STATUS:
-            //TODO: Request python for all game
-            return 0;
+            return send_save(client,packet,system_socket);
         case GPP_GAME_STATUS:
-            //TODO: Send data to python
-            return 0;
+            return send_to_python(packet,system_socket);
         case GPP_ALTER_GAME:
-            /*{
-                FILE *fichier = fopen("mon_gros_fichier-recep.txt","w");
-                fwrite(packet->payload, packet->data_size, 1, fichier);
-                fflush(fichier);
-                fclose(fichier);
-            }*/
             return send_to_python(packet,system_socket);
         case GPP_DELEGATE_ASK:
             //TODO: Notify python to take own of this data
@@ -186,6 +221,44 @@ int type_check(client_game *client, game_packet *packet, int system_socket) {
         default:
             printf("Error bad packet\n");
             return 0;
+    }
+}
+
+int type_object_check(Object_packet *packet) {
+    switch (packet->command) {
+
+        case GOP_CONNECT:
+            printf("Unexpected connect");
+            return -1;
+        case GOP_DISCONNECT:
+            //TODO: Disconnect
+            return 0;
+        case GOP_GAME_SAVE:
+            printf("Unexpected Game save");
+            return -1;
+        case GOP_ASK_SAVE:
+            printf("try send ask\n");
+            return send_ask_save(packet);
+        case GOP_BUILD:
+            return send_all_client(packet);
+        case GOP_DELETE:
+             return send_all_client(packet);
+        case GOP_RISK:
+            return send_all_client(packet);
+        case GOP_UPDATE_W:
+            return send_all_client(packet);
+        case GOP_SPAWN_W:
+            return send_all_client(packet);
+        case GOP_DELETE_W:
+            return send_all_client(packet);
+        case DELEGATE:
+            //TODO: delegate object
+            return 0;
+        case C_COMMAND:
+            return 0;
+        default:
+            printf("bad object\n");
+            return -1;
     }
 }
 
@@ -251,12 +324,8 @@ int game_server(int socket_listen, int socket_system) {
             }
 
             print_object_packet(python_packet);
-            if (is_for_C(python_packet)){
-                //TODO: C'est ecrit au dessus
-            } else{
-                if (send_all_client(python_packet) == -1){
-                    printf("Error send packet\n");
-                }
+            if (type_object_check(python_packet) != 0){
+                printf("Error check type\n");
             }
             free(python_packet);
         }
@@ -436,12 +505,12 @@ int init_server(const char *ip_address){
     }
     
     printf("Server start : \n");
-    /*int system_sock = init_system_socket();
+    int system_sock = init_system_socket();
     if (system_sock == -1){
         close(listen_socket);
         return 1;
-    }*/
-    game_server(listen_socket, 1);
+    }
+    game_server(listen_socket, system_sock);
 
     if (close(listen_socket) == -1){
         perror("close socket:");

@@ -78,6 +78,8 @@ int has_payload(const game_packet *packet){
             return 1;
         case GPP_RESP_IP_LIST:
             return 1;
+        case GPP_ASK_GAME_STATUS:
+            return 1;
         default:
             return 0;
     }
@@ -160,6 +162,9 @@ int receive_game_packet(game_packet *recv_packet, int socket){
 
 game_packet *encapsulate_object_packets(const Object_packet *object, int nb_object, uint8_t type){
 
+    if (object == NULL){
+        return NULL;
+    }
     uint size_all = 0;
     const uint object_size = get_object_size();
     for (int i = 0; i < nb_object; i++){

@@ -17,4 +17,6 @@
 
 #define DELEGATE 499
 
+#define C_COMMAND 65535
+
 #endif //TABOULE_RAZA_OBJECT_TYPE_H

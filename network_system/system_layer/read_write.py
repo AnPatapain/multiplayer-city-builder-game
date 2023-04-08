@@ -40,6 +40,8 @@ class SystemInterface:
         self.message_write = None
         self.connection = None
         self.sock = None
+        self.player_id = 0
+        self.ip = None
 
         self.is_online = False
 
@@ -61,7 +63,11 @@ class SystemInterface:
         print(f"Waiting for a connection on {server_address}")
 
         # Run subprocess here to wait connection before lauch it
-        c_file = ["./network_system/network_layer/test"]
+        if self.ip:
+            c_file = ["./network_system/network_layer/test",self.ip]
+        else:
+            c_file = ["./network_system/network_layer/test"]
+
         self.pid = subprocess.Popen(c_file)
 
         connection, client_address = self.sock.accept()
@@ -87,14 +93,22 @@ class SystemInterface:
         if encode:
             data = data.encode()
 
-        object_size = len(data)
+        if data:
+            object_size = len(data)
 
-        format_send_types = f"=H H L L {object_size}s"
-        sending_message = struct.pack(format_send_types,
-                                      self.player_id, command,
-                                      object_size,
-                                      id_object,
-                                      data)
+            format_send_types = f"=H H L L {object_size}s"
+            sending_message = struct.pack(format_send_types,
+                                          self.player_id, command,
+                                          object_size,
+                                          id_object,
+                                          data)
+
+        else:
+            format_send_types = f"=H H L L"
+            sending_message = struct.pack(format_send_types,
+                                          self.player_id, command,
+                                          0,
+                                          id_object)
 
         return self.connection.sendall(sending_message)
 
@@ -108,7 +122,7 @@ class SystemInterface:
 
         try:
             binary_received_header = self.connection.recv(header_size)
-            if binary_received_header is None:
+            if binary_received_header == b'':
                 return None
         except socket.error as e:
             if e.errno != errno.EAGAIN:
@@ -139,7 +153,7 @@ class SystemInterface:
 
     def unpack_data(self, binary_received_data, data_len):
         format = f"={data_len}s"
-        print(format, binary_received_data)
+        #print(format, binary_received_data)
         data = struct.unpack(format, binary_received_data)
         return data
     def unpack_header(self, binary_received_header) -> Header:
@@ -204,10 +218,6 @@ class SystemInterface:
         pass
 
 
-
-    def send_connect(self, ip):
-        pass
-
     def recieve_connect(self, datas):
         pass
 
@@ -218,17 +228,24 @@ class SystemInterface:
         from game.game_controller import GameController
         read_write_py_c = SystemInterface.get_instance()
         serialize_data = pickle.dumps(GameController.get_instance().__dict__)
+        file = open("./test-send.bin","bw")
+        file.write(serialize_data)
         read_write_py_c.send_message(command=GOP_GAME_SAVE, id_object=1, data=serialize_data, encode=False)
 
-    def recieve_game_save(self, datas):
+    def recieve_game_save(self):
         import pickle
         from game.game_controller import GameController
-        read_write_py_c = SystemInterface.get_instance()
-        GameController.get_instance().__dict__ = pickle.load(datas)
+
+        message = self.read_message(block=True)
+
+        if message["header"]["command"] != GOP_GAME_SAVE:
+            return
+
+        data_len = len(message["data"])
+        file = open("./test-recv.bin","bw")
+        file.write(message["data"][0])
+        GameController.get_instance().__dict__ = pickle.loads(message["data"][0])
         GameController.get_instance().save_load()
-        pass
-
-
 
     def send_delete_buildings(self, start, end):
         pass
@@ -236,7 +253,11 @@ class SystemInterface:
     def recieve_delete_buildings(self, datas):
         pass
 
+    def get_ip(self):
+        return self.ip
 
+    def set_ip(self,ip: str):
+        self.ip = ip
 
     """
     Build message format:

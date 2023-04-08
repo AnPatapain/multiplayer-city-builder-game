@@ -34,7 +34,7 @@ import backup_game
 
 class World:
 
-    def __init__(self, width, height, panel):
+    def __init__(self, width, height, panel, saved_game: bool):
         self.game_controller = GameController.get_instance()
         self.width = width
         self.height = height
@@ -45,7 +45,8 @@ class World:
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
 
-        self.load_map()
+        if not saved_game:
+            self.load_map()
         self.create_static_map()
 
         # For building feature

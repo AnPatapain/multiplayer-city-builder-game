@@ -11,8 +11,6 @@
 
 #include "object_type.h"
 
-#define C_COMMAND 65535
-
 
 struct Object_packet {
     uint16_t id_player;

@@ -29,6 +29,7 @@ def main():
     while True:
         menu = Menu(screen)
         menu.run(already_launched_once)
+        save_game = menu.is_load_save()
         del menu
 
         already_launched_once = True
@@ -39,7 +40,7 @@ def main():
         pg.mixer.music.stop()
 
 
-        game = Game(screen)
+        game = Game(screen,save_game)
         game.run()
         del game
 
