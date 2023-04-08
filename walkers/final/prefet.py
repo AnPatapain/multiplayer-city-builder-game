@@ -12,6 +12,7 @@ from class_types.walker_types import WalkerTypes
 from game.textures import Textures
 from walkers.walker import Walker
 
+
 class State(Enum):
     PATROL = 1
     BACK_TO_BUILDING = 2
@@ -21,10 +22,11 @@ class State(Enum):
 
 class Prefet(Walker):
     def __init__(self, associated_building: Buildable):
-        super().__init__(WalkerTypes.PREFET, associated_building, max_walk_distance=30, roads_only=True)
+        super().__init__(WalkerTypes.PREFET, associated_building, max_walk_distance=30, roads_only=True, )
         self.state = State.PATROL
         self.building_being_extinguished: Optional['Buildable'] = None
         self.extinguish_progress = 0
+
 
     def update(self):
         super().update()

@@ -4,6 +4,7 @@ from map_element.tile import Tile
 from walkers.walker import Walker
 
 
+
 class Immigrant(Walker):
     def __init__(self, associated_building: Buildable, dest: Tile, quantity: int):
         super().__init__(WalkerTypes.MIGRANT, associated_building)

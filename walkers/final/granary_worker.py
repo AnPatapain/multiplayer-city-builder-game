@@ -1,6 +1,7 @@
 from buildable.structure import Structure
 from class_types.walker_types import WalkerTypes
 from walkers.walker import Walker
+
 from enum import Enum
 
 class Actions(Enum):
@@ -16,6 +17,7 @@ class Granary_worker(Walker):
         self.wheat_in_hand = 0
         self.current_farm_tiles_list = [] # list of farm tile
         self.is_finish_in_one_farm = False
+
 
     # def receive_wheat_from_farm(self, farm: WheatFarm):   
     #     self.actual_wheat += farm.given_wheat_to_granary_worker()
