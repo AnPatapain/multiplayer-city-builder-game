@@ -133,7 +133,7 @@ class Menu:
         self.come_back_to_main_menu.display(self.screen)
 
     def show_online_menu(self):
-            draw_text("Play Online with other players!", self.screen, (460, 200), color=(255, 255, 200))
+            draw_text("Play Online with other players!", self.screen, (775, 225), color=(255, 255, 200))
             self.button__connect.display(self.screen)
             self.input_ip.display(self.screen)
             self.input_user.display(self.screen)
