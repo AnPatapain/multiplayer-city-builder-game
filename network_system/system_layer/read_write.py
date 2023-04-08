@@ -46,6 +46,12 @@ class SystemInterface:
         self.is_online = False
 
     def init_server(self):
+
+        client_path = "./network_system/client_c"
+        if not os.path.exists(client_path):
+            print("Error C client not found, please run `make` before play online")
+            return
+
         server_address = "/tmp/socket"
         if os.path.exists(server_address):
             os.remove(server_address)
@@ -63,10 +69,11 @@ class SystemInterface:
         print(f"Waiting for a connection on {server_address}")
 
         # Run subprocess here to wait connection before lauch it
+
         if self.ip:
-            c_file = ["./network_system/network_layer/test",self.ip]
+            c_file = [client_path,self.ip]
         else:
-            c_file = ["./network_system/network_layer/test"]
+            c_file = [client_path]
 
         self.pid = subprocess.Popen(c_file)
 
@@ -85,6 +92,7 @@ class SystemInterface:
         self.player_id = message["header"]["player_id"]
 
         print(f"Accepted a connection from {client_address}")
+        self.set_is_online(True)
 
     def send_message(self, command, id_object, data, encode=True):
         if not self.connection:
@@ -198,8 +206,6 @@ class SystemInterface:
     #..............................................................................#
     def run_subprocess(self) :
         self.init_server()
-
-        self.set_is_online(True)
 
         # return output.decode("utf-8")
 
