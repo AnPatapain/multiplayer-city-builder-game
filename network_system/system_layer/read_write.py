@@ -228,8 +228,6 @@ class SystemInterface:
         from game.game_controller import GameController
         read_write_py_c = SystemInterface.get_instance()
         serialize_data = pickle.dumps(GameController.get_instance().__dict__)
-        file = open("./test-send.bin","bw")
-        file.write(serialize_data)
         read_write_py_c.send_message(command=GOP_GAME_SAVE, id_object=1, data=serialize_data, encode=False)
 
     def recieve_game_save(self):
@@ -241,9 +239,6 @@ class SystemInterface:
         if message["header"]["command"] != GOP_GAME_SAVE:
             return
 
-        data_len = len(message["data"])
-        file = open("./test-recv.bin","bw")
-        file.write(message["data"][0])
         GameController.get_instance().__dict__ = pickle.loads(message["data"][0])
         GameController.get_instance().save_load()
 
