@@ -6,6 +6,7 @@ class NetworkCommandsTypes(IntEnum):
     CONNECT = 400
     DISCONNECT = 401
     GAME_SAVE = 402
+    ASK_SAVE = 403
 
     BUILD = 410
     DELETE_BUILDING = 411

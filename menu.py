@@ -8,7 +8,7 @@ from components.text_input import TextInput
 from events.event_manager import EventManager
 from game.utils import draw_text
 from sounds.sounds import SoundManager
-from network_system.system_layer.object_type import *
+from class_types.network_commands_types import NetworkCommandsTypes
 
 class CurrentMenu(Enum):
     SPLASHSCREEN = 0
@@ -218,7 +218,7 @@ class Menu:
         si = SystemInterface.get_instance()
         si.set_ip(ip)
         si.run_subprocess()
-        si.send_message(GOP_ASK_SAVE,0,None,encode=False)
+        si.send_message(NetworkCommandsTypes.ASK_SAVE,0,None,encode=False)
         si.recieve_game_save()
         self.saved_game = True
         self.set_inactive()

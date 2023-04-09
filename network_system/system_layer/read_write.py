@@ -10,7 +10,6 @@ from typing import TypedDict, Optional
 from class_types.buildind_types import BuildingTypes
 from class_types.network_commands_types import NetworkCommandsTypes
 from class_types.road_types import RoadTypes
-from network_system.system_layer.object_type import *
 
 
 # from class_types.buildind_types import BuildingTypes
@@ -234,7 +233,7 @@ class SystemInterface:
         from game.game_controller import GameController
         read_write_py_c = SystemInterface.get_instance()
         serialize_data = pickle.dumps(GameController.get_instance().__dict__)
-        read_write_py_c.send_message(command=GOP_GAME_SAVE, id_object=1, data=serialize_data, encode=False)
+        read_write_py_c.send_message(command=NetworkCommandsTypes.GAME_SAVE, id_object=1, data=serialize_data, encode=False)
 
     def recieve_game_save(self):
         import pickle
@@ -242,7 +241,7 @@ class SystemInterface:
 
         message = self.read_message(block=True)
 
-        if message["header"]["command"] != GOP_GAME_SAVE:
+        if message["header"]["command"] != NetworkCommandsTypes.GAME_SAVE:
             return
 
         GameController.get_instance().__dict__ = pickle.loads(message["data"][0])
