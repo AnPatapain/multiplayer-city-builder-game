@@ -14,9 +14,6 @@ from .map_controller import MapController
 from .panel import Panel
 from .game_controller import GameController
 from threading import Thread, Event
-
-from network_system.system_layer.read_write import SystemInterface
-
 def my_thread(func, event: Event):
     fps_moyen = [0]
     try:
@@ -29,7 +26,7 @@ def my_thread(func, event: Event):
         exit()
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, saved_game : bool):
         self.is_running = False
         self.screen = screen
         self.paused = False
@@ -44,7 +41,7 @@ class Game:
         self.panel = Panel(self.width, self.height, self.screen)
 
         # World contains populations or graphical objects like buildings, trees, grass
-        self.world = World(self.width, self.height, self.panel)
+        self.world = World(self.width, self.height, self.panel, saved_game)
 
         self.thread_event = Event()
         self.draw_thread = Thread(None, my_thread, "1", [self.display, self.thread_event])

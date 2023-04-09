@@ -4,7 +4,6 @@ import pickle
 from os import mkdir,path
 from game.game_controller import GameController
 
-
 save_dir = "saved_games/"
 list_fichiers = os.listdir(save_dir)
 def load_game(backup_name):
@@ -23,4 +22,5 @@ def save_game(backup_name):
         mkdir(save_dir)
     file = lzma.open(path_game, "wb")
     pickle.dump(GameController.get_instance().__dict__, file)
+
     file.close()

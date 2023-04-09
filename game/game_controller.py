@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 from class_types.buildind_types import BuildingTypes
 from buildable.buildable_datas import buildable_cost
 
-from network_system.system_layer.read_write import SystemInterface
 # from game.builder import Builder
 
 if TYPE_CHECKING:
     from walkers.walker import Walker
     from map_element.tile import Tile
     from buildable.buildable import Buildable
+    from network_system.system_layer.read_write import SystemInterface
    
 
 
@@ -94,7 +94,7 @@ class GameController:
 
     def update(self):
         self.increase_tick()
-        self.auto_build_house()
+        # self.auto_build_house()
 
     def map_has_senate(self):
         for row in self.grid:
@@ -254,12 +254,21 @@ class GameController:
 
     def is_load_save(self) -> bool:
         return self.save_loading
-    
+
+    def set_all_player_id(self,player_id: int):
+        if not self.grid:
+            return
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building:
+                    building.set_player_id(player_id)
+
     def auto_build_house(self):
         '''
         Testing purpose.
         '''
-        # return
+        return
         from game.builder import Builder
         builder = Builder()
         systemInterface = SystemInterface.get_instance()

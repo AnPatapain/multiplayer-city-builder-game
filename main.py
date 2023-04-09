@@ -15,7 +15,7 @@ def main():
     pg.display.set_icon(pg.image.load('assets/menu_sprites/game_icon.png'))
     curseur = pg.cursors.Cursor((0, 0), pg.image.load("assets/C3_sprites/system/Arrow.png"))
     pg.mouse.set_cursor(curseur)
-    pg.event.set_grab(True)
+    #pg.event.set_grab(True)
 
     Textures.init(screen)
 
@@ -29,6 +29,7 @@ def main():
     while True:
         menu = Menu(screen)
         menu.run(already_launched_once)
+        save_game = menu.is_load_save()
         del menu
 
         already_launched_once = True
@@ -39,7 +40,7 @@ def main():
         pg.mixer.music.stop()
 
 
-        game = Game(screen)
+        game = Game(screen,save_game)
         game.run()
         del game
 

@@ -20,6 +20,8 @@
 
 Ce protocole sert à communiquer entre les clients à travers le réseau. Il doit être reçu et envoyé par les processus C à travers des sockets TCP.
 
+Port **5050**
+
 ### Initialisation de la connexion
 Un client souhaite se connecter au jeu:
 
@@ -48,16 +50,11 @@ Demande une connexion à un jeu en cours. Le payload est inutile et le champ `da
 Demande une connexion à un client du jeu
 #### `3: CONNECT_OK`
 Réponse à `CONNECT_REQ`, le nouveau client à été enregistré.
-#### `11: ASK_GAME_STATUS`
-Demande à un client l'état de l'ensemble des objets lui appartenant. Le payload est inutile et le champ `data_size` doit être défini à `0`.
-#### `12: GAME_STATUS`
-Réponse à `ASK_GAME_STATUS`. L'ensemble des objets sont dans le payload sous format OTP.
+#### `4: GPP_CONNECT_START`
+Nouveau packet: Après l'acceptation d'un socket client le joueur envoye un packet pour affirmer au client nouvelement connecté
+qu'il peut commencer a envoyer des informations.
 #### `20: ALTER_GAME`
 La plus commune des requêtes; un client envoie de nouvelles données pour des entités définies dans le payload (format OTP).
-#### `30: DELEGATE_ASK`
-Demande à un autre client s'il peut reprendre, en partie ou totalement, la gestion de ses données. Le payload doit contenir l'ensemble des objets à transmettre au format OTP.
-#### `31: DELEGATE_OK`
-Réponse au `DELEGATE_ASK` l'utilisateur à ses données. 
 #### `50: ASK_IP_LIST`
 Demande la liste des IP connue à un utilisateur. Le payload est inutile et le champ `data_size` doit être défini à `0`.
 #### `51: RESP_IP_LIST`
@@ -105,13 +102,8 @@ Identifiant de l'évènement, peut être incrémentale.
 Transférer des objects de du C vers l'instance Python du jeu.
 
 ## Header structure
-### Type Object & subtype
-deux entiers non-signé de 8 bits (u_int & u_int).
-Permet de définir de quel type est l'object concerné par ce paquet.
-
-### metadata
-Entier non signé de 16 bits (u_int & u_int).
-Précise le type de donnée contenue dans data_object
+### command
+Precise le type de packet. Si la commande est pour le C le packet sera intercepté
 
 ### object_size
 Entier non-signé de 32bits (uint_32).
@@ -128,17 +120,32 @@ Le player_id est un identifiant de 16bits (2 octets). Cet identifiant doit être
 ```
    0             8             16             24            32
   0|---------------------------------------------------------|\
-   |        Object_type        |           metadata          | \
+   |        player_id          |           command           | \
   1|---------------------------------------------------------| |
    |                     object_size                         | | -> Header
   2|---------------------------------------------------------| |
-   |                        id_object                        | |
-   |                                                         | |
-  4|---------------------------------------------------------| /
-   |        player_id          |                             |/
-  5|----------------------------                             |
+   |                        id_object                        | /
+  3|---------------------------------------------------------|/
+   |                                                         |
    |                       data_object                       |
    |                                                         |
   n|---------------------------------------------------------|
 ```
 
+| Command name    | Code |
+|-----------------|------|
+| Connect         | 400  |
+| Disconnect      | 401  |
+| Game save       | 402  |
+|                 |      |
+| Build           | 410  |
+| Delete building | 411  |
+| Risk update     | 412  |
+|                 |      |
+| Update walker   | 420  |
+| Spawn walker    | 421  |
+| Delete walker   | 422  |
+|                 |      |
+| Delegate?       | 499  |
+
+ 

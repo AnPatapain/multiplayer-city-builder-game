@@ -6,6 +6,7 @@ from game.game_controller import GameController
 from walkers.final.immigrant import Immigrant
 
 
+
 class House(Buildable, ABC):
     def __init__(self, x: int, y: int, build_type: BuildingTypes,
                  tax: int, desirability: int, max_citizen: int, prosperity: int, fire_risk: int, destruction_risk: int):

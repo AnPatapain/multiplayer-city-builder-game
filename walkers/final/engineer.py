@@ -5,6 +5,8 @@ from class_types.walker_types import WalkerTypes
 from walkers.walker import Walker
 
 
+
+
 class Engineer(Walker):
     def __init__(self, associated_building: Buildable):
         super().__init__(WalkerTypes.ENGINEER, associated_building, max_walk_distance=10, roads_only=True)

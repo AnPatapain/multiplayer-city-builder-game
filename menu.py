@@ -8,6 +8,7 @@ from components.text_input import TextInput
 from events.event_manager import EventManager
 from game.utils import draw_text
 from sounds.sounds import SoundManager
+from class_types.network_commands_types import NetworkCommandsTypes
 
 class CurrentMenu(Enum):
     SPLASHSCREEN = 0
@@ -65,10 +66,11 @@ class Menu:
         self.button__multiplayer.on_click(self.go_to_online_menu)
 
         self.button__connect = button.Button((button_start, 400), button_size, text="Connect",center_text=True)
-        self.button__connect.on_click(self.connect_to_server)
+        self.button__connect.on_click(self.connect_to_c_client)
 
         self.input_ip = TextInput((button_start,300 ), (320, 30), placeholder="Enter the ip address.")
         self.input_user = TextInput((button_start, 350), (320, 30), placeholder="Enter your username.", focused=False)
+        self.saved_game = False
 
         # pg.mixer.music.load('sounds/wavs/ROME4.WAV')
         # pg.mixer.music.set_volume(0.6)
@@ -131,7 +133,7 @@ class Menu:
         self.come_back_to_main_menu.display(self.screen)
 
     def show_online_menu(self):
-            draw_text("Play Online with other players!", self.screen, (460, 200), color=(255, 255, 200))
+            draw_text("Play Online with other players!", self.screen, (775, 225), color=(255, 255, 200))
             self.button__connect.display(self.screen)
             self.input_ip.display(self.screen)
             self.input_user.display(self.screen)
@@ -207,13 +209,20 @@ class Menu:
         self.event_main_menu()
         self.current_menu = CurrentMenu.MAIN_MENU
 
-    def connect_to_server(self):
+    def connect_to_c_client(self):
+        from network_system.system_layer.read_write import SystemInterface
+
         username = self.input_user.get_text()
         ip = self.input_ip.get_text()
-        ############################
-        ############################
-        ############################
-        ############################
 
+        si = SystemInterface.get_instance()
+        si.set_ip(ip)
+        si.run_subprocess()
+        si.send_message(NetworkCommandsTypes.ASK_SAVE,0,None,encode=False)
+        si.recieve_game_save()
+        self.saved_game = True
+        self.set_inactive()
 
+    def is_load_save(self) -> bool:
+        return self.saved_game
 

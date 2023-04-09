@@ -12,7 +12,7 @@ class Ruin(Buildable):
         self.ruin_type = randint(0, 4)
         self.animation = 0
 
-    def is_destroyable(self):
+    def is_destroyable(self, player_id: int):
         return not self.is_on_fire
 
     def update_tick(self):

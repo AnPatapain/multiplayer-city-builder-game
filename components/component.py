@@ -21,7 +21,7 @@ class Component:
 
     @abstractmethod
     def hover(self):
-        print("FIXME: Method hover not implemented!")
+        #print("FIXM E: Method hover not implemented!")
         pass
 
     @abstractmethod

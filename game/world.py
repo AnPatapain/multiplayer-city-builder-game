@@ -34,7 +34,7 @@ import backup_game
 
 class World:
 
-    def __init__(self, width, height, panel):
+    def __init__(self, width, height, panel, saved_game: bool):
         self.game_controller = GameController.get_instance()
         self.width = width
         self.height = height
@@ -45,7 +45,8 @@ class World:
 
         self.default_surface = pg.Surface((DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT)).convert()
 
-        self.load_map()
+        if not saved_game:
+            self.load_map()
         self.create_static_map()
 
         # For building feature
@@ -128,11 +129,7 @@ class World:
                 self.builder.set_in_build_action(False)
                 if self.in_map(mouse_grid_pos):
                     self.builder.set_end_point(mouse_grid_pos)
-                    
-                    # Send message to c process
-                    tar = f"start: {self.builder.get_start_point()[0]} {self.builder.get_start_point()[1]} end: {self.builder.get_end_point()[0]} {self.builder.get_end_point()[1]}\n"
-                    # print(BuildingTypes.VACANT_HOUSE)
-                    self.read_write_py_c.send_message(1, 2, 10, 1, 2, tar)
+
                 else:
                     self.builder.set_end_point(None)
                     self.builder.set_start_point(None)
@@ -160,7 +157,7 @@ class World:
                     'isometric_coor': tile.get_isometric_coord(),
                     'render_img_coor': tile.get_render_coord(),
                     'isBuildable': tile.is_buildable(buildable_size[selected_tile]),
-                    'isDestroyable': tile.is_destroyable()
+                    'isDestroyable': tile.is_destroyable(self.read_write_py_c.get_player_id())
                 })
 
             # Build from start point to end point
@@ -168,7 +165,7 @@ class World:
                 if self.in_map(self.builder.get_start_point()) and self.in_map(self.builder.get_end_point()):
                     start_point = self.builder.get_start_point()
                     end_point = self.builder.get_end_point()
-                    self.builder.build_from_start_to_end(selected_tile, start_point, end_point)
+                    self.builder.build_from_start_to_end(selected_tile, start_point, end_point,self.read_write_py_c.get_player_id())
 
                     self.builder.set_start_point(None)  # update start point to default after building
                     self.builder.set_end_point(None)  # update start point to default after building
@@ -307,7 +304,7 @@ class World:
                         screen.blit(build_sign,
                                     (x_offset, y_offset - build_sign.get_height() + TILE_SIZE))
 
-                    elif tile.is_destroyable() and temp_tile["name"] == BuildingTypes.PELLE and tile.get_building() not in already_selected:
+                    elif tile.is_destroyable(self.read_write_py_c.get_player_id()) and temp_tile["name"] == BuildingTypes.PELLE and tile.get_building() not in already_selected:
                         # Go to the left of the building, for buildinds larger than 1x1
                         if tile.get_building():
                             tile = tile.get_building().get_current_tile()

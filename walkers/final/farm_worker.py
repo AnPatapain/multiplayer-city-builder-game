@@ -7,6 +7,7 @@ from game.game_controller import GameController
 from walkers.walker import Walker
 from enum import Enum
 
+
 if TYPE_CHECKING:
     from buildable.final.structures.WheatFarm import WheatFarm
 
@@ -23,6 +24,7 @@ class Farm_worker(Walker):
         self.game_controller = GameController.get_instance()
         self.current_action = Actions.IDLE
         self.wheat_in_hand = 0
+
 
 
     def find_granary(self) -> Granary:
