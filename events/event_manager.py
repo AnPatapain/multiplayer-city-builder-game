@@ -46,7 +46,7 @@ class EventManager:
                 d = res["data"][0]
                 d = json.loads(d)
                 b = Builder()
-                b.build_from_start_to_end(d["building_type"], d["start"], d["end"], from_network=True)
+                b.build_from_start_to_end(d["building_type"], d["start"], d["end"], res["header"]["player_id"], from_network=True)
 
             if res["header"]["command"] == NetworkCommandsTypes.ASK_SAVE:
                 si.send_game_save()

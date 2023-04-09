@@ -63,7 +63,7 @@ class Builder:
     
     def get_in_build_action(self): return self.in_build_action
 
-    def build_from_start_to_end(self, selected_tile: BuildingTypes | RoadTypes, start_point: tuple[int, int], end_point: tuple[int, int], from_network: bool = False):
+    def build_from_start_to_end(self, selected_tile: BuildingTypes | RoadTypes, start_point: tuple[int, int], end_point: tuple[int, int],player_id: int, from_network: bool = False):
         grid = self.game_controller.get_map()
 
         if selected_tile == RoadTypes.TL_TO_BR:
@@ -88,7 +88,7 @@ class Builder:
                 tile: Tile = grid[row][col]
 
                 if selected_tile == BuildingTypes.PELLE:
-                    if tile.is_destroyable():
+                    if tile.is_destroyable(player_id):
                         if tile.get_building():
                             self.delete_building(tile.get_building())
                         else:
@@ -101,14 +101,12 @@ class Builder:
                     continue
 
 
-                self.building_add(row, col, selected_tile)
+                self.building_add(row, col, selected_tile,player_id)
 
                 self.start_point = None  # update start point to default after building
                 self.end_point = None  # update start point to default after building
 
         if not from_network:
-            if selected_tile == BuildingTypes.PELLE:
-                return # Not implemented yet
             si = SystemInterface.get_instance()
             si.send_build(start_point, end_point, selected_tile)
 
@@ -116,7 +114,7 @@ class Builder:
         for tile in tile_with_building.get_all_building_tiles():
             tile.destroy()
 
-    def building_add(self, row: int, col: int, selected_type: RoadTypes | BuildingTypes):
+    def building_add(self, row: int, col: int, selected_type: RoadTypes | BuildingTypes, player_id: int):
         if not self.game_controller.has_enough_denier(selected_type):
             return
 
@@ -173,6 +171,7 @@ class Builder:
                     if x != col or y != row:
                         grid[y][x].set_building(building, show_building=False)
 
+        building.set_player_id(player_id)
         #Show first case
         grid[row][col].set_building(building, show_building=True)
         self.game_controller.new_building(building)

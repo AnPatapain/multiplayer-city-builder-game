@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 import errno
 import json
 import os
@@ -10,6 +12,9 @@ from typing import TypedDict, Optional
 from class_types.buildind_types import BuildingTypes
 from class_types.network_commands_types import NetworkCommandsTypes
 from class_types.road_types import RoadTypes
+
+
+from game.game_controller import GameController
 
 
 # from class_types.buildind_types import BuildingTypes
@@ -90,7 +95,9 @@ class SystemInterface:
 
         self.player_id = message["header"]["player_id"]
 
-        print(f"Accepted a connection from {client_address}")
+        print(f"Found C connection, player id : {self.player_id}")
+        gc = GameController.get_instance()
+        gc.set_all_player_id(self.player_id)
         self.set_is_online(True)
 
     def send_message(self, command, id_object, data, encode=True):
@@ -213,8 +220,10 @@ class SystemInterface:
     def stop_subprocess(self):
 
         self.pid.terminate()
-
         self.set_is_online(False)
+        self.player_id = 0
+        GameController.get_instance().set_all_player_id(0)
+        self.connection = None
 #..............................................................................#
     def send_disconnect(self):
         pass
@@ -230,14 +239,12 @@ class SystemInterface:
 
     def send_game_save(self):
         import pickle
-        from game.game_controller import GameController
         read_write_py_c = SystemInterface.get_instance()
         serialize_data = pickle.dumps(GameController.get_instance().__dict__)
         read_write_py_c.send_message(command=NetworkCommandsTypes.GAME_SAVE, id_object=1, data=serialize_data, encode=False)
 
     def recieve_game_save(self):
         import pickle
-        from game.game_controller import GameController
 
         message = self.read_message(block=True)
 
@@ -278,7 +285,8 @@ class SystemInterface:
     def recieve_build(self, datas):
         pass
 
-
+    def get_player_id(self) -> int:
+        return self.player_id
 
     # def send_risk_update(self, risk_type, building_id):
     #     pass

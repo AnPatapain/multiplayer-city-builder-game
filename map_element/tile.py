@@ -135,12 +135,12 @@ class Tile:
 
         return False
 
-    def is_destroyable(self):
+    def is_destroyable(self,player_id: int):
         real_tile = self
         # Ensure we check to the left of the building
         if self.get_building():
             real_tile = self.get_building().get_current_tile()
-        return (real_tile.show_tile and real_tile.building and real_tile.building.is_destroyable()) or real_tile.road
+        return (real_tile.show_tile and real_tile.building and real_tile.building.is_destroyable(player_id)) or real_tile.road
 
     def destroy(self):
         if self.building:
