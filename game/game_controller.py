@@ -9,9 +9,8 @@ if TYPE_CHECKING:
     from walkers.walker import Walker
     from map_element.tile import Tile
     from buildable.buildable import Buildable
-    from network_system.system_layer.read_write import SystemInterface
-   
 
+from network_system.system_layer.read_write import SystemInterface
 
 class GameController:
     instance = None
@@ -71,8 +70,9 @@ class GameController:
     def get_actual_year(self):
         return self.current_year
 
-    def new_building(self, building: 'Buildable'):
-        self.denier -= buildable_cost[building.get_build_type()]
+    def new_building(self, building: 'Buildable', player_id: int):
+        if player_id == SystemInterface.get_instance().get_player_id():
+            self.denier -= buildable_cost[building.get_build_type()]
 
     def has_enough_denier(self, building_type: 'BuildingTypes'):
         return buildable_cost[building_type] <= self.denier
@@ -132,16 +132,22 @@ class GameController:
 
 
     def increase_day(self):
-        from class_types.walker_types import WalkerTypes
         if self.current_day == 15:
             self.increase_month()
             self.current_day = -1
+
 
         for row in self.grid:
             for tile in row:
                 building = tile.get_building()
                 if building and tile.get_show_tile():
                     building.update_day()
+                    #network send
+                    if building.get_risk().is_network_update() and building.get_player_id() == SystemInterface.get_instance().get_player_id():
+                        risk = building.get_risk()
+                        SystemInterface.get_instance().send_risk_update(risk.get_fire_status(),risk.get_dest_status(),tile.get_coord())
+                        risk.network_updated()
+
 
         self.current_day += 1
 

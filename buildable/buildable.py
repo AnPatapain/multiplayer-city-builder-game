@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from walkers.walker import Walker
     from map_element.tile import Tile
 
+from network_system.system_layer.read_write import SystemInterface
 
 class Buildable(ABC):
     def __init__(self, x: int, y: int, build_type: 'BuildingTypes', fire_risk: int, destruction_risk: int, desirability:int =0, player_id: int = 0):
@@ -128,6 +129,9 @@ class Buildable(ABC):
 
     def get_risk(self) -> Risk:
         return self.risk
+
+    def update_risk(self, fire_level, damage_level):
+        self.risk.set_level(fire_level,damage_level)
 
     def set_player_id(self,player_id: int):
         self.player_id = player_id
