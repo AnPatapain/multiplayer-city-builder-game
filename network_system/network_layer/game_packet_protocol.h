@@ -1,6 +1,6 @@
 #ifndef GAME_PACKET_PROTOCOL
 #define GAME_PACKET_PROTOCOL
-#define DEBUG
+//#define DEBUG
 
 #include <stdint.h>
 

@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 import errno
 import json
 import os
@@ -13,8 +11,6 @@ from class_types.buildind_types import BuildingTypes
 from class_types.network_commands_types import NetworkCommandsTypes
 from class_types.road_types import RoadTypes
 
-
-from game.game_controller import GameController
 
 
 # from class_types.buildind_types import BuildingTypes
@@ -34,7 +30,10 @@ class BuildingMsg(TypedDict):
     end: list[int, int]
     building_type: BuildingTypes | RoadTypes
 
-
+class RiskMsg(TypedDict):
+    fire_level: int
+    damage_level: int
+    building_position: list[int, int]
 
 class SystemInterface:
     instance = None
@@ -50,7 +49,7 @@ class SystemInterface:
         self.is_online = False
 
     def init_listen(self):
-
+        from game.game_controller import GameController
         client_path = "./network_system/client_c"
         if not os.path.exists(client_path):
             print("Error C client not found, please run `make` before play online")
@@ -218,7 +217,7 @@ class SystemInterface:
     #methode pour stoper le process
 
     def stop_subprocess(self):
-
+        from game.game_controller import GameController
         self.pid.terminate()
         self.set_is_online(False)
         self.player_id = 0
@@ -238,12 +237,14 @@ class SystemInterface:
 
 
     def send_game_save(self):
+        from game.game_controller import GameController
         import pickle
         read_write_py_c = SystemInterface.get_instance()
         serialize_data = pickle.dumps(GameController.get_instance().__dict__)
         read_write_py_c.send_message(command=NetworkCommandsTypes.GAME_SAVE, id_object=1, data=serialize_data, encode=False)
 
     def recieve_game_save(self):
+        from game.game_controller import GameController
         import pickle
 
         message = self.read_message(block=True)
@@ -254,11 +255,6 @@ class SystemInterface:
         GameController.get_instance().__dict__ = pickle.loads(message["data"][0])
         GameController.get_instance().save_load()
 
-    def send_delete_buildings(self, start, end):
-        pass
-
-    def recieve_delete_buildings(self, datas):
-        pass
 
     def get_ip(self):
         return self.ip
@@ -288,12 +284,14 @@ class SystemInterface:
     def get_player_id(self) -> int:
         return self.player_id
 
-    # def send_risk_update(self, risk_type, building_id):
-    #     pass
-    #
-    # def recieve_risk_update(self, datas):
-    #     pass
-    #
+    def send_risk_update(self, fire_level: int, damage_level: int, building_position: list[int, int] ):
+        msg: RiskMsg = {
+            "fire_level": fire_level,
+            "damage_level": damage_level,
+            "building_position": building_position
+        }
+        self.send_message(command=NetworkCommandsTypes.RISK_UPDATE, id_object=10, data=json.dumps(msg))
+
     #
     #
     # def send_walker_direction_update(self, new_direction, walker_id):

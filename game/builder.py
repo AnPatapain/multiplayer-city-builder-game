@@ -174,7 +174,7 @@ class Builder:
         building.set_player_id(player_id)
         #Show first case
         grid[row][col].set_building(building, show_building=True)
-        self.game_controller.new_building(building)
+        self.game_controller.new_building(building,player_id)
 
     
 

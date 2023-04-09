@@ -81,7 +81,7 @@ class Overlay:
             else:
                 level = int(level / 10)
 
-            building.get_risk().updated()
+            building.get_risk().overlay_updated()
             if not self.pg_image_overlay[level]:
                 self.pg_image_overlay[level] = self.build_overlay(level)
 

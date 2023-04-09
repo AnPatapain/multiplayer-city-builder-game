@@ -50,7 +50,10 @@ class House(Buildable, ABC):
         return self.tax
 
     def update_day(self):
-        self.risk.risk_progress()
+        # No update risk if is not your building
+        from network_system.system_layer.read_write import SystemInterface
+        if self.player_id == SystemInterface.get_instance().get_player_id():
+            self.risk.risk_progress()
 
         if self.risk.is_on_fire():
             self.to_ruin(on_fire=True)
@@ -71,9 +74,9 @@ class House(Buildable, ABC):
 
     def update_happiness(self):
         # it happens once every two weeks
-        if GameController.get_actual_citizen() < 200:
+        if GameController.get_instance().get_actual_citizen() < 200:
             self.happiness = 60
-        if 200 <= GameController.get_actual_citizen() < 300:
+        if 200 <= GameController.get_instance().get_actual_citizen() < 300:
             self.happiness = 50
 
 

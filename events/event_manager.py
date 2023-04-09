@@ -8,6 +8,7 @@ from components.text_input import TextInput
 from events.key_listener import KeyListener
 from game.builder import Builder
 from network_system.system_layer.read_write import SystemInterface
+from game.game_controller import GameController
 
 from class_types.network_commands_types import NetworkCommandsTypes
 
@@ -42,14 +43,22 @@ class EventManager:
 
         res = si.read_message()
         if res:
-            if res["header"]["command"] == NetworkCommandsTypes.BUILD:
-                d = res["data"][0]
-                d = json.loads(d)
-                b = Builder()
-                b.build_from_start_to_end(d["building_type"], d["start"], d["end"], res["header"]["player_id"], from_network=True)
+            match (res["header"]["command"]):
+                case NetworkCommandsTypes.BUILD:
+                    d = res["data"][0]
+                    d = json.loads(d)
+                    b = Builder()
+                    b.build_from_start_to_end(d["building_type"], d["start"], d["end"], res["header"]["player_id"], from_network=True)
 
-            if res["header"]["command"] == NetworkCommandsTypes.ASK_SAVE:
-                si.send_game_save()
+                case NetworkCommandsTypes.ASK_SAVE:
+                    si.send_game_save()
+
+                case NetworkCommandsTypes.RISK_UPDATE:
+                    d = res["data"][0]
+                    d = json.loads(d)
+                    grid = GameController.get_instance().get_map()
+                    grid[d["building_position"][0]][d["building_position"][1]].get_building().update_risk(d["fire_level"],d["damage_level"])
+
 
         pos = pg.mouse.get_pos()
 
