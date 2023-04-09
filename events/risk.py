@@ -30,10 +30,12 @@ class Risk:
     def reset_fire_risk(self):
         if self.fire_risk > 0:
             self.fire_risk_status = 0
+            self.overlay_update = True
 
     def reset_dest_risk(self):
         if self.dest_risk > 0:
             self.dest_risk_status = 0
+            self.overlay_update = True
 
     def is_on_fire(self) -> bool:
         return self.fire_risk_status >= 100

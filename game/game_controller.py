@@ -137,15 +137,15 @@ class GameController:
             self.current_day = -1
 
 
-        for row in range(len(self.grid)):
-            for col in range(len(self.grid[row])):
-                building = self.grid[row][col].get_building()
-                if building and self.grid[row][col].get_show_tile():
+        for row in self.grid:
+            for tile in row:
+                building = tile.get_building()
+                if building and tile.get_show_tile():
                     building.update_day()
                     #network send
                     if building.get_risk().is_network_update() and building.get_player_id() == SystemInterface.get_instance().get_player_id():
                         risk = building.get_risk()
-                        SystemInterface.get_instance().send_risk_update(risk.get_fire_status(),risk.get_dest_status(),[row,col])
+                        SystemInterface.get_instance().send_risk_update(risk.get_fire_status(),risk.get_dest_status(),tile.get_coord())
                         risk.network_updated()
 
 

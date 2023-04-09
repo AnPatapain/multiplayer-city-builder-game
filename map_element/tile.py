@@ -62,6 +62,9 @@ class Tile:
     def get_isometric_coord(self):
         return self.isometric_coord
 
+    def get_coord(self) -> list[int, int]:
+        return [self.x,self.y]
+
     def get_type(self):
         return self.type
 

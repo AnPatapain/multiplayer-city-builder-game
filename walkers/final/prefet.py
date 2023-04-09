@@ -12,6 +12,7 @@ from class_types.walker_types import WalkerTypes
 from game.textures import Textures
 from walkers.walker import Walker
 
+from network_system.system_layer.read_write import SystemInterface
 
 class State(Enum):
     PATROL = 1
@@ -46,7 +47,10 @@ class Prefet(Walker):
             build = tile.get_building()
             if build:
                 if isinstance(build, House) or isinstance(build, Structure) or isinstance(build, Ruin):
-                    build.risk.reset_fire_risk()
+                    if build.get_player_id() == SystemInterface.get_instance().get_player_id() and build.risk.get_fire_status() > 0:
+                        build.risk.reset_fire_risk()
+                        SystemInterface.get_instance().send_risk_update(build.risk.get_fire_status(),build.risk.get_dest_status(),tile.get_coord())
+
                     if build.is_on_fire and self.state == State.PATROL:
                         self.state = State.GO_TO_FIRE
                         self.building_being_extinguished = build
