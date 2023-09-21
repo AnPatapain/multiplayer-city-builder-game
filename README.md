@@ -1,4 +1,3 @@
-# caesar III remake
 ## Operating System compability  
 The game is developed on linux and can run only on linux machines : (
 ## Install dependencies  
