@@ -1,4 +1,4 @@
-## Operating System compability  
+## Only Linux Machine  
 The game is developed on linux and can run only on linux machines : (
 ## Install dependencies  
 ```
